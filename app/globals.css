@@ -1,0 +1,263 @@
+/* Hide sidebar and mobile nav in fullscreen exam mode */
+body.hide-sidebar .student-sidebar,
+body.hide-sidebar .student-mobile-nav,
+body.hide-sidebar .main-navbar {
+  display: none !important;
+}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --toast-bg: #fbf9fe;
+    --toast-color: #18181b;
+    --toast-border: #e7e0f0;
+
+    --background: 264 41% 97%;
+    --foreground: 240 6% 10%;
+    --card: 0 0% 100%;
+    --card-foreground: 240 6% 10%;
+    --popover: 264 56% 99%;
+    --popover-foreground: 240 6% 10%;
+    --primary: 258 90% 59%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 187 92% 41%;
+    --secondary-foreground: 0 0% 100%;
+    --muted: 265 46% 95%;
+    --muted-foreground: 240 4% 46%;
+    --accent: 264 56% 99%;
+    --accent-foreground: 258 55% 35%;
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 266 35% 91%;
+    --input: 266 35% 91%;
+    --ring: 258 90% 59%;
+    --success: 160 84% 39%;
+    --warning: 38 92% 50%;
+    --error: 0 72% 51%;
+    --info: 199 89% 48%;
+    --shadow-soft: 0 1px 2px rgba(24, 24, 27, 0.04),
+      0 10px 28px -12px rgba(139, 92, 246, 0.14);
+    --shadow-medium: 0 4px 12px rgba(24, 24, 27, 0.06),
+      0 18px 40px -16px rgba(6, 182, 212, 0.12);
+    --shadow-large: 0 12px 40px rgba(24, 24, 27, 0.08),
+      0 28px 64px -24px rgba(139, 92, 246, 0.2);
+    --radius: 0.875rem;
+  }
+
+  .dark {
+    --toast-bg: #18181b;
+    --toast-color: #fafafa;
+    --toast-border: #3f3f46;
+
+    --background: 240 6% 6%;
+    --foreground: 0 0% 98%;
+    --card: 240 5% 10%;
+    --card-foreground: 0 0% 98%;
+    --popover: 240 5% 10%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 258 90% 68%;
+    --primary-foreground: 240 6% 6%;
+    --secondary: 187 80% 48%;
+    --secondary-foreground: 0 0% 100%;
+    --muted: 240 4% 16%;
+    --muted-foreground: 240 5% 64%;
+    --accent: 258 40% 18%;
+    --accent-foreground: 258 95% 85%;
+    --destructive: 0 63% 45%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 240 4% 18%;
+    --input: 240 4% 18%;
+    --ring: 258 90% 68%;
+    --success: 160 72% 45%;
+    --warning: 38 92% 55%;
+    --error: 0 63% 45%;
+    --info: 199 89% 55%;
+    --shadow-soft: 0 1px 2px rgba(0, 0, 0, 0.24),
+      0 12px 28px -12px rgba(139, 92, 246, 0.25);
+    --shadow-medium: 0 4px 12px rgba(0, 0, 0, 0.28),
+      0 20px 44px -16px rgba(6, 182, 212, 0.15);
+    --shadow-large: 0 16px 48px rgba(0, 0, 0, 0.32),
+      0 32px 72px -28px rgba(139, 92, 246, 0.22);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: var(--font-inter), var(--font-poppins), system-ui, -apple-system, Segoe UI, sans-serif;
+  }
+
+  html[lang='hi'] body {
+    font-family: var(--font-devanagari), var(--font-inter), var(--font-poppins), system-ui, sans-serif;
+  }
+
+  html[lang='or'] body {
+    font-family: var(--font-odia), var(--font-inter), var(--font-poppins), system-ui, sans-serif;
+  }
+  
+  /* Prevent layout shift when scrollbar appears/disappears */
+  html {
+    scrollbar-gutter: stable;
+    overflow-y: scroll; /* Always show vertical scrollbar */
+  }
+  
+  /* Ensure dropdowns don't cause layout shifts */
+  [data-radix-popper-content-wrapper] {
+    z-index: 60 !important;
+  }
+  
+  /* Prevent layout shifts from dropdowns */
+  body {
+    overflow-x: hidden; /* Prevent horizontal scrollbar */
+  }
+  
+  /* Fix for Radix UI Select components */
+  [data-radix-select-content] {
+    position: fixed !important;
+    z-index: 60 !important;
+  }
+  
+  /* Ensure consistent layout */
+  .main-content {
+    width: 100%;
+    min-height: 100vh;
+  }
+  
+  /* Additional fix for layout stability */
+  * {
+    box-sizing: border-box;
+  }
+  
+  /* Prevent any layout shifts */
+  .layout-stable {
+    contain: layout;
+  }
+  
+  /* Force consistent width for main content */
+  .main-content {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 100% !important;
+  }
+  
+  /* Prevent dropdowns from affecting layout */
+  [data-radix-select-content] {
+    position: fixed !important;
+    z-index: 60 !important;
+    transform: translateZ(0); /* Force hardware acceleration */
+  }
+  
+  /* Ensure body doesn't change width */
+  body {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+}
+
+@layer components {
+  .gradient-text {
+    @apply bg-gradient-to-r from-primary-500 via-violet-500 to-secondary-500 bg-clip-text text-transparent;
+  }
+  
+  .card {
+    @apply rounded-lg border bg-card text-card-foreground shadow-soft;
+  }
+  
+  .card-header {
+    @apply flex flex-col space-y-1.5 p-6;
+  }
+  
+  .card-title {
+    @apply text-2xl font-semibold leading-none tracking-tight;
+  }
+  
+  .card-description {
+    @apply text-sm text-muted-foreground;
+  }
+  
+  .card-content {
+    @apply p-6 pt-0;
+  }
+  
+  .card-footer {
+    @apply flex items-center p-6 pt-0;
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-muted;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-border rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-muted-foreground/35;
+}
+
+/* Smooth transitions */
+* {
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+/* Line clamp utilities */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Safe area and bottom navbar utilities */
+.pb-safe {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.mb-safe {
+  margin-bottom: env(safe-area-inset-bottom);
+}
+
+/* Prevent horizontal scrolling on mobile */
+html, body {
+  overflow-x: hidden;
+  width: 100%;
+  height: 100%;
+}
+
+/* Ensure bottom navbar is always visible */
+@media (max-width: 1023px) {
+  body {
+    padding-bottom: calc(4rem + env(safe-area-inset-bottom));
+  }
+}
+
+/* Prevent touch scrolling issues on mobile */
+@media (max-width: 1023px) {
+  body {
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: none;
+  }
+  
+  /* Prevent horizontal scrolling */
+  .overflow-x-hidden {
+    overflow-x: hidden !important;
+  }
+}

@@ -1,0 +1,265 @@
+{
+  "common": {
+    "dashboard": "डैशबोर्ड",
+    "logout": "लॉगआउट",
+    "cancel": "रद्द करें",
+    "signIn": "साइन इन",
+    "signUp": "साइन अप",
+    "loading": "लोड हो रहा है...",
+    "noFiltersApplied": "कोई फ़िल्टर लागू नहीं है"
+  },
+  "profile": {
+    "form": {
+      "enterYour": "अपना दर्ज करें",
+      "updateSectionInfoPrefix": "अपनी",
+      "updateSectionInfoSuffix": "जानकारी अपडेट करें",
+      "saveChanges": "परिवर्तन सहेजें",
+      "saving": "सहेजा जा रहा है..."
+    }
+  },
+  "nav": {
+    "home": "होम",
+    "jobs": "जॉब्स",
+    "forStudents": "छात्रों के लिए",
+    "forEmployers": "नियोक्ताओं के लिए",
+    "about": "परिचय",
+    "contact": "संपर्क",
+    "language": "भाषा",
+    "studentNavigation": "छात्र नेविगेशन",
+    "recruiterNavigation": "रिक्रूटर नेविगेशन",
+    "adminNavigation": "एडमिन नेविगेशन"
+  },
+  "chat": {
+    "assistant": "एआई सहायक",
+    "opportunityAssistant": "अवसर सहायक",
+    "thinking": "सोच रहा है...",
+    "askPlaceholder": "नौकरी, प्रोफ़ाइल, आवेदन के बारे में पूछें...",
+    "scrollToBottom": "नीचे जाएँ"
+  },
+  "dashboard": {
+    "overview": "अवलोकन",
+    "groups": {
+      "overview": "अवलोकन",
+      "jobs": "जॉब्स",
+      "careerTools": "करियर टूल्स",
+      "account": "अकाउंट",
+      "hiring": "हायरिंग",
+      "insights": "इनसाइट्स",
+      "company": "कंपनी",
+      "operations": "ऑपरेशन्स",
+      "assessments": "असेसमेंट्स",
+      "admin": "एडमिन"
+    },
+    "labels": {
+      "logout": "लॉगआउट",
+      "studentAccount": "छात्र अकाउंट",
+      "recruiterAccount": "रिक्रूटर अकाउंट",
+      "adminAccount": "एडमिन अकाउंट",
+      "studentWorkspace": "छात्र कार्यक्षेत्र",
+      "recruiterWorkspace": "रिक्रूटर कार्यक्षेत्र",
+      "adminWorkspace": "एडमिन कार्यक्षेत्र"
+    }
+  },
+  "home": {
+    "heroTitle": "अपने आसपास और स्थानीय नौकरी अवसर खोजें",
+    "heroSubtitle": "एक हाइपर-लोकल अवसर प्लेटफॉर्म जो नौकरी खोजने वालों को शहर, जिला और ग्रामीण क्षेत्रों के नियोक्ताओं से जोड़ता है।",
+    "ctaStudent": "मेरे पास की जॉब्स देखें",
+    "ctaEmployer": "स्थानीय जॉब पोस्ट करें",
+    "howItWorks": "यह कैसे काम करता है",
+    "valueHeading": "जॉब सीकर्स और नियोक्ता हमें क्यों चुनते हैं"
+  },
+  "footer": {
+    "platformOverview": "प्लेटफॉर्म परिचय",
+    "quickLinks": "त्वरित लिंक",
+    "roleLinks": "भूमिका लिंक",
+    "contact": "संपर्क",
+    "forStudents": "छात्रों के लिए",
+    "forEmployers": "नियोक्ताओं के लिए"
+  },
+  "auth": {
+    "student": "छात्र",
+    "corporate": "कॉर्पोरेट",
+    "admin": "एडमिन",
+    "welcomeBack": "वापसी पर स्वागत है",
+    "continueJourney": "स्थानीय अवसरों की अपनी यात्रा जारी रखने के लिए साइन इन करें",
+    "iAmA": "मैं हूं",
+    "createAccount": "अपना {{role}} अकाउंट बनाएं",
+    "startJourney": "स्थानीय अवसरों और क्षेत्रीय भर्ती की खोज शुरू करें",
+    "verifyEmail": "अपना ईमेल सत्यापित करें",
+    "labels": {
+      "email": "ईमेल",
+      "emailAddressRequired": "ईमेल पता *",
+      "password": "पासवर्ड",
+      "passwordRequired": "पासवर्ड *",
+      "confirmPasswordRequired": "पासवर्ड की पुष्टि करें *",
+      "verificationCode": "सत्यापन कोड",
+      "termsAndConditions": "नियम और शर्तें"
+    },
+    "placeholders": {
+      "email": "you@company.com",
+      "enterEmailAddress": "अपना ईमेल पता दर्ज करें",
+      "createStrongPassword": "मजबूत पासवर्ड बनाएं",
+      "confirmPassword": "अपने पासवर्ड की पुष्टि करें"
+    },
+    "errors": {
+      "validEmail": "कृपया एक मान्य ईमेल पता दर्ज करें",
+      "passwordRequired": "पासवर्ड आवश्यक है",
+      "loginFailed": "लॉगिन विफल हुआ। कृपया पुनः प्रयास करें।",
+      "invalidPassword": "अमान्य पासवर्ड। कृपया पुनः प्रयास करें।",
+      "emailNotRegistered": "यह ईमेल पंजीकृत नहीं है। पहले खाता बनाएं।",
+      "invalidLoginRequest": "अमान्य लॉगिन अनुरोध।",
+      "sendOtpFailed": "OTP भेजने में विफल। कृपया पुनः प्रयास करें।",
+      "resendOtpFailed": "OTP दोबारा भेजने में विफल। कृपया पुनः प्रयास करें।",
+      "validOtp": "कृपया मान्य 6-अंकों का OTP दर्ज करें",
+      "invalidOtp": "अमान्य या समाप्त OTP। कृपया पुनः प्रयास करें।",
+      "resetPasswordFailed": "पासवर्ड रीसेट करने में विफल। कृपया पुनः प्रयास करें।",
+      "invalidUserType": "अमान्य उपयोगकर्ता प्रकार"
+    },
+    "toast": {
+      "registrationSuccessful": "पंजीकरण सफल! जारी रखने के लिए लॉगिन करें।",
+      "registrationSuccessfulSimple": "पंजीकरण सफल!",
+      "acceptTermsRequired": "जारी रखने के लिए नियम और शर्तें स्वीकार करें",
+      "loginSuccessful": "लॉगिन सफल!",
+      "otpSent": "OTP आपके ईमेल पते पर भेज दिया गया है",
+      "otpResent": "OTP फिर से आपके ईमेल पते पर भेज दिया गया है",
+      "otpResentCooldown": "OTP फिर से भेज दिया गया है। कृपया अगला अनुरोध करने से पहले 5 मिनट प्रतीक्षा करें।",
+      "otpVerified": "OTP सफलतापूर्वक सत्यापित हुआ",
+      "passwordResetSuccess": "पासवर्ड सफलतापूर्वक रीसेट हुआ!"
+    },
+    "modal": {
+      "termsTitle": "नियम और शर्तें",
+      "acceptTerms": "नियम, शर्तें और गोपनीयता नीति स्वीकार करें"
+    },
+    "login": {
+      "brandHeadline": "वापस स्वागत है। आपका कार्यप्रवाह वहीं से शुरू होता है जहाँ छोड़ा था।",
+      "brandSub": "एक सुव्यवस्थित कार्यक्षेत्र में आवेदन, भूमिकाएँ और मैच प्रबंधित करने के लिए साइन इन करें।",
+      "brandBullet1": "छात्र और नियोक्ता अनुभव के लिए एकल साइन-इन",
+      "brandBullet2": "आधुनिक करियर प्लेटफॉर्म जैसा अनुभव",
+      "brandBullet3": "स्पष्ट जवाबदेही के साथ गोपनीयता-केंद्रित पहुँच",
+      "signInTag": "साइन इन",
+      "forgotPassword": "पासवर्ड भूल गए?",
+      "signInCta": "साइन इन",
+      "newToPlatform": "प्लेटफॉर्म पर नए हैं?",
+      "createAccount": "खाता बनाएं",
+      "adminAccessNotice": "एडमिन एक्सेस आपकी संस्था द्वारा जारी किया जाता है।",
+      "encryptedNotice": "एन्क्रिप्टेड कनेक्शन · एंटरप्राइज़-रेडी नियंत्रण"
+    },
+    "register": {
+      "brandHeadline": "अपनी प्रोफ़ाइल बनाएं और उद्देश्यपूर्ण मिलान शुरू करें।",
+      "brandSub": "सुधारित ऑनबोर्डिंग फ्लो: ईमेल सत्यापित करें और सीधे कार्यक्षेत्र में जाएँ।",
+      "brandBullet1": "ईमेल सत्यापन से आपका खाता विश्वसनीय बनता है",
+      "brandBullet2": "छात्रों और नियोक्ताओं के लिए अनुकूलित फ़ील्ड",
+      "brandBullet3": "आप बेहतर हायरिंग लूप से कुछ मिनट दूर हैं",
+      "joinTag": "जुड़ें",
+      "sendVerificationCode": "सत्यापन कोड भेजें",
+      "verifyEmailTag": "ईमेल सत्यापित करें",
+      "weSentCode": "हमने 6-अंकों का कोड भेजा है",
+      "pasteCodeHint": "अपने इनबॉक्स से कोड पेस्ट करें। कोड जल्दी समाप्त होते हैं।",
+      "sendingTo": "भेजा जा रहा है",
+      "checkSpamHint": "यदि नहीं दिखे, तो स्पैम या प्रमोशन्स देखें।",
+      "verifyAndRegister": "सत्यापित करें और पंजीकृत करें",
+      "didNotReceiveCode": "कोड प्राप्त नहीं हुआ?",
+      "resendIn": "फिर भेजें",
+      "resendOtp": "OTP फिर भेजें",
+      "alreadyHaveAccount": "पहले से खाता है?",
+      "fairUseNotice": "जारी रखने पर आप निष्पक्ष उपयोग और सही प्रोफ़ाइल जानकारी से सहमत होते हैं।"
+    },
+    "forgot": {
+      "brandHeadline": "बिना परेशानी एक्सेस वापस पाएँ।",
+      "brandSub": "ईमेल सत्यापित करें, कोड पुष्टि करें, और नया पासवर्ड सेट करें।",
+      "brandBullet1": "कम अवधि वाले, एक बार उपयोग OTP कोड",
+      "brandBullet2": "आपके साइन-इन अकाउंट टाइप से मेल",
+      "brandBullet3": "पूरा होने पर आप साइन-इन पर लौटेंगे",
+      "accountRecovery": "खाता पुनर्प्राप्ति",
+      "resetPasswordTitle": "पासवर्ड रीसेट करें",
+      "emailStepSubtitle": "अपना अकाउंट टाइप चुनें, फिर हम सत्यापन कोड ईमेल करेंगे।",
+      "passwordStepSubtitle": "अपना कार्यक्षेत्र सुरक्षित करने के लिए नया मजबूत पासवर्ड बनाएं।",
+      "signingInAs": "मैं साइन इन कर रहा/रही हूँ",
+      "sendVerificationCode": "सत्यापन कोड भेजें",
+      "backToSignIn": "साइन इन पर वापस जाएँ"
+    }
+  },
+  "student": {
+    "welcome": {
+      "greetingMorning": "सुप्रभात",
+      "greetingAfternoon": "नमस्कार",
+      "greetingEvening": "शुभ संध्या",
+      "messageMorning": "क्या आप आज अपने आसपास की नौकरियाँ और स्थानीय अवसर देखना चाहते हैं?",
+      "messageAfternoon": "जारी रखें - आपके आसपास नई स्थानीय नौकरियाँ पोस्ट हो रही हैं।",
+      "messageEvening": "आज अच्छा काम हुआ। आवेदन देखें और अगला कदम तय करें।",
+      "tagLocalOpportunities": "स्थानीय अवसर",
+      "tagNearbyHiring": "आसपास भर्ती"
+    },
+    "jobs": {
+      "title": "स्थानीय नौकरी खोज",
+      "searchPlaceholder": "भूमिका, कौशल, कंपनी या स्थान से खोजें...",
+      "activeFiltersSuffix": "सक्रिय खोज/फ़िल्टर मानदंड"
+    }
+  },
+  "corporate": {
+    "welcome": {
+      "greetingMorning": "सुप्रभात",
+      "greetingAfternoon": "नमस्कार",
+      "greetingEvening": "शुभ संध्या",
+      "messageMorning": "क्या आप बेहतर दृश्यता के साथ स्थानीय प्रतिभा को तेज़ी से नियुक्त करने के लिए तैयार हैं?",
+      "messageAfternoon": "गति बनाए रखें - आसपास से नए उम्मीदवार आवेदन कर रहे हैं।",
+      "messageEvening": "आज अच्छी प्रगति हुई। आवेदकों की समीक्षा करें और अगले भर्ती चरण तय करें।",
+      "tagWorkspace": "नियोक्ता कार्यक्षेत्र",
+      "tagVerified": "सत्यापित नियोक्ता",
+      "tagLocalHiring": "स्थानीय भर्ती",
+      "tagRegionalGrowth": "क्षेत्रीय विकास"
+    },
+    "jobs": {
+      "title": "स्थानीय भर्ती नौकरियाँ",
+      "searchPlaceholder": "शीर्षक, कौशल, या जिला/राज्य से खोजें...",
+      "activeFiltersSuffix": "सक्रिय खोज/फ़िल्टर मानदंड"
+    }
+  },
+  "admin": {
+    "welcome": {
+      "greetingMorning": "सुप्रभात",
+      "greetingAfternoon": "नमस्कार",
+      "greetingEvening": "शुभ संध्या",
+      "subtitle": "अपने हाइपर-लोकल अवसर इकोसिस्टम का प्रबंधन करें",
+      "today": "आज",
+      "systemStatus": "सिस्टम स्थिति",
+      "operational": "सक्रिय",
+      "snapshot": "स्नैपशॉट",
+      "totalUsers": "कुल उपयोगकर्ता",
+      "jobs": "नौकरियाँ"
+    },
+    "jobs": {
+      "title": "स्थानीय अवसर निगरानी",
+      "searchPlaceholder": "शीर्षक, कीवर्ड, स्थान या नियोक्ता से खोजें...",
+      "activeFiltersSuffix": "सक्रिय खोज/फ़िल्टर मानदंड"
+    }
+  },
+  "resumeAI": {
+    "livePreview": "लाइव प्रीव्यू",
+    "generatedResume": "जनरेटेड रिज्यूमे संरचना",
+    "focusChat": "चैट पर फोकस",
+    "showPreview": "प्रीव्यू दिखाएँ",
+    "saveToProfile": "प्रोफ़ाइल में सेव करें",
+    "downloadPdf": "PDF डाउनलोड करें",
+    "previewEmpty": "AI रिज्यूमे आउटपुट आने के बाद प्रीव्यू यहाँ दिखाई देगा।",
+    "generatingStatus": "AI आपका रिज्यूमे तैयार कर रहा है...",
+    "syncingStatus": "सिंक हो रहा है...",
+    "printingStatus": "प्रिंट प्रीव्यू तैयार हो रहा है...",
+    "syncConfirmTitle": "सिंक की पुष्टि करें",
+    "syncConfirmDescription": "यह आपके प्लेटफ़ॉर्म प्रोफ़ाइल को AI-जनरेटेड जानकारी से अपडेट करेगा। समान फ़ील्ड में मौजूद डेटा ओवरराइट हो जाएगा।",
+    "confirmSync": "सिंक जारी रखें",
+    "noAudioDetected": "कोई ऑडियो नहीं मिला। कृपया फिर से प्रयास करें या अपनी स्किल्स टाइप करें।",
+    "mobileTabs": {
+      "chat": "चैट",
+      "preview": "प्रीव्यू"
+    },
+    "sections": {
+      "summary": "प्रोफेशनल सारांश",
+      "experience": "कार्य अनुभव",
+      "education": "शिक्षा",
+      "skills": "कौशल",
+      "projects": "प्रोजेक्ट्स",
+      "certifications": "प्रमाणपत्र"
+    }
+  }
+}

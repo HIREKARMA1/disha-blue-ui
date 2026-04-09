@@ -1,0 +1,265 @@
+{
+  "common": {
+    "dashboard": "ଡ୍ୟାଶବୋର୍ଡ",
+    "logout": "ଲଗଆଉଟ",
+    "cancel": "ବାତିଲ୍",
+    "signIn": "ସାଇନ୍ ଇନ୍",
+    "signUp": "ସାଇନ୍ ଅପ୍",
+    "loading": "ଲୋଡ୍ ହେଉଛି...",
+    "noFiltersApplied": "କୌଣସି ଫିଲ୍ଟର ଲାଗୁ ହୋଇନାହିଁ"
+  },
+  "profile": {
+    "form": {
+      "enterYour": "ଆପଣଙ୍କର ଲେଖନ୍ତୁ",
+      "updateSectionInfoPrefix": "ଆପଣଙ୍କର",
+      "updateSectionInfoSuffix": "ସୂଚନା ଅପଡେଟ୍ କରନ୍ତୁ",
+      "saveChanges": "ପରିବର୍ତ୍ତନ ସେଭ୍ କରନ୍ତୁ",
+      "saving": "ସେଭ୍ ହେଉଛି..."
+    }
+  },
+  "nav": {
+    "home": "ହୋମ",
+    "jobs": "ଚାକିରି",
+    "forStudents": "ଛାତ୍ରଛାତ୍ରୀଙ୍କ ପାଇଁ",
+    "forEmployers": "ନିଯୁକ୍ତିଦାତାଙ୍କ ପାଇଁ",
+    "about": "ପରିଚୟ",
+    "contact": "ଯୋଗାଯୋଗ",
+    "language": "ଭାଷା",
+    "studentNavigation": "ଛାତ୍ର ନାଭିଗେସନ୍",
+    "recruiterNavigation": "ନିଯୁକ୍ତିକର୍ତ୍ତା ନାଭିଗେସନ୍",
+    "adminNavigation": "ଆଡମିନ ନାଭିଗେସନ୍"
+  },
+  "chat": {
+    "assistant": "ଏଆଇ ସହାୟକ",
+    "opportunityAssistant": "ସୁଯୋଗ ସହାୟକ",
+    "thinking": "ଭାବୁଛି...",
+    "askPlaceholder": "ଚାକିରି, ପ୍ରୋଫାଇଲ୍, ଆବେଦନ ବିଷୟରେ ପଚାରନ୍ତୁ...",
+    "scrollToBottom": "ତଳକୁ ଯାଆନ୍ତୁ"
+  },
+  "dashboard": {
+    "overview": "ଅଭିଲୋକନ",
+    "groups": {
+      "overview": "ଅଭିଲୋକନ",
+      "jobs": "ଚାକିରି",
+      "careerTools": "କ୍ୟାରିୟର ଟୁଲ୍ସ",
+      "account": "ଖାତା",
+      "hiring": "ନିଯୁକ୍ତି",
+      "insights": "ଇନସାଇଟ୍ସ",
+      "company": "କମ୍ପାନୀ",
+      "operations": "ଅପରେସନ୍ସ",
+      "assessments": "ଅସେସମେଣ୍ଟସ୍",
+      "admin": "ଆଡମିନ"
+    },
+    "labels": {
+      "logout": "ଲଗଆଉଟ",
+      "studentAccount": "ଛାତ୍ର ଖାତା",
+      "recruiterAccount": "ନିଯୁକ୍ତିକର୍ତ୍ତା ଖାତା",
+      "adminAccount": "ଆଡମିନ ଖାତା",
+      "studentWorkspace": "ଛାତ୍ର କାର୍ଯ୍ୟକ୍ଷେତ୍ର",
+      "recruiterWorkspace": "ନିଯୁକ୍ତିକର୍ତ୍ତା କାର୍ଯ୍ୟକ୍ଷେତ୍ର",
+      "adminWorkspace": "ଆଡମିନ କାର୍ଯ୍ୟକ୍ଷେତ୍ର"
+    }
+  },
+  "home": {
+    "heroTitle": "ନିଜ ଅଞ୍ଚଳରେ ଏବଂ ନିକଟସ୍ଥ ଚାକିରି ସୁଯୋଗ ଖୋଜନ୍ତୁ",
+    "heroSubtitle": "ଏକ ହାଇପର-ଲୋକାଲ୍ ସୁଯୋଗ ପ୍ଲାଟଫର୍ମ ଯାହା ଚାକିରି ପ୍ରାର୍ଥୀଙ୍କୁ ସହର, ଜିଲ୍ଲା ଓ ଗ୍ରାମୀଣ ଅଞ୍ଚଳର ନିଯୁକ୍ତିଦାତାଙ୍କ ସହିତ ଯୋଡେ।",
+    "ctaStudent": "ମୋ ନିକଟର ଚାକିରି ଦେଖନ୍ତୁ",
+    "ctaEmployer": "ସ୍ଥାନୀୟ ଚାକିରି ପୋଷ୍ଟ କରନ୍ତୁ",
+    "howItWorks": "ଏହା କିପରି କାମ କରେ",
+    "valueHeading": "ଚାକିରି ପ୍ରାର୍ଥୀ ଏବଂ ନିଯୁକ୍ତିଦାତାମାନେ ଆମକୁ କାହିଁକି ବାଛନ୍ତି"
+  },
+  "footer": {
+    "platformOverview": "ପ୍ଲାଟଫର୍ମ ପରିଚୟ",
+    "quickLinks": "ଦ୍ରୁତ ଲିଙ୍କ",
+    "roleLinks": "ଭୂମିକା ଲିଙ୍କ",
+    "contact": "ଯୋଗାଯୋଗ",
+    "forStudents": "ଛାତ୍ରଛାତ୍ରୀଙ୍କ ପାଇଁ",
+    "forEmployers": "ନିଯୁକ୍ତିଦାତାଙ୍କ ପାଇଁ"
+  },
+  "auth": {
+    "student": "ଛାତ୍ର",
+    "corporate": "କର୍ପୋରେଟ",
+    "admin": "ଆଡମିନ",
+    "welcomeBack": "ପୁଣିଥରେ ସ୍ୱାଗତ",
+    "continueJourney": "ଆପଣଙ୍କର ସ୍ଥାନୀୟ ସୁଯୋଗ ଯାତ୍ରା ଜାରି ରଖିବାକୁ ସାଇନ୍ ଇନ୍ କରନ୍ତୁ",
+    "iAmA": "ମୁଁ ଜଣେ",
+    "createAccount": "ଆପଣଙ୍କର {{role}} ଆକାଉଣ୍ଟ ସୃଷ୍ଟି କରନ୍ତୁ",
+    "startJourney": "ସ୍ଥାନୀୟ ସୁଯୋଗ ଏବଂ ଆଞ୍ଚଳିକ ନିଯୁକ୍ତି ଆବିଷ୍କାର ଆରମ୍ଭ କରନ୍ତୁ",
+    "verifyEmail": "ଆପଣଙ୍କର ଇମେଲ୍ ସତ୍ୟାପନ କରନ୍ତୁ",
+    "labels": {
+      "email": "ଇମେଲ୍",
+      "emailAddressRequired": "ଇମେଲ୍ ଠିକଣା *",
+      "password": "ପାସୱାର୍ଡ",
+      "passwordRequired": "ପାସୱାର୍ଡ *",
+      "confirmPasswordRequired": "ପାସୱାର୍ଡ ନିଶ୍ଚିତ କରନ୍ତୁ *",
+      "verificationCode": "ଯାଞ୍ଚ କୋଡ୍",
+      "termsAndConditions": "ନିୟମ ଏବଂ ଶର୍ତ୍ତାବଳୀ"
+    },
+    "placeholders": {
+      "email": "you@company.com",
+      "enterEmailAddress": "ଆପଣଙ୍କର ଇମେଲ୍ ଠିକଣା ଲେଖନ୍ତୁ",
+      "createStrongPassword": "ଏକ ଶକ୍ତିଶାଳୀ ପାସୱାର୍ଡ ସୃଷ୍ଟି କରନ୍ତୁ",
+      "confirmPassword": "ଆପଣଙ୍କର ପାସୱାର୍ଡ ନିଶ୍ଚିତ କରନ୍ତୁ"
+    },
+    "errors": {
+      "validEmail": "ଦୟାକରି ଏକ ବ valid ଇମେଲ୍ ଠିକଣା ଲେଖନ୍ତୁ",
+      "passwordRequired": "ପାସୱାର୍ଡ ଆବଶ୍ୟକ",
+      "loginFailed": "ଲଗଇନ ବିଫଳ ହେଲା। ଦୟାକରି ପୁନର୍ବାର ଚେଷ୍ଟା କରନ୍ତୁ।",
+      "invalidPassword": "ଅବୈଧ ପାସୱାର୍ଡ। ଦୟାକରି ପୁନର୍ବାର ଚେଷ୍ଟା କରନ୍ତୁ।",
+      "emailNotRegistered": "ଏହି ଇମେଲ୍ ପଞ୍ଜିକୃତ ନୁହେଁ। ପ୍ରଥମେ ଖାତା ସୃଷ୍ଟି କରନ୍ତୁ।",
+      "invalidLoginRequest": "ଅବୈଧ ଲଗଇନ ଅନୁରୋଧ।",
+      "sendOtpFailed": "OTP ପଠାଇବାରେ ବିଫଳ। ଦୟାକରି ପୁନର୍ବାର ଚେଷ୍ଟା କରନ୍ତୁ।",
+      "resendOtpFailed": "OTP ପୁନଃପଠାଇବାରେ ବିଫଳ। ଦୟାକରି ପୁନର୍ବାର ଚେଷ୍ଟା କରନ୍ତୁ।",
+      "validOtp": "ଦୟାକରି ଏକ ବ valid 6-ଅଂକର OTP ଲେଖନ୍ତୁ",
+      "invalidOtp": "ଅବୈଧ କିମ୍ବା ସମୟୋତ୍ତୀର୍ଣ୍ଣ OTP। ଦୟାକରି ପୁନର୍ବାର ଚେଷ୍ଟା କରନ୍ତୁ।",
+      "resetPasswordFailed": "ପାସୱାର୍ଡ ରିସେଟ୍ କରିବାରେ ବିଫଳ। ଦୟାକରି ପୁନର୍ବାର ଚେଷ୍ଟା କରନ୍ତୁ।",
+      "invalidUserType": "ଅବୈଧ ୟୁଜର୍ ପ୍ରକାର"
+    },
+    "toast": {
+      "registrationSuccessful": "ପଞ୍ଜିକରଣ ସଫଳ! ଦୟାକରି ଲଗଇନ କରନ୍ତୁ।",
+      "registrationSuccessfulSimple": "ପଞ୍ଜିକରଣ ସଫଳ!",
+      "acceptTermsRequired": "ଜାରି ରଖିବାକୁ ନିୟମ ଏବଂ ଶର୍ତ୍ତାବଳୀ ସ୍ୱୀକାର କରନ୍ତୁ",
+      "loginSuccessful": "ଲଗଇନ ସଫଳ!",
+      "otpSent": "OTP ଆପଣଙ୍କ ଇମେଲ୍‌କୁ ପଠାଯାଇଛି",
+      "otpResent": "OTP ପୁନଃ ଆପଣଙ୍କ ଇମେଲ୍‌କୁ ପଠାଯାଇଛି",
+      "otpResentCooldown": "OTP ପୁନଃ ପଠାଯାଇଛି। ପରବର୍ତ୍ତୀ ଅନୁରୋଧ ପାଇଁ 5 ମିନିଟ୍ ଅପେକ୍ଷା କରନ୍ତୁ।",
+      "otpVerified": "OTP ସଫଳଭାବେ ସତ୍ୟାପିତ",
+      "passwordResetSuccess": "ପାସୱାର୍ଡ ସଫଳଭାବେ ରିସେଟ୍ ହେଲା!"
+    },
+    "modal": {
+      "termsTitle": "ନିୟମ ଏବଂ ଶର୍ତ୍ତାବଳୀ",
+      "acceptTerms": "ନିୟମ, ଶର୍ତ୍ତାବଳୀ ଏବଂ ଗୋପନୀୟତା ନୀତି ସ୍ୱୀକାର କରନ୍ତୁ"
+    },
+    "login": {
+      "brandHeadline": "ପୁନଃ ସ୍ୱାଗତ। ଆପଣଙ୍କ କାର୍ଯ୍ୟପ୍ରବାହ ଯେଉଁଠାରେ ଥିଲା ସେଠାରୁ ଆରମ୍ଭ ହେଉ।",
+      "brandSub": "ଏକ ପଲିଶ୍ ୱାର୍କସ୍ପେସ୍‌ରେ ଆବେଦନ, ଭୂମିକା ଏବଂ ମ୍ୟାଚ୍ ପରିଚାଳନା ପାଇଁ ସାଇନ୍ ଇନ୍ କରନ୍ତୁ।",
+      "brandBullet1": "ଛାତ୍ର ଏବଂ ନିଯୁକ୍ତିଦାତା ପାଇଁ ଏକକ ସାଇନ୍-ଇନ୍",
+      "brandBullet2": "ଆଧୁନିକ କ୍ୟାରିୟର ପ୍ଲାଟଫର୍ମ ଅନୁଭବ",
+      "brandBullet3": "ଦାୟିତ୍ୱ ସହିତ ଗୋପନୀୟତାମୁଖୀ ପ୍ରବେଶ",
+      "signInTag": "ସାଇନ୍ ଇନ୍",
+      "forgotPassword": "ପାସୱାର୍ଡ ଭୁଲିଗଲେ?",
+      "signInCta": "ସାଇନ୍ ଇନ୍",
+      "newToPlatform": "ପ୍ଲାଟଫର୍ମରେ ନୂଆ କି?",
+      "createAccount": "ଖାତା ସୃଷ୍ଟି କରନ୍ତୁ",
+      "adminAccessNotice": "ଆଡମିନ ଆକ୍ସେସ୍ ଆପଣଙ୍କ ସଂସ୍ଥା ଦ୍ୱାରା ଦିଆଯାଏ।",
+      "encryptedNotice": "ଇନ୍କ୍ରିପ୍ଟେଡ୍ ସଂଯୋଗ · ଏଣ୍ଟରପ୍ରାଇଜ୍-ରେଡି କଣ୍ଟ୍ରୋଲ୍ସ"
+    },
+    "register": {
+      "brandHeadline": "ଆପଣଙ୍କ ପ୍ରୋଫାଇଲ୍ ସୃଷ୍ଟି କରନ୍ତୁ ଏବଂ ଉଦ୍ଦେଶ୍ୟମୂଳକ ମ୍ୟାଚିଂ ଆରମ୍ଭ କରନ୍ତୁ।",
+      "brandSub": "ସୁନିୟୋଜିତ ଅନବୋର୍ଡିଂ: ଇମେଲ୍ ସତ୍ୟାପନ ପରେ ସିଧାସଳଖ ୱାର୍କସ୍ପେସ୍।",
+      "brandBullet1": "ଇମେଲ୍ ସତ୍ୟାପନ ଆପଣଙ୍କ ଖାତାକୁ ବିଶ୍ୱସନୀୟ କରେ",
+      "brandBullet2": "ଛାତ୍ର ଏବଂ ନିଯୁକ୍ତିଦାତା ପାଇଁ ଅନୁକୂଳ ଫିଲ୍ଡ",
+      "brandBullet3": "ଆପଣ ଏକ ସଫା ହାୟାରିଂ ଲୁପ୍‌ରୁ କେବଳ କିଛି ମିନିଟ୍ ଦୂରରେ",
+      "joinTag": "ଯୋଗ ଦିଅନ୍ତୁ",
+      "sendVerificationCode": "ସତ୍ୟାପନ କୋଡ୍ ପଠାନ୍ତୁ",
+      "verifyEmailTag": "ଇମେଲ୍ ସତ୍ୟାପନ",
+      "weSentCode": "ଆମେ 6-ଅଂକର କୋଡ୍ ପଠାଇଛୁ",
+      "pasteCodeHint": "ଆପଣଙ୍କ ଇନବକ୍ସରୁ କୋଡ୍ ପେଷ୍ଟ କରନ୍ତୁ। କୋଡ୍ ସିଘ୍ର ସମାପ୍ତ ହୁଏ।",
+      "sendingTo": "ପଠାଯାଉଛି",
+      "checkSpamHint": "ନ ଦେଖିଲେ ସ୍ପାମ୍ କିମ୍ବା ପ୍ରୋମୋଶନ୍ସ ଚେକ୍ କରନ୍ତୁ।",
+      "verifyAndRegister": "ସତ୍ୟାପନ କରନ୍ତୁ ଏବଂ ପଞ୍ଜିକରଣ କରନ୍ତୁ",
+      "didNotReceiveCode": "କୋଡ୍ ମିଳିଲା ନାହିଁ କି?",
+      "resendIn": "ପୁନଃ ପଠାନ୍ତୁ",
+      "resendOtp": "OTP ପୁନଃ ପଠାନ୍ତୁ",
+      "alreadyHaveAccount": "ଆଗରୁ ଖାତା ଅଛି କି?",
+      "fairUseNotice": "ଜାରି ରଖିଲେ ଆପଣ ନ୍ୟାୟସଂଗତ ବ୍ୟବହାର ଏବଂ ସଠିକ୍ ପ୍ରୋଫାଇଲ୍ ସୂଚନାକୁ ସ୍ୱୀକାର କରନ୍ତି।"
+    },
+    "forgot": {
+      "brandHeadline": "କୌଣସି ଜଟିଳତା ବିନା ଆକ୍ସେସ୍ ପୁନଃ ପାଆନ୍ତୁ।",
+      "brandSub": "ଇମେଲ୍ ସତ୍ୟାପନ କରନ୍ତୁ, କୋଡ୍ ନିଶ୍ଚିତ କରନ୍ତୁ ଏବଂ ନୂତନ ପାସୱାର୍ଡ ସେଟ୍ କରନ୍ତୁ।",
+      "brandBullet1": "ସ୍ୱଳ୍ପ ସମୟ ପାଇଁ, ଏକବାରିଆ OTP କୋଡ୍",
+      "brandBullet2": "ଆପଣଙ୍କ ସାଇନ୍-ଇନ୍ ଖାତା ପ୍ରକାର ସହିତ ମେଳ",
+      "brandBullet3": "ସମ୍ପୂର୍ଣ୍ଣ ହେଲେ ଆପଣ ସାଇନ୍-ଇନ୍‌କୁ ଫେରିବେ",
+      "accountRecovery": "ଖାତା ପୁନରୁଦ୍ଧାର",
+      "resetPasswordTitle": "ପାସୱାର୍ଡ ରିସେଟ୍",
+      "emailStepSubtitle": "ଆପଣଙ୍କ ଖାତା ପ୍ରକାର ଚୟନ କରନ୍ତୁ, ପରେ ଆମେ ଭେରିଫିକେସନ୍ କୋଡ୍ ଇମେଲ୍ କରିବୁ।",
+      "passwordStepSubtitle": "ଆପଣଙ୍କ ୱାର୍କସ୍ପେସ୍ ସୁରକ୍ଷିତ କରିବାକୁ ନୂତନ ଶକ୍ତିଶାଳୀ ପାସୱାର୍ଡ ସୃଷ୍ଟି କରନ୍ତୁ।",
+      "signingInAs": "ମୁଁ ଏଭଳି ସାଇନ୍ ଇନ୍ କରୁଛି",
+      "sendVerificationCode": "ଭେରିଫିକେସନ୍ କୋଡ୍ ପଠାନ୍ତୁ",
+      "backToSignIn": "ସାଇନ୍ ଇନ୍‌କୁ ଫେରନ୍ତୁ"
+    }
+  },
+  "student": {
+    "welcome": {
+      "greetingMorning": "ସୁପ୍ରଭାତ",
+      "greetingAfternoon": "ଶୁଭ ଅପରାହ୍ନ",
+      "greetingEvening": "ଶୁଭ ସନ୍ଧ୍ୟା",
+      "messageMorning": "ଆଜି ନିକଟସ୍ଥ ଚାକିରି ଏବଂ ସ୍ଥାନୀୟ ସୁଯୋଗ ଦେଖିବାକୁ ପ୍ରସ୍ତୁତ କି?",
+      "messageAfternoon": "ଜାରି ରଖନ୍ତୁ - ଆପଣଙ୍କ ନିକଟରେ ନୂତନ ସ୍ଥାନୀୟ ଚାକିରି ପୋଷ୍ଟ ହେଉଛି।",
+      "messageEvening": "ଆଜି ଭଲ କାମ। ଆବେଦନଗୁଡ଼ିକ ଦେଖନ୍ତୁ ଏବଂ ପରବର୍ତ୍ତୀ ପଦକ୍ଷେପ ପ୍ରସ୍ତୁତ କରନ୍ତୁ।",
+      "tagLocalOpportunities": "ସ୍ଥାନୀୟ ସୁଯୋଗ",
+      "tagNearbyHiring": "ନିକଟସ୍ଥ ନିଯୁକ୍ତି"
+    },
+    "jobs": {
+      "title": "ସ୍ଥାନୀୟ ଚାକିରି ଖୋଜ",
+      "searchPlaceholder": "ଭୂମିକା, କୌଶଳ, କମ୍ପାନୀ କିମ୍ବା ସ୍ଥାନ ଦ୍ୱାରା ଖୋଜନ୍ତୁ...",
+      "activeFiltersSuffix": "ସକ୍ରିୟ ସର୍ଚ୍ଚ/ଫିଲ୍ଟର ମାନଦଣ୍ଡ"
+    }
+  },
+  "corporate": {
+    "welcome": {
+      "greetingMorning": "ସୁପ୍ରଭାତ",
+      "greetingAfternoon": "ଶୁଭ ଅପରାହ୍ନ",
+      "greetingEvening": "ଶୁଭ ସନ୍ଧ୍ୟା",
+      "messageMorning": "ଅଧିକ ଦୃଶ୍ୟମାନତା ସହିତ ସ୍ଥାନୀୟ ପ୍ରତିଭାକୁ ଶୀଘ୍ର ନିଯୁକ୍ତ କରିବାକୁ ପ୍ରସ୍ତୁତ କି?",
+      "messageAfternoon": "ଗତି ରଖନ୍ତୁ - ନିକଟସ୍ଥ ପ୍ରାର୍ଥୀମାନେ ଆବେଦନ କରୁଛନ୍ତି।",
+      "messageEvening": "ଆଜି ଭଲ ପ୍ରଗତି। ଆବେଦକମାନଙ୍କୁ ରିଭ୍ୟୁ କରନ୍ତୁ ଏବଂ ପରବର୍ତ୍ତୀ ନିଯୁକ୍ତି ପଦକ୍ଷେପ ଯୋଜନା କରନ୍ତୁ।",
+      "tagWorkspace": "ନିଯୁକ୍ତିଦାତା ୱାର୍କସ୍ପେସ୍",
+      "tagVerified": "ସତ୍ୟାପିତ ନିଯୁକ୍ତିଦାତା",
+      "tagLocalHiring": "ସ୍ଥାନୀୟ ନିଯୁକ୍ତି",
+      "tagRegionalGrowth": "ଅଞ୍ଚଳୀୟ ବୃଦ୍ଧି"
+    },
+    "jobs": {
+      "title": "ସ୍ଥାନୀୟ ନିଯୁକ୍ତି ଚାକିରି",
+      "searchPlaceholder": "ଶୀର୍ଷକ, କୌଶଳ, କିମ୍ବା ଜିଲ୍ଲା/ରାଜ୍ୟ ଦ୍ୱାରା ଖୋଜନ୍ତୁ...",
+      "activeFiltersSuffix": "ସକ୍ରିୟ ସର୍ଚ୍ଚ/ଫିଲ୍ଟର ମାନଦଣ୍ଡ"
+    }
+  },
+  "admin": {
+    "welcome": {
+      "greetingMorning": "ସୁପ୍ରଭାତ",
+      "greetingAfternoon": "ଶୁଭ ଅପରାହ୍ନ",
+      "greetingEvening": "ଶୁଭ ସନ୍ଧ୍ୟା",
+      "subtitle": "ଆପଣଙ୍କର ହାଇପର-ଲୋକାଲ୍ ସୁଯୋଗ ଇକୋସିଷ୍ଟମ୍ ପରିଚାଳନା କରନ୍ତୁ",
+      "today": "ଆଜି",
+      "systemStatus": "ସିଷ୍ଟମ୍ ସ୍ଥିତି",
+      "operational": "ଚାଲୁ ଅଛି",
+      "snapshot": "ସ୍ନାପସଟ୍",
+      "totalUsers": "ମୋଟ ବ୍ୟବହାରକାରୀ",
+      "jobs": "ଚାକିରି"
+    },
+    "jobs": {
+      "title": "ସ୍ଥାନୀୟ ସୁଯୋଗ ନିରୀକ୍ଷଣ",
+      "searchPlaceholder": "ଶୀର୍ଷକ, କୀୱାର୍ଡ, ସ୍ଥାନ କିମ୍ବା ନିଯୁକ୍ତିଦାତା ଦ୍ୱାରା ଖୋଜନ୍ତୁ...",
+      "activeFiltersSuffix": "ସକ୍ରିୟ ସର୍ଚ୍ଚ/ଫିଲ୍ଟର ମାନଦଣ୍ଡ"
+    }
+  },
+  "resumeAI": {
+    "livePreview": "ଲାଇଭ୍ ପ୍ରିଭ୍ୟୁ",
+    "generatedResume": "ଜନେରେଟେଡ୍ ରେଜ୍ୟୁମେ ଗଠନ",
+    "focusChat": "ଚାଟ୍‌ରେ ଫୋକସ୍",
+    "showPreview": "ପ୍ରିଭ୍ୟୁ ଦେଖାନ୍ତୁ",
+    "saveToProfile": "ପ୍ରୋଫାଇଲ୍‌ରେ ସେଭ୍ କରନ୍ତୁ",
+    "downloadPdf": "PDF ଡାଉନଲୋଡ୍ କରନ୍ତୁ",
+    "previewEmpty": "AI ରେଜ୍ୟୁମେ ଆଉଟପୁଟ୍ ଆସିଲେ ପ୍ରିଭ୍ୟୁ ଏଠାରେ ଦେଖାଯିବ।",
+    "generatingStatus": "AI ଆପଣଙ୍କ ରେଜ୍ୟୁମେ ତିଆରି କରୁଛି...",
+    "syncingStatus": "ସିଙ୍କ ହେଉଛି...",
+    "printingStatus": "ପ୍ରିଣ୍ଟ ପ୍ରିଭ୍ୟୁ ପ୍ରସ୍ତୁତ ହେଉଛି...",
+    "syncConfirmTitle": "ସିଙ୍କ ନିଶ୍ଚିତ କରନ୍ତୁ",
+    "syncConfirmDescription": "ଏହା ଆପଣଙ୍କ ପ୍ଲାଟଫର୍ମ ପ୍ରୋଫାଇଲ୍‌କୁ AI ଦ୍ୱାରା ସୃଷ୍ଟ ସୂଚନା ସହିତ ଅପଡେଟ୍ କରିବ। ସମାନ ଫିଲ୍ଡର ଥିବା ତଥ୍ୟ ଓଭରରାଇଟ୍ ହେବ।",
+    "confirmSync": "ସିଙ୍କ ଜାରି ରଖନ୍ତୁ",
+    "noAudioDetected": "କୌଣସି ଅଡିଓ ମିଳିଲା ନାହିଁ। ଦୟାକରି ପୁଣି ଚେଷ୍ଟା କରନ୍ତୁ କିମ୍ବା ଆପଣଙ୍କ ଦକ୍ଷତା ଟାଇପ କରନ୍ତୁ।",
+    "mobileTabs": {
+      "chat": "ଚାଟ୍",
+      "preview": "ପ୍ରିଭ୍ୟୁ"
+    },
+    "sections": {
+      "summary": "ପ୍ରୋଫେସନାଲ୍ ସାରାଂଶ",
+      "experience": "କାର୍ଯ୍ୟ ଅନୁଭବ",
+      "education": "ଶିକ୍ଷା",
+      "skills": "ଦକ୍ଷତା",
+      "projects": "ପ୍ରକଳ୍ପ",
+      "certifications": "ସର୍ଟିଫିକେସନ୍"
+    }
+  }
+}

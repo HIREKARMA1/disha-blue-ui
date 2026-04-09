@@ -1,0 +1,265 @@
+{
+  "common": {
+    "dashboard": "Dashboard",
+    "logout": "Logout",
+    "cancel": "Cancel",
+    "signIn": "Sign In",
+    "signUp": "Sign Up",
+    "loading": "Loading...",
+    "noFiltersApplied": "No filters applied"
+  },
+  "profile": {
+    "form": {
+      "enterYour": "Enter your",
+      "updateSectionInfoPrefix": "Update your",
+      "updateSectionInfoSuffix": "information",
+      "saveChanges": "Save Changes",
+      "saving": "Saving..."
+    }
+  },
+  "nav": {
+    "home": "Home",
+    "jobs": "Jobs",
+    "forStudents": "For Students",
+    "forEmployers": "For Employers",
+    "about": "About",
+    "contact": "Contact",
+    "language": "Language",
+    "studentNavigation": "Student navigation",
+    "recruiterNavigation": "Recruiter navigation",
+    "adminNavigation": "Admin navigation"
+  },
+  "chat": {
+    "assistant": "AI Assistant",
+    "opportunityAssistant": "Opportunity Assistant",
+    "thinking": "Thinking...",
+    "askPlaceholder": "Ask anything about jobs, profile, applications...",
+    "scrollToBottom": "Scroll to bottom"
+  },
+  "dashboard": {
+    "overview": "Overview",
+    "groups": {
+      "overview": "Overview",
+      "jobs": "Jobs",
+      "careerTools": "Career Tools",
+      "account": "Account",
+      "hiring": "Hiring",
+      "insights": "Insights",
+      "company": "Company",
+      "operations": "Operations",
+      "assessments": "Assessments",
+      "admin": "Admin"
+    },
+    "labels": {
+      "logout": "Logout",
+      "studentAccount": "Student account",
+      "recruiterAccount": "Recruiter account",
+      "adminAccount": "Admin account",
+      "studentWorkspace": "Student Workspace",
+      "recruiterWorkspace": "Recruiter Workspace",
+      "adminWorkspace": "Admin Workspace"
+    }
+  },
+  "home": {
+    "heroTitle": "Discover local and nearby job opportunities",
+    "heroSubtitle": "A hyper-local opportunity platform connecting job seekers with employers across cities, districts, and rural communities.",
+    "ctaStudent": "Find jobs near me",
+    "ctaEmployer": "Post a local job",
+    "howItWorks": "How it works",
+    "valueHeading": "Why job seekers and employers choose us"
+  },
+  "footer": {
+    "platformOverview": "Platform Overview",
+    "quickLinks": "Quick Links",
+    "roleLinks": "Role Links",
+    "contact": "Contact",
+    "forStudents": "For Students",
+    "forEmployers": "For Employers"
+  },
+  "auth": {
+    "student": "Student",
+    "corporate": "Corporate",
+    "admin": "Admin",
+    "welcomeBack": "Welcome Back",
+    "continueJourney": "Sign in to continue your local opportunities journey",
+    "iAmA": "I am a",
+    "createAccount": "Create Your {{role}} Account",
+    "startJourney": "Start discovering local opportunities and regional hiring",
+    "verifyEmail": "Verify Your Email",
+    "labels": {
+      "email": "Email",
+      "emailAddressRequired": "Email Address *",
+      "password": "Password",
+      "passwordRequired": "Password *",
+      "confirmPasswordRequired": "Confirm Password *",
+      "verificationCode": "Verification code",
+      "termsAndConditions": "Terms & Conditions"
+    },
+    "placeholders": {
+      "email": "you@company.com",
+      "enterEmailAddress": "Enter your email address",
+      "createStrongPassword": "Create a strong password",
+      "confirmPassword": "Confirm your password"
+    },
+    "errors": {
+      "validEmail": "Please enter a valid email address",
+      "passwordRequired": "Password is required",
+      "loginFailed": "Login failed. Please try again.",
+      "invalidPassword": "Invalid password. Please try again.",
+      "emailNotRegistered": "This email is not registered. Please create an account first.",
+      "invalidLoginRequest": "Invalid login request.",
+      "sendOtpFailed": "Failed to send OTP. Please try again.",
+      "resendOtpFailed": "Failed to resend OTP. Please try again.",
+      "validOtp": "Please enter a valid 6-digit OTP",
+      "invalidOtp": "Invalid or expired OTP. Please try again.",
+      "resetPasswordFailed": "Failed to reset password. Please try again.",
+      "invalidUserType": "Invalid user type"
+    },
+    "toast": {
+      "registrationSuccessful": "Registration successful! Please log in to continue.",
+      "registrationSuccessfulSimple": "Registration successful!",
+      "acceptTermsRequired": "Please accept Terms and Conditions to continue",
+      "loginSuccessful": "Login successful!",
+      "otpSent": "OTP sent to your email address",
+      "otpResent": "OTP resent to your email address",
+      "otpResentCooldown": "OTP resent to your email address. Please wait 5 minutes before requesting again.",
+      "otpVerified": "OTP verified successfully",
+      "passwordResetSuccess": "Password reset successfully!"
+    },
+    "modal": {
+      "termsTitle": "Terms and Conditions",
+      "acceptTerms": "Accept Terms and Conditions and Privacy Policy"
+    },
+    "login": {
+      "brandHeadline": "Welcome back. Your pipeline picks up where you left off.",
+      "brandSub": "Sign in to manage applications, roles, and matches in one polished workspace.",
+      "brandBullet1": "Single sign-in for student and employer experiences",
+      "brandBullet2": "Aligned with how modern career platforms should feel",
+      "brandBullet3": "Privacy-minded access with clear accountability",
+      "signInTag": "Sign in",
+      "forgotPassword": "Forgot password?",
+      "signInCta": "Sign in",
+      "newToPlatform": "New to the platform?",
+      "createAccount": "Create an account",
+      "adminAccessNotice": "Admin access is issued by your organization.",
+      "encryptedNotice": "Encrypted connection · Enterprise-ready controls"
+    },
+    "register": {
+      "brandHeadline": "Create your profile and start matching with intention.",
+      "brandSub": "A refined onboarding flow: verify your email, then land in a workspace built for hiring and careers.",
+      "brandBullet1": "Email verification keeps your account trustworthy",
+      "brandBullet2": "Tailored fields for students and employers",
+      "brandBullet3": "You are minutes away from a cleaner hiring loop",
+      "joinTag": "Join",
+      "sendVerificationCode": "Send verification code",
+      "verifyEmailTag": "Verify email",
+      "weSentCode": "We sent a 6-digit code to",
+      "pasteCodeHint": "Paste the code from your inbox. Codes expire shortly.",
+      "sendingTo": "Sending to",
+      "checkSpamHint": "If you do not see it, check spam or promotions.",
+      "verifyAndRegister": "Verify & register",
+      "didNotReceiveCode": "Didn't receive the code?",
+      "resendIn": "Resend in",
+      "resendOtp": "Resend OTP",
+      "alreadyHaveAccount": "Already have an account?",
+      "fairUseNotice": "By continuing you agree to fair use and accurate profile information."
+    },
+    "forgot": {
+      "brandHeadline": "Recover access without friction.",
+      "brandSub": "Verify your email, confirm the code, and set a fresh password—clear steps, no clutter.",
+      "brandBullet1": "Short-lived, single-use verification codes",
+      "brandBullet2": "Matches the account type you use to sign in",
+      "brandBullet3": "You will return to sign-in when complete",
+      "accountRecovery": "Account recovery",
+      "resetPasswordTitle": "Reset password",
+      "emailStepSubtitle": "Choose your account type, then we will email a verification code.",
+      "passwordStepSubtitle": "Create a strong new password to secure your workspace.",
+      "signingInAs": "I am signing in as",
+      "sendVerificationCode": "Send verification code",
+      "backToSignIn": "Back to sign in"
+    }
+  },
+  "student": {
+    "welcome": {
+      "greetingMorning": "Good morning",
+      "greetingAfternoon": "Good afternoon",
+      "greetingEvening": "Good evening",
+      "messageMorning": "Ready to explore nearby jobs and local opportunities today?",
+      "messageAfternoon": "Keep going - fresh local jobs are being posted near you.",
+      "messageEvening": "Great effort today. Review applications and plan your next move.",
+      "tagLocalOpportunities": "Local Opportunities",
+      "tagNearbyHiring": "Nearby Hiring"
+    },
+    "jobs": {
+      "title": "Local Job Discovery",
+      "searchPlaceholder": "Search by role, skill, company, or location...",
+      "activeFiltersSuffix": "active search/filter criteria"
+    }
+  },
+  "corporate": {
+    "welcome": {
+      "greetingMorning": "Good morning",
+      "greetingAfternoon": "Good afternoon",
+      "greetingEvening": "Good evening",
+      "messageMorning": "Ready to hire local talent faster with better visibility?",
+      "messageAfternoon": "Keep momentum going - new nearby candidates are applying.",
+      "messageEvening": "Great progress today. Review applicants and plan next hiring steps.",
+      "tagWorkspace": "Employer Workspace",
+      "tagVerified": "Verified Employer",
+      "tagLocalHiring": "Local Hiring",
+      "tagRegionalGrowth": "Regional Growth"
+    },
+    "jobs": {
+      "title": "Local Hiring Jobs",
+      "searchPlaceholder": "Search by title, skill, or district/state...",
+      "activeFiltersSuffix": "active search/filter criteria"
+    }
+  },
+  "admin": {
+    "welcome": {
+      "greetingMorning": "Good Morning",
+      "greetingAfternoon": "Good Afternoon",
+      "greetingEvening": "Good Evening",
+      "subtitle": "Manage your hyper-local opportunity ecosystem",
+      "today": "Today",
+      "systemStatus": "System Status",
+      "operational": "Operational",
+      "snapshot": "Snapshot",
+      "totalUsers": "Total Users",
+      "jobs": "Jobs"
+    },
+    "jobs": {
+      "title": "Local Opportunity Oversight",
+      "searchPlaceholder": "Search by title, keyword, location, or employer...",
+      "activeFiltersSuffix": "active search/filter criteria"
+    }
+  },
+  "resumeAI": {
+    "livePreview": "Live Preview",
+    "generatedResume": "Generated Resume Structure",
+    "focusChat": "Focus chat",
+    "showPreview": "Show preview",
+    "saveToProfile": "Save to Profile",
+    "downloadPdf": "Download PDF",
+    "previewEmpty": "Preview will appear here once AI returns structured resume output.",
+    "generatingStatus": "AI is architecting your resume...",
+    "syncingStatus": "Syncing...",
+    "printingStatus": "Preparing print preview...",
+    "syncConfirmTitle": "Confirm Sync",
+    "syncConfirmDescription": "This will update your platform profile with the AI-generated information. Existing data in matching fields will be overwritten.",
+    "confirmSync": "Continue Sync",
+    "noAudioDetected": "No audio detected. Please try again or type your skills.",
+    "mobileTabs": {
+      "chat": "Chat",
+      "preview": "Preview"
+    },
+    "sections": {
+      "summary": "Professional Summary",
+      "experience": "Work Experience",
+      "education": "Education",
+      "skills": "Skills",
+      "projects": "Projects",
+      "certifications": "Certifications"
+    }
+  }
+}
