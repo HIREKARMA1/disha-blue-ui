@@ -33,6 +33,11 @@ export interface StudentProfile {
     preferred_industry?: string
     job_roles_of_interest?: string
     location_preferences?: string
+    preferred_job_state?: string
+    preferred_job_district?: string
+    preferred_job_city?: string
+    preferred_job_remote?: boolean
+    open_to_relocation?: boolean
     language_proficiency?: string
     extracurricular_activities?: string
     internship_experience?: string
@@ -80,6 +85,11 @@ export interface ProfileUpdateData {
     preferred_industry?: string
     job_roles_of_interest?: string
     location_preferences?: string
+    preferred_job_state?: string
+    preferred_job_district?: string
+    preferred_job_city?: string
+    preferred_job_remote?: boolean
+    open_to_relocation?: boolean
     language_proficiency?: string
     extracurricular_activities?: string
     internship_experience?: string

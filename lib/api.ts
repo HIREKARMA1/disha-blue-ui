@@ -199,6 +199,15 @@ class ApiClient {
     return response.data;
   }
 
+  async getStudentRecommendedJobs(params: {
+    limit?: number;
+    page?: number;
+    include_match_details?: boolean;
+  } = {}): Promise<any> {
+    const response: AxiosResponse = await this.client.get('/students/recommended-jobs', { params });
+    return response.data;
+  }
+
   async getStudentApplications(params: {
     status?: string;
     search?: string;
