@@ -16,6 +16,8 @@ import {
     X,
     Bookmark,
     SlidersHorizontal,
+    Sparkles,
+    Info,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -36,6 +38,7 @@ import {
     loadSavedJobIds,
     toggleSavedJobId,
 } from '@/components/jobs/jobs-ui'
+import { getRecommendationReadiness } from '@/lib/recommendationReadiness'
 
 interface Job {
     id: string
@@ -98,6 +101,8 @@ interface Job {
     company_description?: string
     contact_person?: string
     contact_designation?: string
+    match_score?: number
+    match_reasons?: string[]
 }
 
 interface JobSearchResponse {
@@ -182,12 +187,17 @@ function JobOpportunitiesPageContent() {
     const [currentApplicationJob, setCurrentApplicationJob] = useState<Job | null>(null)
     const [jobStatusFilter, setJobStatusFilter] = useState<'all' | 'open' | 'closed'>('open') // New filter for job status
     const [studentProfile, setStudentProfile] = useState<{ degree?: string; branch?: string } | null>(null)
+    const [recommendationReadinessScore, setRecommendationReadinessScore] = useState(100)
+    const [showImproveMatchesCta, setShowImproveMatchesCta] = useState(false)
     const [allFilteredJobs, setAllFilteredJobs] = useState<Job[]>([]) // Store jobs after degree/branch filtering (before status filter)
     const [baseJobs, setBaseJobs] = useState<Job[]>([]) // Store jobs after API fetch and client-side search (before degree/branch filter)
     const activeFilterCount = Object.values(filters).filter(Boolean).length + (searchTerm ? 1 : 0)
 
     const [savedJobIds, setSavedJobIds] = useState<string[]>([])
     const [savedOnly, setSavedOnly] = useState(false)
+    const [recommendedJobs, setRecommendedJobs] = useState<Job[]>([])
+    const [loadingRecommended, setLoadingRecommended] = useState(false)
+    const [recommendationWhyText, setRecommendationWhyText] = useState<string>('Based on your location, skills, and profile completeness.')
 
     useEffect(() => {
         setSavedJobIds(loadSavedJobIds())
@@ -197,6 +207,23 @@ function JobOpportunitiesPageContent() {
     const handleSaveToggleForJob = (jobId: string) => {
         toggleSavedJobId(jobId)
         refreshSavedJobs()
+    }
+
+    const fetchRecommendedJobs = async () => {
+        try {
+            setLoadingRecommended(true)
+            const response = await apiClient.getStudentRecommendedJobs({
+                limit: 6,
+                page: 1,
+                include_match_details: true,
+            })
+            setRecommendedJobs((response?.jobs || []) as Job[])
+        } catch (error) {
+            console.error('Failed to fetch recommended jobs:', error)
+            setRecommendedJobs([])
+        } finally {
+            setLoadingRecommended(false)
+        }
     }
 
     // Fetch student profile to get degree and branch
@@ -213,6 +240,35 @@ function JobOpportunitiesPageContent() {
                 fullProfile: profile
             })
             setStudentProfile(profileData)
+            const readiness = getRecommendationReadiness(profile)
+            setRecommendationReadinessScore(readiness.score)
+            setShowImproveMatchesCta(!readiness.isReady)
+
+            const locationParts = [
+                profile.preferred_job_city,
+                profile.preferred_job_district,
+                profile.preferred_job_state,
+            ].filter(Boolean)
+            const topSkills = (profile.technical_skills || '')
+                .split(',')
+                .map((s) => s.trim())
+                .filter(Boolean)
+                .slice(0, 2)
+            const roleInterest = (profile.job_roles_of_interest || '')
+                .split(',')
+                .map((s) => s.trim())
+                .filter(Boolean)[0]
+
+            const contextBits: string[] = []
+            if (locationParts.length > 0) contextBits.push(`location: ${locationParts.join(', ')}`)
+            if (roleInterest) contextBits.push(`role interest: ${roleInterest}`)
+            if (topSkills.length > 0) contextBits.push(`skills: ${topSkills.join(', ')}`)
+
+            if (contextBits.length > 0) {
+                setRecommendationWhyText(`You're seeing these jobs based on your ${contextBits.join(' • ')}.`)
+            } else {
+                setRecommendationWhyText('You’re seeing these jobs based on your location, skills, and profile signals.')
+            }
             return profileData
         } catch (error) {
             console.error('Failed to fetch student profile:', error)
@@ -1113,6 +1169,23 @@ function JobOpportunitiesPageContent() {
         setFilters(prev => ({ ...prev, [key]: value }))
     }
 
+    const saveJobsFilterAsPreference = async () => {
+        try {
+            await profileService.updateProfile({
+                preferred_job_city: filters.city_or_town || undefined,
+                preferred_job_district: filters.district || undefined,
+                preferred_job_state: filters.state || undefined,
+                preferred_job_remote: filters.remote_work === 'true',
+                location_preferences: [filters.city_or_town, filters.district, filters.state].filter(Boolean).join(', ') || undefined,
+            })
+            await fetchRecommendedJobs()
+            toast.success('Saved as your recommendation location preference')
+        } catch (error) {
+            console.error('Failed to save location preference from filters:', error)
+            toast.error('Could not save location preference')
+        }
+    }
+
     // Handle pagination
     const handlePageChange = (page: number) => {
         setPagination(prev => ({ ...prev, page }))
@@ -1250,6 +1323,7 @@ function JobOpportunitiesPageContent() {
             const profileData = await fetchStudentProfile()
             // Pass profile data directly to fetchJobs to avoid timing issues
             await fetchJobs(1, {}, false, profileData)
+            await fetchRecommendedJobs()
             checkApplicationStatus()
             fetchProfileCompletion()
         }
@@ -1355,6 +1429,23 @@ function JobOpportunitiesPageContent() {
                     </div>
                 </div>
             </div>
+
+            {showImproveMatchesCta && (
+                <div className={cn(jobsSurfaceClass, 'mb-6 p-4 sm:p-5')}>
+                    <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                        <div>
+                            <p className="text-xs font-semibold uppercase tracking-[0.14em] text-primary">Improve your AI matches</p>
+                            <h2 className="font-display text-lg font-semibold text-foreground">Set your job preferences for better recommendations</h2>
+                            <p className="text-sm text-muted-foreground">
+                                AI match readiness: {recommendationReadinessScore}%. Add location, role interests, and skills in profile.
+                            </p>
+                        </div>
+                        <a href="/dashboard/student/profile">
+                            <Button variant="gradient" className="rounded-xl">Complete preferences</Button>
+                        </a>
+                    </div>
+                </div>
+            )}
 
             <div className={cn(jobsSurfaceClass, 'mb-6 p-4 sm:p-5')}>
                 <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
@@ -1578,8 +1669,67 @@ function JobOpportunitiesPageContent() {
                             >
                                 🗑️ Clear All
                             </Button>
+                            <Button
+                                variant="outline"
+                                onClick={saveJobsFilterAsPreference}
+                                className="border-primary/30 text-primary hover:bg-primary/5 px-6 py-2 w-full sm:w-auto"
+                            >
+                                Save as preference
+                            </Button>
                         </div>
                     </motion.div>
+                )}
+            </div>
+
+            <div className={cn(jobsSurfaceClass, 'mb-6 p-4 sm:p-5')}>
+                <div className="mb-3 flex items-center justify-between">
+                    <div>
+                        <p className="text-xs font-semibold uppercase tracking-[0.14em] text-primary">Smart Matches</p>
+                        <h2 className="font-display text-xl font-semibold text-foreground">Recommended Jobs</h2>
+                        <p className="text-sm text-muted-foreground">Based on your resume and preferred location</p>
+                    </div>
+                    <Button variant="outline" className="rounded-xl" onClick={fetchRecommendedJobs} disabled={loadingRecommended}>
+                        {loadingRecommended ? 'Refreshing...' : 'Refresh'}
+                    </Button>
+                </div>
+                <div className="mb-3 inline-flex items-center gap-2 rounded-lg border border-border/70 bg-muted/30 px-3 py-2 text-xs text-muted-foreground">
+                    <Info className="h-3.5 w-3.5 text-primary" />
+                    <span>{recommendationWhyText} AI recommendations improve as you complete your profile.</span>
+                </div>
+                {recommendedJobs.length === 0 ? (
+                    <p className="text-sm text-muted-foreground">
+                        Complete your profile/resume and set location preference in profile to get stronger AI matches.
+                    </p>
+                ) : (
+                    <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
+                        {recommendedJobs.slice(0, 3).map((job) => (
+                            <div key={job.id} className="rounded-xl border border-border/70 bg-background/70 p-4">
+                                <div className="flex items-start justify-between gap-3">
+                                    <div>
+                                        <h3 className="font-semibold text-foreground">{job.title}</h3>
+                                        <p className="text-xs text-muted-foreground">{job.corporate_name || job.company_name || 'Company'}</p>
+                                    </div>
+                                    <span className="text-xs font-semibold text-primary">
+                                        {typeof job.match_score === 'number' ? `${Math.round(job.match_score)}%` : 'Match'}
+                                    </span>
+                                </div>
+                                {(job.match_reasons || []).slice(0, 2).map((reason, idx) => (
+                                    <p key={idx} className="mt-2 inline-flex items-center gap-1 text-xs text-muted-foreground">
+                                        <Sparkles className="h-3.5 w-3.5 text-primary" />
+                                        {reason}
+                                    </p>
+                                ))}
+                                <div className="mt-3 flex gap-2">
+                                    <Button size="sm" variant="outline" className="rounded-lg" onClick={() => setSelectedJob(job)}>
+                                        View
+                                    </Button>
+                                    <Button size="sm" variant="gradient" className="rounded-lg" onClick={() => handleApplyClick(job)}>
+                                        Apply
+                                    </Button>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
                 )}
             </div>
 

@@ -30,6 +30,7 @@ import { useBranches, useDegrees, useUniversities } from '@/hooks/useLookup'
 import { LookupSelect } from '@/components/ui/lookup-select'
 import { CollegeInfoDisplay } from './CollegeInfoDisplay'
 import { useRef } from 'react'
+import { getRecommendationReadiness } from '@/lib/recommendationReadiness'
 
 interface ProfileSection {
     id: string
@@ -53,6 +54,7 @@ export function StudentProfile() {
         altText: ''
     })
     const basicFormRef = useRef<HTMLDivElement>(null);
+    const recommendationReadiness = getRecommendationReadiness(profile)
 
     const profileSections: ProfileSection[] = [
         {
@@ -73,7 +75,7 @@ export function StudentProfile() {
             id: 'skills',
             title: 'Skills & Interests',
             icon: Zap,
-            fields: ['technical_skills', 'soft_skills', 'certifications', 'preferred_industry', 'job_roles_of_interest', 'location_preferences'],
+            fields: ['technical_skills', 'soft_skills', 'certifications', 'preferred_industry', 'job_roles_of_interest', 'location_preferences', 'preferred_job_city', 'preferred_job_district', 'preferred_job_state', 'preferred_job_remote', 'open_to_relocation'],
             completed: false
         },
         {
@@ -250,6 +252,9 @@ export function StudentProfile() {
                                         </span>
                                         <span className="inline-flex items-center rounded-full border border-secondary/20 bg-secondary/10 px-3 py-1 text-xs font-medium text-secondary-700 dark:text-secondary-300">
                                             Profile workspace
+                                        </span>
+                                        <span className="inline-flex items-center rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
+                                            AI Match Readiness: {recommendationReadiness.score}%
                                         </span>
                                         {profile.resume && (
                                             <Link
@@ -617,7 +622,7 @@ export function StudentProfile() {
 
                                                 {editing === 'skills' ? (
                                                     <ProfileSectionForm
-                                                        section={{ id: 'skills', title: 'Skills & Interests', icon: Zap, fields: ['technical_skills', 'soft_skills', 'certifications', 'preferred_industry', 'job_roles_of_interest', 'location_preferences'], completed: false }}
+                                                        section={{ id: 'skills', title: 'Skills & Interests', icon: Zap, fields: ['technical_skills', 'soft_skills', 'certifications', 'preferred_industry', 'job_roles_of_interest', 'location_preferences', 'preferred_job_city', 'preferred_job_district', 'preferred_job_state', 'preferred_job_remote', 'open_to_relocation'], completed: false }}
                                                         profile={profile}
                                                         onSave={(formData) => handleSave('skills', formData)}
                                                         saving={saving}
@@ -1631,6 +1636,22 @@ function ProfileSectionForm({ section, profile, onSave, saving, onCancel }: Prof
             )
         }
 
+        if (field === 'preferred_job_remote' || field === 'open_to_relocation') {
+            return (
+                <label className="inline-flex items-center space-x-2 rounded-lg border border-gray-300 px-3 py-2 dark:border-gray-600">
+                    <input
+                        type="checkbox"
+                        checked={Boolean(formData[field])}
+                        onChange={(e) => setFormData({ ...formData, [field]: e.target.checked })}
+                        className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                    />
+                    <span className="text-sm text-gray-700 dark:text-gray-200">
+                        {field === 'preferred_job_remote' ? 'Prefer remote roles' : 'Open to relocation'}
+                    </span>
+                </label>
+            )
+        }
+
         if (field.includes('year')) {
             return (
                 <input
@@ -1916,6 +1937,11 @@ function ProfileSectionForm({ section, profile, onSave, saving, onCancel }: Prof
                         const getFieldLabel = (fieldName: string) => {
                             if (fieldName === '10th_certificate') return '10th Certificate'
                             if (fieldName === '12th_certificate') return '12th Certificate'
+                            if (fieldName === 'preferred_job_city') return 'Preferred Job City'
+                            if (fieldName === 'preferred_job_district') return 'Preferred Job District'
+                            if (fieldName === 'preferred_job_state') return 'Preferred Job State'
+                            if (fieldName === 'preferred_job_remote') return 'Remote Preference'
+                            if (fieldName === 'open_to_relocation') return 'Open to Relocation'
                             return fieldName.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())
                         }
 

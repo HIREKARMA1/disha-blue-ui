@@ -8,11 +8,15 @@ import { DashboardStats } from './DashboardStats'
 import { AnalyticsChart } from './AnalyticsChart'
 import { AdvertisementBanner } from './AdvertisementBanner'
 import { RecentActivities } from './RecentActivities'
+import { RecommendedJobsSection } from './RecommendedJobsSection'
 import { useAuth } from '@/hooks/useAuth'
 import { apiClient } from '@/lib/api'
 import { LoadingOverlay } from './LoadingOverlay'
 import Link from 'next/link'
 import { DashboardTopbar } from './DashboardTopbar'
+import { RecommendationOnboardingCard } from './RecommendationOnboardingCard'
+import { getRecommendationReadiness } from '@/lib/recommendationReadiness'
+import type { StudentProfile } from '@/services/profileService'
 
 interface StudentDashboardLayoutProps {
     children?: React.ReactNode
@@ -20,6 +24,8 @@ interface StudentDashboardLayoutProps {
 
 function StudentDashboardContent({ children }: StudentDashboardLayoutProps) {
     const [studentName, setStudentName] = useState<string>('Student')
+    const [studentProfile, setStudentProfile] = useState<StudentProfile | null>(null)
+    const [showOnboardingModal, setShowOnboardingModal] = useState(false)
     const { user } = useAuth()
 
     // Check student access and fetch profile
@@ -28,6 +34,7 @@ function StudentDashboardContent({ children }: StudentDashboardLayoutProps) {
             if (user?.user_type === 'student' && user?.id) {
                 try {
                     const profileData = await apiClient.getStudentProfile()
+                    setStudentProfile(profileData)
 
                     // Debug logging
                     console.log('Profile Data:', profileData)
@@ -37,6 +44,12 @@ function StudentDashboardContent({ children }: StudentDashboardLayoutProps) {
                         setStudentName(profileData.name)
                     } else if (user?.name) {
                         setStudentName(user.name)
+                    }
+
+                    const readiness = getRecommendationReadiness(profileData)
+                    const hasSeenPrompt = localStorage.getItem('ai_pref_onboarding_seen') === '1'
+                    if (!hasSeenPrompt && !readiness.isReady) {
+                        setShowOnboardingModal(true)
                     }
 
                 } catch (error: any) {
@@ -52,6 +65,25 @@ function StudentDashboardContent({ children }: StudentDashboardLayoutProps) {
         checkAccessAndFetchProfile()
     }, [user?.id, user?.user_type])
 
+    const refreshProfile = async () => {
+        try {
+            const profileData = await apiClient.getStudentProfile()
+            setStudentProfile(profileData)
+            if (profileData?.name && profileData.name.trim()) {
+                setStudentName(profileData.name)
+            }
+        } catch (error) {
+            console.error('Failed to refresh student profile:', error)
+        }
+    }
+
+    const handleDismissOnboarding = () => {
+        localStorage.setItem('ai_pref_onboarding_seen', '1')
+        setShowOnboardingModal(false)
+    }
+
+    const readiness = getRecommendationReadiness(studentProfile)
+
     return (
         <div className="min-h-screen bg-gradient-to-b from-muted/35 via-background to-background dark:from-background dark:via-background">
             <Navbar />
@@ -60,6 +92,11 @@ function StudentDashboardContent({ children }: StudentDashboardLayoutProps) {
                 <main className="relative min-h-screen px-4 py-6 pb-safe sm:px-6 lg:px-8 lg:py-8">
                     <div className="mx-auto w-full max-w-[1320px]">
                 <DashboardTopbar role="student" />
+                {!readiness.isReady && (
+                    <div className="mb-6">
+                        <RecommendationOnboardingCard profile={studentProfile} onSaved={refreshProfile} />
+                    </div>
+                )}
                 {children ? (
                     <>
                         <div>{children}</div>
@@ -107,6 +144,7 @@ function StudentDashboardContent({ children }: StudentDashboardLayoutProps) {
                                         </div>
                                         <div className="grid grid-cols-1 gap-6 lg:grid-cols-7">
                                             <div className="space-y-6 lg:col-span-5">
+                                                <RecommendedJobsSection />
                                                 <AnalyticsChart />
                                                 <RecentActivities />
                                             </div>
@@ -151,6 +189,17 @@ function StudentDashboardContent({ children }: StudentDashboardLayoutProps) {
                     </div>
                 </main>
             </div>
+            {showOnboardingModal && (
+                <RecommendationOnboardingCard
+                    profile={studentProfile}
+                    showAsModal
+                    onSaved={async () => {
+                        localStorage.setItem('ai_pref_onboarding_seen', '1')
+                        await refreshProfile()
+                    }}
+                    onDismiss={handleDismissOnboarding}
+                />
+            )}
         </div>
     )
 }
