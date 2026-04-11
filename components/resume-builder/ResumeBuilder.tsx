@@ -480,33 +480,33 @@ export function ResumeBuilder({ templateId, resumeId }: ResumeBuilderProps) {
   <div className="min-h-[calc(100vh-12rem)] flex items-center justify-center">
   <div className="text-center max-w-md mx-auto p-6">
   <div className="mb-6">
-  <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-  <svg className="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+  <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-sage/25 dark:bg-emerald-900/50">
+  <svg className="h-8 w-8 text-sage-deep dark:text-emerald-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
   </svg>
   </div>
-  <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+  <h2 className="mb-2 text-2xl font-bold text-slate-900 dark:text-emerald-50">
   Authentication Required
   </h2>
-  <p className="text-gray-600 dark:text-gray-400 mb-6">
+  <p className="mb-6 text-slate-600 dark:text-emerald-200/85">
   Please log in to access your profile data and create personalized resumes.
   </p>
   <div className="space-y-3">
   <button
   onClick={() => window.location.href = '/auth/login'}
-  className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition-colors"
+  className="w-full rounded-xl bg-primary py-2 px-4 font-medium text-primary-foreground transition-colors hover:bg-primary/90"
   >
   Log In
   </button>
   <button
   onClick={() => window.location.href = '/auth/register'}
-  className="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-2 px-4 rounded-lg transition-colors"
+  className="w-full rounded-xl border border-slate-200/90 bg-white py-2 px-4 font-medium text-slate-800 transition-colors hover:bg-sage/15 dark:border-emerald-800 dark:bg-emerald-950/50 dark:text-emerald-100 dark:hover:bg-emerald-900/40"
   >
   Create Account
   </button>
   </div>
   </div>
-  <div className="text-sm text-gray-500 dark:text-gray-400">
+  <div className="text-sm text-slate-500 dark:text-emerald-400/75">
   <p>Currently showing demo data. Log in to see your real profile information.</p>
   </div>
   </div>
@@ -519,8 +519,8 @@ export function ResumeBuilder({ templateId, resumeId }: ResumeBuilderProps) {
   return (
   <div className="min-h-[calc(100vh-12rem)] flex items-center justify-center">
   <div className="text-center">
-  <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-  <p className="text-gray-600 dark:text-gray-400">Loading your profile...</p>
+  <div className="mx-auto mb-4 h-12 w-12 animate-spin rounded-full border-2 border-sage/30 border-t-sage-deep dark:border-emerald-800 dark:border-t-emerald-400" />
+  <p className="text-slate-600 dark:text-emerald-200/85">Loading your profile...</p>
   </div>
   </div>
   )
@@ -536,15 +536,15 @@ export function ResumeBuilder({ templateId, resumeId }: ResumeBuilderProps) {
   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
   </svg>
   </div>
-  <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+  <h2 className="mb-2 text-2xl font-bold text-slate-900 dark:text-emerald-50">
   Profile Loading Error
   </h2>
-  <p className="text-gray-600 dark:text-gray-400 mb-6">
+  <p className="mb-6 text-slate-600 dark:text-emerald-200/85">
   {profileError}
   </p>
   <button
   onClick={refreshProfile}
-  className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition-colors"
+  className="rounded-xl bg-primary px-4 py-2 font-medium text-primary-foreground transition-colors hover:bg-primary/90"
   >
   Try Again
   </button>
@@ -557,7 +557,7 @@ export function ResumeBuilder({ templateId, resumeId }: ResumeBuilderProps) {
   return (
   <div className="min-h-[calc(100vh-12rem)] flex items-center justify-center">
   <div className="text-center">
-  <p className="text-gray-600 dark:text-gray-400">Profile not found. Please check your profile settings.</p>
+  <p className="text-slate-600 dark:text-emerald-200/85">Profile not found. Please check your profile settings.</p>
   </div>
   </div>
   )
@@ -567,21 +567,21 @@ export function ResumeBuilder({ templateId, resumeId }: ResumeBuilderProps) {
   return (
   <div className="min-h-[calc(100vh-12rem)] flex items-center justify-center">
   <div className="text-center">
-  <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-  <p className="text-gray-600 dark:text-gray-400">Initializing resume...</p>
+  <div className="mx-auto mb-4 h-12 w-12 animate-spin rounded-full border-2 border-sage/30 border-t-sage-deep dark:border-emerald-800 dark:border-t-emerald-400" />
+  <p className="text-slate-600 dark:text-emerald-200/85">Initializing resume...</p>
   </div>
   </div>
   )
   }
 
   return (
-  <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+  <div className="min-h-0">
   {/* Header */}
-  <div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 sticky top-0 z-10">
-  <div className="w-full px-3 sm:px-4 py-3 sm:py-4">
-  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+  <div className="sticky top-0 z-10 border-b border-slate-200/90 bg-white/95 backdrop-blur-sm dark:border-emerald-800/65 dark:bg-emerald-950/85">
+  <div className="w-full px-3 py-3 sm:px-4 sm:py-4">
+  <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
   <div className="flex items-center">
-  <h1 className="text-xl font-semibold text-gray-900 dark:text-white">
+  <h1 className="text-xl font-semibold text-slate-900 dark:text-emerald-50">
   {resumeId ? 'Edit Resume' : 'Create New Resume'}
   </h1>
   </div>
@@ -619,7 +619,7 @@ export function ResumeBuilder({ templateId, resumeId }: ResumeBuilderProps) {
   <Button
   variant="outline"
   onClick={handleAddToProfile}
-  className="border-blue-500 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20 w-full sm:w-auto"
+  className="w-full border-slate-200/90 text-sage-deep hover:bg-sage/15 dark:border-emerald-700 dark:text-emerald-200 dark:hover:bg-emerald-900/40 sm:w-auto"
   >
   <UserPlus className="w-4 h-4 mr-2" />
   Add to Profile
@@ -628,7 +628,7 @@ export function ResumeBuilder({ templateId, resumeId }: ResumeBuilderProps) {
   <Button
   onClick={handleSave}
   disabled={loading}
-  className="bg-primary-500 hover:bg-primary-600 text-white px-6 w-full sm:w-auto"
+  className="w-full px-6 sm:w-auto"
   >
   {loading ? 'Saving...' : saved ? 'Saved!' : 'Save'}
   </Button>
@@ -637,7 +637,7 @@ export function ResumeBuilder({ templateId, resumeId }: ResumeBuilderProps) {
   onClick={handleDownload}
   disabled={loading}
   variant="outline"
-  className="border-green-500 text-green-600 hover:bg-green-50 dark:hover:bg-green-900/20 w-full sm:w-auto"
+  className="w-full border-slate-200/90 text-sage-deep hover:bg-sage/15 dark:border-emerald-700 dark:text-emerald-200 dark:hover:bg-emerald-900/40 sm:w-auto"
   >
   <Download className="w-4 h-4 mr-2" />
   {loading ? 'Generating...' : 'Download PDF'}

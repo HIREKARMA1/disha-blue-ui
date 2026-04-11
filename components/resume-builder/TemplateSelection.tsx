@@ -2,8 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { Search, Filter, Eye, Check } from 'lucide-react'
-import { Button } from '@/components/ui/button'
+import { Search, Check } from 'lucide-react'
 import { resumeService } from '@/services/resumeService'
 
 interface TemplateInfo {
@@ -91,34 +90,37 @@ export function TemplateSelection({ onTemplateSelect }: TemplateSelectionProps) 
   const getCategoryColor = (category: string) => {
   switch (category) {
   case 'professional':
-  return 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200'
+  return 'bg-sage/25 text-sage-deep dark:bg-emerald-900/50 dark:text-emerald-200'
   case 'creative':
-  return 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200'
+  return 'bg-slate-100 text-slate-800 dark:bg-emerald-950/60 dark:text-emerald-200'
   case 'minimalist':
-  return 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200'
+  return 'bg-slate-50 text-slate-700 dark:bg-emerald-950/40 dark:text-emerald-300'
   case 'executive':
-  return 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'
+  return 'bg-sage/35 text-slate-900 dark:bg-emerald-900/55 dark:text-emerald-100'
   default:
-  return 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200'
+  return 'bg-slate-100 text-slate-700 dark:bg-emerald-950/50 dark:text-emerald-200'
   }
   }
 
   const getTemplateCardColor = (templateId: string) => {
   const colors = [
-  'bg-gradient-to-br from-blue-50 to-blue-100 border border-blue-200',
-  'bg-gradient-to-br from-green-50 to-green-100 border border-green-200',
-  'bg-gradient-to-br from-purple-50 to-purple-100 border border-purple-200',
-  'bg-gradient-to-br from-orange-50 to-orange-100 border border-orange-200',
-  'bg-gradient-to-br from-teal-50 to-teal-100 border border-teal-200'
+  'bg-gradient-to-br from-sage/20 to-sage/40 border border-sage/35',
+  'bg-gradient-to-br from-slate-50 to-sage/25 border border-slate-200/90',
+  'bg-gradient-to-br from-sage/15 to-slate-100 border border-sage/30',
+  'bg-gradient-to-br from-slate-100 to-sage/20 border border-slate-200/80',
+  'bg-gradient-to-br from-sage/25 to-slate-50 border border-sage/40',
   ]
-  const index = parseInt(templateId) - 1
-  return colors[index % colors.length]
+  let hash = 0
+  for (let i = 0; i < templateId.length; i++) {
+  hash = (hash + templateId.charCodeAt(i) * (i + 1)) % 10007
+  }
+  return colors[hash % colors.length]
   }
 
   if (loading) {
   return (
-  <div className="flex items-center justify-center h-64">
-  <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-500"></div>
+  <div className="flex h-64 items-center justify-center">
+  <div className="h-12 w-12 animate-spin rounded-full border-2 border-sage/30 border-t-sage-deep dark:border-emerald-800 dark:border-t-emerald-400" />
   </div>
   )
   }
@@ -127,27 +129,26 @@ export function TemplateSelection({ onTemplateSelect }: TemplateSelectionProps) 
   <div className="space-y-4 sm:space-y-6">
 
   {/* Search and Filters */}
-  <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-4 sm:p-6">
-  <div className="flex flex-col sm:flex-row gap-4">
+  <div className="dashboard-overview-card p-4 sm:p-6">
+  <div className="flex flex-col gap-4 sm:flex-row">
   {/* Search */}
-  <div className="w-full sm:flex-1 relative">
-  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+  <div className="relative w-full sm:flex-1">
+  <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400 dark:text-emerald-500/80" />
   <input
   type="text"
   placeholder="Search templates..."
   value={searchQuery}
   onChange={(e) => setSearchQuery(e.target.value)}
-  className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+  className="w-full rounded-2xl border border-slate-200/90 bg-white py-2 pl-10 pr-4 text-slate-900 placeholder:text-slate-500 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-sage-deep dark:border-emerald-800/70 dark:bg-emerald-950/50 dark:text-emerald-50 dark:placeholder:text-emerald-400/70 dark:focus:ring-emerald-500"
   />
   </div>
 
   {/* Category Filter */}
-  <div className="w-full sm:w-auto flex items-center space-x-2">
-  {/* <Filter className="w-4 h-4 text-gray-400" /> */}
+  <div className="flex w-full items-center space-x-2 sm:w-auto">
   <select
   value={selectedCategory}
   onChange={(e) => setSelectedCategory(e.target.value)}
-  className="flex-1 sm:flex-none px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent min-w-[150px] text-sm"
+  className="min-w-[150px] flex-1 rounded-2xl border border-slate-200/90 bg-white px-3 py-2 text-sm text-slate-900 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-sage-deep dark:border-emerald-800/70 dark:bg-emerald-950/50 dark:text-emerald-50 dark:focus:ring-emerald-500 sm:flex-none"
   >
   {categories.map(category => (
   <option key={category.id} value={category.id}>
@@ -167,9 +168,9 @@ export function TemplateSelection({ onTemplateSelect }: TemplateSelectionProps) 
   initial={{ opacity: 0, y: 20 }}
   animate={{ opacity: 1, y: 0 }}
   transition={{ delay: index * 0.1 }}
-  className={`rounded-xl shadow-lg border transition-all duration-200 cursor-pointer hover:shadow-xl overflow-hidden ${selectedTemplate === template.id
-  ? 'ring-4 ring-primary-500 ring-opacity-50'
-  : 'hover:scale-105'
+  className={`cursor-pointer overflow-hidden rounded-2xl border border-slate-200/90 shadow-[0_4px_24px_-6px_rgba(15,23,42,0.09)] transition-all duration-200 hover:shadow-lg dark:border-emerald-800/65 ${selectedTemplate === template.id
+  ? 'ring-2 ring-sage-deep ring-offset-2 ring-offset-white dark:ring-emerald-400 dark:ring-offset-emerald-950'
+  : 'hover:scale-[1.02]'
   }`}
   onClick={() => handleTemplateSelect(template.id)}
   >
@@ -183,7 +184,7 @@ export function TemplateSelection({ onTemplateSelect }: TemplateSelectionProps) 
   className="w-full h-80 sm:h-96 lg:h-[28rem] xl:h-[32rem] object-contain rounded-lg"
   />
   {selectedTemplate === template.id && (
-  <div className="absolute top-3 right-3 bg-primary-500 text-white rounded-full p-2 shadow-lg">
+  <div className="absolute right-3 top-3 rounded-full bg-sage-deep p-2 text-white shadow-lg dark:bg-emerald-600">
   <Check className="w-4 h-4" />
   </div>
   )}
@@ -192,7 +193,7 @@ export function TemplateSelection({ onTemplateSelect }: TemplateSelectionProps) 
   {/* Template Info */}
   <div className="mt-4 p-3 bg-white/90 backdrop-blur-sm rounded-lg">
   <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-2">
-  <h3 className="text-base sm:text-lg font-semibold text-gray-900">
+  <h3 className="text-base font-semibold text-slate-900 sm:text-lg dark:text-emerald-50">
   {template.name}
   </h3>
   <span className={`px-2 py-1 text-xs font-medium rounded-full w-fit ${getCategoryColor(template.category)}`}>
@@ -200,12 +201,12 @@ export function TemplateSelection({ onTemplateSelect }: TemplateSelectionProps) 
   </span>
   </div>
 
-  <p className="text-gray-600 text-xs sm:text-sm mb-2 line-clamp-1">
+  <p className="mb-2 line-clamp-1 text-xs text-slate-600 sm:text-sm dark:text-emerald-200/85">
   {template.description}
   </p>
 
   {/* Template Details */}
-  <div className="space-y-1 text-xs text-gray-500">
+  <div className="space-y-1 text-xs text-slate-500 dark:text-emerald-400/75">
   <div className="flex items-center space-x-2">
   <span>Layout:</span>
   <span className="font-medium">{template.layout}</span>
@@ -228,13 +229,13 @@ export function TemplateSelection({ onTemplateSelect }: TemplateSelectionProps) 
   {/* No Results */}
   {filteredTemplates.length === 0 && (
   <div className="text-center py-12">
-  <div className="text-gray-400 dark:text-gray-500 mb-4">
-  <Search className="w-16 h-16 mx-auto" />
+  <div className="mb-4 text-slate-400 dark:text-emerald-500/60">
+  <Search className="mx-auto h-16 w-16" />
   </div>
-  <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
+  <h3 className="mb-2 text-lg font-medium text-slate-900 dark:text-emerald-50">
   No templates found
   </h3>
-  <p className="text-gray-600 dark:text-gray-300">
+  <p className="text-slate-600 dark:text-emerald-200/85">
   Try adjusting your search or filter criteria
   </p>
   </div>

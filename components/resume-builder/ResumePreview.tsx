@@ -43,8 +43,8 @@ export function ResumePreview({ resumeData, templateId, onReady }: ResumePreview
   const renderPreviewContent = () => {
   if (!TemplateComponent) {
   return (
-  <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
-  <div className="text-center text-gray-500 dark:text-gray-400 py-8">
+  <div className="dashboard-overview-card rounded-2xl p-4">
+  <div className="py-8 text-center text-slate-500 dark:text-emerald-400/75">
   Loading template...
   </div>
   </div>
@@ -63,8 +63,8 @@ export function ResumePreview({ resumeData, templateId, onReady }: ResumePreview
 
   {/* Template Info */}
   {currentTemplate && (
-  <div className="mt-3 p-2 bg-gray-50 dark:bg-gray-700 rounded border border-gray-200 dark:border-gray-600">
-  <div className="text-xs text-gray-500 dark:text-gray-400">
+  <div className="mt-3 rounded-xl border border-slate-200/90 bg-slate-50/90 p-2 dark:border-emerald-800/60 dark:bg-emerald-950/40">
+  <div className="text-xs text-slate-500 dark:text-emerald-400/80">
   <span className="font-medium">Template:</span> {currentTemplate.name} |
   <span className="font-medium ml-1">Layout:</span> {currentTemplate.layout} |
   <span className="font-medium ml-1">Font:</span> {currentTemplate.font_family} {currentTemplate.font_size}

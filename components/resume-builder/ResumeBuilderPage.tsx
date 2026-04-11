@@ -50,7 +50,7 @@ export function ResumeBuilderPage() {
   return (
   <div className="space-y-6">
   <div className="flex items-center justify-center h-64">
-  <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-500"></div>
+  <div className="h-12 w-12 animate-spin rounded-full border-2 border-sage/30 border-t-sage-deep dark:border-emerald-800 dark:border-t-emerald-400" />
   </div>
   </div>
   )
@@ -60,11 +60,11 @@ export function ResumeBuilderPage() {
   if (error) {
   return (
   <div className="space-y-6">
-  <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-6">
-  <h3 className="text-lg font-semibold text-red-800 dark:text-red-200 mb-2">
+  <div className="dashboard-overview-card rounded-2xl border border-red-200/90 bg-red-50/80 p-6 dark:border-red-900/50 dark:bg-red-950/30">
+  <h3 className="mb-2 text-lg font-semibold text-red-900 dark:text-red-200">
   Error Loading Profile
   </h3>
-  <p className="text-red-600 dark:text-red-300">{error}</p>
+  <p className="text-red-700 dark:text-red-300/90">{error}</p>
   </div>
   </div>
   )
@@ -74,11 +74,11 @@ export function ResumeBuilderPage() {
   if (!profile) {
   return (
   <div className="space-y-6">
-  <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-6">
-  <h3 className="text-lg font-semibold text-yellow-800 dark:text-yellow-200 mb-2">
+  <div className="dashboard-overview-card rounded-2xl border border-amber-200/90 bg-amber-50/80 p-6 dark:border-amber-900/40 dark:bg-amber-950/25">
+  <h3 className="mb-2 text-lg font-semibold text-amber-900 dark:text-amber-200">
   No Profile Data
   </h3>
-  <p className="text-yellow-600 dark:text-yellow-300">
+  <p className="text-amber-800 dark:text-amber-200/90">
   Unable to load profile data. Please try again.
   </p>
   </div>
@@ -88,36 +88,36 @@ export function ResumeBuilderPage() {
 
   return (
   <div className="space-y-6">
-  {/* Header - Exact match to Video Search */}
-  <div className="bg-gradient-to-r from-primary-50 to-primary-100 dark:from-primary-900/20 dark:to-primary-800/20 rounded-2xl p-6 border border-primary-200 dark:border-primary-700 mb-6">
-  <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 lg:gap-6">
-  <div className="flex-1 min-w-0">
-  <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-2">
-  Resume Builder 
+  {/* Header — aligned with Video Search / student dashboard */}
+  <div className="dashboard-overview-card mb-6 !bg-sage/10 p-6 dark:!bg-emerald-900/30">
+  <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between lg:gap-6">
+  <div className="min-w-0 flex-1">
+  <h1 className="mb-2 font-display text-2xl font-semibold tracking-tight text-slate-900 md:text-3xl dark:text-emerald-50">
+  Resume Builder
   </h1>
-  <p className="text-gray-600 dark:text-gray-300 text-lg mb-3">
-  Create professional resumes with our AI-powered builder 
+  <p className="mb-3 text-lg text-slate-600 dark:text-emerald-200/85">
+  Create professional resumes with our AI-powered builder
   </p>
   <div className="flex flex-wrap gap-2">
-  <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-200">
+  <span className="inline-flex items-center border border-sage/40 bg-white px-3 py-1 text-sm font-medium text-sage-deep dark:border-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-200">
   {new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}
   </span>
-  <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-200">
+  <span className="inline-flex items-center border border-sage/40 bg-sage/15 px-3 py-1 text-sm font-medium text-sage-deep dark:border-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-200">
   Career Growth
   </span>
-  <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200">
+  <span className="inline-flex items-center border border-sage/40 bg-sage/15 px-3 py-1 text-sm font-medium text-sage-deep dark:border-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-200">
   New Opportunities
   </span>
   </div>
   </div>
-  <div className="flex items-center space-x-3">
+  <div className="flex flex-wrap items-center gap-3">
   {currentView !== 'dashboard' && (
   <Button
   variant="outline"
   onClick={handleBackToDashboard}
-  className="flex items-center space-x-2 border-primary-500 text-primary-500 hover:bg-primary-500 hover:text-white"
+  className="flex items-center gap-2 border-slate-200/90 text-sage-deep hover:bg-sage/20 dark:border-emerald-700 dark:text-emerald-200 dark:hover:bg-emerald-900/50"
   >
-  <FileText className="w-4 h-4" />
+  <FileText className="h-4 w-4" />
   <span>Dashboard</span>
   </Button>
   )}
@@ -125,9 +125,9 @@ export function ResumeBuilderPage() {
   <Button
   variant="outline"
   onClick={handleBackToTemplates}
-  className="flex items-center space-x-2 border-primary-500 text-primary-500 hover:bg-primary-500 hover:text-white"
+  className="flex items-center gap-2 border-slate-200/90 text-sage-deep hover:bg-sage/20 dark:border-emerald-700 dark:text-emerald-200 dark:hover:bg-emerald-900/50"
   >
-  <Filter className="w-4 h-4" />
+  <Filter className="h-4 w-4" />
   <span>Change Template</span>
   </Button>
   )}
