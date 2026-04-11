@@ -3,37 +3,37 @@ import { apiClient } from '@/lib/api'
 
 // Get University Module Attempts Hook
 export function useUniversityModuleAttempts(moduleId: string) {
-    const [data, setData] = useState<any[]>([])
-    const [isLoading, setIsLoading] = useState(true)
-    const [error, setError] = useState<Error | null>(null)
+  const [data, setData] = useState<any[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState<Error | null>(null)
 
-    const fetchAttempts = useCallback(async () => {
-        if (!moduleId) {
-            setData([])
-            setIsLoading(false)
-            return
-        }
+  const fetchAttempts = useCallback(async () => {
+  if (!moduleId) {
+  setData([])
+  setIsLoading(false)
+  return
+  }
 
-        try {
-            setIsLoading(true)
-            setError(null)
-            
-            const response = await apiClient.client.get(`/practice/university/modules/${moduleId}/attempts`)
-            console.log('🔄 Fetched university attempts from API:', response.data)
-            // Handle the API response structure - data is in response.data.value
-            setData(response.data.value || response.data)
-        } catch (err) {
-            const error = err instanceof Error ? err : new Error('Failed to fetch university module attempts')
-            setError(error)
-            console.error('Error fetching university module attempts:', err)
-        } finally {
-            setIsLoading(false)
-        }
-    }, [moduleId])
+  try {
+  setIsLoading(true)
+  setError(null)
+  
+  const response = await apiClient.client.get(`/practice/university/modules/${moduleId}/attempts`)
+  console.log(' Fetched university attempts from API:', response.data)
+  // Handle the API response structure - data is in response.data.value
+  setData(response.data.value || response.data)
+  } catch (err) {
+  const error = err instanceof Error ? err : new Error('Failed to fetch university module attempts')
+  setError(error)
+  console.error('Error fetching university module attempts:', err)
+  } finally {
+  setIsLoading(false)
+  }
+  }, [moduleId])
 
-    useEffect(() => {
-        fetchAttempts()
-    }, [fetchAttempts])
+  useEffect(() => {
+  fetchAttempts()
+  }, [fetchAttempts])
 
-    return { data, isLoading, error, refetch: fetchAttempts }
+  return { data, isLoading, error, refetch: fetchAttempts }
 }

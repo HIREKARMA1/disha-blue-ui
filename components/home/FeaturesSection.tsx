@@ -1,42 +1,35 @@
 "use client"
 
 import { motion } from "framer-motion"
-import { Brain, MapPinned, FileText, LayoutDashboard, Users2, BarChart3 } from "lucide-react"
 
 const highlights = [
   {
-    icon: Brain,
     title: "AI matching & signals",
     description:
       "Surface roles and candidates with fit context—not just filters—so decisions feel informed.",
     span: "lg:col-span-2",
   },
   {
-    icon: MapPinned,
     title: "Hyperlocal discovery",
     description: "Structured locations from state to village, designed for real regional hiring.",
     span: "",
   },
   {
-    icon: FileText,
     title: "Resume & readiness",
     description: "Keep profiles polished with builder tools and nudges that reduce drop-off.",
     span: "",
   },
   {
-    icon: LayoutDashboard,
     title: "Recruiter-grade pipeline",
     description: "Kanban-friendly stages, clear ownership, and history that scales with your team.",
     span: "lg:col-span-2",
   },
   {
-    icon: Users2,
     title: "Collaborative hiring",
     description: "Share context across reviewers without losing the thread on a candidate.",
     span: "",
   },
   {
-    icon: BarChart3,
     title: "Operational analytics",
     description: "Understand funnel health, time-to-hire, and sourcing performance at a glance.",
     span: "",
@@ -53,8 +46,7 @@ export default function FeaturesSection() {
             Everything you need to run modern hiring
           </h2>
           <p className="mt-3 text-muted-foreground md:text-lg">
-            A cohesive product layer for discovery, application, and pipeline—without duct-taping
-            tools together.
+            A cohesive product layer for discovery, application, and pipeline—without duct-taping tools together.
           </p>
         </div>
 
@@ -68,12 +60,7 @@ export default function FeaturesSection() {
               transition={{ delay: i * 0.05 }}
               className={`rounded-2xl border border-border bg-card p-6 shadow-soft transition-all hover:-translate-y-0.5 hover:border-primary/20 hover:shadow-medium ${item.span}`}
             >
-              <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-primary-500/15 to-secondary-500/15 text-primary">
-                <item.icon className="h-5 w-5" />
-              </div>
-              <p className="mt-3 text-[11px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">
-                Product capability
-              </p>
+              <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">Product capability</p>
               <h3 className="mt-4 font-display text-lg font-semibold text-foreground">{item.title}</h3>
               <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{item.description}</p>
             </motion.div>

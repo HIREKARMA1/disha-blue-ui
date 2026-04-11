@@ -44,65 +44,65 @@ class UniversityService {
   private readonly CACHE_DURATION = 5 * 60 * 1000 // 5 minutes
 
   /**
-   * Fetch all universities from the admin endpoint
-   */
+  * Fetch all universities from the admin endpoint
+  */
   async getAllUniversities(): Promise<UniversitiesResponse> {
-    const cacheKey = 'all-universities'
-    
-    // Check cache first
-    const cached = this.cache.get(cacheKey)
-    if (cached && Date.now() - cached.timestamp < this.CACHE_DURATION) {
-      console.log('Using cached universities data')
-      return cached.data as UniversitiesResponse
-    }
+  const cacheKey = 'all-universities'
+  
+  // Check cache first
+  const cached = this.cache.get(cacheKey)
+  if (cached && Date.now() - cached.timestamp < this.CACHE_DURATION) {
+  console.log('Using cached universities data')
+  return cached.data as UniversitiesResponse
+  }
 
-    try {
-      const response = await apiClient.client.get('/admin/lookups/universities')
-      
-      // Cache the result
-      this.cache.set(cacheKey, {
-        data: response.data,
-        timestamp: Date.now()
-      })
+  try {
+  const response = await apiClient.client.get('/admin/lookups/universities')
+  
+  // Cache the result
+  this.cache.set(cacheKey, {
+  data: response.data,
+  timestamp: Date.now()
+  })
 
-      return response.data
-    } catch (error) {
-      console.error('Failed to fetch universities:', error)
-      throw error
-    }
+  return response.data
+  } catch (error) {
+  console.error('Failed to fetch universities:', error)
+  throw error
+  }
   }
 
   /**
-   * Get universities formatted for lookup dropdown
-   */
+  * Get universities formatted for lookup dropdown
+  */
   async getUniversitiesForLookup(): Promise<LookupItem[]> {
-    try {
-      const response = await this.getAllUniversities()
-      
-      // Filter out archived universities and format for lookup
-      const activeUniversities = response.universities
-        .filter(university => !university.is_archived && university.verified)
-        .map(university => ({
-          id: university.id,
-          name: university.university_name,
-          description: university.institute_type || 'University',
-          created_at: university.created_at,
-          updated_at: university.updated_at
-        }))
-        .sort((a, b) => a.name.localeCompare(b.name)) // Sort alphabetically
+  try {
+  const response = await this.getAllUniversities()
+  
+  // Filter out archived universities and format for lookup
+  const activeUniversities = response.universities
+  .filter(university => !university.is_archived && university.verified)
+  .map(university => ({
+  id: university.id,
+  name: university.university_name,
+  description: university.institute_type || 'University',
+  created_at: university.created_at,
+  updated_at: university.updated_at
+  }))
+  .sort((a, b) => a.name.localeCompare(b.name)) // Sort alphabetically
 
-      return activeUniversities
-    } catch (error) {
-      console.error('Failed to fetch universities for lookup:', error)
-      return []
-    }
+  return activeUniversities
+  } catch (error) {
+  console.error('Failed to fetch universities for lookup:', error)
+  return []
+  }
   }
 
   /**
-   * Clear cache
-   */
+  * Clear cache
+  */
   clearCache(): void {
-    this.cache.clear()
+  this.cache.clear()
   }
 }
 

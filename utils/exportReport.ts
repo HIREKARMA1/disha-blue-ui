@@ -13,21 +13,21 @@ export const exportAttemptReport = (report: any, filename = 'practice-report.pdf
 
   // Add weak areas table
   if (report.weak_areas?.length) {
-    autoTable(doc, {
-      startY: 48,
-      head: [['Tag', 'Accuracy']],
-      body: report.weak_areas.map((w: any) => [w.tag, `${w.accuracy}%`]),
-    });
+  autoTable(doc, {
+  startY: 48,
+  head: [['Tag', 'Accuracy']],
+  body: report.weak_areas.map((w: any) => [w.tag, `${w.accuracy}%`]),
+  });
   }
 
   // Per-question table
   const nextY = (doc as any).previousAutoTable ? (doc as any).previousAutoTable.finalY + 10 : 100;
 
   autoTable(doc, {
-    startY: nextY,
-    head: [['Q ID', 'Correct', 'Explanation']],
-    body: report.question_results.map((q: any) => [q.question_id, q.is_correct ? 'Yes' : 'No', q.explanation || '']),
-    styles: { fontSize: 9 },
+  startY: nextY,
+  head: [['Q ID', 'Correct', 'Explanation']],
+  body: report.question_results.map((q: any) => [q.question_id, q.is_correct ? 'Yes' : 'No', q.explanation || '']),
+  styles: { fontSize: 9 },
   });
 
   doc.save(filename);

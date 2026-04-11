@@ -8,20 +8,20 @@ export function cn(...inputs: ClassValue[]) {
 export function formatDate(date: string | Date): string {
   const d = new Date(date);
   return d.toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
   });
 }
 
 export function formatDateTime(date: string | Date): string {
   const d = new Date(date);
   return d.toLocaleString('en-US', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+  hour: '2-digit',
+  minute: '2-digit',
   });
 }
 
@@ -44,11 +44,11 @@ export function validatePhone(phone: string): boolean {
 
 export function getInitials(name: string): string {
   return name
-    .split(' ')
-    .map(word => word.charAt(0))
-    .join('')
-    .toUpperCase()
-    .slice(0, 2);
+  .split(' ')
+  .map(word => word.charAt(0))
+  .join('')
+  .toUpperCase()
+  .slice(0, 2);
 }
 
 export function truncateText(text: string, maxLength: number): string {
@@ -66,7 +66,7 @@ export function debounce<T extends (...args: any[]) => any>(
 ): (...args: Parameters<T>) => void {
   let timeout: NodeJS.Timeout;
   return (...args: Parameters<T>) => {
-    clearTimeout(timeout);
-    timeout = setTimeout(() => func(...args), wait);
+  clearTimeout(timeout);
+  timeout = setTimeout(() => func(...args), wait);
   };
 }

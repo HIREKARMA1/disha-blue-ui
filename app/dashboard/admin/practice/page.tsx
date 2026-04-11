@@ -4,9 +4,9 @@ import { AdminDashboardLayout } from '@/components/dashboard/AdminDashboardLayou
 import { AdminPracticeManager } from '@/components/admin/AdminPracticeManager'
 
 export default function AdminPracticePage() {
-    return (
-        <AdminDashboardLayout>
-            <AdminPracticeManager />
-        </AdminDashboardLayout>
-    )
+ return (
+ <AdminDashboardLayout>
+ <AdminPracticeManager />
+ </AdminDashboardLayout>
+ )
 }

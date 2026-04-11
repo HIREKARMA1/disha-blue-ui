@@ -12,12 +12,12 @@ export function t(locale: SupportedLocale, key: string): string {
   let value: any = dictionaries[locale]
 
   for (const part of parts) {
-    if (value && typeof value === 'object' && part in value) {
-      value = value[part]
-    } else {
-      value = undefined
-      break
-    }
+  if (value && typeof value === 'object' && part in value) {
+  value = value[part]
+  } else {
+  value = undefined
+  break
+  }
   }
 
   if (typeof value === 'string') return value

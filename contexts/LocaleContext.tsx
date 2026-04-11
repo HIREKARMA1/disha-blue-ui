@@ -17,21 +17,21 @@ export function LocaleProvider({ children }: PropsWithChildren) {
   const [locale, setLocaleState] = useState<SupportedLocale>('en')
 
   useEffect(() => {
-    const detected = getClientLocale()
-    setLocaleState(detected)
-    if (typeof document !== 'undefined') {
-      document.documentElement.lang = detected
-      document.documentElement.dir = 'ltr'
-    }
+  const detected = getClientLocale()
+  setLocaleState(detected)
+  if (typeof document !== 'undefined') {
+  document.documentElement.lang = detected
+  document.documentElement.dir = 'ltr'
+  }
   }, [])
 
   const setLocale = (nextLocale: SupportedLocale) => {
-    setLocaleState(nextLocale)
-    setClientLocale(nextLocale)
-    if (typeof document !== 'undefined') {
-      document.documentElement.lang = nextLocale
-      document.documentElement.dir = 'ltr'
-    }
+  setLocaleState(nextLocale)
+  setClientLocale(nextLocale)
+  if (typeof document !== 'undefined') {
+  document.documentElement.lang = nextLocale
+  document.documentElement.dir = 'ltr'
+  }
   }
 
   const value = useMemo(() => ({ locale, setLocale }), [locale])

@@ -4,9 +4,9 @@ import { UniversityDashboardLayout } from '@/components/dashboard/UniversityDash
 import { UniversityPracticeManager } from '@/components/university/UniversityPracticeManager'
 
 export default function UniversityPracticePage() {
-    return (
-        <UniversityDashboardLayout>
-            <UniversityPracticeManager />
-        </UniversityDashboardLayout>
-    )
+ return (
+ <UniversityDashboardLayout>
+ <UniversityPracticeManager />
+ </UniversityDashboardLayout>
+ )
 }
