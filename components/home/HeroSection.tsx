@@ -1,21 +1,80 @@
 "use client"
 
+import { useEffect, useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
+import { cn } from "@/lib/utils"
 
-const statSnapshot = [
-  { label: "Active roles", value: "12k+" },
-  { label: "Employers", value: "3.2k+" },
-  { label: "Cities covered", value: "180+" },
+type StatFormat = "intK" | "decK" | "intPlus"
+
+const heroStats: Array<{ label: string; end: number; format: StatFormat }> = [
+  { label: "Active roles", end: 12, format: "intK" },
+  { label: "Employers", end: 3.2, format: "decK" },
+  { label: "Cities covered", end: 180, format: "intPlus" },
 ]
+
+function StatCounter({
+  end,
+  format,
+  className,
+  delayMs = 0,
+}: {
+  end: number
+  format: StatFormat
+  className?: string
+  /** Stagger so stats read left-to-right. */
+  delayMs?: number
+}) {
+  const [display, setDisplay] = useState(0)
+
+  useEffect(() => {
+    const duration = 2000
+    let rafId = 0
+    let t0 = 0
+    const easeOutCubic = (t: number) => 1 - (1 - t) ** 3
+
+    const tick = (now: number) => {
+      const t = Math.min(1, (now - t0) / duration)
+      const eased = easeOutCubic(t)
+      const raw = end * eased
+      let next: number
+      if (format === "decK") {
+        next = t >= 1 ? end : Math.round(raw * 10) / 10
+      } else {
+        next = t >= 1 ? end : Math.floor(raw)
+      }
+      setDisplay(next)
+      if (t < 1) rafId = requestAnimationFrame(tick)
+    }
+
+    const delayHandle = window.setTimeout(() => {
+      t0 = performance.now()
+      rafId = requestAnimationFrame(tick)
+    }, delayMs)
+
+    return () => {
+      window.clearTimeout(delayHandle)
+      cancelAnimationFrame(rafId)
+    }
+  }, [end, format, delayMs])
+
+  const text =
+    format === "intK"
+      ? `${Math.min(Math.round(display), end)}k+`
+      : format === "decK"
+        ? `${display.toFixed(1)}k+`
+        : `${Math.min(Math.round(display), end)}+`
+
+  return <span className={cn("tabular-nums", className)}>{text}</span>
+}
 
 /** Reference-style accent (burnt orange / terracotta) */
 const ACCENT = "#c95628"
 
 export default function HeroSection() {
-  const heroStat = statSnapshot[0]
+  const heroStat = heroStats[0]
 
   return (
     <section className="relative overflow-hidden bg-transparent pt-24 pb-16 md:pt-32 md:pb-24 dark:bg-transparent">
@@ -91,7 +150,7 @@ export default function HeroSection() {
                     </div>
                     <div className="rounded-2xl bg-white/95 px-3 py-2 shadow-sm backdrop-blur-sm dark:bg-emerald-950/90">
                       <p className="font-display text-lg font-bold tabular-nums text-neutral-900 dark:text-emerald-50">
-                        {heroStat.value}
+                        <StatCounter end={heroStat.end} format={heroStat.format} />
                       </p>
                       <p className="text-[10px] font-medium uppercase tracking-wide text-slate-500 dark:text-emerald-400">
                         {heroStat.label}
@@ -102,13 +161,6 @@ export default function HeroSection() {
                       <span className="h-px w-full bg-slate-400/80 dark:bg-emerald-500/60" />
                     </div>
                   </div>
-                </div>
-
-                {/* Small insight card */}
-                <div className="pointer-events-none absolute bottom-24 left-4 max-w-[14rem] rounded-2xl border border-slate-200/80 bg-white/95 p-3 shadow-sm backdrop-blur-sm dark:border-emerald-700 dark:bg-emerald-950/92">
-                  <p className="text-xs font-medium leading-snug text-slate-600 dark:text-emerald-200/90">
-                    AI-informed matching and recruiter-grade workflows.
-                  </p>
                 </div>
 
                 {/* Sunburst + terracotta scroll */}
@@ -152,15 +204,6 @@ export default function HeroSection() {
 
           {/* Copy column */}
           <div className="order-2 max-w-2xl flex-1 text-center lg:order-1 lg:text-left">
-            <motion.div
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.45 }}
-              className="mb-6 inline-flex items-center rounded-full border border-slate-200/90 bg-white/80 px-4 py-2 text-xs font-semibold text-slate-700 shadow-sm backdrop-blur-sm dark:border-emerald-800 dark:bg-emerald-900/50 dark:text-emerald-200"
-            >
-              <span>Smarter hiring for talent and teams</span>
-            </motion.div>
-
             <motion.h1
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -176,7 +219,7 @@ export default function HeroSection() {
               transition={{ duration: 0.5, delay: 0.12 }}
               className="mt-5 max-w-xl text-base text-slate-600 sm:text-lg md:text-xl lg:max-w-2xl dark:text-emerald-200/90"
             >
-              One modern platform for job seekers and employers, with AI-informed matching and recruiter-grade workflows.
+              One modern platform for job seekers and employers.
             </motion.p>
 
             <motion.p
@@ -219,9 +262,11 @@ export default function HeroSection() {
               transition={{ delay: 0.35, duration: 0.5 }}
               className="mt-10 flex flex-wrap items-center justify-center gap-x-8 gap-y-3 border-t border-slate-200/80 pt-7 dark:border-emerald-800 lg:justify-start"
             >
-              {statSnapshot.map((s) => (
+              {heroStats.map((s, i) => (
                 <div key={s.label} className="min-w-[120px] text-left">
-                  <p className="font-display text-2xl font-semibold text-neutral-900 md:text-3xl dark:text-emerald-50">{s.value}</p>
+                  <p className="font-display text-2xl font-semibold tabular-nums text-neutral-900 md:text-3xl dark:text-emerald-50">
+                    <StatCounter end={s.end} format={s.format} delayMs={i * 140} />
+                  </p>
                   <p className="text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-emerald-400">{s.label}</p>
                 </div>
               ))}
