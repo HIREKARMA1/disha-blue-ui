@@ -78,16 +78,30 @@ type SupportedLocale = "en" | "hi" | "or"
 
 interface GenerateResumeParams {
   text: string
-  voiceTranscript?: string
   files?: File[]
+  jobDescription?: string
   language: SupportedLocale
   profileData?: Record<string, unknown>
 }
 
+export interface AtsFeedback {
+  match_score?: number | null
+  missing_keywords?: string[]
+  suggestions?: string[]
+}
+
 interface GenerateResumeResult {
-  resume: FullResumeSchema
+  error?: boolean
+  mode?: "json_resume" | "text_resume"
+  resume_text?: string
+  resume?: FullResumeSchema
   locale_used?: string
-  metadata?: Record<string, unknown>
+  metadata?: Record<string, unknown> & { ats_feedback?: AtsFeedback }
+}
+interface ResumeState {
+  type: "structured" | "text" | null
+  structured: FullResumeSchema | null
+  text: string | null
 }
 
 const statusStepsByLocale: Record<SupportedLocale, string[]> = {
@@ -121,13 +135,21 @@ const invalidJsonRetryHintByLocale: Record<SupportedLocale, string> = {
 }
 
 export function useResumeAI() {
-  const [resumeData, setResumeData] = useState<FullResumeSchema>(emptyResume)
+  const [resumeState, setResumeState] = useState<ResumeState>({
+  type: null,
+  structured: null,
+  text: null,
+  })
   const [isGenerating, setIsGenerating] = useState(false)
   const [isSaving, setIsSaving] = useState(false)
   const [statusMessage, setStatusMessage] = useState<string>("")
   const [error, setError] = useState<string | null>(null)
+  const [errorSuggestions, setErrorSuggestions] = useState<string[]>([])
+  const [generationMetadata, setGenerationMetadata] = useState<GenerateResumeResult["metadata"] | null>(null)
   const [saveError, setSaveError] = useState<string | null>(null)
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
+  const resumeData = resumeState.structured || emptyResume
+  const textResume = resumeState.text || ""
 
   const stopStatusLoop = () => {
   if (intervalRef.current) {
@@ -172,20 +194,60 @@ export function useResumeAI() {
   return fallback
   }
 
+  const normalizeErrorSuggestions = (err: any) => {
+  const detail = err?.response?.data?.detail
+  if (detail && typeof detail === "object") {
+  const suggestions = (detail as Record<string, unknown>).suggestions
+  if (Array.isArray(suggestions)) {
+  return suggestions.filter((item): item is string => typeof item === "string" && item.trim().length > 0)
+  }
+  }
+  return []
+  }
+
+  const applyResumeResponse = (payload: GenerateResumeResult) => {
+  if (payload?.mode === "text_resume") {
+  setResumeState({
+  type: "text",
+  structured: null,
+  text: payload?.resume_text || "",
+  })
+  return emptyResume
+  }
+  const structured =
+  payload?.resume ||
+  ((payload as FullResumeSchema)?.personal_info ? (payload as FullResumeSchema) : emptyResume)
+  setResumeState({
+  type: "structured",
+  structured,
+  text: null,
+  })
+  return structured
+  }
+
   const generateResume = useCallback(async (params: GenerateResumeParams) => {
-  const { text, voiceTranscript = "", files = [], language, profileData = {} } = params
+  const { text, files = [], jobDescription = "", language, profileData = {} } = params
   setError(null)
+  setErrorSuggestions([])
   setIsGenerating(true)
   startStatusLoop(language)
 
   const buildFormData = (payloadText: string) => {
   const formData = new FormData()
+  const safeInputText = payloadText?.trim() || ""
+  const safeJobDescription = jobDescription?.trim() || ""
   const payload = {
-  text: payloadText,
-  voice_transcript: voiceTranscript,
+  // Send a single canonical input field to avoid conflicts.
+  input_text: safeInputText,
+  job_description: safeJobDescription,
   language,
   profile_data: profileData,
   }
+  console.log("Resume API Payload:", {
+  input_text: safeInputText,
+  job_description: safeJobDescription,
+  language,
+  })
   formData.append("payload", JSON.stringify(payload))
   files.forEach((file) => formData.append("files", file))
   return formData
@@ -193,9 +255,10 @@ export function useResumeAI() {
 
   try {
   const response = await apiClient.client.post<GenerateResumeResult>("/resume/generate-ai", buildFormData(text))
-
-  const nextResume = response.data?.resume || emptyResume
-  setResumeData(nextResume)
+  const apiResponse = response.data || {}
+  console.log("API RESPONSE:", apiResponse)
+  const nextResume = applyResumeResponse(apiResponse)
+  setGenerationMetadata(apiResponse?.metadata || null)
   return nextResume
   } catch (err: any) {
   const rawMessage = normalizeErrorMessage(err, "").toLowerCase()
@@ -206,19 +269,25 @@ export function useResumeAI() {
   try {
   const retryPrompt = `${text}\n\n${invalidJsonRetryHintByLocale[language] || invalidJsonRetryHintByLocale.en}`
   const retryResponse = await apiClient.client.post<GenerateResumeResult>("/resume/generate-ai", buildFormData(retryPrompt))
-  const retryResume = retryResponse.data?.resume || emptyResume
-  setResumeData(retryResume)
+  const retryPayload = retryResponse.data || {}
+  console.log("API RESPONSE:", retryPayload)
+  const retryResume = applyResumeResponse(retryPayload)
+  setGenerationMetadata(retryPayload?.metadata || null)
   setError(null)
   return retryResume
   } catch (retryErr: any) {
   const retryMessage = normalizeErrorMessage(retryErr, "Failed to generate AI resume. Please try again.")
+  const retrySuggestions = normalizeErrorSuggestions(retryErr)
   setError(retryMessage)
+  setErrorSuggestions(retrySuggestions)
   throw retryErr
   }
   }
 
   const message = normalizeErrorMessage(err, "Failed to generate AI resume. Please try again.")
+  const suggestions = normalizeErrorSuggestions(err)
   setError(message)
+  setErrorSuggestions(suggestions)
   throw err
   } finally {
   stopStatusLoop()
@@ -297,12 +366,21 @@ export function useResumeAI() {
   )
 
   return {
+  resumeState,
   resumeData,
-  setResumeData,
+  setResumeData: (next: FullResumeSchema) =>
+  setResumeState({
+  type: "structured",
+  structured: next,
+  text: null,
+  }),
   isGenerating,
   isSaving,
   statusMessage,
   error,
+  errorSuggestions,
+  generationMetadata,
+  textResume,
   saveError,
   generateResume,
   saveToProfile,
