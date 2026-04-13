@@ -14,6 +14,7 @@ import {
  LogOut,
  Brain,
  ClipboardList,
+Bot,
  Sparkles,
  type LucideIcon,
 } from 'lucide-react'
@@ -66,7 +67,7 @@ export function StudentSidebar({ className =''}: StudentSidebarProps) {
  title: t(locale,'dashboard.groups.careerTools'),
  items: [
  { label:'Resume Builder', href:'/dashboard/student/resume-builder', icon: FileText, description:'Craft and iterate quickly'},
- { label:'Build with AI', href:'/dashboard/student/resume/ai', icon: Sparkles, description:'Voice, text, and file-powered resume'},
+ { label:'Build with AI', href:'/dashboard/student/resume/ai', icon: Bot, description:'Generate resume using AI'},
  { label:'Career Align', href:'/dashboard/student/career-align', icon: Target, description:'Get role-fit guidance'},
  { label:'Practice', href:'/dashboard/student/practice', icon: Brain, description:'Mock tests and assessments'},
  { label:'Video Search', href:'/dashboard/student/video-search', icon: Sparkles, description:'Learn from short explainers'},
@@ -101,7 +102,7 @@ export function StudentSidebar({ className =''}: StudentSidebarProps) {
 
  const railLinkClass = (isActive: boolean) =>
  cn(
- 'flex h-11 w-11 shrink-0 items-center justify-center transition-all',
+ 'flex h-11 w-11 shrink-0 items-center justify-center transition-all hover:-translate-y-0.5',
  isActive
  ?'rounded-none bg-white text-slate-800 shadow-none dark:bg-white dark:text-slate-900'
  :'text-slate-700 hover:text-slate-900 dark:text-emerald-200 dark:hover:text-white',
