@@ -20,9 +20,9 @@ export interface StreamPayload {
   language?: 'en' | 'hi' | 'or'
   hyper_local_preferences?: Record<string, unknown>
   attachments: Array<{
-    id: string
-    name: string
-    relativePath?: string
-    kind: 'file' | 'folder'
+  id: string
+  name: string
+  relativePath?: string
+  kind: 'file' | 'folder'
   }>
 }

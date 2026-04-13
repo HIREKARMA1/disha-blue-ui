@@ -6,27 +6,27 @@ The Career Align section provides students with AI-powered resume analysis and p
 
 ## Features
 
-### 🎯 Resume Analysis
+###  Resume Analysis
 
 - **PDF Upload**: Support for PDF resume files (max 10MB)
 - **AI-Powered Analysis**: Uses NLP and machine learning to extract skills and analyze content
 - **ATS Optimization**: Checks resume format for Applicant Tracking System compatibility
 - **Keyword Extraction**: Identifies relevant skills and keywords from resume content
 
-### 📊 Analysis Results
+###  Analysis Results
 
 - **Overall Match Score**: Percentage indicating how well the resume matches available jobs
 - **Resume Score**: Quality assessment of the resume with improvement suggestions
 - **Skills Found**: Number of skills identified from the resume
 - **Job Recommendations**: Personalized job suggestions based on skills and experience
 
-### 🔍 Skill Gap Analysis
+###  Skill Gap Analysis
 
 - **Missing Skills**: Identifies skills needed for target job roles
 - **Priority Levels**: Categorizes skill gaps as Critical, High, or Medium priority
 - **Learning Recommendations**: Suggests skills to develop for career advancement
 
-### 💼 Job Recommendations
+###  Job Recommendations
 
 - **Match Scores**: Each recommended job shows a percentage match score
 - **Consistent Design**: Uses the same job card design as the main jobs page
@@ -155,25 +155,25 @@ Form Data:
 {
   "job_match_score": 85.5,
   "top_recommended_jobs": [
-    {
-      "id": "job-123",
-      "title": "Software Engineer",
-      "location": "Remote",
-      "job_type": "full_time",
-      "required_skills": ["Python", "React", "SQL"],
-      "match_score": 92.3
-    }
+  {
+  "id": "job-123",
+  "title": "Software Engineer",
+  "location": "Remote",
+  "job_type": "full_time",
+  "required_skills": ["Python", "React", "SQL"],
+  "match_score": 92.3
+  }
   ],
   "resume_score": {
-    "needs_ats_formatting": false,
-    "keywords": ["Python", "React", "Node.js"],
-    "overall_score": 78.5,
-    "suggestions": ["Add more quantifiable achievements"]
+  "needs_ats_formatting": false,
+  "keywords": ["Python", "React", "Node.js"],
+  "overall_score": 78.5,
+  "suggestions": ["Add more quantifiable achievements"]
   },
   "skill_gap": {
-    "skills": ["Docker", "Kubernetes"],
-    "message": "Consider learning containerization technologies",
-    "priority": "High"
+  "skills": ["Docker", "Kubernetes"],
+  "message": "Consider learning containerization technologies",
+  "priority": "High"
   },
   "analysis_date": "2024-01-15T10:30:00Z",
   "user_id": "user-123"

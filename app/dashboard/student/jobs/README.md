@@ -4,13 +4,13 @@ This page allows students to browse, search, filter, and apply for job opportuni
 
 ## Features
 
-### 🎯 **Job Discovery**
+###  **Job Discovery**
 
 - Browse all available job postings in a responsive card layout
 - View job details including title, company, location, salary, and requirements
 - See application deadlines and current application counts
 
-### 🔍 **Search & Filtering**
+###  **Search & Filtering**
 
 - **Search Bar**: Search jobs by title, skills, or company name
 - **Advanced Filters**:
@@ -22,13 +22,13 @@ This page allows students to browse, search, filter, and apply for job opportuni
   - Salary range (min/max INR)
   - Date posted
 
-### 📱 **Responsive Design**
+###  **Responsive Design**
 
 - Mobile-first approach with responsive grid layout
 - Optimized for all device sizes (mobile, tablet, desktop)
 - Touch-friendly interface with proper spacing
 
-### 🎨 **UI Components**
+###  **UI Components**
 
 - **Job Cards**: Clean, informative cards with hover effects
 - **Modal**: Detailed job description view with all information
@@ -36,7 +36,7 @@ This page allows students to browse, search, filter, and apply for job opportuni
 - **Loading States**: Skeleton loaders and loading indicators
 - **Status Indicators**: Visual feedback for application status
 
-### ⚡ **Interactive Features**
+###  **Interactive Features**
 
 - **Apply Button**: One-click job application with loading states
 - **View JD Button**: Opens detailed job description modal

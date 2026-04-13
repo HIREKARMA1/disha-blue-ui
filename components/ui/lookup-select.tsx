@@ -34,48 +34,48 @@ export function LookupSelect({
   id
 }: LookupSelectProps) {
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    onChange(e.target.value)
+  onChange(e.target.value)
   }
 
   return (
-    <div className="space-y-2">
-      <select
-        id={id}
-        name={name}
-        value={value}
-        onChange={handleChange}
-        disabled={disabled || loading}
-        required={required}
-        className={cn(
-          "w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-200",
-          "bg-white dark:bg-gray-700 text-gray-900 dark:text-white",
-          "border-gray-300 dark:border-gray-600",
-          "disabled:bg-gray-50 dark:disabled:bg-gray-800 disabled:cursor-not-allowed",
-          error 
-            ? "border-red-500 focus:ring-red-500" 
-            : "focus:ring-blue-500",
-          className
-        )}
-      >
-        <option value="">
-          {loading ? "Loading..." : placeholder}
-        </option>
-        {data.map((item) => (
-          <option key={item.id} value={item.name}>
-            {item.name}
-          </option>
-        ))}
-      </select>
-      
-      {error && (
-        <div className="flex items-center space-x-2 text-sm text-red-600 dark:text-red-400">
-          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-            <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
-          </svg>
-          <span>{error}</span>
-        </div>
-      )}
-    </div>
+  <div className="space-y-2">
+  <select
+  id={id}
+  name={name}
+  value={value}
+  onChange={handleChange}
+  disabled={disabled || loading}
+  required={required}
+  className={cn(
+  "w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-200",
+  "bg-white dark:bg-gray-700 text-gray-900 dark:text-white",
+  "border-gray-300 dark:border-gray-600",
+  "disabled:bg-gray-50 dark:disabled:bg-gray-800 disabled:cursor-not-allowed",
+  error 
+  ? "border-red-500 focus:ring-red-500" 
+  : "focus:ring-blue-500",
+  className
+  )}
+  >
+  <option value="">
+  {loading ? "Loading..." : placeholder}
+  </option>
+  {data.map((item) => (
+  <option key={item.id} value={item.name}>
+  {item.name}
+  </option>
+  ))}
+  </select>
+  
+  {error && (
+  <div className="flex items-center space-x-2 text-sm text-red-600 dark:text-red-400">
+  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+  <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+  </svg>
+  <span>{error}</span>
+  </div>
+  )}
+  </div>
   )
 }
 
@@ -97,30 +97,30 @@ export function LookupSelectWithHook({
   const [error, setError] = React.useState<string | null>(null)
 
   React.useEffect(() => {
-    if (!enabled) return
+  if (!enabled) return
 
-    const fetchData = async () => {
-      setLoading(true)
-      setError(null)
-      try {
-        const result = await fetchFunction()
-        setData(result)
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'Failed to fetch data')
-      } finally {
-        setLoading(false)
-      }
-    }
+  const fetchData = async () => {
+  setLoading(true)
+  setError(null)
+  try {
+  const result = await fetchFunction()
+  setData(result)
+  } catch (err) {
+  setError(err instanceof Error ? err.message : 'Failed to fetch data')
+  } finally {
+  setLoading(false)
+  }
+  }
 
-    fetchData()
+  fetchData()
   }, [fetchFunction, enabled])
 
   return (
-    <LookupSelect
-      {...props}
-      data={data}
-      loading={loading}
-      error={error || undefined}
-    />
+  <LookupSelect
+  {...props}
+  data={data}
+  loading={loading}
+  error={error || undefined}
+  />
   )
 }

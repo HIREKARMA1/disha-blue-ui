@@ -12,8 +12,8 @@ export interface Question {
   statement: string // HTML allowed
   type: 'mcq_single' | 'mcq_multi' | 'descriptive' | 'coding'
   options?: Array<{
-    id: string
-    text: string
+  id: string
+  text: string
   }>
   correct_options?: string[] // Only returned to admin / correct-check endpoints
   explanation?: string // HTML allowed
@@ -50,7 +50,7 @@ export interface PracticeModule {
   target_all_colleges?: boolean
   target_college_ids?: string[]  // University names
   target_all_branches?: boolean
-  target_branch_ids?: string[]   // Branch names
+  target_branch_ids?: string[]  // Branch names
 
   // University-specific targeting fields
   university_target_all_branches?: boolean
@@ -122,10 +122,10 @@ export interface PracticeStats {
   totalTimeSpent: number
   weakAreas: WeakArea[]
   recentAttempts: Array<{
-    moduleId: string
-    moduleTitle: string
-    score: number
-    date: string
+  moduleId: string
+  moduleTitle: string
+  score: number
+  date: string
   }>
 }
 
@@ -136,9 +136,9 @@ export interface BulkUploadResult {
   validRows: number
   invalidRows: number
   errors: Array<{
-    row: number
-    field: string
-    message: string
+  row: number
+  field: string
+  message: string
   }>
 }
 
@@ -190,11 +190,11 @@ export interface JobAssessment {
   total_duration_minutes: number
   round_count: number
   rounds?: Array<{
-    id: string
-    round_name: string
-    round_type: string
-    duration_minutes: number
-    round_number: number
+  id: string
+  round_name: string
+  round_type: string
+  duration_minutes: number
+  round_number: number
   }>
   university_id?: string
   corporate_id?: string
@@ -206,8 +206,8 @@ export interface CreateQuestionSchema {
   statement: string
   type: 'mcq_single' | 'mcq_multi' | 'descriptive' | 'coding'
   options?: Array<{
-    id: string
-    text: string
+  id: string
+  text: string
   }>
   correct_options?: string[]
   explanation?: string
@@ -223,8 +223,8 @@ export interface UpdateQuestionSchema {
   statement?: string
   type?: 'mcq_single' | 'mcq_multi' | 'descriptive' | 'coding'
   options?: Array<{
-    id: string
-    text: string
+  id: string
+  text: string
   }>
   correct_options?: string[]
   explanation?: string

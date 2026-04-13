@@ -4,9 +4,9 @@ import { StudentDashboardLayout } from "@/components/dashboard/StudentDashboardL
 import { AIResumeBuilderPage } from "@/components/resume-builder/AIResumeBuilderPage"
 
 export default function AIResumeDashboardPage() {
-  return (
-    <StudentDashboardLayout>
-      <AIResumeBuilderPage />
-    </StudentDashboardLayout>
-  )
+ return (
+ <StudentDashboardLayout>
+ <AIResumeBuilderPage />
+ </StudentDashboardLayout>
+ )
 }

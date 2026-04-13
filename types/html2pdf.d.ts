@@ -1,19 +1,19 @@
 declare module 'html2pdf.js' {
   interface Html2PdfOptions {
-    margin?: number | [number, number, number, number];
-    filename?: string;
-    image?: { type?: string; quality?: number };
-    enableLinks?: boolean;
-    html2canvas?: any;
-    jsPDF?: any;
-    pagebreak?: { mode?: string | string[] };
+  margin?: number | [number, number, number, number];
+  filename?: string;
+  image?: { type?: string; quality?: number };
+  enableLinks?: boolean;
+  html2canvas?: any;
+  jsPDF?: any;
+  pagebreak?: { mode?: string | string[] };
   }
 
   interface Html2PdfInstance {
-    from(element: HTMLElement): Html2PdfInstance;
-    set(options: Html2PdfOptions): Html2PdfInstance;
-    save(): Promise<void>;
-    outputPdf(): Promise<Blob>;
+  from(element: HTMLElement): Html2PdfInstance;
+  set(options: Html2PdfOptions): Html2PdfInstance;
+  save(): Promise<void>;
+  outputPdf(): Promise<Blob>;
   }
 
   function html2pdf(): Html2PdfInstance;

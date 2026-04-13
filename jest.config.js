@@ -10,15 +10,15 @@ const customJestConfig = {
   setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
   testEnvironment: 'jsdom',
   moduleNameMapping: {
-    '^@/(.*)$': '<rootDir>/$1',
+  '^@/(.*)$': '<rootDir>/$1',
   },
   testPathIgnorePatterns: ['<rootDir>/.next/', '<rootDir>/node_modules/'],
   collectCoverageFrom: [
-    'components/**/*.{js,jsx,ts,tsx}',
-    'hooks/**/*.{js,jsx,ts,tsx}',
-    'utils/**/*.{js,jsx,ts,tsx}',
-    '!**/*.d.ts',
-    '!**/node_modules/**',
+  'components/**/*.{js,jsx,ts,tsx}',
+  'hooks/**/*.{js,jsx,ts,tsx}',
+  'utils/**/*.{js,jsx,ts,tsx}',
+  '!**/*.d.ts',
+  '!**/node_modules/**',
   ],
 }
 

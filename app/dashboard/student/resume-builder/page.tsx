@@ -4,9 +4,9 @@ import { StudentDashboardLayout } from '@/components/dashboard/StudentDashboardL
 import { ResumeBuilderPage } from '@/components/resume-builder'
 
 export default function ResumeBuilderDashboardPage() {
-    return (
-        <StudentDashboardLayout>
-            <ResumeBuilderPage />
-        </StudentDashboardLayout>
-    )
+ return (
+ <StudentDashboardLayout>
+ <ResumeBuilderPage />
+ </StudentDashboardLayout>
+ )
 }

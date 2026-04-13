@@ -3,25 +3,24 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import {
-    Search,
-    MapPin,
-    Briefcase,
-    Clock,
-    DollarSign,
-    Users,
-    Building,
-    Eye,
-    FileText,
-    CheckCircle,
-    X,
-    Bookmark,
-    SlidersHorizontal,
-    Sparkles,
-    Info,
+ Search,
+ MapPin,
+ Briefcase,
+ Clock,
+ DollarSign,
+ Users,
+ Building,
+ Eye,
+ FileText,
+ CheckCircle,
+ X,
+ Bookmark,
+ SlidersHorizontal,
+ Sparkles,
+ Info,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-
 import { JobCard } from '@/components/dashboard/JobCard'
 import { JobDescriptionModal } from '@/components/dashboard/JobDescriptionModal'
 import { ApplicationModal } from '@/components/dashboard/ApplicationModal'
@@ -33,1980 +32,1920 @@ import { profileService, type ProfileCompletionResponse } from '@/services/profi
 import { getClientLocale, tf, type SupportedLocale } from '@/lib/i18n'
 import { cn } from '@/lib/utils'
 import {
-    jobsHeroClass,
-    jobsSurfaceClass,
-    loadSavedJobIds,
-    toggleSavedJobId,
+ jobsHeroClass,
+ jobsSurfaceClass,
+ loadSavedJobIds,
+ toggleSavedJobId,
 } from '@/components/jobs/jobs-ui'
 import { getRecommendationReadiness } from '@/lib/recommendationReadiness'
-
 interface Job {
-    id: string
-    title: string
-    description: string
-    requirements?: string
-    responsibilities?: string
-    job_type: string
-    status: string
-    location: string | string[]
-    state?: string
-    district?: string
-    city_or_town?: string
-    village_or_locality?: string
-    pincode?: string
-    remote_work: boolean
-    travel_required: boolean
-    salary_min?: number
-    salary_max?: number
-    salary_currency: string
-    experience_min?: number
-    experience_max?: number
-    education_level?: string | string[]
-    skills_required?: string[]
-    application_deadline?: string
-    max_applications: number
-    current_applications: number
-    industry?: string
-    selection_process?: string
-    campus_drive_date?: string
-    views_count: number
-    applications_count: number
-    created_at: string
-    corporate_id?: string | null
-    corporate_name?: string
-    university_id?: string | null
-    is_active: boolean
-    can_apply: boolean
-    application_status?: string
-    // Additional fields
-    number_of_openings?: number
-    perks_and_benefits?: string
-    eligibility_criteria?: string
-    service_agreement_details?: string
-    expiration_date?: string
-    ctc_with_probation?: string
-    ctc_after_probation?: string
-    onsite_office?: boolean
-    mode_of_work?: string
-    education_degree?: string | string[]
-    education_branch?: string | string[]
-    // Company information fields (for university-created jobs)
-    company_name?: string
-    company_logo?: string
-    company_website?: string
-    company_address?: string
-    company_size?: string
-    company_type?: string
-    company_founded?: number
-    company_description?: string
-    contact_person?: string
-    contact_designation?: string
-    match_score?: number
-    match_reasons?: string[]
+ id: string
+ title: string
+ description: string
+ requirements?: string
+ responsibilities?: string
+ job_type: string
+ status: string
+ location: string | string[]
+ state?: string
+ district?: string
+ city_or_town?: string
+ village_or_locality?: string
+ pincode?: string
+ remote_work: boolean
+ travel_required: boolean
+ salary_min?: number
+ salary_max?: number
+ salary_currency: string
+ experience_min?: number
+ experience_max?: number
+ education_level?: string | string[]
+ skills_required?: string[]
+ application_deadline?: string
+ max_applications: number
+ current_applications: number
+ industry?: string
+ selection_process?: string
+ campus_drive_date?: string
+ views_count: number
+ applications_count: number
+ created_at: string
+ corporate_id?: string | null
+ corporate_name?: string
+ university_id?: string | null
+ is_active: boolean
+ can_apply: boolean
+ application_status?: string
+ // Additional fields
+ number_of_openings?: number
+ perks_and_benefits?: string
+ eligibility_criteria?: string
+ service_agreement_details?: string
+ expiration_date?: string
+ ctc_with_probation?: string
+ ctc_after_probation?: string
+ onsite_office?: boolean
+ mode_of_work?: string
+ education_degree?: string | string[]
+ education_branch?: string | string[]
+ // Company information fields (for university-created jobs)
+ company_name?: string
+ company_logo?: string
+ company_website?: string
+ company_address?: string
+ company_size?: string
+ company_type?: string
+ company_founded?: number
+ company_description?: string
+ contact_person?: string
+ contact_designation?: string
+ match_score?: number
+ match_reasons?: string[]
 }
 
 interface JobSearchResponse {
-    jobs: Job[]
-    total_count: number
-    page: number
-    limit: number
-    total_pages: number
-    has_next: boolean
-    has_prev: boolean
+ jobs: Job[]
+ total_count: number
+ page: number
+ limit: number
+ total_pages: number
+ has_next: boolean
+ has_prev: boolean
 }
 
 // Narrow, explicit types for params and application payloads
 interface JobSearchParams {
-    page?: number
-    limit?: number
-    title?: string
-    skills?: string[]
-    location?: string
-    keyword?: string
-    state?: string
-    district?: string
-    city_or_town?: string
-    village_or_locality?: string
-    pincode?: string
-    industry?: string
-    job_type?: string
-    experience_min?: string | number
-    experience_max?: string | number
-    salary_min?: string | number
-    salary_max?: string | number
-    remote_work?: string | boolean
-    date_posted?: string
+ page?: number
+ limit?: number
+ title?: string
+ skills?: string[]
+ location?: string
+ keyword?: string
+ state?: string
+ district?: string
+ city_or_town?: string
+ village_or_locality?: string
+ pincode?: string
+ industry?: string
+ job_type?: string
+ experience_min?: string | number
+ experience_max?: string | number
+ salary_min?: string | number
+ salary_max?: string | number
+ remote_work?: string | boolean
+ date_posted?: string
 }
 
 interface ApplicationData {
-    cover_letter?: string
-    expected_salary?: number | null
-    availability_date?: string | null
+ cover_letter?: string
+ expected_salary?: number | null
+ availability_date?: string | null
 }
 
 function JobOpportunitiesPageContent() {
-    const [locale, setLocale] = useState<SupportedLocale>('en')
-    useEffect(() => {
-        setLocale(getClientLocale())
-    }, [])
-
-    const [jobs, setJobs] = useState<Job[]>([])
-    const [loading, setLoading] = useState(true)
-    const [searchTerm, setSearchTerm] = useState('')
-    const [filters, setFilters] = useState({
-        location: '',
-        state: '',
-        district: '',
-        city_or_town: '',
-        village_or_locality: '',
-        pincode: '',
-        industry: '',
-        job_type: '',
-        experience_min: '',
-        experience_max: '',
-        salary_min: '',
-        salary_max: '',
-        remote_work: '',
-        date_posted: ''
-    })
-    const [pagination, setPagination] = useState({
-        page: 1,
-        limit: 9, // Changed from 12 to 9 cards per page
-        total: 0,
-        total_pages: 0
-    })
-    const [selectedJob, setSelectedJob] = useState<Job | null>(null)
-    const [completeJobData, setCompleteJobData] = useState<Job | null>(null)
-    const [loadingJobDetails, setLoadingJobDetails] = useState(false)
-    const [showFilters, setShowFilters] = useState(false)
-    const [applyingJobs, setApplyingJobs] = useState<Set<string>>(new Set())
-    const [applicationStatus, setApplicationStatus] = useState<Map<string, string>>(new Map()) // Track application status
-    const [profileCompletion, setProfileCompletion] = useState<ProfileCompletionResponse | null>(null)
-    const [profileLoading, setProfileLoading] = useState(true)
-    const [showApplicationModal, setShowApplicationModal] = useState(false)
-    const [currentApplicationJob, setCurrentApplicationJob] = useState<Job | null>(null)
-    const [jobStatusFilter, setJobStatusFilter] = useState<'all' | 'open' | 'closed'>('open') // New filter for job status
-    const [studentProfile, setStudentProfile] = useState<{ degree?: string; branch?: string } | null>(null)
-    const [recommendationReadinessScore, setRecommendationReadinessScore] = useState(100)
-    const [showImproveMatchesCta, setShowImproveMatchesCta] = useState(false)
-    const [allFilteredJobs, setAllFilteredJobs] = useState<Job[]>([]) // Store jobs after degree/branch filtering (before status filter)
-    const [baseJobs, setBaseJobs] = useState<Job[]>([]) // Store jobs after API fetch and client-side search (before degree/branch filter)
-    const activeFilterCount = Object.values(filters).filter(Boolean).length + (searchTerm ? 1 : 0)
-
-    const [savedJobIds, setSavedJobIds] = useState<string[]>([])
-    const [savedOnly, setSavedOnly] = useState(false)
-    const [recommendedJobs, setRecommendedJobs] = useState<Job[]>([])
-    const [loadingRecommended, setLoadingRecommended] = useState(false)
-    const [recommendationWhyText, setRecommendationWhyText] = useState<string>('Based on your location, skills, and profile completeness.')
-
-    useEffect(() => {
-        setSavedJobIds(loadSavedJobIds())
-    }, [])
-
-    const refreshSavedJobs = () => setSavedJobIds(loadSavedJobIds())
-    const handleSaveToggleForJob = (jobId: string) => {
-        toggleSavedJobId(jobId)
-        refreshSavedJobs()
-    }
-
-    const fetchRecommendedJobs = async () => {
-        try {
-            setLoadingRecommended(true)
-            const response = await apiClient.getStudentRecommendedJobs({
-                limit: 6,
-                page: 1,
-                include_match_details: true,
-            })
-            setRecommendedJobs((response?.jobs || []) as Job[])
-        } catch (error) {
-            console.error('Failed to fetch recommended jobs:', error)
-            setRecommendedJobs([])
-        } finally {
-            setLoadingRecommended(false)
-        }
-    }
-
-    // Fetch student profile to get degree and branch
-    const fetchStudentProfile = async (): Promise<{ degree?: string; branch?: string } | null> => {
-        try {
-            const profile = await profileService.getProfile()
-            const profileData = {
-                degree: profile.degree,
-                branch: profile.branch
-            }
-            console.log('📋 Fetched student profile:', {
-                degree: profile.degree,
-                branch: profile.branch,
-                fullProfile: profile
-            })
-            setStudentProfile(profileData)
-            const readiness = getRecommendationReadiness(profile)
-            setRecommendationReadinessScore(readiness.score)
-            setShowImproveMatchesCta(!readiness.isReady)
-
-            const locationParts = [
-                profile.preferred_job_city,
-                profile.preferred_job_district,
-                profile.preferred_job_state,
-            ].filter(Boolean)
-            const topSkills = (profile.technical_skills || '')
-                .split(',')
-                .map((s) => s.trim())
-                .filter(Boolean)
-                .slice(0, 2)
-            const roleInterest = (profile.job_roles_of_interest || '')
-                .split(',')
-                .map((s) => s.trim())
-                .filter(Boolean)[0]
-
-            const contextBits: string[] = []
-            if (locationParts.length > 0) contextBits.push(`location: ${locationParts.join(', ')}`)
-            if (roleInterest) contextBits.push(`role interest: ${roleInterest}`)
-            if (topSkills.length > 0) contextBits.push(`skills: ${topSkills.join(', ')}`)
-
-            if (contextBits.length > 0) {
-                setRecommendationWhyText(`You're seeing these jobs based on your ${contextBits.join(' • ')}.`)
-            } else {
-                setRecommendationWhyText('You’re seeing these jobs based on your location, skills, and profile signals.')
-            }
-            return profileData
-        } catch (error) {
-            console.error('Failed to fetch student profile:', error)
-            // Continue without profile - show all jobs if profile fetch fails
-            return null
-        }
-    }
-
-    // Filter jobs based on student's degree and branch
-    const filterJobsByDegreeAndBranch = (jobs: Job[], profile?: { degree?: string; branch?: string } | null): Job[] => {
-        const profileToUse = profile !== undefined ? profile : studentProfile
-        
-        console.log('🔍 Filtering jobs with profile:', profileToUse)
-        
-        if (!profileToUse || (!profileToUse.degree && !profileToUse.branch)) {
-            // If no profile or no degree/branch info, show all jobs
-            console.log('⚠️ No profile data, showing all jobs')
-            return jobs
-        }
-
-        return jobs.filter(job => {
-            console.log(`\n🔎 Checking job: "${job.title}"`)
-            console.log(`   Job education_degree:`, job.education_degree)
-            console.log(`   Job education_branch:`, job.education_branch)
-            
-            // Helper function to normalize and compare values
-            const normalizeString = (str: string): string => {
-                return str.toLowerCase().trim().replace(/[()]/g, '').replace(/\s+/g, ' ')
-            }
-
-            const normalizeArray = (arr: string | string[] | undefined): string[] => {
-                if (!arr) return []
-                if (typeof arr === 'string') {
-                    // Try to parse if it's a JSON string
-                    try {
-                        const parsed = JSON.parse(arr)
-                        if (Array.isArray(parsed)) return parsed.map(normalizeString)
-                        return [normalizeString(String(parsed))]
-                    } catch {
-                        return [normalizeString(arr)]
-                    }
-                }
-                return arr.map(normalizeString)
-            }
-
-            // Extract key terms from degree strings for better matching
-            const extractDegreeKeyTerms = (degreeStr: string): string[] => {
-                const normalized = normalizeString(degreeStr)
-                const terms: string[] = []
-                
-                // Extract degree level (bachelor, master, phd, etc.)
-                if (normalized.includes('bachelor') || normalized.includes('b.tech') || normalized.includes('btech')) {
-                    terms.push('bachelor')
-                }
-                if (normalized.includes('master') || normalized.includes('m.tech') || normalized.includes('mtech')) {
-                    terms.push('master')
-                }
-                if (normalized.includes('phd') || normalized.includes('doctor')) {
-                    terms.push('phd')
-                }
-                
-                // Extract degree type (technology, science, arts, etc.)
-                if (normalized.includes('technology') || normalized.includes('tech')) {
-                    terms.push('technology')
-                }
-                if (normalized.includes('science')) {
-                    terms.push('science')
-                }
-                if (normalized.includes('arts')) {
-                    terms.push('arts')
-                }
-                
-                return terms
-            }
-
-            // If job doesn't specify degree or branch requirements, show it
-            const hasDegreeRequirement = job.education_degree && normalizeArray(job.education_degree).length > 0
-            const hasBranchRequirement = job.education_branch && normalizeArray(job.education_branch).length > 0
-
-            // If job has no requirements, show it
-            if (!hasDegreeRequirement && !hasBranchRequirement) {
-                return true
-            }
-
-            // Check degree match (only if job requires it)
-            let degreeMatch = true
-            if (hasDegreeRequirement) {
-                const jobDegrees = normalizeArray(job.education_degree)
-                const studentDegree = profileToUse.degree ? normalizeString(profileToUse.degree) : ''
-                
-                if (studentDegree) {
-                    // Extract key terms for both student and job degrees
-                    const studentTerms = extractDegreeKeyTerms(profileToUse.degree || '')
-                    
-                    degreeMatch = jobDegrees.some(jobDegree => {
-                        const jobTerms = extractDegreeKeyTerms(jobDegree)
-                        
-                        // Check if degree levels match (bachelor vs master vs phd)
-                        const studentLevel = studentTerms.find(t => ['bachelor', 'master', 'phd'].includes(t))
-                        const jobLevel = jobTerms.find(t => ['bachelor', 'master', 'phd'].includes(t))
-                        
-                        // If both have levels, they must match exactly
-                        if (studentLevel && jobLevel) {
-                            if (studentLevel !== jobLevel) {
-                                console.log(`❌ Degree level mismatch: student=${studentLevel}, job=${jobLevel} (${job.title})`)
-                                return false
-                            }
-                        }
-                        
-                        // Also check for exact or substring match as fallback
-                        const exactMatch = jobDegree === studentDegree
-                        const containsMatch = studentDegree.includes(jobDegree) || jobDegree.includes(studentDegree)
-                        
-                        if (exactMatch || containsMatch) {
-                            console.log(`✅ Degree match: student="${profileToUse.degree}" matches job="${jobDegree}" (${job.title})`)
-                            return true
-                        }
-                        
-                        return false
-                    })
-                    
-                    if (!degreeMatch) {
-                        console.log(`❌ Degree mismatch: student="${profileToUse.degree}" does not match job requirements (${job.title})`)
-                    }
-                } else {
-                    // Job requires degree but student doesn't have one
-                    degreeMatch = false
-                    console.log(`❌ Job requires degree but student has none (${job.title})`)
-                }
-            }
-
-            // Check branch match (only if job requires it)
-            let branchMatch = true
-            if (hasBranchRequirement) {
-                const jobBranches = normalizeArray(job.education_branch)
-                const studentBranch = profileToUse.branch ? normalizeString(profileToUse.branch) : ''
-                
-                if (studentBranch) {
-                    branchMatch = jobBranches.some(jobBranch => {
-                        // Extract core branch name (remove common suffixes)
-                        const extractCoreBranch = (branch: string): string => {
-                            return branch
-                                .replace(/engineering/gi, '')
-                                .replace(/science/gi, '')
-                                .replace(/technology/gi, '')
-                                .replace(/\(.*?\)/g, '') // Remove parentheses
-                                .trim()
-                        }
-                        
-                        const studentCore = extractCoreBranch(studentBranch)
-                        const jobCore = extractCoreBranch(jobBranch)
-                        
-                        // Check for exact match or substring match
-                        const exactMatch = jobBranch === studentBranch
-                        const containsMatch = studentBranch.includes(jobCore) || jobBranch.includes(studentCore)
-                        const coreMatch = studentCore && jobCore && (studentCore.includes(jobCore) || jobCore.includes(studentCore))
-                        
-                        if (exactMatch || containsMatch || coreMatch) {
-                            console.log(`✅ Branch match: student="${profileToUse.branch}" matches job="${jobBranch}" (${job.title})`)
-                            return true
-                        }
-                        
-                        return false
-                    })
-                    
-                    if (!branchMatch) {
-                        console.log(`❌ Branch mismatch: student="${profileToUse.branch}" does not match job requirements (${job.title})`)
-                    }
-                } else {
-                    // Job requires branch but student doesn't have one
-                    branchMatch = false
-                    console.log(`❌ Job requires branch but student has none (${job.title})`)
-                }
-            }
-
-            // Job is shown if all specified requirements match
-            const shouldShow = degreeMatch && branchMatch
-            if (!shouldShow) {
-                console.log(`🚫 Filtering out job: "${job.title}" (degreeMatch=${degreeMatch}, branchMatch=${branchMatch})`)
-            } else {
-                console.log(`✅ Keeping job: "${job.title}" (degreeMatch=${degreeMatch}, branchMatch=${branchMatch})`)
-            }
-            return shouldShow
-        })
-    }
-
-    // Fetch jobs from API
-    const fetchJobs = async (
-        page: number = 1,
-        searchParams: JobSearchParams = {},
-        useClientSideSearch: boolean = false,
-        profileData?: { degree?: string; branch?: string } | null
-    ): Promise<void> => {
-        try {
-            setLoading(true)
-            const params = new URLSearchParams()
-            params.set('page', String(page))
-            params.set('limit', String(pagination.limit))
-            Object.entries(searchParams).forEach(([key, value]) => {
-                if (value === undefined || value === null || value === '') return
-                if (Array.isArray(value)) {
-                    value.forEach(v => params.append(key, String(v)))
-                } else {
-                    params.set(key, String(value))
-                }
-            })
-
-            const response = await apiClient.client.get(`/jobs/?${params}`)
-            const data: JobSearchResponse = response.data
-
-            console.log('Raw API response:', data) // Debug log
-
-            // Immediate check for validation errors in the response
-            const hasValidationErrors = (obj: any): boolean => {
-                if (!obj || typeof obj !== 'object') return false
-                if (Array.isArray(obj)) {
-                    return obj.some(hasValidationErrors)
-                }
-
-                // Check if this is a validation error object
-                if ('type' in obj && 'loc' in obj && 'msg' in obj) {
-                    console.error('CRITICAL: Validation error object found in API response:', obj)
-                    return true
-                }
-
-                // Recursively check all properties
-                for (const [key, value] of Object.entries(obj)) {
-                    if (hasValidationErrors(value)) {
-                        return true
-                    }
-                }
-                return false
-            }
-
-            if (hasValidationErrors(data)) {
-                console.error('CRITICAL: API response contains validation errors. Blocking data processing.')
-                toast.error('Server returned invalid data. Please try again or contact support.')
-                setJobs([])
-                setPagination({
-                    page: 1,
-                    limit: 9,
-                    total: 0,
-                    total_pages: 0
-                })
-                setLoading(false)
-                return
-            }
-
-            // Check for validation error objects in the response
-            if (data.jobs && Array.isArray(data.jobs)) {
-                data.jobs.forEach((job, index) => {
-                    if (job && typeof job === 'object') {
-                        Object.entries(job).forEach(([key, value]) => {
-                            if (value && typeof value === 'object' && 'type' in value && 'loc' in value && 'msg' in value) {
-                                console.error(`Validation error object found in job ${index}, field ${key}:`, value)
-                            }
-                        })
-                    }
-                })
-            }
-
-            // Deep clean the data to remove any validation error objects
-            const deepCleanObject = (obj: any): any => {
-                if (obj === null || obj === undefined) return obj
-                if (typeof obj !== 'object') return obj
-                if (Array.isArray(obj)) return obj.map(deepCleanObject)
-
-                // Check if this is a validation error object
-                if ('type' in obj && 'loc' in obj && 'msg' in obj) {
-                    console.error('Deep cleaning: Found validation error object:', obj)
-                    return null
-                }
-
-                const cleaned: any = {}
-                for (const [key, value] of Object.entries(obj)) {
-                    if (value && typeof value === 'object' && 'type' in value && 'loc' in value && 'msg' in value) {
-                        console.error(`Deep cleaning: Found validation error object in field ${key}:`, value)
-                        cleaned[key] = null // Replace with null
-                    } else if (value && typeof value === 'object') {
-                        cleaned[key] = deepCleanObject(value)
-                    } else {
-                        cleaned[key] = value
-                    }
-                }
-                return cleaned
-            }
-
-            // More aggressive cleaning - remove entire jobs that contain validation errors
-            const aggressiveCleanJobs = (jobs: any[]): any[] => {
-                return jobs.filter(job => {
-                    if (!job || typeof job !== 'object') return false
-
-                    // Check if any field contains validation error objects
-                    for (const [key, value] of Object.entries(job)) {
-                        if (value && typeof value === 'object' && 'type' in value && 'loc' in value && 'msg' in value) {
-                            console.error(`Aggressive cleaning: Removing job with validation error in field ${key}:`, value)
-                            return false // Remove this entire job
-                        }
-                    }
-                    return true
-                })
-            }
-
-            // Deep clean the entire response
-            const cleanedData = deepCleanObject(data)
-            console.log('Deep cleaned data:', cleanedData)
-
-            // Apply aggressive cleaning to jobs
-            if (cleanedData.jobs && Array.isArray(cleanedData.jobs)) {
-                cleanedData.jobs = aggressiveCleanJobs(cleanedData.jobs)
-                console.log('Aggressively cleaned jobs:', cleanedData.jobs)
-            }
-
-            // Validate and clean job data to prevent runtime errors
-            let validatedJobs: any[] = []
-            try {
-                validatedJobs = (cleanedData.jobs || []).map((job: any) => {
-                    // Log any problematic data for debugging
-                    if (typeof job === 'object' && job !== null) {
-                        Object.entries(job).forEach(([key, value]) => {
-                            if (value !== null && typeof value === 'object' && !Array.isArray(value) && !(value instanceof Date)) {
-                                console.warn(`Warning: Job ${job.id} has object value for ${key}:`, value)
-
-                                // Check if this is a validation error object
-                                if ('type' in value && 'loc' in value && 'msg' in value) {
-                                    console.error(`Validation error object detected in job ${job.id}, field ${key}:`, value)
-                                    // Remove this field to prevent rendering issues
-                                    delete job[key]
-                                }
-                            }
-                        })
-                    }
-
-                    return {
-                        ...job,
-                        title: String(job.title || ''),
-                        description: String(job.description || ''),
-                        requirements: job.requirements ? String(job.requirements) : undefined,
-                        responsibilities: job.responsibilities ? String(job.responsibilities) : undefined,
-                        job_type: String(job.job_type || ''),
-                        status: String(job.status || ''),
-                        location: String(job.location || ''),
-                        remote_work: Boolean(job.remote_work),
-                        travel_required: Boolean(job.travel_required),
-                        salary_min: job.salary_min ? Number(job.salary_min) : undefined,
-                        salary_max: job.salary_max ? Number(job.salary_max) : undefined,
-                        salary_currency: String(job.salary_currency || 'INR'),
-                        experience_min: job.experience_min ? Number(job.experience_min) : undefined,
-                        experience_max: job.experience_max ? Number(job.experience_max) : undefined,
-                        education_level: job.education_level ? String(job.education_level) : undefined,
-                        skills_required: Array.isArray(job.skills_required) ? job.skills_required.map((skill: any) => {
-                            if (typeof skill === 'object' && skill !== null) {
-                                console.warn(`Warning: Skill is an object:`, skill)
-                                return String(skill)
-                            }
-                            return String(skill)
-                        }) : [],
-                        application_deadline: job.application_deadline ? String(job.application_deadline) : undefined,
-                        max_applications: Number(job.max_applications || 0),
-                        current_applications: Number(job.current_applications || 0),
-                        industry: job.industry ? String(job.industry) : undefined,
-                        selection_process: job.selection_process ? String(job.selection_process) : undefined,
-                        campus_drive_date: job.campus_drive_date ? String(job.campus_drive_date) : undefined,
-                        views_count: Number(job.views_count || 0),
-                        applications_count: Number(job.applications_count || 0),
-                        created_at: String(job.created_at || ''),
-                        corporate_id: job.corporate_id ? String(job.corporate_id) : null,
-                        corporate_name: job.corporate_name ? String(job.corporate_name) : undefined,
-                        university_id: job.university_id ? String(job.university_id) : null,
-                        is_active: Boolean(job.is_active),
-                        can_apply: Boolean(job.can_apply),
-                        // Company information fields (for university-created jobs)
-                        company_name: job.company_name ? String(job.company_name) : undefined,
-                        company_logo: job.company_logo ? String(job.company_logo) : undefined,
-                        company_website: job.company_website ? String(job.company_website) : undefined,
-                        company_address: job.company_address ? String(job.company_address) : undefined
-                    }
-                })
-            } catch (validationError) {
-                console.error('Error validating job data:', validationError)
-                console.error('Problematic data:', data)
-                // Fallback to empty array if validation fails
-                validatedJobs = []
-                toast.error('Error processing job data. Please try again.')
-            }
-
-            // Only set jobs if validation was successful
-            if (validatedJobs.length > 0 || data.jobs === undefined) {
-                // Final safety check - filter out any jobs that might still have validation error objects
-                const finalJobs = validatedJobs.filter(job => {
-                    if (!job || typeof job !== 'object') return false
-
-                    // Check if any field contains validation error objects
-                    for (const [key, value] of Object.entries(job)) {
-                        if (value && typeof value === 'object' && 'type' in value && 'loc' in value && 'msg' in value) {
-                            console.error(`Final check: Validation error object still present in job ${job.id}, field ${key}:`, value)
-                            return false // Filter out this job
-                        }
-                    }
-                    return true
-                })
-
-                console.log('Final validated jobs:', finalJobs)
-
-                // Nuclear option - completely sanitize all data before setting state
-                const nuclearCleanJobs = finalJobs.map(job => {
-                    if (!job || typeof job !== 'object') return null
-
-                    const cleanJob: any = {}
-                    for (const [key, value] of Object.entries(job)) {
-                        if (value === null || value === undefined) {
-                            cleanJob[key] = value
-                        } else if (typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean') {
-                            cleanJob[key] = value
-                        } else if (Array.isArray(value)) {
-                            // Clean array items - only allow primitives
-                            cleanJob[key] = value.filter(item =>
-                                item === null || item === undefined ||
-                                typeof item === 'string' || typeof item === 'number' || typeof item === 'boolean'
-                            ).map(item => {
-                                if (typeof item === 'object' && item !== null) {
-                                    console.warn(`Nuclear cleaning: Converting object array item to string:`, item)
-                                    return String(item)
-                                }
-                                return item
-                            })
-                        } else {
-                            // Any object becomes null
-                            console.warn(`Nuclear cleaning: Converting object field ${key} to null:`, value)
-                            cleanJob[key] = null
-                        }
-                    }
-                    return cleanJob
-                }).filter(Boolean)
-
-                // Ultra-aggressive cleaning - convert everything to safe types
-                const ultraCleanJobs = nuclearCleanJobs.map(job => {
-                    if (!job || typeof job !== 'object') return null
-
-                    const ultraCleanJob: any = {}
-                    for (const [key, value] of Object.entries(job)) {
-                        if (value === null || value === undefined) {
-                            ultraCleanJob[key] = value
-                        } else if (typeof value === 'string') {
-                            ultraCleanJob[key] = value
-                        } else if (typeof value === 'number') {
-                            ultraCleanJob[key] = isNaN(value) ? 0 : value
-                        } else if (typeof value === 'boolean') {
-                            ultraCleanJob[key] = value
-                        } else if (Array.isArray(value)) {
-                            ultraCleanJob[key] = value.map(item => {
-                                if (item === null || item === undefined) return item
-                                if (typeof item === 'string') return item
-                                if (typeof item === 'number') return isNaN(item) ? 0 : item
-                                if (typeof item === 'boolean') return item
-                                return String(item)
-                            })
-                        } else {
-                            ultraCleanJob[key] = null
-                        }
-                    }
-                    return ultraCleanJob
-                }).filter(Boolean)
-
-                console.log('Nuclear cleaned jobs:', nuclearCleanJobs)
-                console.log('Ultra cleaned jobs:', ultraCleanJobs)
-
-                // Final validation - ensure no objects remain
-                const finalValidation = ultraCleanJobs.every(job => {
-                    if (!job || typeof job !== 'object') return false
-                    for (const [key, value] of Object.entries(job)) {
-                        if (value !== null && typeof value === 'object' && !Array.isArray(value)) {
-                            console.error(`CRITICAL: Object still present after ultra cleaning in ${key}:`, value)
-                            return false
-                        }
-                    }
-                    return true
-                })
-
-                if (!finalValidation) {
-                    console.error('CRITICAL: Ultra cleaning failed. Setting empty state.')
-                    setJobs([])
-                    setAllFilteredJobs([])
-                    setBaseJobs([])
-                    setPagination({
-                        page: 1,
-                        limit: 9,
-                        total: 0,
-                        total_pages: 0
-                    })
-                    toast.error('Data validation failed. Please try again or contact support.')
-                    return
-                }
-
-                // Apply client-side search if needed
-                let searchFilteredJobs = ultraCleanJobs
-                if (useClientSideSearch && searchTerm) {
-                    console.log(`Applying client-side search to ${ultraCleanJobs.length} jobs`)
-                    console.log('Sample job data:', ultraCleanJobs[0])
-                    searchFilteredJobs = performClientSideSearch(ultraCleanJobs, searchTerm)
-                    console.log(`Client-side search: ${ultraCleanJobs.length} -> ${searchFilteredJobs.length} jobs`)
-                }
-
-                // Store base jobs (after API fetch and client-side search, before degree/branch filter)
-                setBaseJobs(searchFilteredJobs)
-                console.log(`📦 Base jobs stored: ${searchFilteredJobs.length} jobs`)
-
-                // Use provided profile data or fall back to state
-                const profileToUse = profileData !== undefined ? profileData : studentProfile
-                
-                // Apply degree and branch filtering
-                console.log(`🔍 Applying degree/branch filter with profile:`, profileToUse)
-                const degreeBranchFilteredJobs = filterJobsByDegreeAndBranch(searchFilteredJobs, profileToUse)
-                console.log(`✅ Degree/Branch filter result: ${searchFilteredJobs.length} -> ${degreeBranchFilteredJobs.length} jobs`)
-                if (profileToUse) {
-                    console.log(`👤 Student profile: degree="${profileToUse.degree}", branch="${profileToUse.branch}"`)
-                } else {
-                    console.warn('⚠️ No student profile available - showing all jobs')
-                }
-
-                // Store jobs after degree/branch filtering (before status filter)
-                setAllFilteredJobs(degreeBranchFilteredJobs)
-
-                // Apply status filter before setting state (so pagination counts are correct)
-                const statusFilteredJobs = filterJobsByStatus(degreeBranchFilteredJobs)
-                console.log(`Status filter (${jobStatusFilter}): ${degreeBranchFilteredJobs.length} -> ${statusFilteredJobs.length} jobs`)
-
-                setJobs(statusFilteredJobs)
-                setPagination({
-                    page: data.page || 1,
-                    limit: data.limit || 9,
-                    total: statusFilteredJobs.length,
-                    total_pages: Math.ceil(statusFilteredJobs.length / (data.limit || 9))
-                })
-
-                // Update application status for jobs
-                checkApplicationStatus()
-            } else {
-                // If validation failed and no jobs, set empty state
-                setJobs([])
-                setAllFilteredJobs([])
-                setBaseJobs([])
-                setPagination({
-                    page: 1,
-                    limit: 9,
-                    total: 0,
-                    total_pages: 0
-                })
-            }
-        } catch (error: any) {
-            console.error('Error fetching jobs:', error)
-
-            // Handle validation errors from backend
-            if (error.response?.status === 422) {
-                console.error('422 Validation Error in fetchJobs:', error.response.data)
-
-                // Check if response contains validation error objects
-                const hasValidationErrors = (obj: any): boolean => {
-                    if (!obj || typeof obj !== 'object') return false
-                    if (Array.isArray(obj)) {
-                        return obj.some(hasValidationErrors)
-                    }
-
-                    // Check if this is a validation error object
-                    if ('type' in obj && 'loc' in obj && 'msg' in obj) {
-                        console.error('CRITICAL: Validation error object in fetchJobs response:', obj)
-                        return true
-                    }
-
-                    // Recursively check all properties
-                    for (const [key, value] of Object.entries(obj)) {
-                        if (hasValidationErrors(value)) {
-                            return true
-                        }
-                    }
-                    return false
-                }
-
-                if (hasValidationErrors(error.response.data)) {
-                    console.error('CRITICAL: fetchJobs response contains validation errors. Setting empty state.')
-                    setJobs([])
-                    setAllFilteredJobs([])
-                    setBaseJobs([])
-                    setPagination({
-                        page: 1,
-                        limit: 9,
-                        total: 0,
-                        total_pages: 0
-                    })
-                    toast.error('Server returned invalid data. Please try again or contact support.')
-                    return
-                }
-            }
-
-            toast.error('Failed to fetch jobs')
-        } finally {
-            setLoading(false)
-        }
-    }
-
-    // Fetch profile completion data
-    const fetchProfileCompletion = async () => {
-        try {
-            setProfileLoading(true)
-            const completionData = await profileService.getProfileCompletion()
-            setProfileCompletion(completionData)
-        } catch (error) {
-            console.error('Failed to fetch profile completion:', error)
-            // Set default completion to 0 if fetch fails
-            setProfileCompletion({ 
-                completion_percentage: 0,
-                completed_fields: [],
-                missing_fields: [],
-                total_fields: 0,
-                completed_count: 0
-            })
-        } finally {
-            setProfileLoading(false)
-        }
-    }
-
-    // Handle job application initiation
-    const handleApplyClick = (job: Job) => {
-        if (!job.can_apply) {
-            toast.error('Applications are not currently open for this position')
-            return
-        }
-
-        // Check if already applied
-        if (applicationStatus.get(job.id) === 'applied') {
-            toast('You have already applied for this position')
-            return
-        }
-
-        // Check profile completion - must be at least 75%
-        if (!profileCompletion || profileCompletion.completion_percentage < 75) {
-            toast.error(`Profile completion must be at least 75%`)
-            return
-        }
-
-        setCurrentApplicationJob(job)
-        setShowApplicationModal(true)
-    }
-
-    // Apply for a job with enhanced data
-    const applyForJob = async (jobId: string, applicationData: any) => {
-        try {
-            setApplyingJobs(prev => new Set(prev).add(jobId))
-
-            const response = await apiClient.client.post(`/applications/apply/${jobId}`, {
-                job_id: jobId, // Add the missing job_id field
-                cover_letter: applicationData.cover_letter || `I am interested in this position and believe my skills and experience make me a great fit.`,
-                expected_salary: applicationData.expected_salary || null,
-                availability_date: applicationData.availability_date || new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]
-            })
-
-            // Update application status
-            setApplicationStatus(prev => {
-                const newStatus = new Map(prev).set(jobId, 'applied')
-
-                // Save to localStorage for persistence
-                const currentStatus = Object.fromEntries(newStatus)
-                localStorage.setItem('appliedJobs', JSON.stringify(currentStatus))
-
-                console.log(`Application status updated for job ${jobId}:`, newStatus.get(jobId))
-                console.log('All application statuses:', Object.fromEntries(newStatus))
-
-                return newStatus
-            })
-
-            toast.success('Application submitted successfully!')
-
-            // Close modal
-            setShowApplicationModal(false)
-            setCurrentApplicationJob(null)
-
-            // Refresh jobs to update application status
-            fetchJobs(pagination.page, buildSearchParams())
-        } catch (error: any) {
-            console.error('Error applying for job:', error)
-
-            // Handle validation errors from backend
-            let message = 'Failed to apply for job'
-
-            if (error.response?.status === 422) {
-                console.error('422 Validation Error Response:', error.response.data)
-
-                // Check if response contains validation error objects
-                const hasValidationErrors = (obj: any): boolean => {
-                    if (!obj || typeof obj !== 'object') return false
-                    if (Array.isArray(obj)) {
-                        return obj.some(hasValidationErrors)
-                    }
-
-                    // Check if this is a validation error object
-                    if ('type' in obj && 'loc' in obj && 'msg' in obj) {
-                        console.error('CRITICAL: Validation error object in application response:', obj)
-                        return true
-                    }
-
-                    // Recursively check all properties
-                    for (const [key, value] of Object.entries(obj)) {
-                        if (hasValidationErrors(value)) {
-                            return true
-                        }
-                    }
-                    return false
-                }
-
-                if (hasValidationErrors(error.response.data)) {
-                    console.error('CRITICAL: Application response contains validation errors. Blocking processing.')
-                    message = 'Server returned invalid data. Please try again or contact support.'
-
-                    // Don't process any data that contains validation errors
-                    setApplyingJobs(prev => {
-                        const newSet = new Set(prev)
-                        newSet.delete(jobId)
-                        return newSet
-                    })
-                    toast.error(message)
-                    return
-                }
-
-                // Extract user-friendly error message
-                if (error.response.data?.detail) {
-                    if (Array.isArray(error.response.data.detail)) {
-                        // Create more specific error messages for common validation errors
-                        const errorMessages = error.response.data.detail.map((err: any) => {
-                            if (err.type === 'missing') {
-                                const field = err.loc[err.loc.length - 1] // Get the field name
-                                return `Missing required field: ${field}`
-                            } else if (err.type === 'value_error') {
-                                return `Invalid value for ${err.loc[err.loc.length - 1]}: ${err.msg}`
-                            } else {
-                                return err.msg || 'Validation error'
-                            }
-                        })
-                        message = errorMessages.join(', ')
-                    } else {
-                        message = error.response.data.detail
-                    }
-                } else if (error.response.data?.message) {
-                    message = error.response.data.message
-                }
-            } else {
-                const data = error.response?.data
-                if (data) {
-                    if (typeof data.error === 'string') {
-                        // Our backend wraps user-facing message in `error`
-                        message = data.error
-                    } else if (typeof data.detail === 'string') {
-                        message = data.detail
-                    } else if (typeof data.message === 'string') {
-                        message = data.message
-                    }
-                }
-            }
-
-            toast.error(message)
-        } finally {
-            setApplyingJobs(prev => {
-                const newSet = new Set(prev)
-                newSet.delete(jobId)
-                return newSet
-            })
-        }
-    }
-
-    // Build search parameters from filters
-    const buildSearchParams = () => {
-        const params: any = {}
-
-        if (searchTerm) {
-            // Enhanced search logic to handle different types of search terms
-            const searchTermLower = searchTerm.toLowerCase().trim()
-
-            // Check if search term looks like a skill (common tech skills)
-            const commonSkills = [
-                'python', 'javascript', 'react', 'node', 'java', 'aws', 'docker', 'kubernetes',
-                'sql', 'mongodb', 'postgresql', 'redis', 'git', 'linux', 'html', 'css',
-                'typescript', 'angular', 'vue', 'php', 'ruby', 'go', 'rust', 'swift',
-                'android', 'ios', 'flutter', 'react native', 'machine learning', 'ai',
-                'data science', 'analytics', 'devops', 'ci/cd', 'terraform', 'ansible',
-                'jenkins', 'graphql', 'rest api', 'microservices', 'blockchain', 'crypto',
-                'spring', 'django', 'flask', 'express', 'laravel', 'rails', 'asp.net',
-                'tensorflow', 'pytorch', 'scikit-learn', 'pandas', 'numpy', 'matplotlib',
-                'elasticsearch', 'kafka', 'rabbitmq', 'nginx', 'apache', 'tomcat'
-            ]
-
-            // Check if search term contains skill keywords
-            const isSkillSearch = commonSkills.some(skill =>
-                searchTermLower.includes(skill) || skill.includes(searchTermLower)
-            )
-
-            if (isSkillSearch) {
-                // If it looks like a skill, search in skills
-                params.skills = [searchTerm]
-            } else {
-                // For company names, job titles, or other terms, search in title
-                // The backend will search in job titles which may include company names
-                params.keyword = searchTerm
-            }
-        }
-
-        if (filters.location) params.location = filters.location
-        if (filters.state) params.state = filters.state
-        if (filters.district) params.district = filters.district
-        if (filters.city_or_town) params.city_or_town = filters.city_or_town
-        if (filters.village_or_locality) params.village_or_locality = filters.village_or_locality
-        if (filters.pincode) params.pincode = filters.pincode
-        if (filters.industry) params.industry = filters.industry
-        if (filters.job_type) params.job_type = filters.job_type
-        if (filters.experience_min) params.experience_min = filters.experience_min
-        if (filters.experience_max) params.experience_max = filters.experience_max
-        if (filters.salary_min) params.salary_min = filters.salary_min
-        if (filters.salary_max) params.salary_max = filters.salary_max
-        if (filters.remote_work !== '') params.remote_work = filters.remote_work
-        if (filters.date_posted) params.date_posted = filters.date_posted
-
-        return params
-    }
-
-    // Client-side search function for company names and other fields
-    const performClientSideSearch = (jobs: Job[], searchTerm: string): Job[] => {
-        if (!searchTerm.trim()) return jobs
-
-        const searchTermLower = searchTerm.toLowerCase().trim()
-        console.log(`Client-side search: Looking for "${searchTermLower}" in ${jobs.length} jobs`)
-
-        const filteredJobs = jobs.filter(job => {
-            // Search in job title
-            if (job.title.toLowerCase().includes(searchTermLower)) {
-                console.log(`Found match in title: ${job.title}`)
-                return true
-            }
-
-            // Search in company name
-            if (job.corporate_name && job.corporate_name.toLowerCase().includes(searchTermLower)) {
-                console.log(`Found match in company name: ${job.corporate_name}`)
-                return true
-            }
-
-            // Search in job description
-            if (job.description && job.description.toLowerCase().includes(searchTermLower)) {
-                console.log(`Found match in description: ${job.title}`)
-                return true
-            }
-
-            // Search in skills
-            if (job.skills_required && job.skills_required.some(skill =>
-                skill.toLowerCase().includes(searchTermLower)
-            )) {
-                console.log(`Found match in skills: ${job.title}`)
-                return true
-            }
-
-            // Search in location
-            const locationString = Array.isArray(job.location) ? job.location.join(' ') : job.location
-            if (locationString && locationString.toLowerCase().includes(searchTermLower)) {
-                console.log(`Found match in location: ${job.title}`)
-                return true
-            }
-
-            return false
-        })
-
-        console.log(`Client-side search result: ${filteredJobs.length} jobs found`)
-        return filteredJobs
-    }
-
-    // Handle search with hybrid approach
-    const handleSearch = async () => {
-        setPagination(prev => ({ ...prev, page: 1 }))
-
-        // First, try the backend search
-        const searchParams = buildSearchParams()
-        console.log('Search params:', searchParams)
-
-        // Try backend search first
-        await fetchJobs(1, searchParams)
-
-        // If we have a search term, also try a broader search with client-side filtering
-        if (searchTerm) {
-            console.log('Search term detected, also trying broader search with client-side filtering...')
-
-            // Get all jobs without search filters, then apply client-side search
-            const allJobsParams = buildSearchParams()
-            delete allJobsParams.title // Remove title search to get all jobs
-            delete allJobsParams.skills // Remove skills search to get all jobs
-
-            console.log('Fallback search params:', allJobsParams)
-            await fetchJobs(1, allJobsParams, true) // Use client-side search
-        }
-    }
-
-    // Handle filter changes
-    const handleFilterChange = (key: string, value: string) => {
-        setFilters(prev => ({ ...prev, [key]: value }))
-    }
-
-    const saveJobsFilterAsPreference = async () => {
-        try {
-            await profileService.updateProfile({
-                preferred_job_city: filters.city_or_town || undefined,
-                preferred_job_district: filters.district || undefined,
-                preferred_job_state: filters.state || undefined,
-                preferred_job_remote: filters.remote_work === 'true',
-                location_preferences: [filters.city_or_town, filters.district, filters.state].filter(Boolean).join(', ') || undefined,
-            })
-            await fetchRecommendedJobs()
-            toast.success('Saved as your recommendation location preference')
-        } catch (error) {
-            console.error('Failed to save location preference from filters:', error)
-            toast.error('Could not save location preference')
-        }
-    }
-
-    // Handle pagination
-    const handlePageChange = (page: number) => {
-        setPagination(prev => ({ ...prev, page }))
-        fetchJobs(page, buildSearchParams())
-    }
-
-    // Clear all filters
-    const clearFilters = () => {
-        setFilters({
-            location: '',
-            state: '',
-            district: '',
-            city_or_town: '',
-            village_or_locality: '',
-            pincode: '',
-            industry: '',
-            job_type: '',
-            experience_min: '',
-            experience_max: '',
-            salary_min: '',
-            salary_max: '',
-            remote_work: '',
-            date_posted: ''
-        })
-        setSearchTerm('')
-        setJobStatusFilter('open')
-        setPagination(prev => ({ ...prev, page: 1 }))
-        fetchJobs(1, {})
-    }
-
-    // Check application status for jobs
-    const checkApplicationStatus = async () => {
-        try {
-            // First, try to fetch applied jobs from server
-            try {
-                const response = await apiClient.getStudentAppliedJobs()
-                if (response && response.applications) {
-                    const appliedJobsMap = new Map()
-                    response.applications.forEach((app: any) => {
-                        appliedJobsMap.set(app.job_id, 'applied')
-                    })
-                    console.log('Loaded application status from server:', Object.fromEntries(appliedJobsMap))
-                    setApplicationStatus(appliedJobsMap)
-
-                    // Update localStorage with server data
-                    localStorage.setItem('appliedJobs', JSON.stringify(Object.fromEntries(appliedJobsMap)))
-                    return
-                }
-            } catch (serverError) {
-                console.log('Server fetch failed, falling back to localStorage:', serverError)
-            }
-
-            // Fallback to localStorage if server fetch fails
-            const appliedJobs = localStorage.getItem('appliedJobs')
-            if (appliedJobs) {
-                const parsed = JSON.parse(appliedJobs)
-                console.log('Loading application status from localStorage:', parsed)
-                setApplicationStatus(new Map(Object.entries(parsed)))
-            } else {
-                console.log('No application status found in localStorage')
-            }
-        } catch (error) {
-            console.error('Error checking application status:', error)
-        }
-    }
-
-    // Helper function to check if a job is expired
-    const isJobExpired = (job: Job) => {
-        if (!job.application_deadline) return false
-        const deadline = new Date(job.application_deadline)
-        const now = new Date()
-        return deadline < now
-    }
-
-    // Helper function to check if a job is open (available for application)
-    const isJobOpen = (job: Job) => {
-        const status = applicationStatus.get(job.id)
-        return status !== 'applied' && !isJobExpired(job) && job.can_apply
-    }
-
-    // Helper function to check if a job is closed (applied, expired, or not available)
-    const isJobClosed = (job: Job) => {
-        const status = applicationStatus.get(job.id)
-        return status === 'applied' || isJobExpired(job) || !job.can_apply
-    }
-
-    // Filter jobs based on job status filter
-    const filterJobsByStatus = (jobs: Job[]) => {
-        if (jobStatusFilter === 'all') return jobs
-        if (jobStatusFilter === 'open') return jobs.filter(isJobOpen)
-        if (jobStatusFilter === 'closed') return jobs.filter(isJobClosed)
-        return jobs
-    }
-
-    // Global validation error handler
-    const handleValidationError = (data: any, context: string) => {
-        console.error(`CRITICAL: Validation error detected in ${context}:`, data)
-
-        // Check if this contains validation error objects
-        const hasValidationErrors = (obj: any): boolean => {
-            if (!obj || typeof obj !== 'object') return false
-            if (Array.isArray(obj)) {
-                return obj.some(hasValidationErrors)
-            }
-
-            // Check if this is a validation error object
-            if ('type' in obj && 'loc' in obj && 'msg' in obj) {
-                console.error(`Validation error object found in ${context}:`, obj)
-                return true
-            }
-
-            // Recursively check all properties
-            for (const [key, value] of Object.entries(obj)) {
-                if (hasValidationErrors(value)) {
-                    return true
-                }
-            }
-            return false
-        }
-
-        if (hasValidationErrors(data)) {
-            console.error(`CRITICAL: ${context} contains validation errors. Blocking processing.`)
-            toast.error('Server returned invalid data. Please try again or contact support.')
-            return true // Indicates validation errors were found
-        }
-
-        return false // No validation errors
-    }
-
-    // Load initial data
-    useEffect(() => {
-        const loadData = async () => {
-            console.log('🚀 Loading initial data...')
-            // Fetch profile first so filtering can work
-            const profileData = await fetchStudentProfile()
-            // Pass profile data directly to fetchJobs to avoid timing issues
-            await fetchJobs(1, {}, false, profileData)
-            await fetchRecommendedJobs()
-            checkApplicationStatus()
-            fetchProfileCompletion()
-        }
-        loadData()
-    }, [])
-
-    // Refilter jobs when student profile is loaded/updated (only if we have base jobs)
-    useEffect(() => {
-        if (studentProfile && baseJobs.length > 0) {
-            console.log('🔄 Re-filtering jobs after profile update:', studentProfile)
-            // Re-apply the degree/branch filter with the updated profile
-            const degreeBranchFiltered = filterJobsByDegreeAndBranch(baseJobs, studentProfile)
-            console.log(`🔄 Re-filter result: ${baseJobs.length} -> ${degreeBranchFiltered.length} jobs`)
-            setAllFilteredJobs(degreeBranchFiltered)
-            // Then apply status filter
-            const statusFiltered = filterJobsByStatus(degreeBranchFiltered)
-            setJobs(statusFiltered)
-            setPagination(prev => ({
-                ...prev,
-                total: statusFiltered.length,
-                total_pages: Math.ceil(statusFiltered.length / prev.limit)
-            }))
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [studentProfile])
-
-    // Re-apply status filter when application status or status filter changes
-    useEffect(() => {
-        if (allFilteredJobs.length > 0) {
-            const statusFiltered = filterJobsByStatus(allFilteredJobs)
-            setJobs(statusFiltered)
-            setPagination(prev => ({
-                ...prev,
-                total: statusFiltered.length,
-                total_pages: Math.ceil(statusFiltered.length / prev.limit)
-            }))
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [applicationStatus, jobStatusFilter])
-
-    // Global error boundary for validation errors
-    useEffect(() => {
-        const handleGlobalError = (event: ErrorEvent) => {
-            if (event.error && event.error.message && event.error.message.includes('Objects are not valid as a React child')) {
-                console.error('CRITICAL: Global React error detected:', event.error)
-
-                // Check if this is a validation error
-                if (event.error.message.includes('{type, loc, msg, input}')) {
-                    console.error('CRITICAL: Validation error object being rendered. This should not happen with our defense system.')
-                    toast.error('Critical error detected. Please refresh the page.')
-
-                    // Force a page refresh to recover
-                    setTimeout(() => {
-                        window.location.reload()
-                    }, 2000)
-                }
-            }
-        }
-
-        window.addEventListener('error', handleGlobalError)
-
-        return () => {
-            window.removeEventListener('error', handleGlobalError)
-        }
-    }, [])
-
-    const jobsForGrid = savedOnly ? jobs.filter((j) => savedJobIds.includes(j.id)) : jobs
-
-    return (
-        <StudentDashboardLayout>
-            <div className={cn(jobsHeroClass, 'mb-6')}>
-                <div className="relative z-[1] max-w-3xl">
-                    <p className="font-display text-xs font-semibold uppercase tracking-[0.2em] text-primary">Opportunities</p>
-                    <h1 className="font-display mt-3 text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-                        {tf(locale, 'student.jobs.title', 'Discover roles')}
-                    </h1>
-                    <p className="mt-3 max-w-xl text-pretty text-base leading-relaxed text-muted-foreground">
-                        Find nearby roles aligned with your program—refine by place, compensation, and work mode.
-                    </p>
-                    <div className="mt-5 flex flex-wrap gap-2">
-                        <span className="rounded-full border border-border/80 bg-background/60 px-3 py-1 text-xs font-semibold text-foreground/90 backdrop-blur-sm">
-                            {new Date().toLocaleDateString('en-US', {
-                                weekday: 'short',
-                                month: 'short',
-                                day: 'numeric',
-                            })}
-                        </span>
-                        {savedJobIds.length > 0 && (
-                            <button
-                                type="button"
-                                onClick={() => setSavedOnly((s) => !s)}
-                                className={cn(
-                                    'inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-semibold transition-colors',
-                                    savedOnly
-                                        ? 'border-primary bg-primary/10 text-primary'
-                                        : 'border-border bg-background/60 text-foreground/80 hover:border-primary/40',
-                                )}
-                            >
-                                <Bookmark className={cn('h-3.5 w-3.5', savedOnly && 'fill-current')} />
-                                Saved ({savedJobIds.length})
-                            </button>
-                        )}
-                    </div>
-                </div>
-            </div>
-
-            {showImproveMatchesCta && (
-                <div className={cn(jobsSurfaceClass, 'mb-6 p-4 sm:p-5')}>
-                    <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                        <div>
-                            <p className="text-xs font-semibold uppercase tracking-[0.14em] text-primary">Improve your AI matches</p>
-                            <h2 className="font-display text-lg font-semibold text-foreground">Set your job preferences for better recommendations</h2>
-                            <p className="text-sm text-muted-foreground">
-                                AI match readiness: {recommendationReadinessScore}%. Add location, role interests, and skills in profile.
-                            </p>
-                        </div>
-                        <a href="/dashboard/student/profile">
-                            <Button variant="gradient" className="rounded-xl">Complete preferences</Button>
-                        </a>
-                    </div>
-                </div>
-            )}
-
-            <div className={cn(jobsSurfaceClass, 'mb-6 p-4 sm:p-5')}>
-                <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-                    <div className="relative min-w-0 flex-1">
-                        <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                        <Input
-                            type="search"
-                            placeholder={tf(
-                                locale,
-                                'student.jobs.searchPlaceholder',
-                                'Search by role, skill, company, or location…',
-                            )}
-                            value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                            onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-                            className="h-11 rounded-xl pl-10"
-                        />
-                    </div>
-                    <Button
-                        variant="outline"
-                        onClick={() => setShowFilters(!showFilters)}
-                        className="h-11 rounded-xl font-semibold sm:w-auto"
-                    >
-                        <SlidersHorizontal className="mr-2 h-4 w-4" />
-                        Filters
-                    </Button>
-                    <select
-                        value={jobStatusFilter}
-                        onChange={(e) => {
-                            const newFilter = e.target.value as 'all' | 'open' | 'closed'
-                            setJobStatusFilter(newFilter)
-                            // Re-apply status filter to already filtered jobs (no need to refetch)
-                            const statusFiltered = filterJobsByStatus(allFilteredJobs)
-                            setJobs(statusFiltered)
-                            setPagination(prev => ({
-                                ...prev,
-                                total: statusFiltered.length,
-                                total_pages: Math.ceil(statusFiltered.length / prev.limit)
-                            }))
-                        }}
-                        className="h-11 min-w-[9rem] flex-1 rounded-xl border border-input bg-background px-3 text-sm font-medium text-foreground shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:flex-initial"
-                    >
-                        <option value="all">All Jobs</option>
-                        <option value="open">Open Jobs</option>
-                        <option value="closed">Closed Jobs</option>
-                    </select>
-                    <Button
-                        onClick={handleSearch}
-                        variant="gradient"
-                        className="h-11 w-full rounded-xl font-semibold shadow-md shadow-primary/15 sm:w-auto"
-                    >
-                        Search
-                    </Button>
-                </div>
-
-                {showFilters && (
-                    <motion.div
-                        initial={{ opacity: 0, height: 0 }}
-                        animate={{ opacity: 1, height: 'auto' }}
-                        exit={{ opacity: 0, height: 0 }}
-                        className="grid grid-cols-1 gap-4 border-t border-border/60 pt-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
-                    >
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                📍 Location
-                            </label>
-                            <Input
-                                placeholder="Legacy location text"
-                                value={filters.location}
-                                onChange={(e) => handleFilterChange('location', e.target.value)}
-                                className="border-gray-200 dark:border-gray-700 focus:border-primary-500 focus:ring-primary-500/20"
-                            />
-                        </div>
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                State
-                            </label>
-                            <Input value={filters.state} onChange={(e) => handleFilterChange('state', e.target.value)} placeholder="State" />
-                        </div>
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                District
-                            </label>
-                            <Input value={filters.district} onChange={(e) => handleFilterChange('district', e.target.value)} placeholder="District" />
-                        </div>
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                City / Town
-                            </label>
-                            <Input value={filters.city_or_town} onChange={(e) => handleFilterChange('city_or_town', e.target.value)} placeholder="City or town" />
-                        </div>
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                Village / Locality
-                            </label>
-                            <Input value={filters.village_or_locality} onChange={(e) => handleFilterChange('village_or_locality', e.target.value)} placeholder="Village or locality" />
-                        </div>
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                Pincode
-                            </label>
-                            <Input value={filters.pincode} onChange={(e) => handleFilterChange('pincode', e.target.value)} placeholder="Pincode" />
-                        </div>
-
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                🏭 Industry
-                            </label>
-                            <select
-                                value={filters.industry}
-                                onChange={(e) => handleFilterChange('industry', e.target.value)}
-                                className="w-full px-3 py-2 border border-gray-200 dark:border-gray-700 focus:border-primary-500 focus:ring-primary-500/20 text-gray-900 dark:text-white rounded-lg bg-white dark:bg-gray-800"
-                            >
-                                <option value="">All Industries</option>
-                                <option value="Technology">Technology</option>
-                                <option value="Finance">Finance</option>
-                                <option value="Healthcare">Healthcare</option>
-                                <option value="Education">Education</option>
-                                <option value="Manufacturing">Manufacturing</option>
-                                <option value="Retail">Retail</option>
-                                <option value="Consulting">Consulting</option>
-                            </select>
-                        </div>
-
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                💼 Job Type
-                            </label>
-                            <select
-                                value={filters.job_type}
-                                onChange={(e) => handleFilterChange('job_type', e.target.value)}
-                                className="w-full px-3 py-2 border border-gray-200 dark:border-gray-700 focus:border-primary-500 focus:ring-primary-500/20 text-gray-900 dark:text-white rounded-lg bg-white dark:bg-gray-800"
-                            >
-                                <option value="">All Types</option>
-                                <option value="full_time">Full Time</option>
-                                <option value="part_time">Part Time</option>
-                                <option value="contract">Contract</option>
-                                <option value="internship">Internship</option>
-                                <option value="freelance">Freelance</option>
-                            </select>
-                        </div>
-
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                🏠 Remote Work
-                            </label>
-                            <select
-                                value={filters.remote_work}
-                                onChange={(e) => handleFilterChange('remote_work', e.target.value)}
-                                className="w-full px-3 py-2 border border-gray-200 dark:border-gray-700 focus:border-primary-500 focus:ring-primary-500/20 text-gray-900 dark:text-white rounded-lg bg-white dark:bg-gray-800"
-                            >
-                                <option value="">All</option>
-                                <option value="true">Remote Only</option>
-                                <option value="false">On-site Only</option>
-                            </select>
-                        </div>
-
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                ⏰ Min Experience (years)
-                            </label>
-                            <Input
-                                type="number"
-                                placeholder="0"
-                                value={filters.experience_min}
-                                onChange={(e) => handleFilterChange('experience_min', e.target.value)}
-                                className="border-gray-200 dark:border-gray-700 focus:border-primary-500 focus:ring-primary-500/20"
-                            />
-                        </div>
-
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                ⏰ Max Experience (years)
-                            </label>
-                            <Input
-                                type="number"
-                                placeholder="10"
-                                value={filters.experience_max}
-                                onChange={(e) => handleFilterChange('experience_max', e.target.value)}
-                                className="border-gray-200 dark:border-gray-700 focus:border-primary-500 focus:ring-primary-500/20"
-                            />
-                        </div>
-
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                💰 Min Salary (INR)
-                            </label>
-                            <Input
-                                type="number"
-                                placeholder="300000"
-                                value={filters.salary_min}
-                                onChange={(e) => handleFilterChange('salary_min', e.target.value)}
-                                className="border-gray-200 dark:border-gray-700 focus:border-primary-500 focus:ring-primary-500/20"
-                            />
-                        </div>
-
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                💰 Max Salary (INR)
-                            </label>
-                            <Input
-                                type="number"
-                                placeholder="2000000"
-                                value={filters.salary_max}
-                                onChange={(e) => handleFilterChange('salary_max', e.target.value)}
-                                className="border-gray-200 dark:border-gray-700 focus:border-primary-500 focus:ring-primary-500/20"
-                            />
-                        </div>
-
-                        <div className="sm:col-span-2 lg:col-span-3 xl:col-span-4 flex flex-col sm:flex-row items-center gap-3">
-                            <Button
-                                onClick={handleSearch}
-                                className="bg-primary-500 hover:bg-primary-600 text-white font-semibold px-6 py-2 transition-all duration-200 hover:shadow-md w-full sm:w-auto"
-                            >
-                                ✨ Apply Filters
-                            </Button>
-                            <Button
-                                variant="outline"
-                                onClick={clearFilters}
-                                className="border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 transition-all duration-200 hover:shadow-md px-6 py-2 w-full sm:w-auto"
-                            >
-                                🗑️ Clear All
-                            </Button>
-                            <Button
-                                variant="outline"
-                                onClick={saveJobsFilterAsPreference}
-                                className="border-primary/30 text-primary hover:bg-primary/5 px-6 py-2 w-full sm:w-auto"
-                            >
-                                Save as preference
-                            </Button>
-                        </div>
-                    </motion.div>
-                )}
-            </div>
-
-            <div className={cn(jobsSurfaceClass, 'mb-6 p-4 sm:p-5')}>
-                <div className="mb-3 flex items-center justify-between">
-                    <div>
-                        <p className="text-xs font-semibold uppercase tracking-[0.14em] text-primary">Smart Matches</p>
-                        <h2 className="font-display text-xl font-semibold text-foreground">Recommended Jobs</h2>
-                        <p className="text-sm text-muted-foreground">Based on your resume and preferred location</p>
-                    </div>
-                    <Button variant="outline" className="rounded-xl" onClick={fetchRecommendedJobs} disabled={loadingRecommended}>
-                        {loadingRecommended ? 'Refreshing...' : 'Refresh'}
-                    </Button>
-                </div>
-                <div className="mb-3 inline-flex items-center gap-2 rounded-lg border border-border/70 bg-muted/30 px-3 py-2 text-xs text-muted-foreground">
-                    <Info className="h-3.5 w-3.5 text-primary" />
-                    <span>{recommendationWhyText} AI recommendations improve as you complete your profile.</span>
-                </div>
-                {recommendedJobs.length === 0 ? (
-                    <p className="text-sm text-muted-foreground">
-                        Complete your profile/resume and set location preference in profile to get stronger AI matches.
-                    </p>
-                ) : (
-                    <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
-                        {recommendedJobs.slice(0, 3).map((job) => (
-                            <div key={job.id} className="rounded-xl border border-border/70 bg-background/70 p-4">
-                                <div className="flex items-start justify-between gap-3">
-                                    <div>
-                                        <h3 className="font-semibold text-foreground">{job.title}</h3>
-                                        <p className="text-xs text-muted-foreground">{job.corporate_name || job.company_name || 'Company'}</p>
-                                    </div>
-                                    <span className="text-xs font-semibold text-primary">
-                                        {typeof job.match_score === 'number' ? `${Math.round(job.match_score)}%` : 'Match'}
-                                    </span>
-                                </div>
-                                {(job.match_reasons || []).slice(0, 2).map((reason, idx) => (
-                                    <p key={idx} className="mt-2 inline-flex items-center gap-1 text-xs text-muted-foreground">
-                                        <Sparkles className="h-3.5 w-3.5 text-primary" />
-                                        {reason}
-                                    </p>
-                                ))}
-                                <div className="mt-3 flex gap-2">
-                                    <Button size="sm" variant="outline" className="rounded-lg" onClick={() => setSelectedJob(job)}>
-                                        View
-                                    </Button>
-                                    <Button size="sm" variant="gradient" className="rounded-lg" onClick={() => handleApplyClick(job)}>
-                                        Apply
-                                    </Button>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                )}
-            </div>
-
-            {/* Main Content */}
-            <div>
-                {/* Results Summary */}
-                <div className={cn(jobsSurfaceClass, 'mb-6 p-4')}>
-                    <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                        <div className="text-sm text-muted-foreground">
-                            {loading ? (
-                                <span className="flex items-center gap-2">
-                                    <div className="h-4 w-4 animate-spin rounded-full border-2 border-primary border-t-transparent" />
-                                    Loading roles…
-                                </span>
-                            ) : (
-                                <span>
-                                    Showing{' '}
-                                    <span className="font-semibold text-foreground">{jobsForGrid.length}</span> roles
-                                    {savedOnly && jobsForGrid.length === 0 && jobs.length > 0
-                                        ? ' on this page (try another page or turn off Saved)'
-                                        : ''}
-                                </span>
-                            )}
-                        </div>
-                        {!loading && (
-                            <div className="text-xs text-muted-foreground">
-                                {activeFilterCount > 0
-                                    ? `${activeFilterCount} ${tf(locale, 'student.jobs.activeFiltersSuffix', 'active filters')}`
-                                    : tf(locale, 'common.noFiltersApplied', 'No filters applied')}
-                            </div>
-                        )}
-                        {pagination.total > 0 && (
-                            <div className="text-xs font-medium text-primary">
-                                Page {pagination.page} of {pagination.total_pages} · {pagination.limit} per page
-                            </div>
-                        )}
-                    </div>
-                </div>
-
-                {/* Profile Completion Banner */}
-                {profileCompletion && profileCompletion.completion_percentage < 75 && (
-                    <div className="mb-6 p-4 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700 rounded-xl">
-                        <div className="flex items-center gap-3">
-                            <div className="w-8 h-8 bg-amber-100 dark:bg-amber-900/30 rounded-full flex items-center justify-center">
-                                <span className="text-amber-600 dark:text-amber-400 text-sm font-bold">!</span>
-                            </div>
-                            <div className="flex-1">
-                                <h3 className="text-sm font-semibold text-amber-800 dark:text-amber-200 mb-1">
-                                    Profile Completion Required
-                                </h3>
-                                <p className="text-sm text-amber-700 dark:text-amber-300">
-                                    Your profile is {profileCompletion.completion_percentage}% complete. You need at least 75% completion to apply for jobs. 
-                                    <a href="/dashboard/student/profile" className="text-amber-600 dark:text-amber-400 hover:underline ml-1 font-medium">
-                                        Complete your profile now →
-                                    </a>
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                )}
-
-                {/* Jobs Grid */}
-                {loading ? (
-                    <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-                        {[...Array(9)].map((_, i) => (
-                            <div
-                                key={i}
-                                className="animate-pulse rounded-2xl border border-border/60 bg-card p-5 shadow-sm"
-                            >
-                                <div className="flex gap-3">
-                                    <div className="h-12 w-12 rounded-xl bg-muted" />
-                                    <div className="flex-1 space-y-2">
-                                        <div className="h-4 w-3/4 rounded bg-muted" />
-                                        <div className="h-3 w-1/2 rounded bg-muted" />
-                                    </div>
-                                </div>
-                                <div className="mt-4 space-y-2">
-                                    <div className="h-3 rounded bg-muted" />
-                                    <div className="h-3 w-5/6 rounded bg-muted" />
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                ) : jobsForGrid.length > 0 ? (
-                    <>
-                        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-                            {jobsForGrid.map((job, index) => {
-                                // Final safety check before rendering
-                                if (!job || typeof job !== 'object') {
-                                    console.error('Attempting to render invalid job:', job)
-                                    return null
-                                }
-
-                                // Check for validation error objects
-                                for (const [key, value] of Object.entries(job)) {
-                                    if (value && typeof value === 'object' && 'type' in value && 'loc' in value && 'msg' in value) {
-                                        console.error(`Validation error object found during render in job ${job.id}, field ${key}:`, value)
-                                        return null // Don't render this job
-                                    }
-                                }
-
-                                return (
-                                    <JobCard
-                                        key={job.id}
-                                        job={job}
-                                        onViewDescription={async () => {
-                                            setSelectedJob(job)
-                                            setLoadingJobDetails(true)
-                                            setCompleteJobData(null)
-                                            
-                                            try {
-                                                // Fetch complete job data from the jobs API to get all company information
-                                                const response = await apiClient.getJobById(job.id)
-                                                setCompleteJobData(response)
-                                            } catch (error) {
-                                                console.error('Failed to fetch complete job data:', error)
-                                                toast.error('Failed to load complete job details')
-                                                // Still show the modal with limited data
-                                            } finally {
-                                                setLoadingJobDetails(false)
-                                            }
-                                        }}
-                                        onApply={() => handleApplyClick(job)}
-                                        isApplying={applyingJobs.has(job.id)}
-                                        cardIndex={index}
-                                        isSaved={savedJobIds.includes(job.id)}
-                                        onSaveToggle={() => handleSaveToggleForJob(job.id)}
-                                    />
-                                )
-                            }).filter(Boolean)}
-
-                            {/* Show message if no jobs were rendered due to validation errors */}
-                            {jobsForGrid.length > 0 && jobsForGrid.filter(job => {
-                                if (!job || typeof job !== 'object') return false
-                                for (const [key, value] of Object.entries(job)) {
-                                    if (value && typeof value === 'object' && 'type' in value && 'loc' in value && 'msg' in value) {
-                                        return false
-                                    }
-                                }
-                                return true
-                            }).length === 0 && (
-                                    <div className="col-span-full text-center py-12">
-                                        <div className="text-gray-500 dark:text-gray-400">
-                                            <p className="text-lg font-medium mb-2">Data Validation Issue</p>
-                                            <p className="text-sm">Some job data contains validation errors and cannot be displayed.</p>
-                                            <p className="text-sm mt-1">Please check the console for details or contact support.</p>
-                                        </div>
-                                    </div>
-                                )}
-                        </div>
-
-                        {/* Simple Pagination */}
-                        {pagination.total_pages > 1 && (
-                            <div className="mt-8 flex items-center justify-center">
-                                <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-4">
-                                    <div className="flex items-center gap-2">
-                                        {/* Previous Button */}
-                                        <Button
-                                            variant="outline"
-                                            size="sm"
-                                            onClick={() => handlePageChange(pagination.page - 1)}
-                                            disabled={pagination.page <= 1}
-                                            className="px-3 py-2 border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 transition-all duration-200 hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
-                                        >
-                                            ←
-                                        </Button>
-
-                                        {/* Page Numbers */}
-                                        <div className="flex items-center gap-1">
-                                            {[...Array(pagination.total_pages)].map((_, i) => {
-                                                const pageNum = i + 1
-                                                const isCurrentPage = pageNum === pagination.page
-                                                const isNearCurrent = Math.abs(pageNum - pagination.page) <= 1
-                                                const isFirstOrLast = pageNum === 1 || pageNum === pagination.total_pages
-
-                                                if (isFirstOrLast || isNearCurrent) {
-                                                    return (
-                                                        <Button
-                                                            key={pageNum}
-                                                            variant={isCurrentPage ? "default" : "outline"}
-                                                            size="sm"
-                                                            onClick={() => handlePageChange(pageNum)}
-                                                            className={`min-w-[32px] h-8 ${isCurrentPage
-                                                                ? 'bg-primary-500 hover:bg-primary-600 text-white shadow-md'
-                                                                : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 transition-all duration-200 hover:shadow-md'
-                                                                }`}
-                                                        >
-                                                            {pageNum}
-                                                        </Button>
-                                                    )
-                                                } else if (pageNum === pagination.page - 2 || pageNum === pagination.page + 2) {
-                                                    return <span key={pageNum} className="px-2 text-primary-400 dark:text-primary-300">...</span>
-                                                }
-                                                return null
-                                            })}
-                                        </div>
-
-                                        {/* Next Button */}
-                                        <Button
-                                            variant="outline"
-                                            size="sm"
-                                            onClick={() => handlePageChange(pagination.page + 1)}
-                                            disabled={pagination.page >= pagination.total_pages}
-                                            className="px-3 py-2 border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 transition-all duration-200 hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
-                                        >
-                                            →
-                                        </Button>
-                                    </div>
-                                </div>
-                            </div>
-                        )}
-                    </>
-                ) : (
-                    <div className={cn(jobsSurfaceClass, 'flex flex-col items-center px-6 py-16 text-center')}>
-                        <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-primary/15 to-secondary/15">
-                            <Briefcase className="h-7 w-7 text-primary" />
-                        </div>
-                        <h3 className="font-display text-xl font-bold text-foreground">
-                            {savedOnly ? 'No saved roles on this page' : 'No roles match'}
-                        </h3>
-                        <p className="mt-2 max-w-md text-sm text-muted-foreground">
-                            {savedOnly
-                                ? 'Try another page or turn off the saved filter. Bookmark roles from cards to build your list.'
-                                : 'Loosen location or keyword filters, or clear filters to see more openings.'}
-                        </p>
-                        <div className="mt-6 flex flex-wrap justify-center gap-2">
-                            {savedOnly && (
-                                <Button type="button" variant="outline" className="rounded-xl" onClick={() => setSavedOnly(false)}>
-                                    Show all roles
-                                </Button>
-                            )}
-                            <Button type="button" variant="gradient" className="rounded-xl shadow-md shadow-primary/15" onClick={clearFilters}>
-                                Reset filters
-                            </Button>
-                        </div>
-                    </div>
-                )}
-            </div>
-
-            {/* Job Description Modal */}
-            {selectedJob && (
-                <JobDescriptionModal
-                    job={completeJobData || selectedJob}
-                    onClose={() => {
-                        setSelectedJob(null)
-                        setCompleteJobData(null)
-                    }}
-                    onApply={() => {
-                        handleApplyClick(selectedJob)
-                        setSelectedJob(null)
-                        setCompleteJobData(null)
-                    }}
-                    isApplying={applyingJobs.has(selectedJob.id)}
-                    hideSensitiveInfo={true}
-                />
-            )}
-
-            {/* Application Modal */}
-            {showApplicationModal && currentApplicationJob && (
-                <ApplicationModal
-                    job={currentApplicationJob as any}
-                    onClose={() => {
-                        setShowApplicationModal(false)
-                        setCurrentApplicationJob(null)
-                    }}
-                    onSubmit={(applicationData) => applyForJob(currentApplicationJob.id, applicationData)}
-                    isApplying={applyingJobs.has(currentApplicationJob.id)}
-                />
-            )}
-        </StudentDashboardLayout>
-    )
+ const [locale, setLocale] = useState<SupportedLocale>('en')
+ useEffect(() => {
+ setLocale(getClientLocale())
+ }, [])
+
+ const [jobs, setJobs] = useState<Job[]>([])
+ const [loading, setLoading] = useState(true)
+ const [searchTerm, setSearchTerm] = useState('')
+ const [filters, setFilters] = useState({
+ location:'',
+ state:'',
+ district:'',
+ city_or_town:'',
+ village_or_locality:'',
+ pincode:'',
+ industry:'',
+ job_type:'',
+ experience_min:'',
+ experience_max:'',
+ salary_min:'',
+ salary_max:'',
+ remote_work:'',
+ date_posted:''})
+ const [pagination, setPagination] = useState({
+ page: 1,
+ limit: 9, // Changed from 12 to 9 cards per page
+ total: 0,
+ total_pages: 0
+ })
+ const [selectedJob, setSelectedJob] = useState<Job | null>(null)
+ const [completeJobData, setCompleteJobData] = useState<Job | null>(null)
+ const [loadingJobDetails, setLoadingJobDetails] = useState(false)
+ const [showFilters, setShowFilters] = useState(false)
+ const [applyingJobs, setApplyingJobs] = useState<Set<string>>(new Set())
+ const [applicationStatus, setApplicationStatus] = useState<Map<string, string>>(new Map()) // Track application status
+const [profileCompletion, setProfileCompletion] = useState<ProfileCompletionResponse | null>(null)
+ const [profileLoading, setProfileLoading] = useState(true)
+ const [showApplicationModal, setShowApplicationModal] = useState(false)
+ const [currentApplicationJob, setCurrentApplicationJob] = useState<Job | null>(null)
+ const [jobStatusFilter, setJobStatusFilter] = useState<'all'|'open'|'closed'>('open') // New filter for job status
+const [studentProfile, setStudentProfile] = useState<{ degree?: string; branch?: string } | null>(null)
+ const [recommendationReadinessScore, setRecommendationReadinessScore] = useState(100)
+ const [showImproveMatchesCta, setShowImproveMatchesCta] = useState(false)
+ const [allFilteredJobs, setAllFilteredJobs] = useState<Job[]>([]) // Store jobs after degree/branch filtering (before status filter)
+const [baseJobs, setBaseJobs] = useState<Job[]>([]) // Store jobs after API fetch and client-side search (before degree/branch filter)
+const activeFilterCount = Object.values(filters).filter(Boolean).length + (searchTerm ? 1 : 0)
+
+ const [savedJobIds, setSavedJobIds] = useState<string[]>([])
+ const [savedOnly, setSavedOnly] = useState(false)
+ const [recommendedJobs, setRecommendedJobs] = useState<Job[]>([])
+ const [loadingRecommended, setLoadingRecommended] = useState(false)
+ const [recommendationWhyText, setRecommendationWhyText] = useState<string>('Based on your location, skills, and profile completeness.')
+
+ useEffect(() => {
+ setSavedJobIds(loadSavedJobIds())
+ }, [])
+
+ const refreshSavedJobs = () => setSavedJobIds(loadSavedJobIds())
+ const handleSaveToggleForJob = (jobId: string) => {
+ toggleSavedJobId(jobId)
+ refreshSavedJobs()
+ }
+
+ const fetchRecommendedJobs = async () => {
+ try {
+ setLoadingRecommended(true)
+ const response = await apiClient.getStudentRecommendedJobs({
+ limit: 6,
+ page: 1,
+ include_match_details: true,
+ })
+ setRecommendedJobs((response?.jobs || []) as Job[])
+ } catch (error) {
+ console.error('Failed to fetch recommended jobs:', error)
+ setRecommendedJobs([])
+ } finally {
+ setLoadingRecommended(false)
+ }
+ }
+
+ // Fetch student profile to get degree and branch
+const fetchStudentProfile = async (): Promise<{ degree?: string; branch?: string } | null> => {
+ try {
+ const profile = await profileService.getProfile()
+ const profileData = {
+ degree: profile.degree,
+ branch: profile.branch
+ }
+ console.log(' Fetched student profile:', {
+ degree: profile.degree,
+ branch: profile.branch,
+ fullProfile: profile
+ })
+ setStudentProfile(profileData)
+ const readiness = getRecommendationReadiness(profile)
+ setRecommendationReadinessScore(readiness.score)
+ setShowImproveMatchesCta(!readiness.isReady)
+
+ const locationParts = [
+ profile.preferred_job_city,
+ profile.preferred_job_district,
+ profile.preferred_job_state,
+ ].filter(Boolean)
+ const topSkills = (profile.technical_skills ||'')
+ .split(',')
+ .map((s) => s.trim())
+ .filter(Boolean)
+ .slice(0, 2)
+ const roleInterest = (profile.job_roles_of_interest ||'')
+ .split(',')
+ .map((s) => s.trim())
+ .filter(Boolean)[0]
+
+ const contextBits: string[] = []
+ if (locationParts.length > 0) contextBits.push(`location: ${locationParts.join(',')}`)
+ if (roleInterest) contextBits.push(`role interest: ${roleInterest}`)
+ if (topSkills.length > 0) contextBits.push(`skills: ${topSkills.join(',')}`)
+
+ if (contextBits.length > 0) {
+ setRecommendationWhyText(`You're seeing these jobs based on your ${contextBits.join('•')}.`)
+ } else {
+ setRecommendationWhyText('You’re seeing these jobs based on your location, skills, and profile signals.')
+ }
+ return profileData
+ } catch (error) {
+ console.error('Failed to fetch student profile:', error)
+ // Continue without profile - show all jobs if profile fetch fails
+ return null
+ }
+ }
+
+ // Filter jobs based on student's degree and branch
+const filterJobsByDegreeAndBranch = (jobs: Job[], profile?: { degree?: string; branch?: string } | null): Job[] => {
+ const profileToUse = profile !== undefined ? profile : studentProfile
+ 
+ console.log(' Filtering jobs with profile:', profileToUse)
+ 
+ if (!profileToUse || (!profileToUse.degree && !profileToUse.branch)) {
+ // If no profile or no degree/branch info, show all jobs
+ console.log(' No profile data, showing all jobs')
+ return jobs
+ }
+
+ return jobs.filter(job => {
+ console.log(`\n Checking job:"${job.title}"`)
+ console.log(` Job education_degree:`, job.education_degree)
+ console.log(` Job education_branch:`, job.education_branch)
+ 
+ // Helper function to normalize and compare values
+const normalizeString = (str: string): string => {
+ return str.toLowerCase().trim().replace(/[()]/g,'').replace(/\s+/g,'')
+ }
+
+ const normalizeArray = (arr: string | string[] | undefined): string[] => {
+ if (!arr) return []
+ if (typeof arr ==='string') {
+ // Try to parse if it's a JSON string
+ try {
+ const parsed = JSON.parse(arr)
+ if (Array.isArray(parsed)) return parsed.map(normalizeString)
+ return [normalizeString(String(parsed))]
+ } catch {
+ return [normalizeString(arr)]
+ }
+ }
+ return arr.map(normalizeString)
+ }
+
+ // Extract key terms from degree strings for better matching
+const extractDegreeKeyTerms = (degreeStr: string): string[] => {
+ const normalized = normalizeString(degreeStr)
+ const terms: string[] = []
+ 
+ // Extract degree level (bachelor, master, phd, etc.)
+ if (normalized.includes('bachelor') || normalized.includes('b.tech') || normalized.includes('btech')) {
+ terms.push('bachelor')
+ }
+ if (normalized.includes('master') || normalized.includes('m.tech') || normalized.includes('mtech')) {
+ terms.push('master')
+ }
+ if (normalized.includes('phd') || normalized.includes('doctor')) {
+ terms.push('phd')
+ }
+ 
+ // Extract degree type (technology, science, arts, etc.)
+ if (normalized.includes('technology') || normalized.includes('tech')) {
+ terms.push('technology')
+ }
+ if (normalized.includes('science')) {
+ terms.push('science')
+ }
+ if (normalized.includes('arts')) {
+ terms.push('arts')
+ }
+ 
+ return terms
+ }
+
+ // If job doesn't specify degree or branch requirements, show it
+const hasDegreeRequirement = job.education_degree && normalizeArray(job.education_degree).length > 0
+ const hasBranchRequirement = job.education_branch && normalizeArray(job.education_branch).length > 0
+
+ // If job has no requirements, show it
+ if (!hasDegreeRequirement && !hasBranchRequirement) {
+ return true
+ }
+
+ // Check degree match (only if job requires it)
+ let degreeMatch = true
+ if (hasDegreeRequirement) {
+ const jobDegrees = normalizeArray(job.education_degree)
+ const studentDegree = profileToUse.degree ? normalizeString(profileToUse.degree) : ''
+ if (studentDegree) {
+ // Extract key terms for both student and job degrees
+const studentTerms = extractDegreeKeyTerms(profileToUse.degree ||'')
+ 
+ degreeMatch = jobDegrees.some(jobDegree => {
+ const jobTerms = extractDegreeKeyTerms(jobDegree)
+ 
+ // Check if degree levels match (bachelor vs master vs phd)
+const studentLevel = studentTerms.find(t => ['bachelor','master','phd'].includes(t))
+ const jobLevel = jobTerms.find(t => ['bachelor','master','phd'].includes(t))
+ 
+ // If both have levels, they must match exactly
+ if (studentLevel && jobLevel) {
+ if (studentLevel !== jobLevel) {
+ console.log(` Degree level mismatch: student=${studentLevel}, job=${jobLevel} (${job.title})`)
+ return false
+ }
+ }
+ 
+ // Also check for exact or substring match as fallback
+const exactMatch = jobDegree === studentDegree
+ const containsMatch = studentDegree.includes(jobDegree) || jobDegree.includes(studentDegree)
+ 
+ if (exactMatch || containsMatch) {
+ console.log(` Degree match: student="${profileToUse.degree}"matches job="${jobDegree}"(${job.title})`)
+ return true
+ }
+ 
+ return false
+ })
+ 
+ if (!degreeMatch) {
+ console.log(` Degree mismatch: student="${profileToUse.degree}"does not match job requirements (${job.title})`)
+ }
+ } else {
+ // Job requires degree but student doesn't have one
+ degreeMatch = false
+ console.log(` Job requires degree but student has none (${job.title})`)
+ }
+ }
+
+ // Check branch match (only if job requires it)
+ let branchMatch = true
+ if (hasBranchRequirement) {
+ const jobBranches = normalizeArray(job.education_branch)
+ const studentBranch = profileToUse.branch ? normalizeString(profileToUse.branch) : ''
+ if (studentBranch) {
+ branchMatch = jobBranches.some(jobBranch => {
+ // Extract core branch name (remove common suffixes)
+const extractCoreBranch = (branch: string): string => {
+ return branch
+ .replace(/engineering/gi,'')
+ .replace(/science/gi,'')
+ .replace(/technology/gi,'')
+ .replace(/\(.*?\)/g,'') // Remove parentheses
+ .trim()
+ }
+ 
+ const studentCore = extractCoreBranch(studentBranch)
+ const jobCore = extractCoreBranch(jobBranch)
+ 
+ // Check for exact match or substring match
+const exactMatch = jobBranch === studentBranch
+ const containsMatch = studentBranch.includes(jobCore) || jobBranch.includes(studentCore)
+ const coreMatch = studentCore && jobCore && (studentCore.includes(jobCore) || jobCore.includes(studentCore))
+ 
+ if (exactMatch || containsMatch || coreMatch) {
+ console.log(` Branch match: student="${profileToUse.branch}"matches job="${jobBranch}"(${job.title})`)
+ return true
+ }
+ 
+ return false
+ })
+ 
+ if (!branchMatch) {
+ console.log(` Branch mismatch: student="${profileToUse.branch}"does not match job requirements (${job.title})`)
+ }
+ } else {
+ // Job requires branch but student doesn't have one
+ branchMatch = false
+ console.log(` Job requires branch but student has none (${job.title})`)
+ }
+ }
+
+ // Job is shown if all specified requirements match
+const shouldShow = degreeMatch && branchMatch
+ if (!shouldShow) {
+ console.log(` Filtering out job:"${job.title}"(degreeMatch=${degreeMatch}, branchMatch=${branchMatch})`)
+ } else {
+ console.log(` Keeping job:"${job.title}"(degreeMatch=${degreeMatch}, branchMatch=${branchMatch})`)
+ }
+ return shouldShow
+ })
+ }
+
+ // Fetch jobs from API
+const fetchJobs = async (
+ page: number = 1,
+ searchParams: JobSearchParams = {},
+ useClientSideSearch: boolean = false,
+ profileData?: { degree?: string; branch?: string } | null
+ ): Promise<void> => {
+ try {
+ setLoading(true)
+ const params = new URLSearchParams()
+ params.set('page', String(page))
+ params.set('limit', String(pagination.limit))
+ Object.entries(searchParams).forEach(([key, value]) => {
+ if (value === undefined || value === null || value ==='') return
+ if (Array.isArray(value)) {
+ value.forEach(v => params.append(key, String(v)))
+ } else {
+ params.set(key, String(value))
+ }
+ })
+
+ const response = await apiClient.client.get(`/jobs/?${params}`)
+ const data: JobSearchResponse = response.data
+
+ console.log('Raw API response:', data) // Debug log
+
+ // Immediate check for validation errors in the response
+const hasValidationErrors = (obj: any): boolean => {
+ if (!obj || typeof obj !=='object') return false
+ if (Array.isArray(obj)) {
+ return obj.some(hasValidationErrors)
+ }
+
+ // Check if this is a validation error object
+ if ('type'in obj &&'loc'in obj &&'msg'in obj) {
+ console.error('CRITICAL: Validation error object found in API response:', obj)
+ return true
+ }
+
+ // Recursively check all properties
+ for (const [key, value] of Object.entries(obj)) {
+ if (hasValidationErrors(value)) {
+ return true
+ }
+ }
+ return false
+ }
+
+ if (hasValidationErrors(data)) {
+ console.error('CRITICAL: API response contains validation errors. Blocking data processing.')
+ toast.error('Server returned invalid data. Please try again or contact support.')
+ setJobs([])
+ setPagination({
+ page: 1,
+ limit: 9,
+ total: 0,
+ total_pages: 0
+ })
+ setLoading(false)
+ return
+ }
+
+ // Check for validation error objects in the response
+ if (data.jobs && Array.isArray(data.jobs)) {
+ data.jobs.forEach((job, index) => {
+ if (job && typeof job ==='object') {
+ Object.entries(job).forEach(([key, value]) => {
+ if (
+ value &&
+ typeof value === 'object' &&
+ 'type' in value &&
+ 'loc' in value &&
+ 'msg' in value
+ ) {
+ console.error(`Validation error object found in job ${index}, field ${key}:`, value)
+ }
+ })
+ }
+ })
+ }
+
+ // Deep clean the data to remove any validation error objects
+const deepCleanObject = (obj: any): any => {
+ if (obj === null || obj === undefined) return obj
+ if (typeof obj !=='object') return obj
+ if (Array.isArray(obj)) return obj.map(deepCleanObject)
+
+ // Check if this is a validation error object
+ if ('type'in obj &&'loc'in obj &&'msg'in obj) {
+ console.error('Deep cleaning: Found validation error object:', obj)
+ return null
+ }
+
+ const cleaned: any = {}
+ for (const [key, value] of Object.entries(obj)) {
+ if (value && typeof value === 'object' && 'type' in value && 'loc' in value && 'msg' in value) {
+ console.error(`Deep cleaning: Found validation error object in field ${key}:`, value)
+ cleaned[key] = null // Replace with null
+ } else if (value && typeof value ==='object') {
+ cleaned[key] = deepCleanObject(value)
+ } else {
+ cleaned[key] = value
+ }
+ }
+ return cleaned
+ }
+
+ // More aggressive cleaning - remove entire jobs that contain validation errors
+const aggressiveCleanJobs = (jobs: any[]): any[] => {
+ return jobs.filter(job => {
+ if (!job || typeof job !=='object') return false
+
+ // Check if any field contains validation error objects
+ for (const [key, value] of Object.entries(job)) {
+ if (value && typeof value === 'object' && 'type' in value && 'loc' in value && 'msg' in value) {
+ console.error(`Aggressive cleaning: Removing job with validation error in field ${key}:`, value)
+ return false // Remove this entire job
+ }
+ }
+ return true
+ })
+ }
+
+ // Deep clean the entire response
+const cleanedData = deepCleanObject(data)
+ console.log('Deep cleaned data:', cleanedData)
+
+ // Apply aggressive cleaning to jobs
+ if (cleanedData.jobs && Array.isArray(cleanedData.jobs)) {
+ cleanedData.jobs = aggressiveCleanJobs(cleanedData.jobs)
+ console.log('Aggressively cleaned jobs:', cleanedData.jobs)
+ }
+
+ // Validate and clean job data to prevent runtime errors
+ let validatedJobs: any[] = []
+ try {
+ validatedJobs = (cleanedData.jobs || []).map((job: any) => {
+ // Log any problematic data for debugging
+ if (typeof job ==='object'&& job !== null) {
+ Object.entries(job).forEach(([key, value]) => {
+ if (value !== null && typeof value ==='object'&& !Array.isArray(value) && !(value instanceof Date)) {
+ console.warn(`Warning: Job ${job.id} has object value for ${key}:`, value)
+
+ // Check if this is a validation error object
+ if ('type'in value &&'loc'in value &&'msg'in value) {
+ console.error(`Validation error object detected in job ${job.id}, field ${key}:`, value)
+ // Remove this field to prevent rendering issues
+ delete job[key]
+ }
+ }
+ })
+ }
+
+ return {
+ ...job,
+ title: String(job.title ||''),
+ description: String(job.description ||''),
+ requirements: job.requirements ? String(job.requirements) : undefined,
+ responsibilities: job.responsibilities ? String(job.responsibilities) : undefined,
+ job_type: String(job.job_type ||''),
+ status: String(job.status ||''),
+ location: String(job.location ||''),
+ remote_work: Boolean(job.remote_work),
+ travel_required: Boolean(job.travel_required),
+ salary_min: job.salary_min ? Number(job.salary_min) : undefined,
+ salary_max: job.salary_max ? Number(job.salary_max) : undefined,
+ salary_currency: String(job.salary_currency ||'INR'),
+ experience_min: job.experience_min ? Number(job.experience_min) : undefined,
+ experience_max: job.experience_max ? Number(job.experience_max) : undefined,
+ education_level: job.education_level ? String(job.education_level) : undefined,
+ skills_required: Array.isArray(job.skills_required) ? job.skills_required.map((skill: any) => {
+ if (typeof skill ==='object'&& skill !== null) {
+ console.warn(`Warning: Skill is an object:`, skill)
+ return String(skill)
+ }
+ return String(skill)
+ }) : [],
+ application_deadline: job.application_deadline ? String(job.application_deadline) : undefined,
+ max_applications: Number(job.max_applications || 0),
+ current_applications: Number(job.current_applications || 0),
+ industry: job.industry ? String(job.industry) : undefined,
+ selection_process: job.selection_process ? String(job.selection_process) : undefined,
+ campus_drive_date: job.campus_drive_date ? String(job.campus_drive_date) : undefined,
+ views_count: Number(job.views_count || 0),
+ applications_count: Number(job.applications_count || 0),
+ created_at: String(job.created_at ||''),
+ corporate_id: job.corporate_id ? String(job.corporate_id) : null,
+ corporate_name: job.corporate_name ? String(job.corporate_name) : undefined,
+ university_id: job.university_id ? String(job.university_id) : null,
+ is_active: Boolean(job.is_active),
+ can_apply: Boolean(job.can_apply),
+ // Company information fields (for university-created jobs)
+ company_name: job.company_name ? String(job.company_name) : undefined,
+ company_logo: job.company_logo ? String(job.company_logo) : undefined,
+ company_website: job.company_website ? String(job.company_website) : undefined,
+ company_address: job.company_address ? String(job.company_address) : undefined
+ }
+ })
+ } catch (validationError) {
+ console.error('Error validating job data:', validationError)
+ console.error('Problematic data:', data)
+ // Fallback to empty array if validation fails
+ validatedJobs = []
+ toast.error('Error processing job data. Please try again.')
+ }
+
+ // Only set jobs if validation was successful
+ if (validatedJobs.length > 0 || data.jobs === undefined) {
+ // Final safety check - filter out any jobs that might still have validation error objects
+const finalJobs = validatedJobs.filter(job => {
+ if (!job || typeof job !=='object') return false
+
+ // Check if any field contains validation error objects
+ for (const [key, value] of Object.entries(job)) {
+ if (value && typeof value === 'object' && 'type' in value && 'loc' in value && 'msg' in value) {
+ console.error(`Final check: Validation error object still present in job ${job.id}, field ${key}:`, value)
+ return false // Filter out this job
+ }
+ }
+ return true
+ })
+
+ console.log('Final validated jobs:', finalJobs)
+
+ // Nuclear option - completely sanitize all data before setting state
+const nuclearCleanJobs = finalJobs.map(job => {
+ if (!job || typeof job !=='object') return null
+
+ const cleanJob: any = {}
+ for (const [key, value] of Object.entries(job)) {
+ if (value === null || value === undefined) {
+ cleanJob[key] = value
+ } else if (typeof value ==='string'|| typeof value ==='number'|| typeof value ==='boolean') {
+ cleanJob[key] = value
+ } else if (Array.isArray(value)) {
+ // Clean array items - only allow primitives
+ cleanJob[key] = value.filter(item =>
+ item === null || item === undefined ||
+ typeof item ==='string'|| typeof item ==='number'|| typeof item ==='boolean').map(item => {
+ if (typeof item ==='object'&& item !== null) {
+ console.warn(`Nuclear cleaning: Converting object array item to string:`, item)
+ return String(item)
+ }
+ return item
+ })
+ } else {
+ // Any object becomes null
+ console.warn(`Nuclear cleaning: Converting object field ${key} to null:`, value)
+ cleanJob[key] = null
+ }
+ }
+ return cleanJob
+ }).filter(Boolean)
+
+ // Ultra-aggressive cleaning - convert everything to safe types
+const ultraCleanJobs = nuclearCleanJobs.map(job => {
+ if (!job || typeof job !=='object') return null
+
+ const ultraCleanJob: any = {}
+ for (const [key, value] of Object.entries(job)) {
+ if (value === null || value === undefined) {
+ ultraCleanJob[key] = value
+ } else if (typeof value ==='string') {
+ ultraCleanJob[key] = value
+ } else if (typeof value ==='number') {
+ ultraCleanJob[key] = isNaN(value) ? 0 : value
+ } else if (typeof value ==='boolean') {
+ ultraCleanJob[key] = value
+ } else if (Array.isArray(value)) {
+ ultraCleanJob[key] = value.map(item => {
+ if (item === null || item === undefined) return item
+ if (typeof item ==='string') return item
+ if (typeof item ==='number') return isNaN(item) ? 0 : item
+ if (typeof item ==='boolean') return item
+ return String(item)
+ })
+ } else {
+ ultraCleanJob[key] = null
+ }
+ }
+ return ultraCleanJob
+ }).filter(Boolean)
+
+ console.log('Nuclear cleaned jobs:', nuclearCleanJobs)
+ console.log('Ultra cleaned jobs:', ultraCleanJobs)
+
+ // Final validation - ensure no objects remain
+const finalValidation = ultraCleanJobs.every(job => {
+ if (!job || typeof job !=='object') return false
+ for (const [key, value] of Object.entries(job)) {
+ if (value !== null && typeof value ==='object'&& !Array.isArray(value)) {
+ console.error(`CRITICAL: Object still present after ultra cleaning in ${key}:`, value)
+ return false
+ }
+ }
+ return true
+ })
+
+ if (!finalValidation) {
+ console.error('CRITICAL: Ultra cleaning failed. Setting empty state.')
+ setJobs([])
+ setAllFilteredJobs([])
+ setBaseJobs([])
+ setPagination({
+ page: 1,
+ limit: 9,
+ total: 0,
+ total_pages: 0
+ })
+ toast.error('Data validation failed. Please try again or contact support.')
+ return
+ }
+
+ // Apply client-side search if needed
+ let searchFilteredJobs = ultraCleanJobs
+ if (useClientSideSearch && searchTerm) {
+ console.log(`Applying client-side search to ${ultraCleanJobs.length} jobs`)
+ console.log('Sample job data:', ultraCleanJobs[0])
+ searchFilteredJobs = performClientSideSearch(ultraCleanJobs, searchTerm)
+ console.log(`Client-side search: ${ultraCleanJobs.length} -> ${searchFilteredJobs.length} jobs`)
+ }
+
+ // Store base jobs (after API fetch and client-side search, before degree/branch filter)
+ setBaseJobs(searchFilteredJobs)
+ console.log(` Base jobs stored: ${searchFilteredJobs.length} jobs`)
+
+ // Use provided profile data or fall back to state
+const profileToUse = profileData !== undefined ? profileData : studentProfile
+ 
+ // Apply degree and branch filtering
+ console.log(` Applying degree/branch filter with profile:`, profileToUse)
+ const degreeBranchFilteredJobs = filterJobsByDegreeAndBranch(searchFilteredJobs, profileToUse)
+ console.log(` Degree/Branch filter result: ${searchFilteredJobs.length} -> ${degreeBranchFilteredJobs.length} jobs`)
+ if (profileToUse) {
+ console.log(` Student profile: degree="${profileToUse.degree}", branch="${profileToUse.branch}"`)
+ } else {
+ console.warn(' No student profile available - showing all jobs')
+ }
+
+ // Store jobs after degree/branch filtering (before status filter)
+ setAllFilteredJobs(degreeBranchFilteredJobs)
+
+ // Apply status filter before setting state (so pagination counts are correct)
+const statusFilteredJobs = filterJobsByStatus(degreeBranchFilteredJobs)
+ console.log(`Status filter (${jobStatusFilter}): ${degreeBranchFilteredJobs.length} -> ${statusFilteredJobs.length} jobs`)
+
+ setJobs(statusFilteredJobs)
+ setPagination({
+ page: data.page || 1,
+ limit: data.limit || 9,
+ total: statusFilteredJobs.length,
+ total_pages: Math.ceil(statusFilteredJobs.length / (data.limit || 9))
+ })
+
+ // Update application status for jobs
+ checkApplicationStatus()
+ } else {
+ // If validation failed and no jobs, set empty state
+ setJobs([])
+ setAllFilteredJobs([])
+ setBaseJobs([])
+ setPagination({
+ page: 1,
+ limit: 9,
+ total: 0,
+ total_pages: 0
+ })
+ }
+ } catch (error: any) {
+ console.error('Error fetching jobs:', error)
+
+ // Handle validation errors from backend
+ if (error.response?.status === 422) {
+ console.error('422 Validation Error in fetchJobs:', error.response.data)
+
+ // Check if response contains validation error objects
+const hasValidationErrors = (obj: any): boolean => {
+ if (!obj || typeof obj !=='object') return false
+ if (Array.isArray(obj)) {
+ return obj.some(hasValidationErrors)
+ }
+
+ // Check if this is a validation error object
+ if ('type'in obj &&'loc'in obj &&'msg'in obj) {
+ console.error('CRITICAL: Validation error object in fetchJobs response:', obj)
+ return true
+ }
+
+ // Recursively check all properties
+ for (const [key, value] of Object.entries(obj)) {
+ if (hasValidationErrors(value)) {
+ return true
+ }
+ }
+ return false
+ }
+
+ if (hasValidationErrors(error.response.data)) {
+ console.error('CRITICAL: fetchJobs response contains validation errors. Setting empty state.')
+ setJobs([])
+ setAllFilteredJobs([])
+ setBaseJobs([])
+ setPagination({
+ page: 1,
+ limit: 9,
+ total: 0,
+ total_pages: 0
+ })
+ toast.error('Server returned invalid data. Please try again or contact support.')
+ return
+ }
+ }
+
+ toast.error('Failed to fetch jobs')
+ } finally {
+ setLoading(false)
+ }
+ }
+
+ // Fetch profile completion data
+const fetchProfileCompletion = async () => {
+ try {
+ setProfileLoading(true)
+ const completionData = await profileService.getProfileCompletion()
+ setProfileCompletion(completionData)
+ } catch (error) {
+ console.error('Failed to fetch profile completion:', error)
+ // Set default completion to 0 if fetch fails
+ setProfileCompletion({ 
+ completion_percentage: 0,
+ completed_fields: [],
+ missing_fields: [],
+ total_fields: 0,
+ completed_count: 0
+ })
+ } finally {
+ setProfileLoading(false)
+ }
+ }
+
+ // Handle job application initiation
+const handleApplyClick = (job: Job) => {
+ if (!job.can_apply) {
+ toast.error('Applications are not currently open for this position')
+ return
+ }
+
+ // Check if already applied
+ if (applicationStatus.get(job.id) ==='applied') {
+ toast('You have already applied for this position')
+ return
+ }
+
+ // Check profile completion - must be at least 75%
+ if (!profileCompletion || profileCompletion.completion_percentage < 75) {
+ toast.error(`Profile completion must be at least 75%`)
+ return
+ }
+
+ setCurrentApplicationJob(job)
+ setShowApplicationModal(true)
+ }
+
+ // Apply for a job with enhanced data
+const applyForJob = async (jobId: string, applicationData: any) => {
+ try {
+ setApplyingJobs(prev => new Set(prev).add(jobId))
+
+ const response = await apiClient.client.post(`/applications/apply/${jobId}`, {
+ job_id: jobId, // Add the missing job_id field
+ cover_letter: applicationData.cover_letter || `I am interested in this position and believe my skills and experience make me a great fit.`,
+ expected_salary: applicationData.expected_salary || null,
+ availability_date: applicationData.availability_date || new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]
+ })
+
+ // Update application status
+ setApplicationStatus(prev => {
+ const newStatus = new Map(prev).set(jobId,'applied')
+
+ // Save to localStorage for persistence
+const currentStatus = Object.fromEntries(newStatus)
+ localStorage.setItem('appliedJobs', JSON.stringify(currentStatus))
+
+ console.log(`Application status updated for job ${jobId}:`, newStatus.get(jobId))
+ console.log('All application statuses:', Object.fromEntries(newStatus))
+
+ return newStatus
+ })
+
+ toast.success('Application submitted successfully!')
+
+ // Close modal
+ setShowApplicationModal(false)
+ setCurrentApplicationJob(null)
+
+ // Refresh jobs to update application status
+ fetchJobs(pagination.page, buildSearchParams())
+ } catch (error: any) {
+ console.error('Error applying for job:', error)
+
+ // Handle validation errors from backend
+ let message = 'Failed to apply for job'
+ if (error.response?.status === 422) {
+ console.error('422 Validation Error Response:', error.response.data)
+
+ // Check if response contains validation error objects
+const hasValidationErrors = (obj: any): boolean => {
+ if (!obj || typeof obj !=='object') return false
+ if (Array.isArray(obj)) {
+ return obj.some(hasValidationErrors)
+ }
+
+ // Check if this is a validation error object
+ if ('type'in obj &&'loc'in obj &&'msg'in obj) {
+ console.error('CRITICAL: Validation error object in application response:', obj)
+ return true
+ }
+
+ // Recursively check all properties
+ for (const [key, value] of Object.entries(obj)) {
+ if (hasValidationErrors(value)) {
+ return true
+ }
+ }
+ return false
+ }
+
+ if (hasValidationErrors(error.response.data)) {
+ console.error('CRITICAL: Application response contains validation errors. Blocking processing.')
+ message = 'Server returned invalid data. Please try again or contact support.'
+ // Don't process any data that contains validation errors
+ setApplyingJobs(prev => {
+ const newSet = new Set(prev)
+ newSet.delete(jobId)
+ return newSet
+ })
+ toast.error(message)
+ return
+ }
+
+ // Extract user-friendly error message
+ if (error.response.data?.detail) {
+ if (Array.isArray(error.response.data.detail)) {
+ // Create more specific error messages for common validation errors
+const errorMessages = error.response.data.detail.map((err: any) => {
+ if (err.type ==='missing') {
+ const field = err.loc[err.loc.length - 1] // Get the field name
+ return `Missing required field: ${field}`
+ } else if (err.type ==='value_error') {
+ return `Invalid value for ${err.loc[err.loc.length - 1]}: ${err.msg}`
+ } else {
+ return err.msg ||'Validation error'}
+ })
+ message = errorMessages.join(',')
+ } else {
+ message = error.response.data.detail
+ }
+ } else if (error.response.data?.message) {
+ message = error.response.data.message
+ }
+ } else {
+ const data = error.response?.data
+ if (data) {
+ if (typeof data.error ==='string') {
+ // Our backend wraps user-facing message in `error`
+ message = data.error
+ } else if (typeof data.detail ==='string') {
+ message = data.detail
+ } else if (typeof data.message ==='string') {
+ message = data.message
+ }
+ }
+ }
+
+ toast.error(message)
+ } finally {
+ setApplyingJobs(prev => {
+ const newSet = new Set(prev)
+ newSet.delete(jobId)
+ return newSet
+ })
+ }
+ }
+
+ // Build search parameters from filters
+const buildSearchParams = () => {
+ const params: any = {}
+
+ if (searchTerm) {
+ // Enhanced search logic to handle different types of search terms
+const searchTermLower = searchTerm.toLowerCase().trim()
+
+ // Check if search term looks like a skill (common tech skills)
+const commonSkills = ['python','javascript','react','node','java','aws','docker','kubernetes','sql','mongodb','postgresql','redis','git','linux','html','css','typescript','angular','vue','php','ruby','go','rust','swift','android','ios','flutter','react native','machine learning','ai','data science','analytics','devops','ci/cd','terraform','ansible','jenkins','graphql','rest api','microservices','blockchain','crypto','spring','django','flask','express','laravel','rails','asp.net','tensorflow','pytorch','scikit-learn','pandas','numpy','matplotlib','elasticsearch','kafka','rabbitmq','nginx','apache','tomcat']
+
+ // Check if search term contains skill keywords
+const isSkillSearch = commonSkills.some(skill =>
+ searchTermLower.includes(skill) || skill.includes(searchTermLower)
+ )
+
+ if (isSkillSearch) {
+ // If it looks like a skill, search in skills
+ params.skills = [searchTerm]
+ } else {
+ // For company names, job titles, or other terms, search in title
+ // The backend will search in job titles which may include company names
+ params.keyword = searchTerm
+ }
+ }
+
+ if (filters.location) params.location = filters.location
+ if (filters.state) params.state = filters.state
+ if (filters.district) params.district = filters.district
+ if (filters.city_or_town) params.city_or_town = filters.city_or_town
+ if (filters.village_or_locality) params.village_or_locality = filters.village_or_locality
+ if (filters.pincode) params.pincode = filters.pincode
+ if (filters.industry) params.industry = filters.industry
+ if (filters.job_type) params.job_type = filters.job_type
+ if (filters.experience_min) params.experience_min = filters.experience_min
+ if (filters.experience_max) params.experience_max = filters.experience_max
+ if (filters.salary_min) params.salary_min = filters.salary_min
+ if (filters.salary_max) params.salary_max = filters.salary_max
+ if (filters.remote_work !=='') params.remote_work = filters.remote_work
+ if (filters.date_posted) params.date_posted = filters.date_posted
+
+ return params
+ }
+
+ // Client-side search function for company names and other fields
+const performClientSideSearch = (jobs: Job[], searchTerm: string): Job[] => {
+ if (!searchTerm.trim()) return jobs
+
+ const searchTermLower = searchTerm.toLowerCase().trim()
+ console.log(`Client-side search: Looking for"${searchTermLower}"in ${jobs.length} jobs`)
+
+ const filteredJobs = jobs.filter(job => {
+ // Search in job title
+ if (job.title.toLowerCase().includes(searchTermLower)) {
+ console.log(`Found match in title: ${job.title}`)
+ return true
+ }
+
+ // Search in company name
+ if (job.corporate_name && job.corporate_name.toLowerCase().includes(searchTermLower)) {
+ console.log(`Found match in company name: ${job.corporate_name}`)
+ return true
+ }
+
+ // Search in job description
+ if (job.description && job.description.toLowerCase().includes(searchTermLower)) {
+ console.log(`Found match in description: ${job.title}`)
+ return true
+ }
+
+ // Search in skills
+ if (job.skills_required && job.skills_required.some(skill =>
+ skill.toLowerCase().includes(searchTermLower)
+ )) {
+ console.log(`Found match in skills: ${job.title}`)
+ return true
+ }
+
+ // Search in location
+const locationString = Array.isArray(job.location) ? job.location.join('') : job.location
+ if (locationString && locationString.toLowerCase().includes(searchTermLower)) {
+ console.log(`Found match in location: ${job.title}`)
+ return true
+ }
+
+ return false
+ })
+
+ console.log(`Client-side search result: ${filteredJobs.length} jobs found`)
+ return filteredJobs
+ }
+
+ // Handle search with hybrid approach
+const handleSearch = async () => {
+ setPagination(prev => ({ ...prev, page: 1 }))
+
+ // First, try the backend search
+const searchParams = buildSearchParams()
+ console.log('Search params:', searchParams)
+
+ // Try backend search first
+ await fetchJobs(1, searchParams)
+
+ // If we have a search term, also try a broader search with client-side filtering
+ if (searchTerm) {
+ console.log('Search term detected, also trying broader search with client-side filtering...')
+
+ // Get all jobs without search filters, then apply client-side search
+const allJobsParams = buildSearchParams()
+ delete allJobsParams.title // Remove title search to get all jobs
+ delete allJobsParams.skills // Remove skills search to get all jobs
+
+ console.log('Fallback search params:', allJobsParams)
+ await fetchJobs(1, allJobsParams, true) // Use client-side search
+ }
+ }
+
+ // Handle filter changes
+const handleFilterChange = (key: string, value: string) => {
+ setFilters(prev => ({ ...prev, [key]: value }))
+ }
+
+ const saveJobsFilterAsPreference = async () => {
+ try {
+ await profileService.updateProfile({
+ preferred_job_city: filters.city_or_town || undefined,
+ preferred_job_district: filters.district || undefined,
+ preferred_job_state: filters.state || undefined,
+ preferred_job_remote: filters.remote_work ==='true',
+ location_preferences: [filters.city_or_town, filters.district, filters.state].filter(Boolean).join(',') || undefined,
+ })
+ await fetchRecommendedJobs()
+ toast.success('Saved as your recommendation location preference')
+ } catch (error) {
+ console.error('Failed to save location preference from filters:', error)
+ toast.error('Could not save location preference')
+ }
+ }
+
+ // Handle pagination
+const handlePageChange = (page: number) => {
+ setPagination(prev => ({ ...prev, page }))
+ fetchJobs(page, buildSearchParams())
+ }
+
+ // Clear all filters
+const clearFilters = () => {
+ setFilters({
+ location:'',
+ state:'',
+ district:'',
+ city_or_town:'',
+ village_or_locality:'',
+ pincode:'',
+ industry:'',
+ job_type:'',
+ experience_min:'',
+ experience_max:'',
+ salary_min:'',
+ salary_max:'',
+ remote_work:'',
+ date_posted:''})
+ setSearchTerm('')
+ setJobStatusFilter('open')
+ setPagination(prev => ({ ...prev, page: 1 }))
+ fetchJobs(1, {})
+ }
+
+ // Check application status for jobs
+const checkApplicationStatus = async () => {
+ try {
+ // First, try to fetch applied jobs from server
+ try {
+ const response = await apiClient.getStudentAppliedJobs()
+ if (response && response.applications) {
+ const appliedJobsMap = new Map()
+ response.applications.forEach((app: any) => {
+ appliedJobsMap.set(app.job_id,'applied')
+ })
+ console.log('Loaded application status from server:', Object.fromEntries(appliedJobsMap))
+ setApplicationStatus(appliedJobsMap)
+
+ // Update localStorage with server data
+ localStorage.setItem('appliedJobs', JSON.stringify(Object.fromEntries(appliedJobsMap)))
+ return
+ }
+ } catch (serverError) {
+ console.log('Server fetch failed, falling back to localStorage:', serverError)
+ }
+
+ // Fallback to localStorage if server fetch fails
+const appliedJobs = localStorage.getItem('appliedJobs')
+ if (appliedJobs) {
+ const parsed = JSON.parse(appliedJobs)
+ console.log('Loading application status from localStorage:', parsed)
+ setApplicationStatus(new Map(Object.entries(parsed)))
+ } else {
+ console.log('No application status found in localStorage')
+ }
+ } catch (error) {
+ console.error('Error checking application status:', error)
+ }
+ }
+
+ // Helper function to check if a job is expired
+const isJobExpired = (job: Job) => {
+ if (!job.application_deadline) return false
+ const deadline = new Date(job.application_deadline)
+ const now = new Date()
+ return deadline < now
+ }
+
+ // Helper function to check if a job is open (available for application)
+const isJobOpen = (job: Job) => {
+ const status = applicationStatus.get(job.id)
+ return status !=='applied'&& !isJobExpired(job) && job.can_apply
+ }
+
+ // Helper function to check if a job is closed (applied, expired, or not available)
+const isJobClosed = (job: Job) => {
+ const status = applicationStatus.get(job.id)
+ return status ==='applied'|| isJobExpired(job) || !job.can_apply
+ }
+
+ // Filter jobs based on job status filter
+const filterJobsByStatus = (jobs: Job[]) => {
+ if (jobStatusFilter ==='all') return jobs
+ if (jobStatusFilter ==='open') return jobs.filter(isJobOpen)
+ if (jobStatusFilter ==='closed') return jobs.filter(isJobClosed)
+ return jobs
+ }
+
+ // Global validation error handler
+const handleValidationError = (data: any, context: string) => {
+ console.error(`CRITICAL: Validation error detected in ${context}:`, data)
+
+ // Check if this contains validation error objects
+const hasValidationErrors = (obj: any): boolean => {
+ if (!obj || typeof obj !=='object') return false
+ if (Array.isArray(obj)) {
+ return obj.some(hasValidationErrors)
+ }
+
+ // Check if this is a validation error object
+ if ('type'in obj &&'loc'in obj &&'msg'in obj) {
+ console.error(`Validation error object found in ${context}:`, obj)
+ return true
+ }
+
+ // Recursively check all properties
+ for (const [key, value] of Object.entries(obj)) {
+ if (hasValidationErrors(value)) {
+ return true
+ }
+ }
+ return false
+ }
+
+ if (hasValidationErrors(data)) {
+ console.error(`CRITICAL: ${context} contains validation errors. Blocking processing.`)
+ toast.error('Server returned invalid data. Please try again or contact support.')
+ return true // Indicates validation errors were found
+ }
+
+ return false // No validation errors
+ }
+
+ // Load initial data
+ useEffect(() => {
+ const loadData = async () => {
+ console.log(' Loading initial data...')
+ // Fetch profile first so filtering can work
+const profileData = await fetchStudentProfile()
+ // Pass profile data directly to fetchJobs to avoid timing issues
+ await fetchJobs(1, {}, false, profileData)
+ await fetchRecommendedJobs()
+ checkApplicationStatus()
+ fetchProfileCompletion()
+ }
+ loadData()
+ }, [])
+
+ // Refilter jobs when student profile is loaded/updated (only if we have base jobs)
+ useEffect(() => {
+ if (studentProfile && baseJobs.length > 0) {
+ console.log(' Re-filtering jobs after profile update:', studentProfile)
+ // Re-apply the degree/branch filter with the updated profile
+const degreeBranchFiltered = filterJobsByDegreeAndBranch(baseJobs, studentProfile)
+ console.log(` Re-filter result: ${baseJobs.length} -> ${degreeBranchFiltered.length} jobs`)
+ setAllFilteredJobs(degreeBranchFiltered)
+ // Then apply status filter
+const statusFiltered = filterJobsByStatus(degreeBranchFiltered)
+ setJobs(statusFiltered)
+ setPagination(prev => ({
+ ...prev,
+ total: statusFiltered.length,
+ total_pages: Math.ceil(statusFiltered.length / prev.limit)
+ }))
+ }
+ // eslint-disable-next-line react-hooks/exhaustive-deps
+ }, [studentProfile])
+
+ // Re-apply status filter when application status or status filter changes
+ useEffect(() => {
+ if (allFilteredJobs.length > 0) {
+ const statusFiltered = filterJobsByStatus(allFilteredJobs)
+ setJobs(statusFiltered)
+ setPagination(prev => ({
+ ...prev,
+ total: statusFiltered.length,
+ total_pages: Math.ceil(statusFiltered.length / prev.limit)
+ }))
+ }
+ // eslint-disable-next-line react-hooks/exhaustive-deps
+ }, [applicationStatus, jobStatusFilter])
+
+ // Global error boundary for validation errors
+ useEffect(() => {
+ const handleGlobalError = (event: ErrorEvent) => {
+ if (event.error && event.error.message && event.error.message.includes('Objects are not valid as a React child')) {
+ console.error('CRITICAL: Global React error detected:', event.error)
+
+ // Check if this is a validation error
+ if (event.error.message.includes('{type, loc, msg, input}')) {
+ console.error('CRITICAL: Validation error object being rendered. This should not happen with our defense system.')
+ toast.error('Critical error detected. Please refresh the page.')
+
+ // Force a page refresh to recover
+ setTimeout(() => {
+ window.location.reload()
+ }, 2000)
+ }
+ }
+ }
+
+ window.addEventListener('error', handleGlobalError)
+
+ return () => {
+ window.removeEventListener('error', handleGlobalError)
+ }
+ }, [])
+
+ const jobsForGrid = savedOnly ? jobs.filter((j) => savedJobIds.includes(j.id)) : jobs
+
+ return (
+ <StudentDashboardLayout>
+ <div className={cn(jobsHeroClass,'mb-6')}>
+ <div className="relative z-[1] max-w-3xl">
+ <p className="font-display text-xs font-semibold uppercase tracking-[0.2em] text-primary">Opportunities</p>
+ <h1 className="font-display mt-3 text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+ {tf(locale,'student.jobs.title','Discover roles')}
+ </h1>
+ <p className="mt-3 max-w-xl text-pretty text-base leading-relaxed text-muted-foreground">
+ Find nearby roles aligned with your program—refine by place, compensation, and work mode.
+ </p>
+ <div className="mt-5 flex flex-wrap gap-2">
+ <span className="border px-3 py-1 text-xs font-semibold">
+ {new Date().toLocaleDateString('en-US', {
+ weekday:'short',
+ month:'short',
+ day:'numeric',
+ })}
+ </span>
+ {savedJobIds.length > 0 && (
+ <button
+ type="button"onClick={() => setSavedOnly((s) => !s)}
+ className={cn('inline-flex items-center gap-1.5 border px-3 py-1 text-xs font-semibold transition-colors',
+ savedOnly
+ ?'border-primary text-primary':'border-border',
+ )}
+ >
+ <Bookmark className={cn('h-3.5 w-3.5', savedOnly &&'fill-current')} />
+ Saved ({savedJobIds.length})
+ </button>
+ )}
+ </div>
+ </div>
+ </div>
+
+ {showImproveMatchesCta && (
+ <div className={cn(jobsSurfaceClass,'mb-6 p-4 sm:p-5')}>
+ <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+ <div>
+ <p className="text-xs font-semibold uppercase tracking-[0.14em] text-primary">Improve your AI matches</p>
+ <h2 className="font-display text-lg font-semibold text-foreground">Set your job preferences for better recommendations</h2>
+ <p className="text-sm text-muted-foreground">
+ AI match readiness: {recommendationReadinessScore}%. Add location, role interests, and skills in profile.
+ </p>
+ </div>
+ <a href="/dashboard/student/profile">
+ <Button variant="gradient"className="rounded-none-none">Complete preferences</Button>
+ </a>
+ </div>
+ </div>
+ )}
+
+ <div className={cn(jobsSurfaceClass,'mb-6 p-4 sm:p-5')}>
+ <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+ <div className="relative min-w-0 flex-1">
+ <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"/>
+ <Input
+ type="search"placeholder={tf(
+ locale,'student.jobs.searchPlaceholder','Search by role, skill, company, or location…',
+ )}
+ value={searchTerm}
+ onChange={(e) => setSearchTerm(e.target.value)}
+ onKeyDown={(e) => e.key ==='Enter'&& handleSearch()}
+ className="h-11 rounded-none-none pl-10"/>
+ </div>
+ <Button
+ variant="outline"onClick={() => setShowFilters(!showFilters)}
+ className="h-11 rounded-none-none font-semibold sm:w-auto">
+ <SlidersHorizontal className="mr-2 h-4 w-4"/>
+ Filters
+ </Button>
+ <select
+ value={jobStatusFilter}
+ onChange={(e) => {
+ const newFilter = e.target.value as 'all' | 'open' | 'closed'
+ setJobStatusFilter(newFilter)
+ // Re-apply status filter to already filtered jobs (no need to refetch)
+const statusFiltered = filterJobsByStatus(allFilteredJobs)
+ setJobs(statusFiltered)
+ setPagination(prev => ({
+ ...prev,
+ total: statusFiltered.length,
+ total_pages: Math.ceil(statusFiltered.length / prev.limit)
+ }))
+ }}
+ className="h-11 min-w-[9rem] flex-1 rounded-none-none border border-input bg-background px-3 text-sm font-medium text-foreground shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:flex-initial">
+ <option value="all">All Jobs</option>
+ <option value="open">Open Jobs</option>
+ <option value="closed">Closed Jobs</option>
+ </select>
+ <Button
+ onClick={handleSearch}
+ variant="gradient"className="h-11 w-full rounded-none-none font-semibold shadow-md shadow-primary/15 sm:w-auto">
+ Search
+ </Button>
+ </div>
+
+ {showFilters && (
+ <motion.div
+ initial={{ opacity: 0, height: 0 }}
+ animate={{ opacity: 1, height:'auto'}}
+ exit={{ opacity: 0, height: 0 }}
+ className="grid grid-cols-1 gap-4 border-t pt-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+ <div>
+ <label className="block text-sm font-medium text-gray-700 mb-2">
+  Location
+ </label>
+ <Input
+ placeholder="Legacy location text"value={filters.location}
+ onChange={(e) => handleFilterChange('location', e.target.value)}
+ className="border-gray-200 focus:border-primary-500 focus:ring-primary-500/20"/>
+ </div>
+ <div>
+ <label className="block text-sm font-medium text-gray-700 mb-2">
+ State
+ </label>
+ <Input value={filters.state} onChange={(e) => handleFilterChange('state', e.target.value)} placeholder="State"/>
+ </div>
+ <div>
+ <label className="block text-sm font-medium text-gray-700 mb-2">
+ District
+ </label>
+ <Input value={filters.district} onChange={(e) => handleFilterChange('district', e.target.value)} placeholder="District"/>
+ </div>
+ <div>
+ <label className="block text-sm font-medium text-gray-700 mb-2">
+ City / Town
+ </label>
+ <Input value={filters.city_or_town} onChange={(e) => handleFilterChange('city_or_town', e.target.value)} placeholder="City or town"/>
+ </div>
+ <div>
+ <label className="block text-sm font-medium text-gray-700 mb-2">
+ Village / Locality
+ </label>
+ <Input value={filters.village_or_locality} onChange={(e) => handleFilterChange('village_or_locality', e.target.value)} placeholder="Village or locality"/>
+ </div>
+ <div>
+ <label className="block text-sm font-medium text-gray-700 mb-2">
+ Pincode
+ </label>
+ <Input value={filters.pincode} onChange={(e) => handleFilterChange('pincode', e.target.value)} placeholder="Pincode"/>
+ </div>
+
+ <div>
+ <label className="block text-sm font-medium text-gray-700 mb-2">
+  Industry
+ </label>
+ <select
+ value={filters.industry}
+ onChange={(e) => handleFilterChange('industry', e.target.value)}
+ className="w-full px-3 py-2 border border-gray-200 focus:border-primary-500 focus:ring-primary-500/20 text-gray-900 rounded-none-none bg-white">
+ <option value="">All Industries</option>
+ <option value="Technology">Technology</option>
+ <option value="Finance">Finance</option>
+ <option value="Healthcare">Healthcare</option>
+ <option value="Education">Education</option>
+ <option value="Manufacturing">Manufacturing</option>
+ <option value="Retail">Retail</option>
+ <option value="Consulting">Consulting</option>
+ </select>
+ </div>
+
+ <div>
+ <label className="block text-sm font-medium text-gray-700 mb-2">
+  Job Type
+ </label>
+ <select
+ value={filters.job_type}
+ onChange={(e) => handleFilterChange('job_type', e.target.value)}
+ className="w-full px-3 py-2 border border-gray-200 focus:border-primary-500 focus:ring-primary-500/20 text-gray-900 rounded-none-none bg-white">
+ <option value="">All Types</option>
+ <option value="full_time">Full Time</option>
+ <option value="part_time">Part Time</option>
+ <option value="contract">Contract</option>
+ <option value="internship">Internship</option>
+ <option value="freelance">Freelance</option>
+ </select>
+ </div>
+
+ <div>
+ <label className="block text-sm font-medium text-gray-700 mb-2">
+  Remote Work
+ </label>
+ <select
+ value={filters.remote_work}
+ onChange={(e) => handleFilterChange('remote_work', e.target.value)}
+ className="w-full px-3 py-2 border border-gray-200 focus:border-primary-500 focus:ring-primary-500/20 text-gray-900 rounded-none-none bg-white">
+ <option value="">All</option>
+ <option value="true">Remote Only</option>
+ <option value="false">On-site Only</option>
+ </select>
+ </div>
+
+ <div>
+ <label className="block text-sm font-medium text-gray-700 mb-2">
+  Min Experience (years)
+ </label>
+ <Input
+ type="number"placeholder="0"value={filters.experience_min}
+ onChange={(e) => handleFilterChange('experience_min', e.target.value)}
+ className="border-gray-200 focus:border-primary-500 focus:ring-primary-500/20"/>
+ </div>
+
+ <div>
+ <label className="block text-sm font-medium text-gray-700 mb-2">
+  Max Experience (years)
+ </label>
+ <Input
+ type="number"placeholder="10"value={filters.experience_max}
+ onChange={(e) => handleFilterChange('experience_max', e.target.value)}
+ className="border-gray-200 focus:border-primary-500 focus:ring-primary-500/20"/>
+ </div>
+
+ <div>
+ <label className="block text-sm font-medium text-gray-700 mb-2">
+  Min Salary (INR)
+ </label>
+ <Input
+ type="number"placeholder="300000"value={filters.salary_min}
+ onChange={(e) => handleFilterChange('salary_min', e.target.value)}
+ className="border-gray-200 focus:border-primary-500 focus:ring-primary-500/20"/>
+ </div>
+
+ <div>
+ <label className="block text-sm font-medium text-gray-700 mb-2">
+  Max Salary (INR)
+ </label>
+ <Input
+ type="number"placeholder="2000000"value={filters.salary_max}
+ onChange={(e) => handleFilterChange('salary_max', e.target.value)}
+ className="border-gray-200 focus:border-primary-500 focus:ring-primary-500/20"/>
+ </div>
+
+ <div className="sm:col-span-2 lg:col-span-3 xl:col-span-4 flex flex-col sm:flex-row items-center gap-3">
+ <Button
+ onClick={handleSearch}
+ className="bg-primary-500 hover:bg-primary-600 text-white font-semibold px-6 py-2 transition-all duration-200 hover:shadow-md w-full sm:w-auto">
+  Apply Filters
+ </Button>
+ <Button
+ variant="outline"onClick={clearFilters}
+ className="border-gray-200 hover:border-gray-300 transition-all duration-200 hover:shadow-md px-6 py-2 w-full sm:w-auto">
+  Clear All
+ </Button>
+ <Button
+ variant="outline"onClick={saveJobsFilterAsPreference}
+ className="text-primary px-6 py-2 w-full sm:w-auto">
+ Save as preference
+ </Button>
+ </div>
+ </motion.div>
+ )}
+ </div>
+
+ <div className={cn(jobsSurfaceClass,'mb-6 p-4 sm:p-5')}>
+ <div className="mb-3 flex items-center justify-between">
+ <div>
+ <p className="text-xs font-semibold uppercase tracking-[0.14em] text-primary">Smart Matches</p>
+ <h2 className="font-display text-xl font-semibold text-foreground">Recommended Jobs</h2>
+ <p className="text-sm text-muted-foreground">Based on your resume and preferred location</p>
+ </div>
+ <Button variant="outline"className="rounded-none-none"onClick={fetchRecommendedJobs} disabled={loadingRecommended}>
+ {loadingRecommended ?'Refreshing...':'Refresh'}
+ </Button>
+ </div>
+ <div className="mb-3 inline-flex items-center gap-2 rounded-none-none border px-3 py-2 text-xs text-muted-foreground">
+ <Info className="h-3.5 w-3.5 text-primary"/>
+ <span>{recommendationWhyText} AI recommendations improve as you complete your profile.</span>
+ </div>
+ {recommendedJobs.length === 0 ? (
+ <p className="text-sm text-muted-foreground">
+ Complete your profile/resume and set location preference in profile to get stronger AI matches.
+ </p>
+ ) : (
+ <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
+ {recommendedJobs.slice(0, 3).map((job) => (
+ <div key={job.id} className="rounded-none-none border p-4">
+ <div className="flex items-start justify-between gap-3">
+ <div>
+ <h3 className="font-semibold text-foreground">{job.title}</h3>
+ <p className="text-xs text-muted-foreground">{job.corporate_name || job.company_name ||'Company'}</p>
+ </div>
+ <span className="text-xs font-semibold text-primary">
+ {typeof job.match_score ==='number'? `${Math.round(job.match_score)}%` :'Match'}
+ </span>
+ </div>
+ {(job.match_reasons || []).slice(0, 2).map((reason, idx) => (
+ <p key={idx} className="mt-2 inline-flex items-center gap-1 text-xs text-muted-foreground">
+ <Sparkles className="h-3.5 w-3.5 text-primary"/>
+ {reason}
+ </p>
+ ))}
+ <div className="mt-3 flex gap-2">
+ <Button size="sm"variant="outline"className="rounded-none-none"onClick={() => setSelectedJob(job)}>
+ View
+ </Button>
+ <Button size="sm"variant="gradient"className="rounded-none-none"onClick={() => handleApplyClick(job)}>
+ Apply
+ </Button>
+ </div>
+ </div>
+ ))}
+ </div>
+ )}
+ </div>
+
+ {/* Main Content */}
+ <div>
+ {/* Results Summary */}
+ <div className={cn(jobsSurfaceClass,'mb-6 p-4')}>
+ <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+ <div className="text-sm text-muted-foreground">
+ {loading ? (
+ <span className="flex items-center gap-2">
+ <div className="h-4 w-4 animate-spin border-2 border-primary border-t-transparent"/>
+ Loading roles…
+ </span>
+ ) : (
+ <span>
+ Showing{''}
+ <span className="font-semibold text-foreground">{jobsForGrid.length}</span> roles
+ {savedOnly && jobsForGrid.length === 0 && jobs.length > 0
+ ?'on this page (try another page or turn off Saved)':''}
+ </span>
+ )}
+ </div>
+ {!loading && (
+ <div className="text-xs text-muted-foreground">
+ {activeFilterCount > 0
+ ? `${activeFilterCount} ${tf(locale,'student.jobs.activeFiltersSuffix','active filters')}`
+ : tf(locale,'common.noFiltersApplied','No filters applied')}
+ </div>
+ )}
+ {pagination.total > 0 && (
+ <div className="text-xs font-medium text-primary">
+ Page {pagination.page} of {pagination.total_pages} · {pagination.limit} per page
+ </div>
+ )}
+ </div>
+ </div>
+
+ {/* Profile Completion Banner */}
+ {profileCompletion && profileCompletion.completion_percentage < 75 && (
+ <div className="mb-6 p-4 bg-amber-50 border border-amber-200 rounded-none-none">
+ <div className="flex items-center gap-3">
+ <div className="w-8 h-8 bg-amber-100 flex items-center justify-center">
+ <span className="text-amber-600 text-sm font-bold">!</span>
+ </div>
+ <div className="flex-1">
+ <h3 className="text-sm font-semibold text-amber-800 mb-1">
+ Profile Completion Required
+ </h3>
+ <p className="text-sm text-amber-700">
+ Your profile is {profileCompletion.completion_percentage}% complete. You need at least 75% completion to apply for jobs. 
+ <a href="/dashboard/student/profile"className="text-amber-600 hover:underline ml-1 font-medium">
+ Complete your profile now →
+ </a>
+ </p>
+ </div>
+ </div>
+ </div>
+ )}
+
+ {/* Jobs Grid */}
+ {loading ? (
+ <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+ {[...Array(9)].map((_, i) => (
+ <div
+ key={i}
+ className="animate-pulse rounded-none-none border bg-card p-5 shadow-sm">
+ <div className="flex gap-3">
+ <div className="h-12 w-12 rounded-none-none bg-muted"/>
+ <div className="flex-1 space-y-2">
+ <div className="h-4 w-3/4 rounded-none bg-muted"/>
+ <div className="h-3 w-1/2 rounded-none bg-muted"/>
+ </div>
+ </div>
+ <div className="mt-4 space-y-2">
+ <div className="h-3 rounded-none bg-muted"/>
+ <div className="h-3 w-5/6 rounded-none bg-muted"/>
+ </div>
+ </div>
+ ))}
+ </div>
+ ) : jobsForGrid.length > 0 ? (
+ <>
+ <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+ {jobsForGrid.map((job, index) => {
+ // Final safety check before rendering
+ if (!job || typeof job !=='object') {
+ console.error('Attempting to render invalid job:', job)
+ return null
+ }
+
+ // Check for validation error objects
+ for (const [key, value] of Object.entries(job)) {
+ if (value && typeof value === 'object' && 'type' in value && 'loc' in value && 'msg' in value) {
+ console.error(`Validation error object found during render in job ${job.id}, field ${key}:`, value)
+ return null // Don't render this job
+ }
+ }
+
+ return (
+ <JobCard
+ key={job.id}
+ job={job}
+ onViewDescription={async () => {
+ setSelectedJob(job)
+ setLoadingJobDetails(true)
+ setCompleteJobData(null)
+ 
+ try {
+ // Fetch complete job data from the jobs API to get all company information
+const response = await apiClient.getJobById(job.id)
+ setCompleteJobData(response)
+ } catch (error) {
+ console.error('Failed to fetch complete job data:', error)
+ toast.error('Failed to load complete job details')
+ // Still show the modal with limited data
+ } finally {
+ setLoadingJobDetails(false)
+ }
+ }}
+ onApply={() => handleApplyClick(job)}
+ isApplying={applyingJobs.has(job.id)}
+ cardIndex={index}
+ isSaved={savedJobIds.includes(job.id)}
+ onSaveToggle={() => handleSaveToggleForJob(job.id)}
+ />
+ )
+ }).filter(Boolean)}
+
+ {/* Show message if no jobs were rendered due to validation errors */}
+ {jobsForGrid.length > 0 && jobsForGrid.filter(job => {
+ if (!job || typeof job !=='object') return false
+ for (const [key, value] of Object.entries(job)) {
+ if (value && typeof value === 'object' && 'type' in value && 'loc' in value && 'msg' in value) {
+ return false
+ }
+ }
+ return true
+ }).length === 0 && (
+ <div className="col-span-full text-center py-12">
+ <div className="text-gray-500">
+ <p className="text-lg font-medium mb-2">Data Validation Issue</p>
+ <p className="text-sm">Some job data contains validation errors and cannot be displayed.</p>
+ <p className="text-sm mt-1">Please check the console for details or contact support.</p>
+ </div>
+ </div>
+ )}
+ </div>
+
+ {/* Simple Pagination */}
+ {pagination.total_pages > 1 && (
+ <div className="mt-8 flex items-center justify-center">
+ <div className="bg-white rounded-none-none border border-gray-200 p-4">
+ <div className="flex items-center gap-2">
+ {/* Previous Button */}
+ <Button
+ variant="outline"size="sm"onClick={() => handlePageChange(pagination.page - 1)}
+ disabled={pagination.page <= 1}
+ className="px-3 py-2 border-gray-200 hover:border-gray-300 transition-all duration-200 hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed">
+ ←
+ </Button>
+
+ {/* Page Numbers */}
+ <div className="flex items-center gap-1">
+ {[...Array(pagination.total_pages)].map((_, i) => {
+ const pageNum = i + 1
+ const isCurrentPage = pageNum === pagination.page
+ const isNearCurrent = Math.abs(pageNum - pagination.page) <= 1
+ const isFirstOrLast = pageNum === 1 || pageNum === pagination.total_pages
+
+ if (isFirstOrLast || isNearCurrent) {
+ return (
+ <Button
+ key={pageNum}
+ variant={isCurrentPage ?"default":"outline"}
+ size="sm"onClick={() => handlePageChange(pageNum)}
+ className={`min-w-[32px] h-8 ${isCurrentPage
+ ?'bg-primary-500 hover:bg-primary-600 text-white shadow-md':'border-gray-200 hover:border-gray-300 transition-all duration-200 hover:shadow-md'}`}
+ >
+ {pageNum}
+ </Button>
+ )
+ } else if (pageNum === pagination.page - 2 || pageNum === pagination.page + 2) {
+ return <span key={pageNum} className="px-2 text-primary-400">...</span>
+ }
+ return null
+ })}
+ </div>
+
+ {/* Next Button */}
+ <Button
+ variant="outline"size="sm"onClick={() => handlePageChange(pagination.page + 1)}
+ disabled={pagination.page >= pagination.total_pages}
+ className="px-3 py-2 border-gray-200 hover:border-gray-300 transition-all duration-200 hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed">
+ →
+ </Button>
+ </div>
+ </div>
+ </div>
+ )}
+ </>
+ ) : (
+ <div className={cn(jobsSurfaceClass,'flex flex-col items-center px-6 py-16 text-center')}>
+ <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-none-none">
+ <Briefcase className="h-7 w-7 text-primary"/>
+ </div>
+ <h3 className="font-display text-xl font-bold text-foreground">
+ {savedOnly ?'No saved roles on this page':'No roles match'}
+ </h3>
+ <p className="mt-2 max-w-md text-sm text-muted-foreground">
+ {savedOnly
+ ?'Try another page or turn off the saved filter. Bookmark roles from cards to build your list.':'Loosen location or keyword filters, or clear filters to see more openings.'}
+ </p>
+ <div className="mt-6 flex flex-wrap justify-center gap-2">
+ {savedOnly && (
+ <Button type="button"variant="outline"className="rounded-none-none"onClick={() => setSavedOnly(false)}>
+ Show all roles
+ </Button>
+ )}
+ <Button type="button"variant="gradient"className="rounded-none-none shadow-md shadow-primary/15"onClick={clearFilters}>
+ Reset filters
+ </Button>
+ </div>
+ </div>
+ )}
+ </div>
+
+ {/* Job Description Modal */}
+ {selectedJob && (
+ <JobDescriptionModal
+ job={completeJobData || selectedJob}
+ onClose={() => {
+ setSelectedJob(null)
+ setCompleteJobData(null)
+ }}
+ onApply={() => {
+ handleApplyClick(selectedJob)
+ setSelectedJob(null)
+ setCompleteJobData(null)
+ }}
+ isApplying={applyingJobs.has(selectedJob.id)}
+ hideSensitiveInfo={true}
+ />
+ )}
+
+ {/* Application Modal */}
+ {showApplicationModal && currentApplicationJob && (
+ <ApplicationModal
+ job={currentApplicationJob as any}
+ onClose={() => {
+ setShowApplicationModal(false)
+ setCurrentApplicationJob(null)
+ }}
+ onSubmit={(applicationData) => applyForJob(currentApplicationJob.id, applicationData)}
+ isApplying={applyingJobs.has(currentApplicationJob.id)}
+ />
+ )}
+ </StudentDashboardLayout>
+ )
 }
 
 export default function JobOpportunitiesPage() {
-    return (
-        <ErrorBoundary>
-            <JobOpportunitiesPageContent />
-        </ErrorBoundary>
-    )
+ return (
+ <ErrorBoundary>
+ <JobOpportunitiesPageContent />
+ </ErrorBoundary>
+ )
 }

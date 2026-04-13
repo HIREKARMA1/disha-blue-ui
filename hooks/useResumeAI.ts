@@ -55,14 +55,14 @@ export interface FullResumeSchema {
 
 const emptyResume: FullResumeSchema = {
   personal_info: {
-    name: "",
-    email: "",
-    phone: "",
-    location: "",
-    linkedin: "",
-    github: "",
-    portfolio: "",
-    summary: "",
+  name: "",
+  email: "",
+  phone: "",
+  location: "",
+  linkedin: "",
+  github: "",
+  portfolio: "",
+  summary: "",
   },
   education: [],
   experience: [],
@@ -127,182 +127,182 @@ export function useResumeAI() {
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
 
   const stopStatusLoop = () => {
-    if (intervalRef.current) {
-      clearInterval(intervalRef.current)
-      intervalRef.current = null
-    }
+  if (intervalRef.current) {
+  clearInterval(intervalRef.current)
+  intervalRef.current = null
+  }
   }
 
   const startStatusLoop = (language: SupportedLocale) => {
-    let index = 0
-    const steps = statusStepsByLocale[language] || statusStepsByLocale.en
-    setStatusMessage(steps[index])
-    intervalRef.current = setInterval(() => {
-      index = (index + 1) % steps.length
-      setStatusMessage(steps[index])
-    }, 1300)
+  let index = 0
+  const steps = statusStepsByLocale[language] || statusStepsByLocale.en
+  setStatusMessage(steps[index])
+  intervalRef.current = setInterval(() => {
+  index = (index + 1) % steps.length
+  setStatusMessage(steps[index])
+  }, 1300)
   }
 
   const normalizeErrorMessage = (err: any, fallback: string) => {
-    const detail = err?.response?.data?.detail
-    if (typeof detail === "string" && detail.trim()) return detail
-    if (Array.isArray(detail) && detail.length > 0) {
-      const first = detail[0]
-      if (typeof first === "string") return first
-      if (first && typeof first === "object") {
-        const loc = Array.isArray(first.loc) ? first.loc.join(".") : ""
-        const msg = typeof first.msg === "string" ? first.msg : ""
-        const formatted = [loc, msg].filter(Boolean).join(": ")
-        if (formatted) return formatted
-      }
-    }
-    if (detail && typeof detail === "object") {
-      const msg = (detail as Record<string, unknown>).msg
-      if (typeof msg === "string" && msg.trim()) return msg
-      try {
-        return JSON.stringify(detail)
-      } catch {
-        // no-op
-      }
-    }
-    if (typeof err?.message === "string" && err.message.trim()) return err.message
-    return fallback
+  const detail = err?.response?.data?.detail
+  if (typeof detail === "string" && detail.trim()) return detail
+  if (Array.isArray(detail) && detail.length > 0) {
+  const first = detail[0]
+  if (typeof first === "string") return first
+  if (first && typeof first === "object") {
+  const loc = Array.isArray(first.loc) ? first.loc.join(".") : ""
+  const msg = typeof first.msg === "string" ? first.msg : ""
+  const formatted = [loc, msg].filter(Boolean).join(": ")
+  if (formatted) return formatted
+  }
+  }
+  if (detail && typeof detail === "object") {
+  const msg = (detail as Record<string, unknown>).msg
+  if (typeof msg === "string" && msg.trim()) return msg
+  try {
+  return JSON.stringify(detail)
+  } catch {
+  // no-op
+  }
+  }
+  if (typeof err?.message === "string" && err.message.trim()) return err.message
+  return fallback
   }
 
   const generateResume = useCallback(async (params: GenerateResumeParams) => {
-    const { text, voiceTranscript = "", files = [], language, profileData = {} } = params
-    setError(null)
-    setIsGenerating(true)
-    startStatusLoop(language)
+  const { text, voiceTranscript = "", files = [], language, profileData = {} } = params
+  setError(null)
+  setIsGenerating(true)
+  startStatusLoop(language)
 
-    const buildFormData = (payloadText: string) => {
-      const formData = new FormData()
-      const payload = {
-        text: payloadText,
-        voice_transcript: voiceTranscript,
-        language,
-        profile_data: profileData,
-      }
-      formData.append("payload", JSON.stringify(payload))
-      files.forEach((file) => formData.append("files", file))
-      return formData
-    }
+  const buildFormData = (payloadText: string) => {
+  const formData = new FormData()
+  const payload = {
+  text: payloadText,
+  voice_transcript: voiceTranscript,
+  language,
+  profile_data: profileData,
+  }
+  formData.append("payload", JSON.stringify(payload))
+  files.forEach((file) => formData.append("files", file))
+  return formData
+  }
 
-    try {
-      const response = await apiClient.client.post<GenerateResumeResult>("/resume/generate-ai", buildFormData(text))
+  try {
+  const response = await apiClient.client.post<GenerateResumeResult>("/resume/generate-ai", buildFormData(text))
 
-      const nextResume = response.data?.resume || emptyResume
-      setResumeData(nextResume)
-      return nextResume
-    } catch (err: any) {
-      const rawMessage = normalizeErrorMessage(err, "").toLowerCase()
-      const shouldRetryForJson =
-        rawMessage.includes("schema") || rawMessage.includes("json") || rawMessage.includes("did not match")
+  const nextResume = response.data?.resume || emptyResume
+  setResumeData(nextResume)
+  return nextResume
+  } catch (err: any) {
+  const rawMessage = normalizeErrorMessage(err, "").toLowerCase()
+  const shouldRetryForJson =
+  rawMessage.includes("schema") || rawMessage.includes("json") || rawMessage.includes("did not match")
 
-      if (shouldRetryForJson) {
-        try {
-          const retryPrompt = `${text}\n\n${invalidJsonRetryHintByLocale[language] || invalidJsonRetryHintByLocale.en}`
-          const retryResponse = await apiClient.client.post<GenerateResumeResult>("/resume/generate-ai", buildFormData(retryPrompt))
-          const retryResume = retryResponse.data?.resume || emptyResume
-          setResumeData(retryResume)
-          setError(null)
-          return retryResume
-        } catch (retryErr: any) {
-          const retryMessage = normalizeErrorMessage(retryErr, "Failed to generate AI resume. Please try again.")
-          setError(retryMessage)
-          throw retryErr
-        }
-      }
+  if (shouldRetryForJson) {
+  try {
+  const retryPrompt = `${text}\n\n${invalidJsonRetryHintByLocale[language] || invalidJsonRetryHintByLocale.en}`
+  const retryResponse = await apiClient.client.post<GenerateResumeResult>("/resume/generate-ai", buildFormData(retryPrompt))
+  const retryResume = retryResponse.data?.resume || emptyResume
+  setResumeData(retryResume)
+  setError(null)
+  return retryResume
+  } catch (retryErr: any) {
+  const retryMessage = normalizeErrorMessage(retryErr, "Failed to generate AI resume. Please try again.")
+  setError(retryMessage)
+  throw retryErr
+  }
+  }
 
-      const message = normalizeErrorMessage(err, "Failed to generate AI resume. Please try again.")
-      setError(message)
-      throw err
-    } finally {
-      stopStatusLoop()
-      setStatusMessage("")
-      setIsGenerating(false)
-    }
+  const message = normalizeErrorMessage(err, "Failed to generate AI resume. Please try again.")
+  setError(message)
+  throw err
+  } finally {
+  stopStatusLoop()
+  setStatusMessage("")
+  setIsGenerating(false)
+  }
   }, [])
 
   const saveToProfile = useCallback(
-    async (language: SupportedLocale = "en") => {
-      setSaveError(null)
-      setIsSaving(true)
-      try {
-        if (!resumeData.personal_info.name?.trim()) {
-          throw new Error(syncMissingNameByLocale[language] || syncMissingNameByLocale.en)
-        }
+  async (language: SupportedLocale = "en") => {
+  setSaveError(null)
+  setIsSaving(true)
+  try {
+  if (!resumeData.personal_info.name?.trim()) {
+  throw new Error(syncMissingNameByLocale[language] || syncMissingNameByLocale.en)
+  }
 
-        const firstEducation = resumeData.education[0]
-        const profilePayload = {
-          name: resumeData.personal_info.name || undefined,
-          phone: resumeData.personal_info.phone || undefined,
-          city: resumeData.personal_info.location || undefined,
-          bio: resumeData.personal_info.summary || undefined,
-          linkedin_profile: resumeData.personal_info.linkedin || undefined,
-          github_profile: resumeData.personal_info.github || undefined,
-          personal_website: resumeData.personal_info.portfolio || undefined,
-          institution: firstEducation?.institution || undefined,
-          degree: firstEducation?.degree || undefined,
-          branch: firstEducation?.field_of_study || undefined,
-          graduation_year: firstEducation?.end_date ? Number.parseInt(firstEducation.end_date, 10) || undefined : undefined,
-          technical_skills: resumeData.skills.length ? resumeData.skills.join(", ") : undefined,
-          internship_experience: resumeData.experience.length
-            ? resumeData.experience
-                .map((item) => `${item.role} at ${item.company}${item.bullets.length ? `: ${item.bullets.join(" | ")}` : ""}`)
-                .join("\n")
-            : undefined,
-          project_details: resumeData.projects.length
-            ? resumeData.projects
-                .map((item) => `${item.name}${item.description ? ` - ${item.description}` : ""}`)
-                .join("\n")
-            : undefined,
-          certifications: resumeData.certifications.length ? resumeData.certifications.join(", ") : undefined,
-          location_preferences: resumeData.location_preferences || resumeData.personal_info.location || undefined,
-        }
+  const firstEducation = resumeData.education[0]
+  const profilePayload = {
+  name: resumeData.personal_info.name || undefined,
+  phone: resumeData.personal_info.phone || undefined,
+  city: resumeData.personal_info.location || undefined,
+  bio: resumeData.personal_info.summary || undefined,
+  linkedin_profile: resumeData.personal_info.linkedin || undefined,
+  github_profile: resumeData.personal_info.github || undefined,
+  personal_website: resumeData.personal_info.portfolio || undefined,
+  institution: firstEducation?.institution || undefined,
+  degree: firstEducation?.degree || undefined,
+  branch: firstEducation?.field_of_study || undefined,
+  graduation_year: firstEducation?.end_date ? Number.parseInt(firstEducation.end_date, 10) || undefined : undefined,
+  technical_skills: resumeData.skills.length ? resumeData.skills.join(", ") : undefined,
+  internship_experience: resumeData.experience.length
+  ? resumeData.experience
+  .map((item) => `${item.role} at ${item.company}${item.bullets.length ? `: ${item.bullets.join(" | ")}` : ""}`)
+  .join("\n")
+  : undefined,
+  project_details: resumeData.projects.length
+  ? resumeData.projects
+  .map((item) => `${item.name}${item.description ? ` - ${item.description}` : ""}`)
+  .join("\n")
+  : undefined,
+  certifications: resumeData.certifications.length ? resumeData.certifications.join(", ") : undefined,
+  location_preferences: resumeData.location_preferences || resumeData.personal_info.location || undefined,
+  }
 
-        const sanitizedPayload = Object.fromEntries(
-          Object.entries(profilePayload).filter(([, value]) => value !== undefined && value !== "")
-        )
+  const sanitizedPayload = Object.fromEntries(
+  Object.entries(profilePayload).filter(([, value]) => value !== undefined && value !== "")
+  )
 
-        await apiClient.client.put("/students/profile", sanitizedPayload)
-        toast(
-          createElement(
-            "span",
-            { className: "inline-flex items-center gap-2" },
-            createElement("span", null, syncSuccessByLocale[language] || syncSuccessByLocale.en),
-            createElement(
-              "a",
-              {
-                href: "/dashboard/student/profile",
-                className: "font-semibold underline",
-              },
-              viewProfileByLocale[language] || viewProfileByLocale.en
-            )
-          )
-        )
-      } catch (err: any) {
-        const message = normalizeErrorMessage(err, "Failed to sync resume to profile.")
-        setSaveError(message)
-        toast.error(message)
-        throw err
-      } finally {
-        setIsSaving(false)
-      }
-    },
-    [resumeData]
+  await apiClient.client.put("/students/profile", sanitizedPayload)
+  toast(
+  createElement(
+  "span",
+  { className: "inline-flex items-center gap-2" },
+  createElement("span", null, syncSuccessByLocale[language] || syncSuccessByLocale.en),
+  createElement(
+  "a",
+  {
+  href: "/dashboard/student/profile",
+  className: "font-semibold underline",
+  },
+  viewProfileByLocale[language] || viewProfileByLocale.en
+  )
+  )
+  )
+  } catch (err: any) {
+  const message = normalizeErrorMessage(err, "Failed to sync resume to profile.")
+  setSaveError(message)
+  toast.error(message)
+  throw err
+  } finally {
+  setIsSaving(false)
+  }
+  },
+  [resumeData]
   )
 
   return {
-    resumeData,
-    setResumeData,
-    isGenerating,
-    isSaving,
-    statusMessage,
-    error,
-    saveError,
-    generateResume,
-    saveToProfile,
+  resumeData,
+  setResumeData,
+  isGenerating,
+  isSaving,
+  statusMessage,
+  error,
+  saveError,
+  generateResume,
+  saveToProfile,
   }
 }
 

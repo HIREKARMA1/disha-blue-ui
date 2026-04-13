@@ -17,69 +17,68 @@ import { toast } from 'react-hot-toast'
 import { useRouter } from 'next/navigation'
 
 interface PracticeExamProps {
-    module: PracticeModule
-    onComplete: (result: any) => void
-    onBack: () => void
+  module: PracticeModule
+  onComplete: (result: any) => void
+  onBack: () => void
 }
 
 // Helper to add/remove a class to body for hiding sidebar
 function setSidebarHidden(hidden: boolean) {
-    if (typeof document !== 'undefined') {
-        if (hidden) {
-            document.body.classList.add('hide-sidebar')
-        } else {
-            document.body.classList.remove('hide-sidebar')
-        }
-    }
+  if (typeof document !== 'undefined') {
+  if (hidden) {
+  document.body.classList.add('hide-sidebar')
+  } else {
+  document.body.classList.remove('hide-sidebar')
+  }
+  }
 }
 
 // Updated style block incorporating themes from StudentProfile (gradients, backdrops, rounded cards, shadows, hover effects)
 const fullscreenExamStyle = `
-/* CSS Variables for theme colors - aligned with StudentProfile's primary, gradients, and dark mode */
+/* CSS variables — sage / emerald dashboard theme (matches Library & Video Search) */
 :root {
-  --exam-bg: #f8fafc; /* slate-50 similar to bg-gray-50 */
-  --exam-header-bg: white; /* Changed to white */
-  --exam-header-color: #4b5563; /* Changed to gray-700 for text */
-  --exam-border: #e2e8f0; /* gray-200 */
-  --question-footer-bg: #ffffff; /* white */
-  --question-footer-border: #e5e7eb; /* gray-300 */
-  --question-content-bg: #ffffff; /* white with backdrop-blur */
-  --question-content-text: #1f2937; /* gray-800 */
-  --option-bg: #f9fafb; /* gray-50 */
-  --option-border: #d1d5db; /* gray-300 */
-  --option-text: #1f2937;
-  --option-hover-bg: #f3f4f6; /* gray-100 */
-  --option-selected-bg: #dbeafe; /* blue-100 */
-  --option-selected-border: #3b82f6; /* blue-500 */
-  --button-primary-bg: linear-gradient(to right, #3b82f6, #6366f1);
+  --exam-bg: #f8fafc;
+  --exam-header-bg: #ffffff;
+  --exam-header-color: #334155;
+  --exam-border: #e2e8f0;
+  --question-footer-bg: #ffffff;
+  --question-footer-border: #e2e8f0;
+  --question-content-bg: #ffffff;
+  --question-content-text: #0f172a;
+  --option-bg: #f8fafc;
+  --option-border: #cbd5e1;
+  --option-text: #0f172a;
+  --option-hover-bg: #f1f5f9;
+  --option-selected-bg: rgba(163, 177, 138, 0.22);
+  --option-selected-border: #8f9f78;
+  --button-primary-bg: linear-gradient(to right, #8f9f78, #6d7d62);
   --button-primary-text: white;
-  --button-secondary-bg: #f3f4f6;
-  --button-secondary-text: #4b5563;
-  --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); /* shadow-sm */
-  --hover-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* hover:shadow-md */
+  --button-secondary-bg: #f1f5f9;
+  --button-secondary-text: #475569;
+  --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --hover-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
   --backdrop-blur: blur(8px);
 }
 
-/* Dark mode variables - matching StudentProfile dark classes */
 .dark {
-  --exam-bg: #0f172a; /* slate-900 */
-  --exam-header-bg: #1e293b; /* Changed to slate-800 for dark gray */
-  --exam-header-color: white; /* Kept as white */
-  --exam-border: #334155; /* slate-700 */
-  --question-footer-bg: #1e293b; /* slate-800 */
-  --question-footer-border: #334155;
-  --question-content-bg: #1e293b;
-  --question-content-text: #f8fafc; /* slate-50 */
-  --option-bg: #1e293b;
-  --option-border: #475569; /* slate-600 */
-  --option-text: #f8fafc;
-  --option-hover-bg: #334155;
-  --option-selected-bg: #1e40af; /* blue-900 */
-  --option-selected-border: #60a5fa; /* blue-400 */
-  --button-primary-bg: linear-gradient(to right, #2563eb, #4f46e5);
+  --exam-bg: #022c22;
+  --exam-header-bg: #064e3b;
+  --exam-header-color: #ecfdf5;
+  --exam-border: rgba(16, 185, 129, 0.35);
+  --question-footer-bg: #064e3b;
+  --question-footer-border: rgba(16, 185, 129, 0.35);
+  --question-content-bg: #064e3b;
+  --question-content-text: #ecfdf5;
+  --option-bg: rgba(6, 78, 59, 0.55);
+  --option-border: rgba(52, 211, 153, 0.45);
+  --option-text: #ecfdf5;
+  --option-hover-bg: rgba(6, 95, 70, 0.75);
+  --option-selected-bg: rgba(16, 185, 129, 0.28);
+  --option-selected-border: #34d399;
+  --button-primary-bg: linear-gradient(to right, #15803d, #059669);
   --button-primary-text: white;
-  --button-secondary-bg: #334155;
-  --button-secondary-text: #e2e8f0; /* slate-300 */
+  --button-secondary-bg: rgba(6, 78, 59, 0.8);
+  --button-secondary-text: #d1fae5;
 }
 
 .fullscreen-exam {
@@ -142,7 +141,7 @@ const fullscreenExamStyle = `
 }
 
 .dark .fullscreen-exam .question-content {
-  background: rgba(31, 41, 55, 0.8); /* dark:bg-gray-800/80 */
+  background: rgba(6, 78, 59, 0.72);
 }
 
 .fullscreen-exam .question-footer {
@@ -216,14 +215,14 @@ const fullscreenExamStyle = `
 
 @media (max-width: 1024px) {
   .fullscreen-exam .exam-content {
-    flex-direction: column;
-    padding: 0;
-    height: calc(100vh - 60px);
+  flex-direction: column;
+  padding: 0;
+  height: calc(100vh - 60px);
   }
   .fullscreen-exam .question-palette {
-    width: 100%;
-    height: auto;
-    max-height: 200px;
+  width: 100%;
+  height: auto;
+  max-height: 200px;
   }
 }
 
@@ -251,7 +250,7 @@ const fullscreenExamStyle = `
 
 /* Additional StudentProfile-inspired styles: gradients, badges, icons */
 .fullscreen-exam .gradient-header {
-  background: linear-gradient(to right, #3b82f6, #6366f1);
+  background: linear-gradient(to right, #8f9f78, #15803d);
   border-radius: 1rem;
   padding: 1.5rem;
   margin-bottom: 1.5rem;
@@ -265,14 +264,15 @@ const fullscreenExamStyle = `
   rounded-full;
   text-sm;
   font-medium;
-  background: #dbeafe; /* blue-100 */
-  color: #1e40af; /* blue-800 */
-  border: 1px solid #93c5fd; /* blue-300 */
+  background: rgba(163, 177, 138, 0.25);
+  color: #3f4f32;
+  border: 1px solid rgba(143, 159, 120, 0.65);
 }
 
 .dark .fullscreen-exam .stat-badge {
-  background: #1e3a8a/30; /* primary-900/30 */
-  color: #93c5fd;
+  background: rgba(16, 185, 129, 0.2);
+  color: #a7f3d0;
+  border-color: rgba(52, 211, 153, 0.45);
 }
 
 .fullscreen-exam .icon-circle {
@@ -282,734 +282,734 @@ const fullscreenExamStyle = `
   width: 3rem;
   height: 3rem;
   border-radius: 0.75rem;
-  background: linear-gradient(to right, #3b82f6, #6366f1);
+  background: linear-gradient(to right, #8f9f78, #15803d);
   box-shadow: var(--card-shadow);
 }
 `
 
 export function PracticeExam({ module, onComplete, onBack }: PracticeExamProps) {
-    const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
-    const [questionResults, setQuestionResults] = useState<Record<string, {
-        correct: boolean
-        score: number
-        maxScore: number
-        feedback?: string
-    }>>({})
-    const [isFullscreen, setIsFullscreen] = useState(false)
-    const [isExitingFullscreen, setIsExitingFullscreen] = useState(false)
-    const [showFullscreenPrompt, setShowFullscreenPrompt] = useState(false)
-    const [isManualSubmit, setIsManualSubmit] = useState(false)
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
+  const [questionResults, setQuestionResults] = useState<Record<string, {
+  correct: boolean
+  score: number
+  maxScore: number
+  feedback?: string
+  }>>({})
+  const [isFullscreen, setIsFullscreen] = useState(false)
+  const [isExitingFullscreen, setIsExitingFullscreen] = useState(false)
+  const [showFullscreenPrompt, setShowFullscreenPrompt] = useState(false)
+  const [isManualSubmit, setIsManualSubmit] = useState(false)
 
-    const { data: questions, isLoading } = usePracticeQuestions(module.id)
-    const { session, updateAnswer, updateTimeSpent, toggleFlag, submitExam } = useExamSession(module.id)
-    const { user } = useAuth()
-    const { profile, isLoading: profileLoading } = useStudentProfile()
-    const router = useRouter()
+  const { data: questions, isLoading } = usePracticeQuestions(module.id)
+  const { session, updateAnswer, updateTimeSpent, toggleFlag, submitExam } = useExamSession(module.id)
+  const { user } = useAuth()
+  const { profile, isLoading: profileLoading } = useStudentProfile()
+  const router = useRouter()
 
-    const currentQuestion = questions?.[currentQuestionIndex]
-    const totalQuestions = questions?.length || 0
+  const currentQuestion = questions?.[currentQuestionIndex]
+  const totalQuestions = questions?.length || 0
 
-    // Get question status for the dashboard
-    const getQuestionStatus = useCallback((questionId: string) => {
-        if (session?.isSubmitted) return 'submitted'
-        const isFlagged = session?.flaggedQuestions.has(questionId)
-        const hasAnswer = !!(session?.answers[questionId] && session.answers[questionId].length > 0)
-        if (isFlagged && hasAnswer) return 'marked-answered'
-        if (isFlagged) return 'flagged'
-        if (hasAnswer) return 'answered'
-        return 'not-visited'
-    }, [session])
+  // Get question status for the dashboard
+  const getQuestionStatus = useCallback((questionId: string) => {
+  if (session?.isSubmitted) return 'submitted'
+  const isFlagged = session?.flaggedQuestions.has(questionId)
+  const hasAnswer = !!(session?.answers[questionId] && session.answers[questionId].length > 0)
+  if (isFlagged && hasAnswer) return 'marked-answered'
+  if (isFlagged) return 'flagged'
+  if (hasAnswer) return 'answered'
+  return 'not-visited'
+  }, [session])
 
-    // Auto-save progress
-    useEffect(() => {
-        const interval = setInterval(() => {
-            if (session && !session.isSubmitted) {
-                console.log('Auto-saving exam progress...')
-            }
-        }, 10000)
-        return () => clearInterval(interval)
-    }, [session])
+  // Auto-save progress
+  useEffect(() => {
+  const interval = setInterval(() => {
+  if (session && !session.isSubmitted) {
+  console.log('Auto-saving exam progress...')
+  }
+  }, 10000)
+  return () => clearInterval(interval)
+  }, [session])
 
-    // Auto-enter fullscreen when exam loads
-    useEffect(() => {
-        if (!session || session.isSubmitted) return;
+  // Auto-enter fullscreen when exam loads
+  useEffect(() => {
+  if (!session || session.isSubmitted) return;
 
-        // Check if already in fullscreen
-        const alreadyFullscreen = !!(document.fullscreenElement || (document as any).webkitFullscreenElement || (document as any).msFullscreenElement);
-        if (alreadyFullscreen) {
-            setIsFullscreen(true);
-            setSidebarHidden(true);
-            setShowFullscreenPrompt(false);
-            return;
-        }
+  // Check if already in fullscreen
+  const alreadyFullscreen = !!(document.fullscreenElement || (document as any).webkitFullscreenElement || (document as any).msFullscreenElement);
+  if (alreadyFullscreen) {
+  setIsFullscreen(true);
+  setSidebarHidden(true);
+  setShowFullscreenPrompt(false);
+  return;
+  }
 
-        // Small delay to ensure the page has fully loaded
-        const timer = setTimeout(async () => {
-            try {
-                const elem: any = document.documentElement;
-                if (elem.requestFullscreen) {
-                    await elem.requestFullscreen({ navigationUI: 'hide' } as any);
-                } else if (elem.mozRequestFullScreen) {
-                    await elem.mozRequestFullScreen();
-                } else if (elem.webkitRequestFullscreen) {
-                    await elem.webkitRequestFullscreen();
-                } else if (elem.msRequestFullscreen) {
-                    await elem.msRequestFullscreen();
-                }
+  // Small delay to ensure the page has fully loaded
+  const timer = setTimeout(async () => {
+  try {
+  const elem: any = document.documentElement;
+  if (elem.requestFullscreen) {
+  await elem.requestFullscreen({ navigationUI: 'hide' } as any);
+  } else if (elem.mozRequestFullScreen) {
+  await elem.mozRequestFullScreen();
+  } else if (elem.webkitRequestFullscreen) {
+  await elem.webkitRequestFullscreen();
+  } else if (elem.msRequestFullscreen) {
+  await elem.msRequestFullscreen();
+  }
 
-                // Verify fullscreen engaged
-                const becameFullscreen = !!(document.fullscreenElement || (document as any).webkitFullscreenElement || (document as any).msFullscreenElement);
-                if (becameFullscreen) {
-                    setIsFullscreen(true);
-                    setSidebarHidden(true);
-                    setShowFullscreenPrompt(false);
-                    toast.success('Test started in fullscreen mode');
-                } else {
-                    // Show manual prompt if automatic fullscreen failed
-                    setShowFullscreenPrompt(true);
-                }
-            } catch (error) {
-                console.error('Failed to enter fullscreen:', error);
-                // Show manual prompt if automatic fullscreen failed
-                setShowFullscreenPrompt(true);
-            }
-        }, 300);
+  // Verify fullscreen engaged
+  const becameFullscreen = !!(document.fullscreenElement || (document as any).webkitFullscreenElement || (document as any).msFullscreenElement);
+  if (becameFullscreen) {
+  setIsFullscreen(true);
+  setSidebarHidden(true);
+  setShowFullscreenPrompt(false);
+  toast.success('Test started in fullscreen mode');
+  } else {
+  // Show manual prompt if automatic fullscreen failed
+  setShowFullscreenPrompt(true);
+  }
+  } catch (error) {
+  console.error('Failed to enter fullscreen:', error);
+  // Show manual prompt if automatic fullscreen failed
+  setShowFullscreenPrompt(true);
+  }
+  }, 300);
 
-        return () => clearTimeout(timer);
-    }, [session]);
+  return () => clearTimeout(timer);
+  }, [session]);
 
-    // Updated fullscreen handling logic
-    useEffect(() => {
-        if (!session) return;
+  // Updated fullscreen handling logic
+  useEffect(() => {
+  if (!session) return;
 
-        const fullscreenChange = async () => {
-            const fs = document.fullscreenElement || (document as any).webkitFullscreenElement || (document as any).msFullscreenElement
-            const isNowFullscreen = !!fs;
+  const fullscreenChange = async () => {
+  const fs = document.fullscreenElement || (document as any).webkitFullscreenElement || (document as any).msFullscreenElement
+  const isNowFullscreen = !!fs;
 
-            if (isNowFullscreen && !isFullscreen) {
-                setIsFullscreen(true)
-                setSidebarHidden(true)
-                return;
-            }
+  if (isNowFullscreen && !isFullscreen) {
+  setIsFullscreen(true)
+  setSidebarHidden(true)
+  return;
+  }
 
-            // Only auto-submit when exiting fullscreen mode AND it's not a manual submit
-            if (!isNowFullscreen && isFullscreen) {
-                setIsFullscreen(false)
-                setSidebarHidden(false)
+  // Only auto-submit when exiting fullscreen mode AND it's not a manual submit
+  if (!isNowFullscreen && isFullscreen) {
+  setIsFullscreen(false)
+  setSidebarHidden(false)
 
-                // Auto-submit only when exiting fullscreen and not already submitted and NOT a manual submit
-                if (session && !session.isSubmitted && !isExitingFullscreen && !isManualSubmit) {
-                    setIsExitingFullscreen(true)
-                    toast.error("Exam submitted - Full screen mode was exited")
-                    try {
-                        await handleSubmitAndRedirect()
-                    } catch (error) {
-                        console.error("Error submitting exam:", error)
-                        window.location.href = '/dashboard/student/practice'
-                    }
-                }
-            }
-        }
+  // Auto-submit only when exiting fullscreen and not already submitted and NOT a manual submit
+  if (session && !session.isSubmitted && !isExitingFullscreen && !isManualSubmit) {
+  setIsExitingFullscreen(true)
+  toast.error("Exam submitted - Full screen mode was exited")
+  try {
+  await handleSubmitAndRedirect()
+  } catch (error) {
+  console.error("Error submitting exam:", error)
+  window.location.href = '/dashboard/student/practice'
+  }
+  }
+  }
+  }
 
-        document.addEventListener('fullscreenchange', fullscreenChange)
-        document.addEventListener('webkitfullscreenchange', fullscreenChange)
-        document.addEventListener('msfullscreenchange', fullscreenChange)
+  document.addEventListener('fullscreenchange', fullscreenChange)
+  document.addEventListener('webkitfullscreenchange', fullscreenChange)
+  document.addEventListener('msfullscreenchange', fullscreenChange)
 
-        return () => {
-            document.removeEventListener('fullscreenchange', fullscreenChange)
-            document.removeEventListener('webkitfullscreenchange', fullscreenChange)
-            document.removeEventListener('msfullscreenchange', fullscreenChange)
-            // Do not toggle sidebar visibility or exit fullscreen here, as this cleanup
-            // runs on every dependency change and would immediately exit fullscreen.
-        }
-    }, [session, isFullscreen, isExitingFullscreen, isManualSubmit])
+  return () => {
+  document.removeEventListener('fullscreenchange', fullscreenChange)
+  document.removeEventListener('webkitfullscreenchange', fullscreenChange)
+  document.removeEventListener('msfullscreenchange', fullscreenChange)
+  // Do not toggle sidebar visibility or exit fullscreen here, as this cleanup
+  // runs on every dependency change and would immediately exit fullscreen.
+  }
+  }, [session, isFullscreen, isExitingFullscreen, isManualSubmit])
 
-    // On component unmount only: restore sidebar and exit fullscreen if still active
-    useEffect(() => {
-        return () => {
-            try {
-                setSidebarHidden(false)
-                if (document.fullscreenElement || (document as any).webkitFullscreenElement || (document as any).msFullscreenElement) {
-                    if (document.exitFullscreen) {
-                        document.exitFullscreen()
-                    } else if ((document as any).webkitExitFullscreen) {
-                        (document as any).webkitExitFullscreen()
-                    } else if ((document as any).msExitFullscreen) {
-                        (document as any).msExitFullscreen()
-                    }
-                }
-            } catch (error) {
-                console.error('Failed to cleanup fullscreen on unmount:', error)
-            }
-        }
-    }, [])
+  // On component unmount only: restore sidebar and exit fullscreen if still active
+  useEffect(() => {
+  return () => {
+  try {
+  setSidebarHidden(false)
+  if (document.fullscreenElement || (document as any).webkitFullscreenElement || (document as any).msFullscreenElement) {
+  if (document.exitFullscreen) {
+  document.exitFullscreen()
+  } else if ((document as any).webkitExitFullscreen) {
+  (document as any).webkitExitFullscreen()
+  } else if ((document as any).msExitFullscreen) {
+  (document as any).msExitFullscreen()
+  }
+  }
+  } catch (error) {
+  console.error('Failed to cleanup fullscreen on unmount:', error)
+  }
+  }
+  }, [])
 
-    // Keyboard shortcuts (unchanged)
-    useEffect(() => {
-        const handleKeyPress = (e: KeyboardEvent) => {
-            if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) {
-                return
-            }
+  // Keyboard shortcuts (unchanged)
+  useEffect(() => {
+  const handleKeyPress = (e: KeyboardEvent) => {
+  if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) {
+  return
+  }
 
-            switch (e.key.toLowerCase()) {
-                case 'n':
-                    handleNext()
-                    break
-                case 'p':
-                    handlePrevious()
-                    break
-                case '1':
-                case '2':
-                case '3':
-                case '4':
-                case '5':
-                case '6':
-                case '7':
-                case '8':
-                case '9':
-                    const questionNum = parseInt(e.key) - 1
-                    if (questionNum < totalQuestions) {
-                        setCurrentQuestionIndex(questionNum)
-                    }
-                    break
-            }
-        }
+  switch (e.key.toLowerCase()) {
+  case 'n':
+  handleNext()
+  break
+  case 'p':
+  handlePrevious()
+  break
+  case '1':
+  case '2':
+  case '3':
+  case '4':
+  case '5':
+  case '6':
+  case '7':
+  case '8':
+  case '9':
+  const questionNum = parseInt(e.key) - 1
+  if (questionNum < totalQuestions) {
+  setCurrentQuestionIndex(questionNum)
+  }
+  break
+  }
+  }
 
-        if (typeof window !== 'undefined') {
-            window.addEventListener('keydown', handleKeyPress)
-            return () => window.removeEventListener('keydown', handleKeyPress)
-        }
-    }, [totalQuestions])
+  if (typeof window !== 'undefined') {
+  window.addEventListener('keydown', handleKeyPress)
+  return () => window.removeEventListener('keydown', handleKeyPress)
+  }
+  }, [totalQuestions])
 
-    // Add styles to head
-    useEffect(() => {
-        let styleTag: HTMLStyleElement | null = null;
-        if (typeof document !== 'undefined') {
-            styleTag = document.createElement('style');
-            styleTag.innerHTML = fullscreenExamStyle;
-            document.head.appendChild(styleTag);
-        }
-        return () => {
-            if (styleTag && document.head.contains(styleTag)) {
-                document.head.removeChild(styleTag);
-            }
-        };
-    }, []);
+  // Add styles to head
+  useEffect(() => {
+  let styleTag: HTMLStyleElement | null = null;
+  if (typeof document !== 'undefined') {
+  styleTag = document.createElement('style');
+  styleTag.innerHTML = fullscreenExamStyle;
+  document.head.appendChild(styleTag);
+  }
+  return () => {
+  if (styleTag && document.head.contains(styleTag)) {
+  document.head.removeChild(styleTag);
+  }
+  };
+  }, []);
 
-    const handleNext = () => {
-        if (currentQuestionIndex < totalQuestions - 1) {
-            setCurrentQuestionIndex(currentQuestionIndex + 1)
-        }
-    }
+  const handleNext = () => {
+  if (currentQuestionIndex < totalQuestions - 1) {
+  setCurrentQuestionIndex(currentQuestionIndex + 1)
+  }
+  }
 
-    const handlePrevious = () => {
-        if (currentQuestionIndex > 0) {
-            setCurrentQuestionIndex(currentQuestionIndex - 1)
-        }
-    }
+  const handlePrevious = () => {
+  if (currentQuestionIndex > 0) {
+  setCurrentQuestionIndex(currentQuestionIndex - 1)
+  }
+  }
 
-    const handleQuestionSelect = (index: number) => {
-        setCurrentQuestionIndex(index)
-    }
+  const handleQuestionSelect = (index: number) => {
+  setCurrentQuestionIndex(index)
+  }
 
-    const handleAnswerChange = (answer: string[]) => {
-        if (currentQuestion) {
-            updateAnswer(currentQuestion.id, answer)
-        }
-    }
+  const handleAnswerChange = (answer: string[]) => {
+  if (currentQuestion) {
+  updateAnswer(currentQuestion.id, answer)
+  }
+  }
 
-    const handleTimeSpent = (timeSpent: number) => {
-        if (currentQuestion) {
-            updateTimeSpent(currentQuestion.id, timeSpent)
-        }
-    }
+  const handleTimeSpent = (timeSpent: number) => {
+  if (currentQuestion) {
+  updateTimeSpent(currentQuestion.id, timeSpent)
+  }
+  }
 
-    const handleFlagToggle = () => {
-        if (currentQuestion) {
-            toggleFlag(currentQuestion.id)
-        }
-    }
+  const handleFlagToggle = () => {
+  if (currentQuestion) {
+  toggleFlag(currentQuestion.id)
+  }
+  }
 
-    const handleClearResponse = () => {
-        if (currentQuestion) {
-            updateAnswer(currentQuestion.id, [])
-        }
-    }
+  const handleClearResponse = () => {
+  if (currentQuestion) {
+  updateAnswer(currentQuestion.id, [])
+  }
+  }
 
-    const handleMarkForReviewAnswered = () => {
-        if (!currentQuestion) return
-        const qid = currentQuestion.id
-        const hasAnswer = !!(session?.answers[qid] && session!.answers[qid].length > 0)
-        // Ensure question is flagged; palette color will depend on whether it's answered
-        if (!session?.flaggedQuestions.has(qid)) {
-            toggleFlag(qid)
-        }
-        handleNext()
-    }
+  const handleMarkForReviewAnswered = () => {
+  if (!currentQuestion) return
+  const qid = currentQuestion.id
+  const hasAnswer = !!(session?.answers[qid] && session!.answers[qid].length > 0)
+  // Ensure question is flagged; palette color will depend on whether it's answered
+  if (!session?.flaggedQuestions.has(qid)) {
+  toggleFlag(qid)
+  }
+  handleNext()
+  }
 
-    const handleEnterFullscreen = async () => {
-        try {
-            const elem: any = document.documentElement
-            if (elem.requestFullscreen) {
-                // navigationUI: 'hide' is supported by some browsers (e.g., Firefox)
-                await elem.requestFullscreen({ navigationUI: 'hide' } as any)
-            } else if (elem.mozRequestFullScreen) {
-                await elem.mozRequestFullScreen()
-            } else if (elem.webkitRequestFullscreen) {
-                await elem.webkitRequestFullscreen()
-            } else if (elem.msRequestFullscreen) {
-                await elem.msRequestFullscreen()
-            }
+  const handleEnterFullscreen = async () => {
+  try {
+  const elem: any = document.documentElement
+  if (elem.requestFullscreen) {
+  // navigationUI: 'hide' is supported by some browsers (e.g., Firefox)
+  await elem.requestFullscreen({ navigationUI: 'hide' } as any)
+  } else if (elem.mozRequestFullScreen) {
+  await elem.mozRequestFullScreen()
+  } else if (elem.webkitRequestFullscreen) {
+  await elem.webkitRequestFullscreen()
+  } else if (elem.msRequestFullscreen) {
+  await elem.msRequestFullscreen()
+  }
 
-            // Verify that fullscreen actually engaged
-            const becameFullscreen = !!(document.fullscreenElement || (document as any).webkitFullscreenElement || (document as any).msFullscreenElement)
-            if (becameFullscreen) {
-                setIsFullscreen(true)
-                setSidebarHidden(true)
-                setShowFullscreenPrompt(false)
-                toast.success('Test started in fullscreen mode')
-            } else {
-                toast.error('Fullscreen was blocked. Please allow fullscreen for this site and try again.')
-            }
-        } catch (error) {
-            console.error('Failed to enter fullscreen:', error)
-            toast.error('Unable to enter fullscreen. Please click again or check browser settings.')
-        }
-    }
+  // Verify that fullscreen actually engaged
+  const becameFullscreen = !!(document.fullscreenElement || (document as any).webkitFullscreenElement || (document as any).msFullscreenElement)
+  if (becameFullscreen) {
+  setIsFullscreen(true)
+  setSidebarHidden(true)
+  setShowFullscreenPrompt(false)
+  toast.success('Test started in fullscreen mode')
+  } else {
+  toast.error('Fullscreen was blocked. Please allow fullscreen for this site and try again.')
+  }
+  } catch (error) {
+  console.error('Failed to enter fullscreen:', error)
+  toast.error('Unable to enter fullscreen. Please click again or check browser settings.')
+  }
+  }
 
-    const handleSubmit = async () => {
-        if (!questions || !session) return
+  const handleSubmit = async () => {
+  if (!questions || !session) return
 
-        // Set flag to prevent auto-submit when exiting fullscreen
-        setIsManualSubmit(true)
+  // Set flag to prevent auto-submit when exiting fullscreen
+  setIsManualSubmit(true)
 
-        // Exit fullscreen before submitting
-        if (document.fullscreenElement || (document as any).webkitFullscreenElement || (document as any).msFullscreenElement) {
-            if (document.exitFullscreen) {
-                await document.exitFullscreen()
-            } else if ((document as any).webkitExitFullscreen) {
-                await (document as any).webkitExitFullscreen()
-            } else if ((document as any).msExitFullscreen) {
-                await (document as any).msExitFullscreen()
-            }
-        }
+  // Exit fullscreen before submitting
+  if (document.fullscreenElement || (document as any).webkitFullscreenElement || (document as any).msFullscreenElement) {
+  if (document.exitFullscreen) {
+  await document.exitFullscreen()
+  } else if ((document as any).webkitExitFullscreen) {
+  await (document as any).webkitExitFullscreen()
+  } else if ((document as any).msExitFullscreen) {
+  await (document as any).msExitFullscreen()
+  }
+  }
 
-        try {
-            const result = await submitExam()
-            if (result.question_results && Array.isArray(result.question_results)) {
-                const resultsMap: Record<string, {
-                    correct: boolean
-                    score: number
-                    maxScore: number
-                    feedback?: string
-                }> = {}
-                result.question_results.forEach((qr: any) => {
-                    resultsMap[qr.question_id] = {
-                        correct: qr.correct || false,
-                        score: qr.score || 0,
-                        maxScore: qr.max_score || 1,
-                        feedback: qr.feedback
-                    }
-                })
-                setQuestionResults(resultsMap)
-            }
-            // Show success message for manual submission
-            toast.success('Test submitted successfully! 🎉')
-            onComplete(result)
-        } catch (error) {
-            toast.error('Failed to submit exam. Please try again.')
-            console.error('Submit error:', error)
-        } finally {
-            // Reset the manual submit flag
-            setIsManualSubmit(false)
-        }
-    }
+  try {
+  const result = await submitExam()
+  if (result.question_results && Array.isArray(result.question_results)) {
+  const resultsMap: Record<string, {
+  correct: boolean
+  score: number
+  maxScore: number
+  feedback?: string
+  }> = {}
+  result.question_results.forEach((qr: any) => {
+  resultsMap[qr.question_id] = {
+  correct: qr.correct || false,
+  score: qr.score || 0,
+  maxScore: qr.max_score || 1,
+  feedback: qr.feedback
+  }
+  })
+  setQuestionResults(resultsMap)
+  }
+  // Show success message for manual submission
+  toast.success('Test submitted successfully! ')
+  onComplete(result)
+  } catch (error) {
+  toast.error('Failed to submit exam. Please try again.')
+  console.error('Submit error:', error)
+  } finally {
+  // Reset the manual submit flag
+  setIsManualSubmit(false)
+  }
+  }
 
-    const handleSubmitAndRedirect = async () => {
-        if (!session) return
-        try {
-            setIsExitingFullscreen(true)
-            // Perform submission first to ensure results are available
-            const result = await submitExam()
-            if (result?.question_results && Array.isArray(result.question_results)) {
-                const resultsMap: Record<string, {
-                    correct: boolean
-                    score: number
-                    maxScore: number
-                    feedback?: string
-                }> = {}
-                result.question_results.forEach((qr: any) => {
-                    resultsMap[qr.question_id] = {
-                        correct: qr.correct || false,
-                        score: qr.score || 0,
-                        maxScore: qr.max_score || 1,
-                        feedback: qr.feedback
-                    }
-                })
-                setQuestionResults(resultsMap)
-            }
-            // Let parent flow handle result display (same as manual submit)
-            onComplete(result)
-        } catch (error) {
-            console.error('Auto submit error:', error)
-            toast.error('Failed to finalize results. Redirecting to dashboard...')
-            try {
-                router.push('/dashboard/student/practice')
-            } catch {
-                window.location.href = '/dashboard/student/practice'
-            }
-        }
-    }
+  const handleSubmitAndRedirect = async () => {
+  if (!session) return
+  try {
+  setIsExitingFullscreen(true)
+  // Perform submission first to ensure results are available
+  const result = await submitExam()
+  if (result?.question_results && Array.isArray(result.question_results)) {
+  const resultsMap: Record<string, {
+  correct: boolean
+  score: number
+  maxScore: number
+  feedback?: string
+  }> = {}
+  result.question_results.forEach((qr: any) => {
+  resultsMap[qr.question_id] = {
+  correct: qr.correct || false,
+  score: qr.score || 0,
+  maxScore: qr.max_score || 1,
+  feedback: qr.feedback
+  }
+  })
+  setQuestionResults(resultsMap)
+  }
+  // Let parent flow handle result display (same as manual submit)
+  onComplete(result)
+  } catch (error) {
+  console.error('Auto submit error:', error)
+  toast.error('Failed to finalize results. Redirecting to dashboard...')
+  try {
+  router.push('/dashboard/student/practice')
+  } catch {
+  window.location.href = '/dashboard/student/practice'
+  }
+  }
+  }
 
-    if (isLoading) {
-        return (
-            <div className="flex items-center justify-center min-h-[400px] bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-xl shadow-sm">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-500"></div>
-            </div>
-        )
-    }
+  if (isLoading) {
+  return (
+  <div className="flex min-h-[400px] items-center justify-center rounded-xl bg-white/80 shadow-sm backdrop-blur-sm dark:bg-emerald-950/50">
+  <div className="h-12 w-12 animate-spin rounded-full border-2 border-sage-deep border-t-transparent dark:border-emerald-400"></div>
+  </div>
+  )
+  }
 
-    if (!questions || questions.length === 0) {
-        return (
-            <div className="bg-red-50/80 dark:bg-red-900/20 border border-red-200/50 dark:border-red-700 rounded-xl p-6 backdrop-blur-sm">
-                <h3 className="text-lg font-medium text-red-900 dark:text-red-100 mb-2">
-                    No Questions Available
-                </h3>
-                <p className="text-red-700 dark:text-red-300 mb-4">
-                    This practice module doesn't have any questions yet.
-                </p>
-            </div>
-        )
-    }
+  if (!questions || questions.length === 0) {
+  return (
+  <div className="bg-red-50/80 dark:bg-red-900/20 border border-red-200/50 dark:border-red-700 rounded-xl p-6 backdrop-blur-sm">
+  <h3 className="text-lg font-medium text-red-900 dark:text-red-100 mb-2">
+  No Questions Available
+  </h3>
+  <p className="text-red-700 dark:text-red-300 mb-4">
+  This practice module doesn't have any questions yet.
+  </p>
+  </div>
+  )
+  }
 
-    return (
-        <div className="fullscreen-exam">
-            {/* Header - with gradient and shadow */}
-            <div className="exam-header p-6 shadow-sm">
-                <div className="flex items-center justify-between max-w-7xl mx-auto">
-                    <div className="flex items-center gap-4">
-                        <div>
-                            <h1 className="text-xl font-bold text-gray-900 dark:text-white mb-1">
-                                {module.title}
-                            </h1>
-                            <p className="text-sm  text-gray-900 dark:text-white">
-                                Question {currentQuestionIndex + 1} of {totalQuestions}
-                            </p>
-                        </div>
-                    </div>
+  return (
+  <div className="fullscreen-exam">
+  {/* Header - with gradient and shadow */}
+  <div className="exam-header p-6 shadow-sm">
+  <div className="flex items-center justify-between max-w-7xl mx-auto">
+  <div className="flex items-center gap-4">
+  <div>
+  <h1 className="mb-1 text-xl font-bold text-slate-900 dark:text-emerald-50">
+  {module.title}
+  </h1>
+  <p className="text-sm text-slate-600 dark:text-emerald-200/85">
+  Question {currentQuestionIndex + 1} of {totalQuestions}
+  </p>
+  </div>
+  </div>
 
-                    <div className="flex items-center gap-6">
-                        {/* {!isFullscreen && !session?.isSubmitted && (
-                            <Button
-                                onClick={handleEnterFullscreen}
-                                variant="outline"
-                                size="lg"
-                                className="hover:-translate-y-0.5 transition-all duration-200"
-                            >
-                                <Maximize2 className="w-4 h-4 mr-2" />
-                                Enter Fullscreen
-                            </Button>
-                        )} */}
+  <div className="flex items-center gap-6">
+  {/* {!isFullscreen && !session?.isSubmitted && (
+  <Button
+  onClick={handleEnterFullscreen}
+  variant="outline"
+  size="lg"
+  className="hover:-translate-y-0.5 transition-all duration-200"
+  >
+  <Maximize2 className="w-4 h-4 mr-2" />
+  Enter Fullscreen
+  </Button>
+  )} */}
 
-                        <ExamTimer
-                            duration={module.duration_seconds}
-                            onTimeUp={handleSubmit}
-                        />
-                    </div>
-                </div>
-            </div>
+  <ExamTimer
+  duration={module.duration_seconds}
+  onTimeUp={handleSubmit}
+  />
+  </div>
+  </div>
+  </div>
 
-            {/* Main Content */}
-            <div className="exam-content">
-                {/* Left Panel - Question */}
-                <div className="question-container">
-                    {/* Question Header */}
-                    <div className="border-b border-gray-200/50 dark:border-gray-700/50 px-6 py-4 bg-gray-50/80 dark:bg-gray-800/80 backdrop-blur-sm">
-                        <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-4">
-                                <span className="text-sm font-medium text-gray-600 dark:text-gray-300">Question {currentQuestionIndex + 1}</span>
-                                {session?.flaggedQuestions.has(currentQuestion?.id || '') && (
-                                    <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-yellow-50/80 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-200 text-xs font-medium border border-yellow-200/50 dark:border-yellow-700/50 backdrop-blur-sm">
-                                        <Flag className="w-3 h-3" />
-                                        Marked for Review
-                                    </span>
-                                )}
-                            </div>
-                            <div className="text-sm text-gray-500 dark:text-gray-400">
-                                Single Choice • Mark for Review
-                            </div>
-                        </div>
-                    </div>
+  {/* Main Content */}
+  <div className="exam-content">
+  {/* Left Panel - Question */}
+  <div className="question-container">
+  {/* Question Header */}
+  <div className="border-b border-slate-200/80 bg-sage/10 px-6 py-4 backdrop-blur-sm dark:border-emerald-800/60 dark:bg-emerald-950/40">
+  <div className="flex items-center justify-between">
+  <div className="flex items-center gap-4">
+  <span className="text-sm font-medium text-slate-600 dark:text-emerald-200/90">Question {currentQuestionIndex + 1}</span>
+  {session?.flaggedQuestions.has(currentQuestion?.id || '') && (
+  <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-yellow-50/80 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-200 text-xs font-medium border border-yellow-200/50 dark:border-yellow-700/50 backdrop-blur-sm">
+  <Flag className="w-3 h-3" />
+  Marked for Review
+  </span>
+  )}
+  </div>
+  <div className="text-sm text-slate-500 dark:text-emerald-300/70">
+  Single Choice • Mark for Review
+  </div>
+  </div>
+  </div>
 
-                    {/* Question Content */}
-                    <div className="question-content">
-                        <QuestionPanel
-                            question={currentQuestion!}
-                            questionNumber={currentQuestionIndex + 1}
-                            onTimeSpent={handleTimeSpent}
-                        />
-                        <OptionsPanel
-                            key={currentQuestion?.id}
-                            question={currentQuestion!}
-                            answer={session?.answers[currentQuestion?.id || ''] || []}
-                            isFlagged={session?.flaggedQuestions.has(currentQuestion?.id || '') || false}
-                            onAnswerChange={handleAnswerChange}
-                            onFlagToggle={handleFlagToggle}
-                            isSubmitted={session?.isSubmitted || false}
-                            questionResult={currentQuestion ? questionResults[currentQuestion.id] : undefined}
-                        />
-                    </div>
+  {/* Question Content */}
+  <div className="question-content">
+  <QuestionPanel
+  question={currentQuestion!}
+  questionNumber={currentQuestionIndex + 1}
+  onTimeSpent={handleTimeSpent}
+  />
+  <OptionsPanel
+  key={currentQuestion?.id}
+  question={currentQuestion!}
+  answer={session?.answers[currentQuestion?.id || ''] || []}
+  isFlagged={session?.flaggedQuestions.has(currentQuestion?.id || '') || false}
+  onAnswerChange={handleAnswerChange}
+  onFlagToggle={handleFlagToggle}
+  isSubmitted={session?.isSubmitted || false}
+  questionResult={currentQuestion ? questionResults[currentQuestion.id] : undefined}
+  />
+  </div>
 
-                    {/* Navigation Footer */}
-                    <div className="question-footer">
-                        <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-3">
-                                <Button
-                                    onClick={handlePrevious}
-                                    disabled={currentQuestionIndex === 0}
-                                    variant="outline"
-                                    size="lg"
-                                    className="hover:-translate-y-0.5 transition-all duration-200"
-                                >
-                                    <ChevronLeft className="w-4 h-4 mr-2" />
-                                    Previous
-                                </Button>
+  {/* Navigation Footer */}
+  <div className="question-footer">
+  <div className="flex items-center justify-between">
+  <div className="flex items-center gap-3">
+  <Button
+  onClick={handlePrevious}
+  disabled={currentQuestionIndex === 0}
+  variant="outline"
+  size="lg"
+  className="hover:-translate-y-0.5 transition-all duration-200"
+  >
+  <ChevronLeft className="w-4 h-4 mr-2" />
+  Previous
+  </Button>
 
-                                {/* Removed standalone Mark for Review button */}
+  {/* Removed standalone Mark for Review button */}
 
-                                <Button
-                                    onClick={handleMarkForReviewAnswered}
-                                    variant="outline"
-                                    size="lg"
-                                    className="text-gray-700 hover:bg-gray-50 dark:text-gray-300 hover:-translate-y-0.5 transition-all duration-200"
-                                >
-                                    <CheckCircle className="w-4 h-4 mr-2" />
-                                    Mark for Review
-                                </Button>
+  <Button
+  onClick={handleMarkForReviewAnswered}
+  variant="outline"
+  size="lg"
+  className="text-slate-700 transition-all duration-200 hover:-translate-y-0.5 hover:bg-sage/10 dark:text-emerald-100 dark:hover:bg-emerald-900/40"
+  >
+  <CheckCircle className="w-4 h-4 mr-2" />
+  Mark for Review
+  </Button>
 
-                                <Button
-                                    onClick={handleClearResponse}
-                                    variant="outline"
-                                    size="lg"
-                                    className="text-gray-700 hover:bg-gray-50 dark:text-gray-300 hover:-translate-y-0.5 transition-all duration-200"
-                                    disabled={!session?.answers[currentQuestion?.id || ''] || session.answers[currentQuestion?.id || '']?.length === 0}
-                                >
-                                    <X className="w-4 h-4 mr-2" />
-                                    Clear Response
-                                </Button>
-                            </div>
+  <Button
+  onClick={handleClearResponse}
+  variant="outline"
+  size="lg"
+  className="text-slate-700 transition-all duration-200 hover:-translate-y-0.5 hover:bg-sage/10 dark:text-emerald-100 dark:hover:bg-emerald-900/40"
+  disabled={!session?.answers[currentQuestion?.id || ''] || session.answers[currentQuestion?.id || '']?.length === 0}
+  >
+  <X className="w-4 h-4 mr-2" />
+  Clear Response
+  </Button>
+  </div>
 
-                            <div className="flex items-center gap-3">
-                                {currentQuestionIndex === totalQuestions - 1 ? (
-                                    <Button
-                                        onClick={handleSubmit}
-                                        size="lg"
-                                        className="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white px-8 hover:-translate-y-0.5 transition-all duration-200 shadow-sm"
-                                    >
-                                        Submit Exam
-                                    </Button>
-                                ) : (
-                                    <Button
-                                        onClick={handleNext}
-                                        size="lg"
-                                        className="bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white px-8 hover:-translate-y-0.5 transition-all duration-200 shadow-sm"
-                                    >
-                                        Next
-                                        <ChevronRight className="w-4 h-4 ml-2" />
-                                    </Button>
-                                )}
-                            </div>
-                        </div>
-                    </div>
-                </div>
+  <div className="flex items-center gap-3">
+  {currentQuestionIndex === totalQuestions - 1 ? (
+  <Button
+  onClick={handleSubmit}
+  size="lg"
+  className="bg-gradient-to-r from-sage-deep to-emerald-600 px-8 text-white shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:from-sage-deep/95 hover:to-emerald-600/95 dark:from-emerald-700 dark:to-emerald-500 dark:hover:from-emerald-600 dark:hover:to-emerald-400"
+  >
+  Submit Exam
+  </Button>
+  ) : (
+  <Button
+  onClick={handleNext}
+  size="lg"
+  className="bg-gradient-to-r from-sage-deep to-emerald-600 px-8 text-white shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:from-sage-deep/95 hover:to-emerald-600/95 dark:from-emerald-700 dark:to-emerald-500 dark:hover:from-emerald-600 dark:hover:to-emerald-400"
+  >
+  Next
+  <ChevronRight className="w-4 h-4 ml-2" />
+  </Button>
+  )}
+  </div>
+  </div>
+  </div>
+  </div>
 
-                {/* Right Panel - Question Dashboard */}
-                <div className="question-palette">
-                    <div className="bg-white/80 dark:bg-gray-800/80 h-full border-l border-gray-200/50 dark:border-gray-700/50 backdrop-blur-sm">
-                        {/* Profile Section - styled like StudentProfile avatar */}
-                        <div className="border-b border-gray-200/50 dark:border-gray-700/50 p-4 flex items-center space-x-3">
-                            <div className="flex-shrink-0">
-                                {profile?.profile_picture ? (
-                                    <img
-                                        src={profile.profile_picture}
-                                        alt={profile?.name || 'Student'}
-                                        className="h-10 w-10 rounded-full object-cover border-2 border-gray-200 dark:border-gray-600"
-                                        onError={(e) => {
-                                            (e.target as HTMLImageElement).src = `https://ui-avatars.com/api/?name=${profile?.name || 'Student'}&background=1e40af&color=fff`;
-                                        }}
-                                    />
-                                ) : (
-                                    <div className="h-10 w-10 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white shadow-sm">
-                                        <User className="h-5 w-5" />
-                                    </div>
-                                )}
-                            </div>
-                            <div className="flex-1 min-w-0">
-                                <p className="text-sm font-medium text-gray-900 dark:text-white truncate">
-                                    {profile?.name || user?.name || 'Student'}
-                                </p>
-                                <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
-                                    {profile?.institution || 'University Student'}
-                                </p>
-                            </div>
-                        </div>
+  {/* Right Panel - Question Dashboard */}
+  <div className="question-palette">
+  <div className="h-full border-l border-slate-200/80 bg-white/90 backdrop-blur-sm dark:border-emerald-800/50 dark:bg-emerald-950/40">
+  {/* Profile Section - styled like StudentProfile avatar */}
+  <div className="flex items-center space-x-3 border-b border-slate-200/80 p-4 dark:border-emerald-800/50">
+  <div className="flex-shrink-0">
+  {profile?.profile_picture ? (
+  <img
+  src={profile.profile_picture}
+  alt={profile?.name || 'Student'}
+  className="h-10 w-10 rounded-full border-2 border-slate-200 object-cover dark:border-emerald-700/60"
+  onError={(e) => {
+  (e.target as HTMLImageElement).src = `https://ui-avatars.com/api/?name=${profile?.name || 'Student'}&background=8f9f78&color=fff`;
+  }}
+  />
+  ) : (
+  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-sage-deep to-emerald-600 text-white shadow-sm dark:from-emerald-700 dark:to-emerald-500">
+  <User className="h-5 w-5" />
+  </div>
+  )}
+  </div>
+  <div className="flex-1 min-w-0">
+  <p className="truncate text-sm font-medium text-slate-900 dark:text-emerald-50">
+  {profile?.name || user?.name || 'Student'}
+  </p>
+  <p className="truncate text-xs text-slate-500 dark:text-emerald-200/75">
+  {profile?.institution || 'University Student'}
+  </p>
+  </div>
+  </div>
 
-                        {/* Dashboard Header */}
-                        <div className="border-b border-gray-200/50 dark:border-gray-700/50 px-4 py-3 bg-gray-50/80 dark:bg-gray-800/80 backdrop-blur-sm">
-                            <h3 className="font-semibold text-gray-900 dark:text-white">Question Palette</h3>
-                        </div>
+  {/* Dashboard Header */}
+  <div className="border-b border-slate-200/80 bg-sage/10 px-4 py-3 backdrop-blur-sm dark:border-emerald-800/50 dark:bg-emerald-950/50">
+  <h3 className="font-semibold text-slate-900 dark:text-emerald-50">Question Palette</h3>
+  </div>
 
-                        {/* Awareness Stats - gradient cards like StudentProfile */}
-                        <div className="p-4 border-b border-gray-200/50 dark:border-gray-700/50">
-                            <div className="grid grid-cols-2 gap-3 text-sm">
-                                <div className="text-center p-2 bg-gradient-to-r from-green-50/80 to-emerald-50/80 dark:from-green-900/20 dark:to-emerald-900/20 rounded-lg border border-green-200/50 dark:border-green-700/50 backdrop-blur-sm">
-                                    <div className="text-green-700 dark:text-green-200 font-semibold">
-                                        {Object.keys(session?.answers || {}).length}
-                                    </div>
-                                    <div className="text-green-600 dark:text-green-300">Answered</div>
-                                </div>
-                                <div className="text-center p-2 bg-gradient-to-r from-red-50/80 to-rose-50/80 dark:from-red-900/20 dark:to-rose-900/20 rounded-lg border border-red-200/50 dark:border-red-700/50 backdrop-blur-sm">
-                                    <div className="text-red-700 dark:text-red-200 font-semibold">
-                                        {totalQuestions - Object.keys(session?.answers || {}).length}
-                                    </div>
-                                    <div className="text-red-600 dark:text-red-300">Not Answered</div>
-                                </div>
-                                <div className="text-center p-2 bg-gradient-to-r from-yellow-50/80 to-amber-50/80 dark:from-yellow-900/20 dark:to-amber-900/20 rounded-lg border border-yellow-200/50 dark:border-yellow-700/50 backdrop-blur-sm">
-                                    <div className="text-yellow-700 dark:text-yellow-200 font-semibold">
-                                        {questions?.filter(q => session?.flaggedQuestions.has(q.id) && (!session?.answers[q.id] || session!.answers[q.id].length === 0)).length || 0}
-                                    </div>
-                                    <div className="text-yellow-600 dark:text-yellow-300">Marked</div>
-                                </div>
-                                <div className="text-center p-2 bg-gradient-to-r from-purple-50/80 to-fuchsia-50/80 dark:from-purple-900/20 dark:to-fuchsia-900/20 rounded-lg border border-purple-200/50 dark:border-purple-700/50 backdrop-blur-sm">
-                                    <div className="text-purple-700 dark:text-purple-200 font-semibold">
-                                        {questions?.filter(q => session?.flaggedQuestions.has(q.id) && (session?.answers[q.id] && session!.answers[q.id].length > 0)).length || 0}
-                                    </div>
-                                    <div className="text-purple-600 dark:text-purple-300">Marked & Answered</div>
-                                </div>
-                                <div className="text-center p-2 bg-gradient-to-r from-blue-50/80 to-indigo-50/80 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-lg border border-blue-200/50 dark:border-blue-700/50 backdrop-blur-sm">
-                                    <div className="text-blue-700 dark:text-blue-200 font-semibold">
-                                        {totalQuestions}
-                                    </div>
-                                    <div className="text-blue-600 dark:text-blue-300">Total</div>
-                                </div>
-                            </div>
-                        </div>
+  {/* Awareness Stats - gradient cards like StudentProfile */}
+  <div className="border-b border-slate-200/80 p-4 dark:border-emerald-800/50">
+  <div className="grid grid-cols-2 gap-3 text-sm">
+  <div className="rounded-lg border border-emerald-200/70 bg-gradient-to-r from-sage/20 to-emerald-50/90 p-2 text-center backdrop-blur-sm dark:border-emerald-700/50 dark:from-emerald-900/35 dark:to-emerald-950/40">
+  <div className="font-semibold text-sage-deep dark:text-emerald-200">
+  {Object.keys(session?.answers || {}).length}
+  </div>
+  <div className="text-emerald-800/90 dark:text-emerald-300/90">Answered</div>
+  </div>
+  <div className="text-center p-2 bg-gradient-to-r from-red-50/80 to-rose-50/80 dark:from-red-900/20 dark:to-rose-900/20 rounded-lg border border-red-200/50 dark:border-red-700/50 backdrop-blur-sm">
+  <div className="text-red-700 dark:text-red-200 font-semibold">
+  {totalQuestions - Object.keys(session?.answers || {}).length}
+  </div>
+  <div className="text-red-600 dark:text-red-300">Not Answered</div>
+  </div>
+  <div className="text-center p-2 bg-gradient-to-r from-yellow-50/80 to-amber-50/80 dark:from-yellow-900/20 dark:to-amber-900/20 rounded-lg border border-yellow-200/50 dark:border-yellow-700/50 backdrop-blur-sm">
+  <div className="text-yellow-700 dark:text-yellow-200 font-semibold">
+  {questions?.filter(q => session?.flaggedQuestions.has(q.id) && (!session?.answers[q.id] || session!.answers[q.id].length === 0)).length || 0}
+  </div>
+  <div className="text-yellow-600 dark:text-yellow-300">Marked</div>
+  </div>
+  <div className="rounded-lg border border-sage/40 bg-gradient-to-r from-sage/25 to-emerald-100/80 p-2 text-center backdrop-blur-sm dark:border-emerald-700/50 dark:from-emerald-900/35 dark:to-emerald-800/25">
+  <div className="font-semibold text-sage-deep dark:text-emerald-200">
+  {questions?.filter(q => session?.flaggedQuestions.has(q.id) && (session?.answers[q.id] && session!.answers[q.id].length > 0)).length || 0}
+  </div>
+  <div className="text-sage-deep/90 dark:text-emerald-300/90">Marked & Answered</div>
+  </div>
+  <div className="rounded-lg border border-sage/40 bg-gradient-to-r from-sage/25 to-emerald-100/80 p-2 text-center backdrop-blur-sm dark:border-emerald-700/50 dark:from-emerald-900/35 dark:to-emerald-800/25">
+  <div className="font-semibold text-sage-deep dark:text-emerald-200">
+  {totalQuestions}
+  </div>
+  <div className="text-sage-deep/90 dark:text-emerald-300/90">Total</div>
+  </div>
+  </div>
+  </div>
 
-                        {/* Question Grid */}
-                        <div className="p-4">
-                            <div className="grid grid-cols-5 gap-2">
-                                {Array.from({ length: totalQuestions }, (_, i) => {
-                                    const question = questions[i]
-                                    const status = getQuestionStatus(question.id)
-                                    const isCurrent = currentQuestionIndex === i
+  {/* Question Grid */}
+  <div className="p-4">
+  <div className="grid grid-cols-5 gap-2">
+  {Array.from({ length: totalQuestions }, (_, i) => {
+  const question = questions[i]
+  const status = getQuestionStatus(question.id)
+  const isCurrent = currentQuestionIndex === i
 
-                                    const getButtonStyle = () => {
-                                        if (isCurrent) {
-                                            return 'bg-gradient-to-r from-blue-500 to-indigo-600 text-white border-blue-500 shadow-md hover:shadow-lg'
-                                        }
+  const getButtonStyle = () => {
+  if (isCurrent) {
+  return 'border-sage-deep bg-gradient-to-r from-sage-deep to-emerald-600 text-white shadow-md hover:shadow-lg dark:from-emerald-700 dark:to-emerald-500'
+  }
 
-                                        switch (status) {
-                                            case 'answered':
-                                                return 'bg-gradient-to-r from-green-500 to-emerald-600 text-white border-green-500 hover:from-green-600 hover:to-emerald-700'
-                                            case 'marked-answered':
-                                                return 'bg-gradient-to-r from-purple-500 to-fuchsia-600 text-white border-purple-500 hover:from-purple-600 hover:to-fuchsia-700'
-                                            case 'flagged':
-                                                return 'bg-gradient-to-r from-yellow-500 to-amber-600 text-white border-yellow-500 hover:from-yellow-600 hover:to-amber-700'
-                                            case 'not-visited':
-                                                return 'bg-gradient-to-r from-red-500 to-rose-600 text-white border-red-500 hover:from-red-600 hover:to-rose-700'
-                                            default:
-                                                return 'bg-white/80 dark:bg-gray-800/80 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700'
-                                        }
-                                    }
+  switch (status) {
+  case 'answered':
+  return 'border-sage-deep bg-gradient-to-r from-sage-deep to-emerald-600 text-white hover:from-sage-deep/95 hover:to-emerald-700 dark:border-emerald-500 dark:from-emerald-700 dark:to-emerald-500 dark:hover:from-emerald-600 dark:hover:to-emerald-400'
+  case 'marked-answered':
+  return 'border-emerald-800 bg-gradient-to-r from-emerald-700 to-teal-600 text-white hover:from-emerald-600 hover:to-teal-500 dark:from-emerald-800 dark:to-teal-700'
+  case 'flagged':
+  return 'bg-gradient-to-r from-yellow-500 to-amber-600 text-white border-yellow-500 hover:from-yellow-600 hover:to-amber-700'
+  case 'not-visited':
+  return 'bg-gradient-to-r from-red-500 to-rose-600 text-white border-red-500 hover:from-red-600 hover:to-rose-700'
+  default:
+  return 'border-slate-300 bg-white/90 text-slate-700 hover:bg-sage/10 dark:border-emerald-800 dark:bg-emerald-950/50 dark:text-emerald-100 dark:hover:bg-emerald-900/50'
+  }
+  }
 
-                                    return (
-                                        <Button
-                                            key={i}
-                                            variant="outline"
-                                            className={`w-10 h-10 p-0 text-sm font-medium transition-all duration-200 hover:-translate-y-0.5 ${getButtonStyle()}`}
-                                            onClick={() => handleQuestionSelect(i)}
-                                            disabled={session?.isSubmitted}
-                                        >
-                                            {i + 1}
-                                        </Button>
-                                    )
-                                })}
-                            </div>
-                        </div>
+  return (
+  <Button
+  key={i}
+  variant="outline"
+  className={`w-10 h-10 p-0 text-sm font-medium transition-all duration-200 hover:-translate-y-0.5 ${getButtonStyle()}`}
+  onClick={() => handleQuestionSelect(i)}
+  disabled={session?.isSubmitted}
+  >
+  {i + 1}
+  </Button>
+  )
+  })}
+  </div>
+  </div>
 
-                        {/* Legend - with badges */}
-                        <div className="p-4 border-t border-gray-200/50 dark:border-gray-700/50  backdrop-blur-sm">
-                            <div className="space-y-2 text-xs">
-                                <div className="flex items-center gap-2">
-                                    <div className="w-3 h-3  rounded"></div>
-                                    <span className="text-gray-600 dark:text-gray-300">Answered</span>
-                                </div>
-                                <div className="flex items-center gap-2">
-                                    <div className="w-3 h-3 bg-gradient-to-r from-red-500 to-rose-600 rounded"></div>
-                                    <span className="text-gray-600 dark:text-gray-300">Not Answered</span>
-                                </div>
-                                <div className="flex items-center gap-2">
-                                    <div className="w-3 h-3 bg-gradient-to-r from-yellow-500 to-amber-600 rounded"></div>
-                                    <span className="text-gray-600 dark:text-gray-300">Marked for Review</span>
-                                </div>
-                                <div className="flex items-center gap-2">
-                                    <div className="w-3 h-3 bg-gradient-to-r from-blue-500 to-indigo-600 rounded"></div>
-                                    <span className="text-gray-600 dark:text-gray-300">Current Question</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+  {/* Legend - with badges */}
+  <div className="border-t border-slate-200/80 p-4 backdrop-blur-sm dark:border-emerald-800/50">
+  <div className="space-y-2 text-xs">
+  <div className="flex items-center gap-2">
+  <div className="h-3 w-3 rounded bg-gradient-to-r from-sage-deep to-emerald-600 dark:from-emerald-600 dark:to-emerald-400"></div>
+  <span className="text-slate-600 dark:text-emerald-200/85">Answered</span>
+  </div>
+  <div className="flex items-center gap-2">
+  <div className="h-3 w-3 rounded bg-gradient-to-r from-red-500 to-rose-600"></div>
+  <span className="text-slate-600 dark:text-emerald-200/85">Not Answered</span>
+  </div>
+  <div className="flex items-center gap-2">
+  <div className="h-3 w-3 rounded bg-gradient-to-r from-yellow-500 to-amber-600"></div>
+  <span className="text-slate-600 dark:text-emerald-200/85">Marked for Review</span>
+  </div>
+  <div className="flex items-center gap-2">
+  <div className="h-3 w-3 rounded bg-gradient-to-r from-sage-deep to-emerald-600 dark:from-emerald-700 dark:to-emerald-500"></div>
+  <span className="text-slate-600 dark:text-emerald-200/85">Current Question</span>
+  </div>
+  </div>
+  </div>
+  </div>
+  </div>
+  </div>
 
-            {/* Fullscreen Prompt Overlay */}
-            {showFullscreenPrompt && (
-                <div className="fixed inset-0 z-[10000] bg-gradient-to-br from-blue-900/95 via-indigo-900/95 to-purple-900/95 backdrop-blur-md flex items-center justify-center">
-                    <div className="max-w-md w-full mx-4 bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-8 text-center transform transition-all duration-300 hover:scale-105">
-                        <div className="mb-6">
-                            <div className="w-20 h-20 mx-auto bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full flex items-center justify-center shadow-lg">
-                                <Maximize2 className="w-10 h-10 text-white" />
-                            </div>
-                        </div>
+  {/* Fullscreen Prompt Overlay */}
+  {showFullscreenPrompt && (
+  <div className="fixed inset-0 z-[10000] flex items-center justify-center bg-gradient-to-br from-emerald-950/95 via-slate-900/95 to-emerald-900/90 backdrop-blur-md">
+  <div className="mx-4 w-full max-w-md transform rounded-2xl bg-white p-8 text-center shadow-2xl transition-all duration-300 hover:scale-105 dark:border dark:border-emerald-800/60 dark:bg-emerald-950">
+  <div className="mb-6">
+  <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-sage-deep to-emerald-600 shadow-lg dark:from-emerald-700 dark:to-emerald-500">
+  <Maximize2 className="w-10 h-10 text-white" />
+  </div>
+  </div>
 
-                        <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-3">
-                            Start Test in Fullscreen
-                        </h2>
+  <h2 className="mb-3 text-2xl font-bold text-slate-900 dark:text-emerald-50">
+  Start Test in Fullscreen
+  </h2>
 
-                        <p className="text-gray-600 dark:text-gray-300 mb-6 leading-relaxed">
-                            This test requires fullscreen mode for the best experience.
-                            Click the button below to enter fullscreen and begin your test.
-                        </p>
+  <p className="mb-6 leading-relaxed text-slate-600 dark:text-emerald-200/85">
+  This test requires fullscreen mode for the best experience.
+  Click the button below to enter fullscreen and begin your test.
+  </p>
 
-                        <div className="space-y-3">
-                            <Button
-                                onClick={handleEnterFullscreen}
-                                size="lg"
-                                className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold py-4 rounded-xl shadow-lg hover:shadow-xl transform transition-all duration-200 hover:-translate-y-1"
-                            >
-                                <Maximize2 className="w-5 h-5 mr-2" />
-                                Enter Fullscreen & Start Test
-                            </Button>
+  <div className="space-y-3">
+  <Button
+  onClick={handleEnterFullscreen}
+  size="lg"
+  className="w-full transform rounded-xl bg-gradient-to-r from-sage-deep to-emerald-600 py-4 font-semibold text-white shadow-lg transition-all duration-200 hover:-translate-y-1 hover:from-sage-deep/95 hover:to-emerald-600/95 hover:shadow-xl dark:from-emerald-700 dark:to-emerald-500 dark:hover:from-emerald-600 dark:hover:to-emerald-400"
+  >
+  <Maximize2 className="w-5 h-5 mr-2" />
+  Enter Fullscreen & Start Test
+  </Button>
 
-                            <Button
-                                onClick={onBack}
-                                variant="outline"
-                                size="lg"
-                                className="w-full py-4 rounded-xl border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700"
-                            >
-                                <ArrowLeft className="w-5 h-5 mr-2" />
-                                Back to Dashboard
-                            </Button>
-                        </div>
+  <Button
+  onClick={onBack}
+  variant="outline"
+  size="lg"
+  className="w-full rounded-xl border-slate-300 py-4 hover:bg-sage/10 dark:border-emerald-800 dark:hover:bg-emerald-900/40"
+  >
+  <ArrowLeft className="w-5 h-5 mr-2" />
+  Back to Dashboard
+  </Button>
+  </div>
 
-                        <div className="mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-xl border border-blue-200 dark:border-blue-700">
-                            <p className="text-xs text-blue-800 dark:text-blue-200 leading-relaxed">
-                                <strong>Note:</strong> The test will automatically submit if you exit fullscreen mode during the exam.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            )}
-        </div>
-    )
+  <div className="mt-6 rounded-xl border border-sage/40 bg-sage/15 p-4 dark:border-emerald-800/60 dark:bg-emerald-900/30">
+  <p className="text-xs leading-relaxed text-sage-deep dark:text-emerald-200/90">
+  <strong>Note:</strong> The test will automatically submit if you exit fullscreen mode during the exam.
+  </p>
+  </div>
+  </div>
+  </div>
+  )}
+  </div>
+  )
 }

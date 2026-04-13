@@ -32,56 +32,56 @@ const odia = Noto_Sans_Oriya({
 })
 
 export const metadata: Metadata = {
-    title: `${BRANDING.appName} - ${BRANDING.tagline}`,
-    description: BRANDING.tagline,
+  title: `${BRANDING.appName} - ${BRANDING.tagline}`,
+  description: BRANDING.tagline,
 
 }
 
 export const viewport: Viewport = {
-    width: 'device-width',
-    initialScale: 1,
-    maximumScale: 1,
-    userScalable: false,
-    viewportFit: 'cover'
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+  viewportFit: 'cover'
 }
 
 export default function RootLayout({
-    children,
+  children,
 }: {
-    children: React.ReactNode
+  children: React.ReactNode
 }) {
-    return (
-        <html lang="en" suppressHydrationWarning>
-            <body
-              className={`${inter.variable} ${poppins.variable} ${display.variable} ${devanagari.variable} ${odia.variable} font-sans antialiased`}
-            >
-                <ThemeProvider
-                    attribute="class"
-                    defaultTheme="system"
-                    enableSystem
-                    disableTransitionOnChange
-                >
-                    <AppQueryProvider>
-                        <LocaleProvider>
-                            <LoadingProvider>
-                                {children}
-                                <ChatBotMount />
-                                <Toaster
-                                    position="top-right"
-                                    toastOptions={{
-                                        duration: 4000,
-                                        style: {
-                                            background: 'var(--toast-bg)',
-                                            color: 'var(--toast-color)',
-                                            border: '1px solid var(--toast-border)',
-                                        },
-                                    }}
-                                />
-                            </LoadingProvider>
-                        </LocaleProvider>
-                    </AppQueryProvider>
-                </ThemeProvider>
-            </body>
-        </html>
-    )
+  return (
+  <html lang="en" suppressHydrationWarning>
+  <body
+  className={`${inter.variable} ${poppins.variable} ${display.variable} ${devanagari.variable} ${odia.variable} font-sans antialiased`}
+  >
+  <ThemeProvider
+  attribute="class"
+  defaultTheme="system"
+  enableSystem
+  disableTransitionOnChange
+  >
+  <AppQueryProvider>
+  <LocaleProvider>
+  <LoadingProvider>
+  {children}
+  <ChatBotMount />
+  <Toaster
+  position="top-right"
+  toastOptions={{
+  duration: 4000,
+  style: {
+  background: 'var(--toast-bg)',
+  color: 'var(--toast-color)',
+  border: '1px solid var(--toast-border)',
+  },
+  }}
+  />
+  </LoadingProvider>
+  </LocaleProvider>
+  </AppQueryProvider>
+  </ThemeProvider>
+  </body>
+  </html>
+  )
 }
