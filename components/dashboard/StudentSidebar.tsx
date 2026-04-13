@@ -58,7 +58,7 @@ export function StudentSidebar({ className =''}: StudentSidebarProps) {
  {
  title: t(locale,'dashboard.groups.jobs'),
  items: [
- { label:'Discover Jobs', href:'/dashboard/student/jobs', icon: Compass, description:'Local and personalized roles'},
+ { label:'Discover Jobs', href:'/dashboard/discover-jobs', icon: Compass, description:'Local and personalized roles'},
  { label:'Applications', href:'/dashboard/student/applications', icon: ClipboardList, description:'Track your pipeline status'},
  ],
  },

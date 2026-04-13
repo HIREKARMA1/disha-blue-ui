@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import { motion } from 'framer-motion'
 import {
  Search,
@@ -16,8 +16,7 @@ import {
  X,
  Bookmark,
  SlidersHorizontal,
- Sparkles,
- Info,
+ Inbox,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -25,6 +24,7 @@ import { JobCard } from '@/components/dashboard/JobCard'
 import { JobDescriptionModal } from '@/components/dashboard/JobDescriptionModal'
 import { ApplicationModal } from '@/components/dashboard/ApplicationModal'
 import { ErrorBoundary } from '@/components/ErrorBoundary'
+import { isAxiosError } from 'axios'
 import { apiClient } from '@/lib/api'
 import { toast } from 'react-hot-toast'
 import { StudentDashboardLayout } from '@/components/dashboard/StudentDashboardLayout'
@@ -38,6 +38,8 @@ import {
  toggleSavedJobId,
 } from '@/components/jobs/jobs-ui'
 import { getRecommendationReadiness } from '@/lib/recommendationReadiness'
+import { useJobDiscoveryPreferencesStore } from '@/stores/jobDiscoveryPreferencesStore'
+import { JobDiscoveryPreferencesModal } from '@/components/jobs/JobDiscoveryPreferencesModal'
 interface Job {
  id: string
  title: string
@@ -101,6 +103,8 @@ interface Job {
  contact_designation?: string
  match_score?: number
  match_reasons?: string[]
+ matched_skills?: string[]
+ recommendation_explanation?: string
 }
 
 interface JobSearchResponse {
@@ -192,35 +196,203 @@ const activeFilterCount = Object.values(filters).filter(Boolean).length + (searc
 
  const [savedJobIds, setSavedJobIds] = useState<string[]>([])
  const [savedOnly, setSavedOnly] = useState(false)
- const [recommendedJobs, setRecommendedJobs] = useState<Job[]>([])
- const [loadingRecommended, setLoadingRecommended] = useState(false)
- const [recommendationWhyText, setRecommendationWhyText] = useState<string>('Based on your location, skills, and profile completeness.')
+ const [resumeFlowJobs, setResumeFlowJobs] = useState<Job[]>([])
+ const [loadingResumeFlowJobs, setLoadingResumeFlowJobs] = useState(false)
+ const [resumeFlowRecommendEmpty, setResumeFlowRecommendEmpty] = useState(false)
+ const [didAttemptResumeFlowRec, setDidAttemptResumeFlowRec] = useState(false)
+ const [resumeRecTotal, setResumeRecTotal] = useState(0)
+ const [resumeRecPage, setResumeRecPage] = useState(1)
+ const [prefsHydrated, setPrefsHydrated] = useState(false)
+ const [preferencesModalOpen, setPreferencesModalOpen] = useState(false)
+ const resumeRecInitRef = useRef(false)
+
+ type ResumeRecPayload = { skills: string[]; preferred_role: string; locations: string[] }
+
+ const hasResumePrefs = useJobDiscoveryPreferencesStore(
+ (s) => s.resumeSkills.length > 0 || s.preferredRole.trim().length > 0
+ )
+
+ const loadResumeRecommendationsPage = useCallback(
+ async (
+ page: number,
+ append: boolean,
+ opts?: {
+ clearSessionOnSuccess?: boolean
+ seedFromPayload?: ResumeRecPayload | null
+ /** After saving preferences: no scary toasts on network/5xx; keep previous matches */
+ preferQuietRefresh?: boolean
+ }
+ ) => {
+ const store = useJobDiscoveryPreferencesStore.getState()
+ let skills = store.resumeSkills
+ let preferred_role = store.preferredRole
+ let locations = store.preferredLocations
+ if (opts?.seedFromPayload) {
+ const p = opts.seedFromPayload
+ skills = p.skills || []
+ preferred_role = p.preferred_role || ''
+ locations = p.locations || []
+ store.setJobDiscoveryPreferences({
+ resumeSkills: skills,
+ preferredRole: preferred_role,
+ preferredLocations: locations,
+ })
+ }
+ setLoadingResumeFlowJobs(true)
+ if (!append) setResumeFlowRecommendEmpty(false)
+ try {
+ const skillList = (Array.isArray(skills) ? skills : [])
+ .filter((s): s is string => typeof s === 'string')
+ .map((s) => s.trim())
+ .filter(Boolean)
+ const locList = (Array.isArray(locations) ? locations : [])
+ .filter((s): s is string => typeof s === 'string')
+ .map((s) => s.trim())
+ .filter(Boolean)
+ const roleSafe = typeof preferred_role === 'string' ? preferred_role.trim() : ''
+
+ console.log('[recommend] request payload', {
+ skills: skillList,
+ preferredRole: roleSafe,
+ locations: locList,
+ page,
+ append,
+ })
+
+ const res = await apiClient.postJobRecommendations({
+ skills: skillList,
+ preferred_role: roleSafe,
+ locations: locList,
+ page,
+ limit: 20,
+ })
+ const list = (res?.jobs || []) as Job[]
+ console.log('[recommend] response summary', {
+ returnedJobs: list.length,
+ totalCount: res?.total_count ?? list.length,
+ hasMatchScore: list.some((j) => typeof j?.match_score === 'number'),
+ })
+ const total = res?.total_count ?? list.length
+ setResumeRecTotal(total)
+ if (append) {
+ setResumeFlowJobs((p) => [...p, ...list])
+ setResumeRecPage(page)
+ } else {
+ setResumeFlowJobs(list)
+ setResumeFlowRecommendEmpty(list.length === 0)
+ setResumeRecPage(1)
+ }
+ if (opts?.clearSessionOnSuccess) {
+ try {
+ sessionStorage.removeItem('disha-resume-rec-payload')
+ } catch {
+ /* ignore */
+ }
+ }
+ } catch (e) {
+ console.error('Recommendation API failed:', e)
+ const quiet = opts?.preferQuietRefresh === true
+ const showErrorToast = (msg: string) => {
+ if (quiet) return
+ toast.error(msg)
+ }
+
+ if (isAxiosError(e)) {
+ console.log('[recommend] response error body:', e?.response?.data)
+ const status = e.response?.status
+ const raw = e.response?.data as { detail?: unknown } | undefined
+ const detail = raw?.detail
+ const detailStr =
+ typeof detail === 'string'
+ ? detail
+ : detail != null && typeof detail === 'object' && 'detail' in detail && typeof (detail as { detail: string }).detail === 'string'
+ ? (detail as { detail: string }).detail
+ : null
+
+ if (status === 401) {
+ toast.error('Please sign in again to load recommendations.')
+ } else if (status === 403) {
+ toast.error(detailStr || 'You do not have access to personalized recommendations.')
+ } else if (status === 422) {
+ toast.error(
+ 'Could not validate recommendation preferences. Try editing and saving them again.',
+ )
+ } else if (status != null && status >= 500) {
+ showErrorToast('Recommendations are temporarily unavailable. Please try again in a moment.')
+ } else if (!e.response) {
+ showErrorToast('Cannot reach the server. Check your connection or API settings.')
+ } else {
+ showErrorToast(detailStr || 'Could not load personalized recommendations.')
+ }
+ } else {
+ showErrorToast('Could not load personalized recommendations.')
+ }
+ if (!append) {
+ if (quiet) {
+ /* keep existing list so the screen does not flash empty after a good save */
+ } else {
+ setResumeFlowJobs([])
+ setResumeFlowRecommendEmpty(true)
+ setResumeRecTotal(0)
+ }
+ }
+ } finally {
+ // Ensure resume-flow one-time intent is cleared after first attempt,
+ // even if recommendation API fails temporarily.
+ store.consumeResumeFlowIntent()
+ setLoadingResumeFlowJobs(false)
+ }
+ },
+ []
+ )
 
  useEffect(() => {
  setSavedJobIds(loadSavedJobIds())
  }, [])
 
+useEffect(() => {
+ if (useJobDiscoveryPreferencesStore.persist.hasHydrated()) {
+ setPrefsHydrated(true)
+ return
+ }
+ return useJobDiscoveryPreferencesStore.persist.onFinishHydration(() => setPrefsHydrated(true))
+}, [])
+
+useEffect(() => {
+ if (!prefsHydrated || resumeRecInitRef.current) return
+
+ let payload: ResumeRecPayload | null = null
+ try {
+ const raw = typeof window !== 'undefined' ? sessionStorage.getItem('disha-resume-rec-payload') : null
+ if (raw) payload = JSON.parse(raw) as ResumeRecPayload
+ } catch {
+ payload = null
+ }
+
+ const store = useJobDiscoveryPreferencesStore.getState()
+ const prefs = store.resumeSkills.length > 0 || store.preferredRole.trim().length > 0
+ const shouldUsePayload = Boolean(payload && (payload.preferred_role?.trim() || (payload.skills && payload.skills.length)))
+
+ if (!shouldUsePayload && !prefs) return
+
+ resumeRecInitRef.current = true
+ setDidAttemptResumeFlowRec(true)
+
+ if (shouldUsePayload) {
+ void loadResumeRecommendationsPage(1, false, {
+ clearSessionOnSuccess: true,
+ seedFromPayload: payload,
+ })
+ return
+ }
+
+ void loadResumeRecommendationsPage(1, false)
+}, [prefsHydrated, loadResumeRecommendationsPage])
+
  const refreshSavedJobs = () => setSavedJobIds(loadSavedJobIds())
  const handleSaveToggleForJob = (jobId: string) => {
  toggleSavedJobId(jobId)
  refreshSavedJobs()
- }
-
- const fetchRecommendedJobs = async () => {
- try {
- setLoadingRecommended(true)
- const response = await apiClient.getStudentRecommendedJobs({
- limit: 6,
- page: 1,
- include_match_details: true,
- })
- setRecommendedJobs((response?.jobs || []) as Job[])
- } catch (error) {
- console.error('Failed to fetch recommended jobs:', error)
- setRecommendedJobs([])
- } finally {
- setLoadingRecommended(false)
- }
  }
 
  // Fetch student profile to get degree and branch
@@ -241,31 +413,6 @@ const fetchStudentProfile = async (): Promise<{ degree?: string; branch?: string
  setRecommendationReadinessScore(readiness.score)
  setShowImproveMatchesCta(!readiness.isReady)
 
- const locationParts = [
- profile.preferred_job_city,
- profile.preferred_job_district,
- profile.preferred_job_state,
- ].filter(Boolean)
- const topSkills = (profile.technical_skills ||'')
- .split(',')
- .map((s) => s.trim())
- .filter(Boolean)
- .slice(0, 2)
- const roleInterest = (profile.job_roles_of_interest ||'')
- .split(',')
- .map((s) => s.trim())
- .filter(Boolean)[0]
-
- const contextBits: string[] = []
- if (locationParts.length > 0) contextBits.push(`location: ${locationParts.join(',')}`)
- if (roleInterest) contextBits.push(`role interest: ${roleInterest}`)
- if (topSkills.length > 0) contextBits.push(`skills: ${topSkills.join(',')}`)
-
- if (contextBits.length > 0) {
- setRecommendationWhyText(`You're seeing these jobs based on your ${contextBits.join('•')}.`)
- } else {
- setRecommendationWhyText('You’re seeing these jobs based on your location, skills, and profile signals.')
- }
  return profileData
  } catch (error) {
  console.error('Failed to fetch student profile:', error)
@@ -1165,7 +1312,6 @@ const handleFilterChange = (key: string, value: string) => {
  preferred_job_remote: filters.remote_work ==='true',
  location_preferences: [filters.city_or_town, filters.district, filters.state].filter(Boolean).join(',') || undefined,
  })
- await fetchRecommendedJobs()
  toast.success('Saved as your recommendation location preference')
  } catch (error) {
  console.error('Failed to save location preference from filters:', error)
@@ -1309,7 +1455,6 @@ const hasValidationErrors = (obj: any): boolean => {
 const profileData = await fetchStudentProfile()
  // Pass profile data directly to fetchJobs to avoid timing issues
  await fetchJobs(1, {}, false, profileData)
- await fetchRecommendedJobs()
  checkApplicationStatus()
  fetchProfileCompletion()
  }
@@ -1633,59 +1778,146 @@ const statusFiltered = filterJobsByStatus(allFilteredJobs)
  </div>
 
  <div className={cn(jobsSurfaceClass,'mb-6 p-4 sm:p-5')}>
- <div className="mb-3 flex items-center justify-between">
+ <div className="mb-3 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
  <div>
- <p className="text-xs font-semibold uppercase tracking-[0.14em] text-primary">Smart Matches</p>
- <h2 className="font-display text-xl font-semibold text-foreground">Recommended Jobs</h2>
- <p className="text-sm text-muted-foreground">Based on your resume and preferred location</p>
+ <p className="text-xs font-semibold uppercase tracking-[0.14em] text-primary">Personalized</p>
+ <h2 className="font-display text-xl font-semibold text-foreground">Recommended for You</h2>
+ <p className="text-sm text-muted-foreground">Ranked from your resume skills, target role, and locations.</p>
  </div>
- <Button variant="outline"className="rounded-none-none"onClick={fetchRecommendedJobs} disabled={loadingRecommended}>
- {loadingRecommended ?'Refreshing...':'Refresh'}
+ <div className="flex flex-wrap gap-2">
+ <Button
+ type="button"
+ variant="outline"
+ className="rounded-none-none"
+ onClick={() => setPreferencesModalOpen(true)}
+ >
+ Edit preferences
  </Button>
  </div>
- <div className="mb-3 inline-flex items-center gap-2 rounded-none-none border px-3 py-2 text-xs text-muted-foreground">
- <Info className="h-3.5 w-3.5 text-primary"/>
- <span>{recommendationWhyText} AI recommendations improve as you complete your profile.</span>
  </div>
- {recommendedJobs.length === 0 ? (
- <p className="text-sm text-muted-foreground">
- Complete your profile/resume and set location preference in profile to get stronger AI matches.
+{!hasResumePrefs && !didAttemptResumeFlowRec ? (
+<div className="flex flex-col items-center px-4 py-12 text-center">
+<div className="mb-4 flex h-14 w-14 items-center justify-center rounded-none-none border border-border bg-muted/40">
+<Inbox className="h-7 w-7 text-muted-foreground" />
+</div>
+<h3 className="font-display text-lg font-semibold text-foreground">Set preferences to get recommendations</h3>
+<p className="mt-2 max-w-md text-sm text-muted-foreground">
+Add your preferred role and locations to get personalized matches.
+</p>
+<div className="mt-6 flex flex-wrap justify-center gap-2">
+<Button
+type="button"
+variant="gradient"
+className="rounded-none-none"
+onClick={() => setPreferencesModalOpen(true)}
+>
+Edit preferences
+</Button>
+<Button type="button" variant="outline" className="rounded-none-none" asChild>
+<a href="/dashboard/student/resume/ai">Edit resume (AI)</a>
+</Button>
+</div>
+</div>
+) : loadingResumeFlowJobs && resumeFlowJobs.length === 0 ? (
+ <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+ {[0, 1, 2].map((i) => (
+ <div
+ key={i}
+ className="flex h-[280px] animate-pulse flex-col rounded-none-none border border-border bg-muted/30"
+ >
+ <div className="h-24 border-b border-border bg-muted/50" />
+ <div className="flex-1 space-y-3 p-4">
+ <div className="h-3 w-2/3 bg-muted" />
+ <div className="h-3 w-1/2 bg-muted" />
+ <div className="h-20 bg-muted/80" />
+ </div>
+ </div>
+ ))}
+ </div>
+ ) : resumeFlowRecommendEmpty && !loadingResumeFlowJobs ? (
+ <div className="flex flex-col items-center px-4 py-12 text-center">
+ <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-none-none border border-border bg-muted/40">
+ <Inbox className="h-7 w-7 text-muted-foreground" />
+ </div>
+ <h3 className="font-display text-lg font-semibold text-foreground">No matching jobs found</h3>
+ <p className="mt-2 max-w-md text-sm text-muted-foreground">
+ Try broadening your role or locations, or update preferences from your AI resume flow.
  </p>
+ <div className="mt-6 flex flex-wrap justify-center gap-2">
+ <Button
+ type="button"
+ variant="gradient"
+ className="rounded-none-none"
+ onClick={() => setPreferencesModalOpen(true)}
+ >
+ Update preferences
+ </Button>
+ <Button type="button" variant="outline" className="rounded-none-none" asChild>
+ <a href="/dashboard/student/resume/ai">Edit resume (AI)</a>
+ </Button>
+ </div>
+ </div>
  ) : (
- <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
- {recommendedJobs.slice(0, 3).map((job) => (
- <div key={job.id} className="rounded-none-none border p-4">
- <div className="flex items-start justify-between gap-3">
- <div>
- <h3 className="font-semibold text-foreground">{job.title}</h3>
- <p className="text-xs text-muted-foreground">{job.corporate_name || job.company_name ||'Company'}</p>
- </div>
- <span className="text-xs font-semibold text-primary">
- {typeof job.match_score ==='number'? `${Math.round(job.match_score)}%` :'Match'}
- </span>
- </div>
- {(job.match_reasons || []).slice(0, 2).map((reason, idx) => (
- <p key={idx} className="mt-2 inline-flex items-center gap-1 text-xs text-muted-foreground">
- <Sparkles className="h-3.5 w-3.5 text-primary"/>
- {reason}
- </p>
+ <>
+ <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
+ {resumeFlowJobs.map((job, index) => (
+ <JobCard
+ key={job.id}
+ job={job}
+ cardIndex={index}
+ recommendationScorePct={typeof job.match_score === 'number' ? job.match_score : undefined}
+ matchedSkillsHighlight={job.matched_skills}
+ recommendationReasons={job.match_reasons}
+ onRecommendTrack={(action) => {
+ void apiClient.postJobRecommendationTrack({ job_id: job.id, action_type: action }).catch(() => {
+ /* non-blocking */
+ })
+ }}
+ onViewDescription={async () => {
+ setSelectedJob(job)
+ setLoadingJobDetails(true)
+ setCompleteJobData(null)
+ try {
+ const response = await apiClient.getJobById(job.id)
+ setCompleteJobData(response)
+ } catch (error) {
+ console.error('Failed to fetch complete job data:', error)
+ toast.error('Failed to load complete job details')
+ } finally {
+ setLoadingJobDetails(false)
+ }
+ }}
+ onApply={() => handleApplyClick(job)}
+ isApplying={applyingJobs.has(job.id)}
+ isSaved={savedJobIds.includes(job.id)}
+ onSaveToggle={() => handleSaveToggleForJob(job.id)}
+ />
  ))}
- <div className="mt-3 flex gap-2">
- <Button size="sm"variant="outline"className="rounded-none-none"onClick={() => setSelectedJob(job)}>
- View
+ </div>
+ {resumeRecTotal > resumeFlowJobs.length && (
+ <div className="mt-5 flex justify-center">
+ <Button
+ type="button"
+ variant="outline"
+ className="rounded-none-none"
+ disabled={loadingResumeFlowJobs}
+ onClick={() => void loadResumeRecommendationsPage(resumeRecPage + 1, true)}
+ >
+ {loadingResumeFlowJobs ? 'Loading…' : `Load more (${resumeFlowJobs.length} of ${resumeRecTotal})`}
  </Button>
- <Button size="sm"variant="gradient"className="rounded-none-none"onClick={() => handleApplyClick(job)}>
- Apply
- </Button>
  </div>
- </div>
- ))}
- </div>
+ )}
+ </>
  )}
  </div>
 
- {/* Main Content */}
+ {/* Main Content — all listings */}
  <div>
+ <div className="mb-4">
+ <p className="text-xs font-semibold uppercase tracking-[0.14em] text-primary">Directory</p>
+ <h2 className="font-display text-xl font-semibold text-foreground">All Jobs</h2>
+ <p className="text-sm text-muted-foreground">Search and filter every open role available to you.</p>
+ </div>
  {/* Results Summary */}
  <div className={cn(jobsSurfaceClass,'mb-6 p-4')}>
  <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
@@ -1938,6 +2170,14 @@ const response = await apiClient.getJobById(job.id)
  isApplying={applyingJobs.has(currentApplicationJob.id)}
  />
  )}
+
+ <JobDiscoveryPreferencesModal
+ open={preferencesModalOpen}
+ onOpenChange={setPreferencesModalOpen}
+ onSaved={() =>
+ void loadResumeRecommendationsPage(1, false, { preferQuietRefresh: true })
+ }
+ />
  </StudentDashboardLayout>
  )
 }

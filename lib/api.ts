@@ -208,6 +208,57 @@ class ApiClient {
   return response.data;
   }
 
+  /** POST /jobs/recommend — resume-flow personalized ranking (student auth). */
+  async postJobRecommendations(
+  body: {
+ skills: string[];
+  preferred_role: string;
+  locations: string[];
+  preferredRole?: string;
+  page?: number;
+  limit?: number;
+  },
+  params?: { page?: number; limit?: number }
+  ): Promise<{
+ jobs: any[];
+  total_count?: number;
+  page?: number;
+  limit?: number;
+  total_pages?: number;
+  }> {
+  const payload = {
+  skills: Array.isArray(body?.skills)
+  ? body.skills.filter((s): s is string => typeof s === 'string').map((s) => s.trim()).filter(Boolean)
+  : [],
+  preferred_role:
+  typeof body?.preferred_role === 'string'
+  ? body.preferred_role.trim()
+  : typeof body?.preferredRole === 'string'
+  ? body.preferredRole.trim()
+  : '',
+  locations: Array.isArray(body?.locations)
+  ? body.locations.filter((l): l is string => typeof l === 'string').map((l) => l.trim()).filter(Boolean)
+  : [],
+  page: body?.page,
+  limit: body?.limit,
+  };
+  const hasToken = Boolean(localStorage.getItem('access_token'));
+  if (!hasToken) {
+  console.warn('[recommend] missing Authorization token before API call');
+  }
+  const response: AxiosResponse = await this.client.post('/jobs/recommend', payload, { params });
+  return response.data;
+  }
+
+  /** POST /jobs/recommend/track — behavioral signal for adaptive recommendations (student auth). */
+  async postJobRecommendationTrack(body: {
+    job_id: string;
+    action_type: 'view' | 'click' | 'apply';
+  }): Promise<{ success?: boolean }> {
+    const response: AxiosResponse = await this.client.post('/jobs/recommend/track', body);
+    return response.data;
+  }
+
   async getStudentApplications(params: {
   status?: string;
   search?: string;

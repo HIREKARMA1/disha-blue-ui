@@ -108,13 +108,13 @@ function StudentDashboardContent({ children }: StudentDashboardLayoutProps) {
  <DashboardStats />
  <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
  <Link
- href="/dashboard/student/jobs"className="dashboard-overview-card-interactive p-5">
+ href="/dashboard/discover-jobs"className="dashboard-overview-card-interactive p-5">
  <p className="text-xs font-semibold uppercase tracking-wide text-sage-deep">Discover</p>
  <p className="mt-2 font-display text-lg font-semibold text-slate-900">Jobs near you</p>
  <p className="mt-1 text-sm text-slate-600">AI-ranked local openings</p>
  </Link>
  <Link
- href="/dashboard/student/jobs?saved=1"className="dashboard-overview-card-interactive p-5">
+ href="/dashboard/discover-jobs?saved=1"className="dashboard-overview-card-interactive p-5">
  <p className="text-xs font-semibold uppercase tracking-wide text-sage-deep">Saved</p>
  <p className="mt-2 font-display text-lg font-semibold text-slate-900">Shortlisted jobs</p>
  <p className="mt-1 text-sm text-slate-600">Keep priority roles together</p>
