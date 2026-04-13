@@ -1,5 +1,6 @@
 "use client"
 
+import { useState, useRef } from 'react'
 import { motion } from 'framer-motion'
 import {
  MapPin,
@@ -12,6 +13,7 @@ import {
  Calendar,
  X,
  Bookmark,
+ ChevronDown,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
@@ -65,6 +67,8 @@ interface Job {
  ctc_after_probation?: string
  onsite_office?: boolean
  mode_of_work?: string
+ /** Template explanation from POST /jobs/recommend */
+ recommendation_explanation?: string
 }
 
 interface JobCardProps {
@@ -78,6 +82,14 @@ interface JobCardProps {
  /** Local / client-side bookmark (optional) */
  isSaved?: boolean
  onSaveToggle?: () => void
+ /** Resume-flow: matched skill labels → highlight pills */
+ matchedSkillsHighlight?: string[]
+ /** Short explainability lines (1–2 shown) */
+ recommendationReasons?: string[]
+ /** 0–100 — shows green % badge when set */
+ recommendationScorePct?: number
+ /** When set (e.g. resume-flow cards), fires once per action for adaptive ranking */
+ onRecommendTrack?: (action: 'view' | 'click' | 'apply') => void
 }
 
 export function JobCard({
@@ -90,7 +102,23 @@ export function JobCard({
  matchScore,
  isSaved = false,
  onSaveToggle,
+ matchedSkillsHighlight,
+ recommendationReasons,
+ recommendationScorePct,
+ onRecommendTrack,
 }: JobCardProps) {
+ const [whyThisJobOpen, setWhyThisJobOpen] = useState(false)
+ const whyViewTracked = useRef(false)
+ const highlightNorm = new Set(
+ (matchedSkillsHighlight || []).map((s) => s.toLowerCase().trim()).filter(Boolean)
+ )
+ const isSkillHighlighted = (skillText: string) => {
+ const t = skillText.toLowerCase().trim()
+ if (highlightNorm.has(t)) return true
+ return Array.from(highlightNorm).some(
+ (h) => h && (t.includes(h) || h.includes(t))
+ )
+ }
  const formatStructuredLocation = () => {
  const parts = [job.village_or_locality, job.city_or_town, job.district, job.state].filter(Boolean)
  if (parts.length > 0) return parts.join(',')
@@ -267,7 +295,13 @@ export function JobCard({
  <h3 className="font-display text-lg font-semibold leading-snug tracking-tight text-foreground transition-colors group-hover:text-primary">
  {typeof job.title ==='string'? job.title : String(job.title ||'')}
  </h3>
- <div className="flex shrink-0 items-center gap-1">
+ <div className="flex shrink-0 flex-col items-end gap-1">
+ {recommendationScorePct !== undefined && (
+ <span className="rounded-none border border-emerald-600/50 bg-emerald-500/15 px-2 py-0.5 text-xs font-bold text-emerald-700 dark:text-emerald-400">
+ {Math.round(recommendationScorePct)}% Match
+ </span>
+ )}
+ <div className="flex items-center gap-1">
  {onSaveToggle && (
  <button
  type="button"onClick={(e) => {
@@ -283,6 +317,7 @@ export function JobCard({
  <Bookmark className={cn('h-4 w-4', isSaved &&'fill-current')} />
  </button>
  )}
+ </div>
  </div>
  </div>
  {employerName ? (
@@ -339,21 +374,82 @@ export function JobCard({
 
  {job.skills_required && Array.isArray(job.skills_required) && job.skills_required.length > 0 && (
  <div className="mt-4 flex flex-wrap gap-1.5">
- {job.skills_required.slice(0, 4).map((skill, index) => {
+ {(matchedSkillsHighlight && matchedSkillsHighlight.length > 0
+ ? job.skills_required : job.skills_required.slice(0, 4)
+ ).map((skill, index) => {
  const skillText = typeof skill ==='string'? skill : String(skill ||'')
+ const hi = matchedSkillsHighlight && matchedSkillsHighlight.length > 0 && isSkillHighlighted(skillText)
  return (
  <span
  key={index}
- className="rounded-none-none border px-2 py-0.5 text-[11px] font-medium">
+ className={cn(
+ 'rounded-none-none border px-2 py-0.5 text-[11px] font-medium',
+ hi
+ ? 'border-emerald-600/60 bg-emerald-500/10 text-emerald-800 dark:text-emerald-300'
+ : 'border-border',
+ )}
+ >
  {skillText}
  </span>
  )
  })}
- {job.skills_required.length > 4 && (
+ {!matchedSkillsHighlight?.length && job.skills_required.length > 4 && (
  <span className="rounded-none-none border border-dashed border-border px-2 py-0.5 text-[11px] text-muted-foreground">
  +{job.skills_required.length - 4}
  </span>
  )}
+ </div>
+ )}
+
+ {recommendationReasons && recommendationReasons.length > 0 && (
+ <ul className="mt-3 space-y-1 border-l-2 border-emerald-600/50 pl-3">
+ {recommendationReasons.slice(0, 2).map((line, i) => (
+ <li key={i} className="text-xs leading-snug text-muted-foreground">
+ <span className="mr-1 inline-block h-1.5 w-1.5 translate-y-px rounded-full bg-emerald-600 dark:bg-emerald-400" />
+ {line}
+ </li>
+ ))}
+ </ul>
+ )}
+
+ {job.recommendation_explanation && job.recommendation_explanation.trim().length > 0 && (
+ <div className="mt-3">
+ <button
+ type="button"
+ onClick={() => {
+ setWhyThisJobOpen((prev) => {
+ const next = !prev
+ if (next && onRecommendTrack && !whyViewTracked.current) {
+ whyViewTracked.current = true
+ onRecommendTrack('view')
+ }
+ return next
+ })
+ }}
+ className={cn(
+ 'flex w-full items-center justify-between gap-2 rounded-none-none border border-border bg-muted/30 px-3 py-2 text-left text-xs font-semibold text-foreground transition-colors hover:bg-muted/50',
+ )}
+ aria-expanded={whyThisJobOpen}
+ >
+ <span>Why this job?</span>
+ <ChevronDown
+ className={cn('h-4 w-4 shrink-0 text-muted-foreground transition-transform duration-200', whyThisJobOpen && 'rotate-180')}
+ />
+ </button>
+ <motion.div
+ initial={false}
+ animate={
+ whyThisJobOpen
+ ? { height: 'auto', opacity: 1 }
+ : { height: 0, opacity: 0 }
+ }
+ transition={{ duration: 0.28, ease: [0.33, 1, 0.68, 1] }}
+ className="overflow-hidden"
+ >
+ <p className="border-x border-b border-border bg-muted/20 px-3 py-3 text-sm leading-relaxed text-muted-foreground">
+ {job.recommendation_explanation}
+ </p>
+ </motion.div>
  </div>
  )}
 
@@ -398,12 +494,20 @@ export function JobCard({
 
  <div className="mt-4 flex gap-2">
  <Button
- type="button"onClick={onViewDescription}
+ type="button"
+ onClick={() => {
+ onRecommendTrack?.('click')
+ onViewDescription()
+ }}
  variant="outline"className="h-10 flex-1 rounded-none-none font-semibold">
  View role
  </Button>
  <Button
- type="button"onClick={onApply}
+ type="button"
+ onClick={() => {
+ onRecommendTrack?.('apply')
+ onApply()
+ }}
  disabled={!canApply() || isApplying}
  variant="gradient"className="h-10 flex-1 rounded-none-none font-semibold shadow-md shadow-primary/15">
  {isApplying ? (

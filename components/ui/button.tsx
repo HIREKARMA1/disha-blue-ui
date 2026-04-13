@@ -3,6 +3,21 @@ import { Slot } from "@radix-ui/react-slot"
 import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
+/** Radix Slot requires exactly one element; ignore whitespace-only JSX text nodes between tags. */
+function getSingleComposableChild(children: React.ReactNode): React.ReactElement | null {
+  const filtered = React.Children.toArray(children).filter((child) => {
+    if (typeof child === "string" || typeof child === "number") {
+      return String(child).trim() !== ""
+    }
+    return child != null
+  })
+  if (filtered.length !== 1) return null
+  const only = filtered[0]
+  if (!React.isValidElement(only)) return null
+  if (only.type === React.Fragment) return null
+  return only
+}
+
 const buttonVariants = cva(
   "inline-flex items-center justify-center whitespace-nowrap rounded-full text-sm font-semibold shadow-soft ring-offset-background transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
   {
@@ -48,15 +63,28 @@ export interface ButtonProps
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant, size, asChild = false, loading = false, disabled, children, ...props }, ref) => {
-  const canUseSlot = asChild && React.Children.count(children) === 1 && React.isValidElement(children)
-  const Comp = canUseSlot ? Slot : "button"
-  const shouldShowLoader = loading && !canUseSlot
+  const slotChild = asChild ? getSingleComposableChild(children) : null
+  const canUseSlot = Boolean(slotChild)
 
-  return (
-  <Comp
+  if (canUseSlot && slotChild) {
+ return (
+  <Slot
   className={cn(buttonVariants({ variant, size, className }))}
   ref={ref}
-  disabled={!canUseSlot ? disabled || loading : undefined}
+  {...props}
+  >
+  {slotChild}
+  </Slot>
+  )
+  }
+
+  const shouldShowLoader = Boolean(loading)
+
+  return (
+  <button
+  className={cn(buttonVariants({ variant, size, className }))}
+  ref={ref}
+  disabled={disabled || loading}
   {...props}
   >
   {shouldShowLoader && (
@@ -82,7 +110,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   </svg>
   )}
   {children}
-  </Comp>
+  </button>
   )
   }
 )

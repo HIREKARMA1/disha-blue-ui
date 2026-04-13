@@ -25,6 +25,7 @@ import { useLocale } from "@/contexts/LocaleContext"
 import { t } from "@/lib/i18n"
 import { useProfile } from "@/hooks/useProfile"
 import { ExecutiveResumePreview } from "./ResumePreview"
+import { PostResumePreferences } from "./PostResumePreferences"
 
 interface SpeechRecognitionResultItem {
   transcript: string
@@ -437,6 +438,9 @@ export function AIResumeBuilderPage() {
   <FileText className="h-4 w-4" />
   {t(locale, "resumeAI.downloadPdf")}
   </button>
+  </div>
+  <div data-hide-on-print className="mt-4">
+  <PostResumePreferences resume={resumeData} />
   </div>
   </div>
   ) : (

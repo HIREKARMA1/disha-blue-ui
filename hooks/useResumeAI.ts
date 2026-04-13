@@ -51,6 +51,8 @@ export interface FullResumeSchema {
   projects: ResumeProjectItem[]
   certifications: string[]
   location_preferences?: string
+  /** Target role from AI or user; optional */
+  preferred_role?: string | null
 }
 
 const emptyResume: FullResumeSchema = {
@@ -69,6 +71,7 @@ const emptyResume: FullResumeSchema = {
   skills: [],
   projects: [],
   certifications: [],
+  preferred_role: null,
 }
 
 type SupportedLocale = "en" | "hi" | "or"
