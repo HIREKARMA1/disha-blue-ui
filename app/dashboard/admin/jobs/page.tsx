@@ -337,7 +337,7 @@ const paginatedJobs = filteredJobs.slice(
  <SelectTrigger>
  <SelectValue placeholder="All Status"/>
  </SelectTrigger>
- <SelectContent sideOffset={4} className="z-[60] w-[var(--radix-select-trigger-width)] max-h-[var(--radix-select-content-available-height)]">
+ <SelectContent sideOffset={4} className="w-[var(--radix-select-trigger-width)] max-h-[var(--radix-select-content-available-height)]">
  <SelectItem value="all">All Status</SelectItem>
  <SelectItem value="active">Active</SelectItem>
  <SelectItem value="inactive">Inactive</SelectItem>
@@ -355,7 +355,7 @@ const paginatedJobs = filteredJobs.slice(
  <SelectTrigger>
  <SelectValue placeholder="All Types"/>
  </SelectTrigger>
- <SelectContent sideOffset={4} className="z-[60] w-[var(--radix-select-trigger-width)] max-h-[var(--radix-select-content-available-height)]">
+ <SelectContent sideOffset={4} className="w-[var(--radix-select-trigger-width)] max-h-[var(--radix-select-content-available-height)]">
  <SelectItem value="all">All Types</SelectItem>
  <SelectItem value="full_time">Full Time</SelectItem>
  <SelectItem value="part_time">Part Time</SelectItem>

@@ -605,7 +605,7 @@ const jobData: any = {
  <label className="block text-sm font-medium text-gray-700 mb-2">
  Job Type *
  </label>
- <Select value={formData.job_type} onValueChange={(value) => handleInputChange('job_type', value)}>
+ <Select value={formData.job_type || undefined} onValueChange={(value) => handleInputChange('job_type', value)}>
  <SelectTrigger className={validationErrors.job_type ?"border-red-500":""}>
  <SelectValue placeholder={validationErrors.job_type ||"Select job type"} />
  </SelectTrigger>
@@ -669,7 +669,7 @@ const jobData: any = {
  <label className="block text-sm font-medium text-gray-700 mb-2">
  Job Status *
  </label>
- <Select value={formData.status} onValueChange={(value) => handleInputChange('status', value)}>
+ <Select value={formData.status || undefined} onValueChange={(value) => handleInputChange('status', value)}>
  <SelectTrigger>
  <SelectValue placeholder="Select job status"/>
  </SelectTrigger>
@@ -733,7 +733,7 @@ const jobData: any = {
  <label className="block text-sm font-medium text-gray-700 mb-2">
  Industry
  </label>
- <Select value={formData.industry} onValueChange={(value) => handleInputChange('industry', value)}>
+ <Select value={formData.industry || undefined} onValueChange={(value) => handleInputChange('industry', value)}>
  <SelectTrigger>
  <SelectValue placeholder="Select industry"/>
  </SelectTrigger>
@@ -789,7 +789,7 @@ const jobData: any = {
  <label className="block text-sm font-medium text-gray-700 mb-2">
  Company Size
  </label>
- <Select value={formData.company_size} onValueChange={(value) => handleInputChange('company_size', value)}>
+ <Select value={formData.company_size || undefined} onValueChange={(value) => handleInputChange('company_size', value)}>
  <SelectTrigger>
  <SelectValue placeholder="Select company size"/>
  </SelectTrigger>
@@ -810,7 +810,7 @@ const jobData: any = {
  <label className="block text-sm font-medium text-gray-700 mb-2">
  Company Type
  </label>
- <Select value={formData.company_type} onValueChange={(value) => handleInputChange('company_type', value)}>
+ <Select value={formData.company_type || undefined} onValueChange={(value) => handleInputChange('company_type', value)}>
  <SelectTrigger>
  <SelectValue placeholder="Select company type"/>
  </SelectTrigger>
@@ -917,7 +917,7 @@ const jobData: any = {
  <label className="block text-sm font-medium text-gray-700 mb-2">
  Industry
  </label>
- <Select value={formData.industry} onValueChange={(value) => handleInputChange('industry', value)}>
+ <Select value={formData.industry || undefined} onValueChange={(value) => handleInputChange('industry', value)}>
  <SelectTrigger>
  <SelectValue placeholder="Select industry"/>
  </SelectTrigger>
@@ -1011,7 +1011,7 @@ const jobData: any = {
  <label className="block text-sm font-medium text-gray-700 mb-2">
  Currency
  </label>
- <Select value={formData.salary_currency} onValueChange={(value) => handleInputChange('salary_currency', value)}>
+ <Select value={formData.salary_currency || undefined} onValueChange={(value) => handleInputChange('salary_currency', value)}>
  <SelectTrigger>
  <SelectValue />
  </SelectTrigger>

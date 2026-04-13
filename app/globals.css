@@ -128,9 +128,10 @@ body.hide-sidebar .main-navbar {
     overflow-y: scroll; /* Always show vertical scrollbar */
   }
   
-  /* Ensure dropdowns don't cause layout shifts */
+  /* Radix portaled layers: must stack above dashboard modals (z-100+), corporate chrome, and navbar (z-50).
+     These rules use !important (legacy), which overrides inline/Tailwind z-index—60 was too low and hid menus behind modals. */
   [data-radix-popper-content-wrapper] {
-    z-index: 60 !important;
+    z-index: 10050 !important;
   }
   
   /* Prevent layout shifts from dropdowns */
@@ -138,10 +139,10 @@ body.hide-sidebar .main-navbar {
     overflow-x: hidden; /* Prevent horizontal scrollbar */
   }
   
-  /* Fix for Radix UI Select components */
   [data-radix-select-content] {
     position: fixed !important;
-    z-index: 60 !important;
+    z-index: 10050 !important;
+    transform: translateZ(0);
   }
   
   /* Ensure consistent layout */
@@ -165,13 +166,6 @@ body.hide-sidebar .main-navbar {
     width: 100% !important;
     max-width: 100% !important;
     min-width: 100% !important;
-  }
-  
-  /* Prevent dropdowns from affecting layout */
-  [data-radix-select-content] {
-    position: fixed !important;
-    z-index: 60 !important;
-    transform: translateZ(0); /* Force hardware acceleration */
   }
   
   /* Ensure body doesn't change width */
