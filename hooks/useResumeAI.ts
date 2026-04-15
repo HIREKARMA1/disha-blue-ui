@@ -234,6 +234,7 @@ export function useResumeAI() {
   const [errorSuggestions, setErrorSuggestions] = useState<string[]>([])
   const [generationMetadata, setGenerationMetadata] = useState<GenerateResumeResult["metadata"] | null>(null)
   const [saveError, setSaveError] = useState<string | null>(null)
+  const [resumeGenerated, setResumeGenerated] = useState(false)
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
   const resumeData = resumeState.structured || emptyResume
   const textResume = resumeState.text || ""
@@ -294,9 +295,21 @@ export function useResumeAI() {
 
   const applyResumeResponse = (payload: GenerateResumeResult) => {
   const resumeText = payload?.resume_text || ""
-  const structured =
-  payload?.structured_data ||
-  parseTextIntoStructuredResume(resumeText)
+  const structuredFromApi = payload?.structured_data || null
+  if (structuredFromApi) {
+  if (!structuredFromApi.personal_info?.name?.trim() || structuredFromApi.personal_info.name === "Not specified") {
+  structuredFromApi.personal_info.name = "Candidate Name"
+  }
+  setResumeState({
+  type: "structured",
+  structured: structuredFromApi,
+  text: resumeText || null,
+  })
+  setResumeGenerated(true)
+  console.log("RESUME STATE UPDATED:", structuredFromApi)
+  return structuredFromApi
+  }
+  const structured = parseTextIntoStructuredResume(resumeText)
   const hasStructured = Boolean(
   structured?.personal_info?.name?.trim() ||
   structured?.personal_info?.summary?.trim() ||
@@ -313,17 +326,19 @@ export function useResumeAI() {
   structured: null,
   text: resumeText,
   })
+  setResumeGenerated(false)
   return emptyResume
   }
   if (!structured?.personal_info?.name?.trim() || structured.personal_info.name === "Not specified") {
   structured.personal_info.name = "Candidate Name"
   }
-  setResumeState({ type: null, structured: null, text: null })
   setResumeState({
   type: "structured",
   structured,
   text: resumeText || null,
   })
+  setResumeGenerated(true)
+  console.log("RESUME STATE UPDATED:", structured)
   return structured
   }
 
@@ -483,6 +498,7 @@ export function useResumeAI() {
   generationMetadata,
   textResume,
   saveError,
+  resumeGenerated,
   generateResume,
   saveToProfile,
   }

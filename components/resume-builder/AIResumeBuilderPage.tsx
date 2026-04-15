@@ -31,10 +31,13 @@ import { PostResumePreferences } from "./PostResumePreferences"
 
 interface SpeechRecognitionResultItem {
   transcript: string
+  confidence?: number
 }
 
 interface SpeechRecognitionResultLike {
   [index: number]: SpeechRecognitionResultItem
+  isFinal?: boolean
+  length?: number
 }
 
 interface SpeechRecognitionEventLike {
@@ -43,7 +46,9 @@ interface SpeechRecognitionEventLike {
 
 interface SpeechRecognitionLike {
   lang: string
+  continuous?: boolean
   interimResults: boolean
+  maxAlternatives?: number
   onresult: ((event: SpeechRecognitionEventLike) => void) | null
   onend: (() => void) | null
   onerror?: ((event: { error?: string }) => void) | null
@@ -65,6 +70,7 @@ declare global {
 const mkId = () => `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`
 const VOICE_SILENCE_MS = 2000
 const MIN_RESUME_INPUT_LEN = 10
+const MIN_AUDIO_BLOB_BYTES = 1000
 const ODIA_MISRECOGNITIONS = ["mona", "new", "naa"]
 
 interface LocalChatMessage {
@@ -73,6 +79,54 @@ interface LocalChatMessage {
   content: string
 }
 type VoicePhase = "idle" | "listening" | "processing" | "completed"
+type VoiceSource = "BACKEND_STT" | "BUFFERED_AUDIO"
+type VoiceMode = "BACKEND_ONLY" | "BACKEND_FALLBACK"
+type RecognitionState = "idle" | "listening" | "error" | "restarting"
+type ConfidenceHint = "low" | "medium" | "high"
+
+interface TranscriptMeta {
+  text: string
+  source: VoiceSource
+  confidence?: number
+}
+
+interface VoiceIntelligenceState {
+  liveSTTActive: boolean
+  backendSTTActive: boolean
+  currentMode: VoiceMode
+  recognitionState: RecognitionState
+  lastError: string
+  interimTranscriptLength: number
+  finalTranscriptLength: number
+  confidenceHint: ConfidenceHint
+}
+
+interface STTHealthStatus {
+  google_stt: "available" | "missing" | "misconfigured"
+  whisper_local: "available" | "missing"
+  openai: "available" | "quota_exceeded"
+  overall_status: "READY" | "DEGRADED" | "UNAVAILABLE"
+  recommended_provider: "google" | "whisper" | "none"
+  message: string
+}
+
+type VoiceAnalyticsProvider = "google" | "whisper" | "openai" | "cache"
+type VoiceAnalyticsStatus = "success" | "failure" | "fallback"
+
+interface VoiceAnalyticsEvent {
+  event: string
+  provider: VoiceAnalyticsProvider
+  status: VoiceAnalyticsStatus
+  error_type: string
+  fallback_used: boolean
+  language_mode: "odia"
+  audio_size: number
+  latency_ms: number
+  cost_estimate: number
+  transcript_length: number
+  session_id: string
+  timestamp: number
+}
 interface ExtractedInputPreview {
   name: string
   skills: string[]
@@ -137,7 +191,7 @@ const isValidResumeInput = (text: string): boolean => {
 export function AIResumeBuilderPage() {
   const { locale } = useLocale()
   const { profile } = useProfile()
-  const { resumeState, resumeData, setResumeData, generateResume, generationMetadata, textResume, isGenerating, isSaving, statusMessage, error, errorSuggestions, saveToProfile } = useResumeAI()
+  const { resumeState, resumeData, setResumeData, generateResume, generationMetadata, textResume, isGenerating, isSaving, statusMessage, error, errorSuggestions, saveToProfile, resumeGenerated } = useResumeAI()
   const [messages, setMessages] = useState<LocalChatMessage[]>([])
   const [attachments, setAttachments] = useState<Array<{ id: string; file: File; name: string }>>([])
   const [inputValue, setInputValue] = useState("")
@@ -147,7 +201,18 @@ export function AIResumeBuilderPage() {
   const [voiceErrorHint, setVoiceErrorHint] = useState("")
   const [voicePhase, setVoicePhase] = useState<VoicePhase>("idle")
   const [liveTranscript, setLiveTranscript] = useState("")
-  const [useHindiVoiceFallback, setUseHindiVoiceFallback] = useState(true)
+  const [latestTranscriptMeta, setLatestTranscriptMeta] = useState<TranscriptMeta | null>(null)
+  const [sttHealth, setSttHealth] = useState<STTHealthStatus | null>(null)
+  const [voiceIntelState, setVoiceIntelState] = useState<VoiceIntelligenceState>({
+    liveSTTActive: false,
+    backendSTTActive: false,
+    currentMode: "BACKEND_ONLY",
+    recognitionState: "idle",
+    lastError: "",
+    interimTranscriptLength: 0,
+    finalTranscriptLength: 0,
+    confidenceHint: "low",
+  })
   const [placeholderIndex, setPlaceholderIndex] = useState(0)
   const [pendingConfirmation, setPendingConfirmation] = useState<PendingConfirmation | null>(null)
   const [resumeVersions, setResumeVersions] = useState<FullResumeSchema[]>([])
@@ -161,14 +226,17 @@ export function AIResumeBuilderPage() {
   const [quickEditOpen, setQuickEditOpen] = useState(false)
   const [quickEditDraft, setQuickEditDraft] = useState<FullResumeSchema | null>(null)
   const recognitionRef = useRef<SpeechRecognitionLike | null>(null)
+  const recordingActiveRef = useRef(false)
+  const lastLiveTranscriptRef = useRef("")
+  const restartWindowRef = useRef<number[]>([])
   const mediaRecorderRef = useRef<MediaRecorder | null>(null)
   const mediaStreamRef = useRef<MediaStream | null>(null)
   const mediaChunksRef = useRef<BlobPart[]>([])
   const printRef = useRef<HTMLDivElement>(null)
   const voiceTranscriptRef = useRef("")
+  const voiceSessionIdRef = useRef(`voice-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`)
   const silenceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const manualStopRef = useRef(false)
-  const odiaFallbackTriedRef = useRef(false)
   const odiaStrictRetryTriedRef = useRef(false)
   const romanizedOdiaDetectedRef = useRef(false)
   const voiceStatusTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
@@ -202,7 +270,16 @@ export function AIResumeBuilderPage() {
     return sections
   }, [textResume])
 
-  const hasResume = resumeState.type === "structured" || resumeState.type === "text"
+  const hasStructuredResume = resumeState.structured != null
+  const hasResume = hasStructuredResume || resumeGenerated || resumeState.type === "text"
+  const recognitionIndicator =
+    voiceIntelState.recognitionState === "listening"
+      ? "🟢 Listening"
+      : voiceIntelState.recognitionState === "restarting"
+      ? "🟡 Reconnecting"
+      : voiceIntelState.recognitionState === "error"
+      ? "🔴 Error"
+      : "⚪ Idle"
   const currentPlaceholder = guidedPlaceholders[placeholderIndex % guidedPlaceholders.length]
   const previousResume = resumeVersions.length > 1 ? resumeVersions[resumeVersions.length - 2] : null
   const currentResume = resumeVersions.length > 0 ? resumeVersions[resumeVersions.length - 1] : null
@@ -232,6 +309,81 @@ export function AIResumeBuilderPage() {
   useEffect(() => {
     return () => {
       stopMediaStream()
+    }
+  }, [])
+
+  useEffect(() => {
+    let pollId: number | null = null
+    const scheduleNext = (status?: STTHealthStatus | null) => {
+      const intervalMs =
+        status?.overall_status === "READY"
+          ? 20000
+          : 10000
+      pollId = window.setTimeout(() => {
+        void fetchSTTHealth()
+      }, intervalMs)
+    }
+    const fetchSTTHealth = async () => {
+      try {
+        const response = await apiClient.client.get<STTHealthStatus>("/resume/stt-health")
+        setSttHealth((prev) => {
+          const next = response.data
+          if (prev && prev.recommended_provider !== next.recommended_provider) {
+            void emitVoiceAnalytics({
+              event: "provider_switch",
+              provider:
+                next.recommended_provider === "google"
+                  ? "google"
+                  : next.recommended_provider === "whisper"
+                  ? "whisper"
+                  : "cache",
+              status: "fallback",
+              error_type: `provider_switch_${prev.recommended_provider}_to_${next.recommended_provider}`,
+              fallback_used: next.recommended_provider !== "google",
+              language_mode: "odia",
+              audio_size: 0,
+              latency_ms: 0,
+              cost_estimate: 0,
+              transcript_length: 0,
+              session_id: voiceSessionIdRef.current,
+              timestamp: Date.now(),
+            })
+            if (next.recommended_provider === "whisper") {
+              setVoiceStatus("Switching to backup voice engine...")
+            }
+          }
+          if (prev && prev.overall_status !== next.overall_status) {
+            if (next.overall_status !== "READY") {
+              setVoiceStatus("Voice temporarily unavailable")
+              setVoiceErrorHint(next.message || "Voice transcription services are temporarily unavailable.")
+              setIsRecording(false)
+            } else {
+              setVoiceErrorHint("")
+              setVoiceStatus("Voice services restored")
+            }
+          }
+          return next
+        })
+        scheduleNext(response.data)
+      } catch {
+        const unavailablePayload: STTHealthStatus = {
+          google_stt: "missing",
+          whisper_local: "missing",
+          openai: "quota_exceeded",
+          overall_status: "UNAVAILABLE",
+          recommended_provider: "none",
+          message: "Voice transcription services are not configured. Please enable Google STT or install Whisper.",
+        }
+        setSttHealth(unavailablePayload)
+        setVoiceStatus("Voice temporarily unavailable")
+        setVoiceErrorHint(unavailablePayload.message)
+        setIsRecording(false)
+        scheduleNext(unavailablePayload)
+      }
+    }
+    void fetchSTTHealth()
+    return () => {
+      if (pollId) window.clearTimeout(pollId)
     }
   }, [])
 
@@ -340,6 +492,72 @@ export function AIResumeBuilderPage() {
     }
   }
 
+  const setRecordingActive = (active: boolean) => {
+    recordingActiveRef.current = active
+    setIsRecording(active)
+  }
+
+  const emitVoiceTelemetry = (event: string, details: Record<string, unknown> = {}) => {
+    const payload = {
+      event,
+      timestamp: new Date().toISOString(),
+      state: voiceIntelState.recognitionState,
+      ...details,
+    }
+    console.log("[voice-telemetry]", payload)
+  }
+
+  const updateVoiceIntel = (patch: Partial<VoiceIntelligenceState>) => {
+    setVoiceIntelState((prev) => ({ ...prev, ...patch }))
+  }
+
+  const estimateVoiceCost = (provider: VoiceAnalyticsProvider, audioSize: number) => {
+    const seconds = Math.max(audioSize, 0) / 32000
+    if (provider === "google") return Number(((seconds / 15) * 0.006).toFixed(6))
+    if (provider === "openai") return Number(((seconds / 60) * 0.006).toFixed(6))
+    return 0
+  }
+
+  const emitVoiceAnalytics = async (event: VoiceAnalyticsEvent) => {
+    try {
+      await apiClient.client.post("/voice/analytics", { events: [event] })
+    } catch {
+      // Analytics must never block voice UX.
+    }
+  }
+
+  const setTranscriptWithMeta = (meta: TranscriptMeta) => {
+    const text = (meta.text || "").trim()
+    if (!text) return
+    voiceTranscriptRef.current = text
+    lastLiveTranscriptRef.current = text
+    setLiveTranscript(text)
+    setTranscript(text)
+    setLatestTranscriptMeta(meta)
+    updateVoiceIntel({
+      confidenceHint: (meta.confidence || 0) >= 0.8 ? "high" : (meta.confidence || 0) >= 0.5 ? "medium" : "low",
+      finalTranscriptLength: text.length,
+      currentMode: meta.source === "BACKEND_STT" ? "BACKEND_FALLBACK" : "BACKEND_ONLY",
+    })
+  }
+
+  const canRestartRecognition = () => {
+    const now = Date.now()
+    restartWindowRef.current = restartWindowRef.current.filter((ts) => now - ts <= 10_000)
+    restartWindowRef.current.push(now)
+    if (restartWindowRef.current.length > 5) {
+      updateVoiceIntel({
+        currentMode: "BACKEND_FALLBACK",
+        recognitionState: "error",
+        liveSTTActive: false,
+        lastError: "restart_limit_exceeded",
+      })
+      emitVoiceTelemetry("recognition_restart_limit_exceeded", { attemptsIn10s: restartWindowRef.current.length })
+      return false
+    }
+    return true
+  }
+
   const stopMediaStream = () => {
     if (mediaStreamRef.current) {
       mediaStreamRef.current.getTracks().forEach((track) => track.stop())
@@ -361,9 +579,16 @@ export function AIResumeBuilderPage() {
   const scheduleSilenceStop = () => {
     clearSilenceTimer()
     silenceTimerRef.current = setTimeout(() => {
-      recognitionRef.current?.stop()
-      setVoicePhase("processing")
-      setVoiceStatus("Processing voice input...")
+      if (mediaRecorderRef.current && mediaRecorderRef.current.state === "recording") {
+        try {
+          mediaRecorderRef.current.requestData()
+        } catch {
+          // ignore requestData errors
+        }
+        mediaRecorderRef.current.stop()
+        setVoicePhase("processing")
+        setVoiceStatus("Processing voice input...")
+      }
     }, VOICE_SILENCE_MS)
   }
 
@@ -462,9 +687,15 @@ export function AIResumeBuilderPage() {
     }
   }
 
+  const getRecorderMimeType = (): string | undefined => {
+    if (typeof MediaRecorder === "undefined" || typeof MediaRecorder.isTypeSupported !== "function") return undefined
+    const candidates = ["audio/webm;codecs=opus", "audio/webm", "audio/ogg;codecs=opus"]
+    return candidates.find((value) => MediaRecorder.isTypeSupported(value))
+  }
+
   const preprocessAudioBlob = async (inputBlob: Blob): Promise<Blob> => {
+    const audioContext = new AudioContext()
     try {
-      const audioContext = new AudioContext()
       const arrayBuffer = await inputBlob.arrayBuffer()
       const decoded = await audioContext.decodeAudioData(arrayBuffer)
       const targetSampleRate = 16000
@@ -509,31 +740,210 @@ export function AIResumeBuilderPage() {
         view.setInt16(offset, s < 0 ? s * 0x8000 : s * 0x7fff, true)
         offset += 2
       }
-      await audioContext.close()
       return new Blob([wavBuffer], { type: "audio/wav" })
-    } catch {
-      return inputBlob
+    } finally {
+      await audioContext.close()
     }
   }
 
   const transcribeOdiaVoice = async (audioBlob: Blob): Promise<string> => {
+    console.log("[voice] input blob:", { type: audioBlob?.type, size: audioBlob?.size })
+    if (!audioBlob || audioBlob.size <= MIN_AUDIO_BLOB_BYTES) {
+      throw new Error("Audio recording failed. Please try again.")
+    }
     const processed = await preprocessAudioBlob(audioBlob)
+    console.log("[voice] processed blob:", { type: processed?.type, size: processed?.size })
+    if (!processed || processed.size <= MIN_AUDIO_BLOB_BYTES) {
+      throw new Error("Audio recording failed. Please try again.")
+    }
     const formData = new FormData()
     formData.append("audio", processed, "voice.wav")
     formData.append("language_hint", "or")
-    const response = await apiClient.client.post("/resume/transcribe-voice", formData, {
-      headers: { "Content-Type": "multipart/form-data" },
+    console.log("[voice] transcription payload ready:", {
+      hasAudio: formData.has("audio"),
+      hasLanguageHint: formData.has("language_hint"),
+      fileName: "voice.wav",
+      size: processed.size,
     })
+    const response = await apiClient.client.post("/resume/transcribe-voice", formData)
+    if (response?.data?.error_type === "API_QUOTA_EXCEEDED") {
+      const quotaError = new Error(
+        "Voice service temporarily unavailable (quota issue). Please use text input."
+      ) as Error & { error_type?: string }
+      quotaError.error_type = "API_QUOTA_EXCEEDED"
+      throw quotaError
+    }
+    if (response?.data?.error_type === "STT_SYSTEM_UNAVAILABLE") {
+      const unavailableError = new Error(
+        typeof response?.data?.message === "string" && response.data.message.trim()
+          ? response.data.message
+          : "Voice transcription services are not configured. Please contact admin."
+      ) as Error & { error_type?: string }
+      unavailableError.error_type = "STT_SYSTEM_UNAVAILABLE"
+      throw unavailableError
+    }
+    if (typeof response?.data?.message === "string" && /quota|insufficient_quota|exceeded/i.test(response.data.message)) {
+      const quotaError = new Error(
+        "Voice service temporarily unavailable (quota issue). Please use text input."
+      ) as Error & { error_type?: string }
+      quotaError.error_type = "API_QUOTA_EXCEEDED"
+      throw quotaError
+    }
     return typeof response?.data?.transcript === "string" ? response.data.transcript.trim() : ""
   }
 
+  const startBrowserVoiceRecognition = (lang: string, listeningStatus: string) => {
+  const Speech = window.SpeechRecognition || window.webkitSpeechRecognition
+  if (!Speech) {
+    setVoiceErrorHint("Speech recognition is not supported in this browser.")
+    return
+  }
+  if (!recognitionRef.current) {
+    recognitionRef.current = new Speech()
+  }
+  const recognition = recognitionRef.current
+  recognition.lang = lang
+  recognition.continuous = true
+  recognition.interimResults = true
+  recognition.maxAlternatives = 1
+  voiceTranscriptRef.current = ""
+  lastLiveTranscriptRef.current = ""
+  setLiveTranscript("")
+  setTranscript("")
+  odiaStrictRetryTriedRef.current = false
+  romanizedOdiaDetectedRef.current = false
+  manualStopRef.current = false
+  setVoiceErrorHint("")
+  setVoicePhase("listening")
+  setVoiceStatus(listeningStatus)
+  updateVoiceIntel({
+    liveSTTActive: true,
+    backendSTTActive: false,
+    currentMode: "BACKEND_ONLY",
+    recognitionState: "listening",
+    lastError: "",
+    interimTranscriptLength: 0,
+  })
+  recognition.onresult = (event) => {
+  console.log("Speech recognition result received")
+  let interimTranscript = ""
+  let finalTranscript = ""
+  for (let i = 0; i < event.results.length; i += 1) {
+  const result = event.results[i]
+  const text = result?.[0]?.transcript || ""
+  if (!text) continue
+  if (result.isFinal) finalTranscript += `${text} `
+  else interimTranscript += `${text} `
+  }
+  const combined = `${finalTranscript}${interimTranscript}`.trim()
+  if (!combined) return
+  const lastResult = event.results[event.results.length - 1]
+  const confidence = lastResult?.[0]?.confidence
+  if (interimTranscript.trim()) console.log("Interim transcript:", interimTranscript.trim())
+  if (finalTranscript.trim()) console.log("Final transcript:", finalTranscript.trim())
+  setTranscriptWithMeta({ text: combined, source: "BACKEND_STT", confidence })
+  updateVoiceIntel({
+    interimTranscriptLength: interimTranscript.trim().length,
+    finalTranscriptLength: finalTranscript.trim().length || combined.length,
+    currentMode: "BACKEND_ONLY",
+  })
+  }
+  recognition.onerror = (event) => {
+  const kind = event?.error || ""
+  console.log("Recognition error:", kind || "unknown")
+  emitVoiceTelemetry("recognition_error", { error: kind || "unknown" })
+  if (kind === "not-allowed" || kind === "service-not-allowed") {
+  setVoiceErrorHint("Microphone permission denied. Please allow microphone access.")
+  setVoicePhase("idle")
+  setRecordingActive(false)
+  updateVoiceIntel({ recognitionState: "error", lastError: "microphone_permission_denied", liveSTTActive: false })
+  return
+  }
+  updateVoiceIntel({ recognitionState: "restarting", lastError: kind || "unknown" })
+  if (!manualStopRef.current && recordingActiveRef.current) {
+  if (!canRestartRecognition()) return
+  setTimeout(() => {
+  if (!manualStopRef.current && recordingActiveRef.current) {
+  try {
+  recognition.start()
+  console.log("Recognition restarted")
+  emitVoiceTelemetry("recognition_restart", { reason: kind || "unknown" })
+  updateVoiceIntel({ recognitionState: "listening", lastError: "" })
+  } catch {
+  // restart best effort
+  }
+  }
+  }, 300)
+  }
+  }
+  recognition.onend = () => {
+  if (recordingActiveRef.current && !manualStopRef.current) {
+  if (!canRestartRecognition()) return
+  updateVoiceIntel({ recognitionState: "restarting" })
+  setTimeout(() => {
+  if (!recordingActiveRef.current || manualStopRef.current) return
+  try {
+  recognition.start()
+  console.log("Recognition restarted")
+  emitVoiceTelemetry("recognition_restart", { reason: "onend_auto_restart" })
+  updateVoiceIntel({ recognitionState: "listening", lastError: "" })
+  } catch {
+  // restart best effort
+  }
+  }, 300)
+  } else {
+  updateVoiceIntel({ recognitionState: "idle", liveSTTActive: false })
+  }
+  }
+  try {
+  recognition.start()
+  console.log("Speech recognition started")
+  emitVoiceTelemetry("recognition_started", { lang })
+  } catch {
+  setVoiceErrorHint("Voice not supported for selected language. Please type your input.")
+  setVoicePhase("idle")
+  setRecordingActive(false)
+  updateVoiceIntel({ recognitionState: "error", lastError: "language_not_supported", liveSTTActive: false })
+  return
+  }
+  setRecordingActive(true)
+  }
+
+  // Odia mode uses backend STT only (MediaRecorder -> backend).
+
   const toggleRecording = () => {
   if (locale === "or") {
+  if (sttHealth?.overall_status !== "READY") {
+  setVoiceErrorHint(sttHealth?.message || "Voice temporarily unavailable")
+  setVoicePhase("idle")
+  return
+  }
   if (isRecording) {
   manualStopRef.current = true
   clearSilenceTimer()
+  try {
+  if (mediaRecorderRef.current && mediaRecorderRef.current.state === "recording") {
+  mediaRecorderRef.current.requestData()
+  }
+  } catch {
+  // Some browsers may not support requestData reliably.
+  }
   mediaRecorderRef.current?.stop()
-  setIsRecording(false)
+  void emitVoiceAnalytics({
+    event: "recording_stop",
+    provider: "google",
+    status: "fallback",
+    error_type: "",
+    fallback_used: false,
+    language_mode: "odia",
+    audio_size: 0,
+    latency_ms: 0,
+    cost_estimate: 0,
+    transcript_length: 0,
+    session_id: voiceSessionIdRef.current,
+    timestamp: Date.now(),
+  })
+  setRecordingActive(false)
   setVoicePhase("processing")
   setVoiceStatus("Processing voice input...")
   return
@@ -541,59 +951,191 @@ export function AIResumeBuilderPage() {
   navigator.mediaDevices
   .getUserMedia({ audio: true })
   .then((stream) => {
+  voiceSessionIdRef.current = `voice-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`
+  void emitVoiceAnalytics({
+    event: "recording_start",
+    provider: "google",
+    status: "success",
+    error_type: "",
+    fallback_used: false,
+    language_mode: "odia",
+    audio_size: 0,
+    latency_ms: 0,
+    cost_estimate: 0,
+    transcript_length: 0,
+    session_id: voiceSessionIdRef.current,
+    timestamp: Date.now(),
+  })
   mediaStreamRef.current = stream
-  const recorder = new MediaRecorder(stream)
+  const mimeType = getRecorderMimeType()
+  const recorder = mimeType ? new MediaRecorder(stream, { mimeType }) : new MediaRecorder(stream)
   mediaRecorderRef.current = recorder
   mediaChunksRef.current = []
   voiceTranscriptRef.current = ""
+  lastLiveTranscriptRef.current = ""
   setLiveTranscript("")
   setTranscript("")
+  odiaStrictRetryTriedRef.current = false
   setVoiceErrorHint("")
   setVoicePhase("listening")
-  setVoiceStatus("Listening...")
+  setVoiceStatus("Odia Mode: Recording (No Hindi fallback)")
   manualStopRef.current = false
+  updateVoiceIntel({
+    liveSTTActive: false,
+    backendSTTActive: false,
+    currentMode: "BACKEND_ONLY",
+    recognitionState: "listening",
+    lastError: "",
+    interimTranscriptLength: 0,
+  })
 
   recorder.ondataavailable = (event) => {
   if (event.data && event.data.size > 0) mediaChunksRef.current.push(event.data)
   }
-  recorder.onstop = () => {
+  recorder.onstop = async () => {
+  await new Promise((resolve) => setTimeout(resolve, 120))
   const blob = new Blob(mediaChunksRef.current, { type: recorder.mimeType || "audio/webm" })
+  const sttStartTime = Date.now()
+  console.log("[voice] recorder stopped:", {
+    mimeType: recorder.mimeType,
+    chunkCount: mediaChunksRef.current.length,
+    blobSize: blob.size,
+  })
   stopMediaStream()
-  setIsRecording(false)
-  if (manualStopRef.current && blob.size < 1024) {
+  setRecordingActive(false)
+  if (!blob || blob.size <= MIN_AUDIO_BLOB_BYTES) {
+  setVoiceErrorHint("Audio recording failed. Please try again.")
+  setVoicePhase("idle")
+  manualStopRef.current = false
+  return
+  }
+  if (manualStopRef.current && blob.size < MIN_AUDIO_BLOB_BYTES) {
   setVoicePhase("idle")
   manualStopRef.current = false
   return
   }
   setVoicePhase("processing")
-  setVoiceStatus("Transcribing Odia voice...")
+  setVoiceStatus("Odia Mode: Backend Speech Processing")
+  updateVoiceIntel({ backendSTTActive: true, liveSTTActive: false, currentMode: "BACKEND_FALLBACK" })
   void transcribeOdiaVoice(blob)
   .then((transcribed) => {
-  voiceTranscriptRef.current = transcribed
-  setTranscript(transcribed)
-  setLiveTranscript(transcribed)
-  if (!transcribed || transcribed.split(/\s+/).filter(Boolean).length < 3) {
-  setVoiceErrorHint("Voice input not detected. Please type your input or switch to English/Hindi.")
-  setVoicePhase("idle")
-  return
+  if (/[\\u0900-\\u097F]/.test(transcribed || "")) {
+  throw new Error("invalid_odia_mode_transcript_devanagari")
   }
+  if (!transcribed || transcribed.split(/\s+/).filter(Boolean).length < 3) {
+  throw new Error("backend_transcript_empty")
+  }
+  setTranscriptWithMeta({ text: transcribed, source: "BACKEND_STT", confidence: 0.8 })
+  void emitVoiceAnalytics({
+    event: "stt_success",
+    provider: sttHealth?.recommended_provider === "whisper" ? "whisper" : "google",
+    status: "success",
+    error_type: "",
+    fallback_used: sttHealth?.recommended_provider === "whisper",
+    language_mode: "odia",
+    audio_size: blob.size,
+    latency_ms: Date.now() - sttStartTime,
+    cost_estimate: estimateVoiceCost(sttHealth?.recommended_provider === "whisper" ? "whisper" : "google", blob.size),
+    transcript_length: transcribed.length,
+    session_id: voiceSessionIdRef.current,
+    timestamp: Date.now(),
+  })
   setVoicePhase("completed")
   setVoiceStatus("Generating your resume...")
+  updateVoiceIntel({ currentMode: "BACKEND_FALLBACK", backendSTTActive: true, liveSTTActive: true })
   void handleSend({ contentOverride: transcribed, bypassConfirmation: true })
   })
-  .catch(() => {
-  setVoiceErrorHint("Voice input failed. Please try again.")
+  .catch((err: any) => {
+  const apiMessage = err?.response?.data?.message
+  const apiErrorType = err?.response?.data?.error_type || err?.error_type
+  const localError = typeof err?.message === "string" ? err.message : ""
+  console.error("[voice] transcription failed:", err)
+  if (apiErrorType === "API_QUOTA_EXCEEDED") {
+  setVoiceErrorHint("Voice service temporarily unavailable (quota issue). Please use text input.")
   setVoicePhase("idle")
+  updateVoiceIntel({
+    recognitionState: "error",
+    lastError: "API_QUOTA_EXCEEDED",
+    backendSTTActive: false,
+  })
+  return
+  }
+  if (apiErrorType === "STT_SYSTEM_UNAVAILABLE") {
+  setVoiceErrorHint(
+    typeof apiMessage === "string" && apiMessage.trim()
+      ? apiMessage
+      : "Voice transcription services are not configured. Please contact admin or use text input."
+  )
+  setVoicePhase("idle")
+  updateVoiceIntel({
+    recognitionState: "error",
+    lastError: "STT_SYSTEM_UNAVAILABLE",
+    backendSTTActive: false,
+  })
+  return
+  }
+  const bufferedText = lastLiveTranscriptRef.current.trim() || voiceTranscriptRef.current.trim()
+  if (bufferedText.length >= MIN_RESUME_INPUT_LEN) {
+  setVoiceStatus("Using buffered live transcript fallback...")
+  setVoicePhase("completed")
+  setTranscriptWithMeta({ text: bufferedText, source: "BUFFERED_AUDIO", confidence: 0.6 })
+  void emitVoiceAnalytics({
+    event: "fallback_triggered",
+    provider: "cache",
+    status: "fallback",
+    error_type: apiErrorType || localError || "stt_failure",
+    fallback_used: true,
+    language_mode: "odia",
+    audio_size: blob.size,
+    latency_ms: Date.now() - sttStartTime,
+    cost_estimate: estimateVoiceCost("cache", blob.size),
+    transcript_length: bufferedText.length,
+    session_id: voiceSessionIdRef.current,
+    timestamp: Date.now(),
+  })
+  updateVoiceIntel({ currentMode: "BACKEND_FALLBACK", backendSTTActive: false, liveSTTActive: false, recognitionState: "listening" })
+  void handleSend({ contentOverride: bufferedText, bypassConfirmation: true })
+  return
+  }
+  setVoiceErrorHint(
+    localError === "invalid_odia_mode_transcript_devanagari"
+      ? "Invalid non-Odia transcript detected. Please retry Odia voice input."
+      : typeof apiMessage === "string" && apiMessage.trim()
+      ? apiMessage
+      : "We couldn't process your voice input. Please try again or type your message."
+  )
+  setVoicePhase("idle")
+  updateVoiceIntel({
+    recognitionState: "error",
+    lastError: (localError || apiMessage || "transcription_failed") as string,
+    backendSTTActive: false,
+  })
+  void emitVoiceAnalytics({
+    event: "stt_failure",
+    provider: sttHealth?.recommended_provider === "whisper" ? "whisper" : "google",
+    status: "failure",
+    error_type: String(apiErrorType || localError || apiMessage || "transcription_failed"),
+    fallback_used: false,
+    language_mode: "odia",
+    audio_size: blob.size,
+    latency_ms: Date.now() - sttStartTime,
+    cost_estimate: estimateVoiceCost(sttHealth?.recommended_provider === "whisper" ? "whisper" : "google", blob.size),
+    transcript_length: 0,
+    session_id: voiceSessionIdRef.current,
+    timestamp: Date.now(),
+  })
   })
   .finally(() => {
   manualStopRef.current = false
+  updateVoiceIntel({ backendSTTActive: false })
   })
   }
-  recorder.start()
+  recorder.start(250)
   scheduleSilenceStop()
-  setIsRecording(true)
+  setRecordingActive(true)
   })
-  .catch(() => {
+  .catch((error) => {
+  console.error("[voice] microphone access failed:", error)
   setVoiceErrorHint("Microphone permission denied. Please allow microphone access.")
   setVoicePhase("idle")
   })
@@ -603,102 +1145,15 @@ export function AIResumeBuilderPage() {
       manualStopRef.current = true
       clearSilenceTimer()
   recognitionRef.current?.stop()
-  setIsRecording(false)
+  setRecordingActive(false)
   setVoicePhase("processing")
   setVoiceStatus("Processing voice input...")
   return
   }
-  const Speech = window.SpeechRecognition || window.webkitSpeechRecognition
-  if (!Speech) {
-    setVoiceErrorHint("Speech recognition is not supported in this browser.")
-    return
-  }
-  const recognition = new Speech()
-  recognition.lang = locale === "hi" ? "hi-IN" : "en-IN"
-  recognition.interimResults = true
-  voiceTranscriptRef.current = ""
-  setLiveTranscript("")
-  setTranscript("")
-  odiaFallbackTriedRef.current = false
-  odiaStrictRetryTriedRef.current = false
-  romanizedOdiaDetectedRef.current = false
-    manualStopRef.current = false
-  setVoiceErrorHint("")
-  setVoicePhase("listening")
-  setVoiceStatus(locale === "hi" ? "Hindi speech detected... translating to professional English." : "Listening...")
-  recognition.onresult = (event) => {
-  const nextText = Array.from(event.results)
-  .map((res) => res[0]?.transcript || "")
-  .join(" ")
-  voiceTranscriptRef.current = nextText
-  setLiveTranscript(nextText)
-  setTranscript(nextText)
-      scheduleSilenceStop()
-  }
-  recognition.onerror = (event) => {
-    const kind = event?.error || ""
-    if (kind === "not-allowed" || kind === "service-not-allowed") {
-      setVoiceErrorHint("Microphone permission denied. Please allow microphone access.")
-    } else if (kind === "no-speech") {
-      setVoiceErrorHint(t(locale, "resumeAI.noAudioDetected"))
-    } else if (kind === "language-not-supported") {
-      setVoiceErrorHint("Voice not supported for selected language. Please type your input.")
-    } else {
-      setVoiceErrorHint("Voice input failed. Please try again.")
-    }
-    setVoicePhase("idle")
-    clearSilenceTimer()
-    setIsRecording(false)
-  }
-  recognition.onend = () => {
-      clearSilenceTimer()
-  setIsRecording(false)
-  setVoiceStatus((prev) => (prev.includes("Translation unavailable") ? prev : ""))
-      if (!voiceTranscriptRef.current.trim() && !manualStopRef.current) {
-  setVoiceErrorHint("Voice input not detected. Please type your input or switch to English/Hindi.")
-  setVoicePhase("idle")
-  } else {
-  const transcriptText = voiceTranscriptRef.current.trim()
-  if (!manualStopRef.current && !odiaStrictRetryTriedRef.current && shouldRetryOdiaRecognition(transcriptText)) {
-  odiaStrictRetryTriedRef.current = true
-  flashVoiceStatus("Retrying voice input for better recognition...", 2600)
-  try {
-  recognition.start()
-  setIsRecording(true)
-  scheduleSilenceStop()
-  return
-  } catch {
-  // Continue with existing validation hints.
-  }
-  }
-  if (voiceTranscriptRef.current.trim().length < 3) {
-  setVoiceErrorHint("Voice input not detected. Please type your input or switch to English/Hindi.")
-  setVoicePhase("idle")
-  manualStopRef.current = false
-  return
-  }
-  if (voiceTranscriptRef.current.trim().length < MIN_RESUME_INPUT_LEN) {
-  setVoiceErrorHint("Please provide more details like your skills or education.")
-  setVoicePhase("idle")
-  manualStopRef.current = false
-  return
-  }
-  setVoicePhase("completed")
-  setVoiceStatus("Generating your resume...")
-  void handleSend({ contentOverride: voiceTranscriptRef.current, bypassConfirmation: true })
-  }
-      manualStopRef.current = false
-  }
-  try {
-  recognition.start()
-  } catch {
-  setVoiceErrorHint("Voice not supported for selected language. Please type your input.")
-  setVoicePhase("idle")
-  return
-  }
-    scheduleSilenceStop()
-  recognitionRef.current = recognition
-  setIsRecording(true)
+  startBrowserVoiceRecognition(
+    "en-IN",
+    "Listening..."
+  )
   }
 
   const runGeneration = async (content: string, finalInput: string, voiceTranscriptPayload: string = "") => {
@@ -985,7 +1440,7 @@ export function AIResumeBuilderPage() {
   Try: "I know Java and React, create a one-page fresher resume for product companies."
   </div>
   )}
-  {!isGenerating && !hasResume && (
+  {!isGenerating && !hasResume && !hasStructuredResume && (
   <div className="rounded-xl border border-dashed border-border bg-muted/20 p-3 text-xs text-muted-foreground">
   No resume generated yet
   </div>
@@ -1007,9 +1462,30 @@ export function AIResumeBuilderPage() {
   {voicePhase === "processing" && <p className="text-xs text-muted-foreground">Processing ⏳</p>}
   {voicePhase === "completed" && <p className="text-xs text-emerald-600">Completed ✅</p>}
   {locale === "or" && (
-  <p className="rounded-lg border border-amber-200 bg-amber-50 px-2 py-1 text-xs text-amber-800 dark:border-amber-700 dark:bg-amber-950/30 dark:text-amber-200">
-    Odia voice input may not be fully supported. You can type or use Hindi/English voice.
-  </p>
+  <div className="space-y-1 rounded-lg border border-amber-200 bg-amber-50 px-2 py-2 text-xs text-amber-900 dark:border-amber-700 dark:bg-amber-950/30 dark:text-amber-200">
+    <p className="font-semibold">Odia Voice Intelligence</p>
+    <p>
+      {sttHealth?.overall_status === "READY"
+        ? "🟢 LIVE: Voice Ready"
+        : sttHealth?.overall_status === "DEGRADED"
+        ? "🟡 LIVE: Degraded"
+        : "🔴 LIVE: Unavailable"}
+    </p>
+    <p>
+      Odia Voice:{" "}
+      {sttHealth?.overall_status === "READY"
+        ? "Ready"
+        : sttHealth?.overall_status === "DEGRADED"
+        ? "Degraded"
+        : "Unavailable"}
+    </p>
+    <p>Odia Mode: Backend Speech Processing</p>
+    <p>Fallback: {voiceIntelState.backendSTTActive ? "Running" : "Ready"}</p>
+    <p>Transcript Source: {latestTranscriptMeta?.source || "BACKEND_STT"}</p>
+    <p>{recognitionIndicator}</p>
+    <p>Confidence: {voiceIntelState.confidenceHint}</p>
+    <p>{sttHealth?.message || "Live Odia speech not supported in browser. Using backend transcription."}</p>
+  </div>
   )}
   {voiceStatus && <p className="text-xs text-secondary-700 dark:text-secondary-300">{voiceStatus}</p>}
   {liveTranscript && (
@@ -1133,6 +1609,7 @@ export function AIResumeBuilderPage() {
   <Paperclip className="h-4 w-4" />
   </button>
   <button
+  disabled={locale === "or" && sttHealth?.overall_status !== "READY"}
   className={`relative rounded-xl border border-border p-2.5 ${isRecording ? "bg-red-500/15 text-red-600" : "hover:bg-muted/60"}`}
   onClick={toggleRecording}
   >
@@ -1149,17 +1626,6 @@ export function AIResumeBuilderPage() {
   {isGenerating ? <Loader2 className="h-4 w-4 animate-spin" /> : <span className="inline-flex items-center gap-1"><Send className="h-4 w-4" />Generate Resume</span>}
   </button>
   </div>
-  {locale === "or" && (
-  <label className="mt-2 inline-flex items-center gap-2 text-xs text-muted-foreground">
-    <input
-      type="checkbox"
-      checked={useHindiVoiceFallback}
-      onChange={(e) => setUseHindiVoiceFallback(e.target.checked)}
-      className="h-3.5 w-3.5 rounded border-border"
-    />
-    Use Hindi voice for better recognition
-  </label>
-  )}
   </div>
   </motion.section>
 
@@ -1193,7 +1659,7 @@ export function AIResumeBuilderPage() {
     <div className="h-4 animate-pulse rounded bg-muted/40" />
     <div className="h-24 animate-pulse rounded bg-muted/40" />
   </div>
-  ) : resumeState.type === "structured" ? (
+  ) : hasStructuredResume ? (
   <div className="space-y-3">
   <div ref={printRef}>
   <ExecutiveResumePreview
@@ -1215,7 +1681,7 @@ export function AIResumeBuilderPage() {
   <button
   className="inline-flex items-center justify-center gap-2 rounded-xl border border-border bg-background px-3 py-2 text-sm font-medium text-foreground hover:bg-muted"
   data-hide-on-print
-  disabled={resumeState.type !== "structured" || isSaving}
+  disabled={!hasStructuredResume || isSaving}
   >
   <Wand2 className="h-4 w-4" />
   {isSaving ? t(locale, "resumeAI.syncingStatus") : t(locale, "resumeAI.saveToProfile")}
@@ -1259,7 +1725,7 @@ export function AIResumeBuilderPage() {
   // keep dialog open on failure so user can retry
   })
   }}
-  disabled={isSaving || resumeState.type !== "structured"}
+  disabled={isSaving || !hasStructuredResume}
   >
   {isSaving ? t(locale, "resumeAI.syncingStatus") : t(locale, "resumeAI.confirmSync")}
   </button>
@@ -1272,7 +1738,7 @@ export function AIResumeBuilderPage() {
   className="inline-flex items-center justify-center gap-2 rounded-xl border border-border bg-background px-3 py-2 text-sm font-medium text-foreground hover:bg-muted"
   data-hide-on-print
   onClick={() => handlePrint()}
-  disabled={resumeState.type !== "structured"}
+  disabled={!hasStructuredResume}
   >
   <FileText className="h-4 w-4" />
   {t(locale, "resumeAI.downloadPdf")}
@@ -1281,7 +1747,7 @@ export function AIResumeBuilderPage() {
   className="inline-flex items-center justify-center gap-2 rounded-xl border border-border bg-background px-3 py-2 text-sm font-medium text-foreground hover:bg-muted"
   data-hide-on-print
   onClick={() => void handleCopyResume()}
-  disabled={resumeState.type !== "structured"}
+  disabled={!hasStructuredResume}
   >
   <Clipboard className="h-4 w-4" />
   Copy Resume
@@ -1290,7 +1756,7 @@ export function AIResumeBuilderPage() {
   className="inline-flex items-center justify-center gap-2 rounded-xl border border-border bg-background px-3 py-2 text-sm font-medium text-foreground hover:bg-muted"
   data-hide-on-print
   onClick={handleOpenQuickEdit}
-  disabled={resumeState.type !== "structured"}
+  disabled={!hasStructuredResume}
   >
   <Wand2 className="h-4 w-4" />
   Quick Resume Editor
@@ -1402,7 +1868,7 @@ export function AIResumeBuilderPage() {
   handleApplyQuickEdit()
   setSaveDialogOpen(true)
   }}
-  disabled={isSaving || resumeState.type !== "structured"}
+  disabled={isSaving || !hasStructuredResume}
   >
   Save / Update
   </button>
