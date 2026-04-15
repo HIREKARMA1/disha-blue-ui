@@ -78,6 +78,7 @@ type SupportedLocale = "en" | "hi" | "or"
 
 interface GenerateResumeParams {
   text: string
+  voiceTranscript?: string
   files?: File[]
   jobDescription?: string
   language: SupportedLocale
@@ -91,10 +92,16 @@ export interface AtsFeedback {
 }
 
 interface GenerateResumeResult {
+  success?: boolean
   error?: boolean
-  mode?: "json_resume" | "text_resume"
+  mode?: "json_resume" | "text_resume" | "structured"
   resume_text?: string
   resume?: FullResumeSchema
+  structured_data?: FullResumeSchema
+  data?: {
+    resume?: string
+    structured?: FullResumeSchema
+  }
   locale_used?: string
   metadata?: Record<string, unknown> & { ats_feedback?: AtsFeedback }
 }
@@ -132,6 +139,86 @@ const invalidJsonRetryHintByLocale: Record<SupportedLocale, string> = {
   en: "Please re-format your previous response as valid JSON matching the required schema only.",
   hi: "कृपया अपनी पिछली प्रतिक्रिया को केवल आवश्यक स्कीमा के अनुसार वैध JSON में दोबारा फॉर्मेट करें।",
   or: "ଦୟାକରି ଆପଣଙ୍କ ପୂର୍ବ ଉତ୍ତରକୁ କେବଳ ଆବଶ୍ୟକ ସ୍କିମା ଅନୁଯାୟୀ ବ valid JSON ଭାବେ ପୁନଃ ଫର୍ମାଟ୍ କରନ୍ତୁ।",
+}
+
+const parseTextIntoStructuredResume = (resumeText: string): FullResumeSchema => {
+  const source = (resumeText || "").trim()
+  if (!source) return emptyResume
+  const lines = source.split(/\r?\n/)
+  const out: FullResumeSchema = JSON.parse(JSON.stringify(emptyResume))
+  let current = ""
+  const push = (line: string) => {
+    const cleaned = line.replace(/^[-•]\s*/, "").trim()
+    if (!cleaned) return
+    if (current === "skills") {
+      out.skills.push(...cleaned.split(",").map((s) => s.trim()).filter(Boolean))
+      return
+    }
+    if (current === "education") {
+      out.education.push({
+        institution: cleaned,
+        degree: "",
+        field_of_study: "",
+        start_date: "",
+        end_date: "",
+        score: "",
+        highlights: [],
+      })
+      return
+    }
+    if (current === "experience") {
+      out.experience.push({
+        company: "",
+        role: cleaned,
+        start_date: "",
+        end_date: "",
+        location: "",
+        bullets: [],
+      })
+      return
+    }
+    if (current === "projects") {
+      out.projects.push({
+        name: cleaned,
+        role: "",
+        tech_stack: [],
+        description: "",
+        bullets: [],
+        link: "",
+      })
+      return
+    }
+    if (current === "certifications") {
+      out.certifications.push(cleaned)
+      return
+    }
+    if (current === "summary") {
+      out.personal_info.summary = `${out.personal_info.summary} ${cleaned}`.trim()
+      return
+    }
+    if (current === "personal_information") {
+      const lower = cleaned.toLowerCase()
+      if (lower.includes("@")) out.personal_info.email = cleaned
+      else if (/\d{8,}/.test(cleaned)) out.personal_info.phone = cleaned
+      else if (!out.personal_info.name) out.personal_info.name = cleaned
+      else out.personal_info.location = cleaned
+    }
+  }
+  for (const line of lines) {
+    const raw = line.trim()
+    if (!raw) continue
+    const normalized = raw.replace(/[:\-]+$/, "").toLowerCase()
+    if (normalized.includes("personal information")) current = "personal_information"
+    else if (normalized.includes("summary")) current = "summary"
+    else if (normalized.includes("skills")) current = "skills"
+    else if (normalized.includes("education")) current = "education"
+    else if (normalized.includes("experience")) current = "experience"
+    else if (normalized.includes("projects")) current = "projects"
+    else if (normalized.includes("certifications")) current = "certifications"
+    else push(raw)
+  }
+  out.skills = Array.from(new Set(out.skills))
+  return out
 }
 
 export function useResumeAI() {
@@ -206,56 +293,70 @@ export function useResumeAI() {
   }
 
   const applyResumeResponse = (payload: GenerateResumeResult) => {
-  if (payload?.mode === "text_resume") {
+  const resumeText = payload?.resume_text || ""
+  const structured =
+  payload?.structured_data ||
+  parseTextIntoStructuredResume(resumeText)
+  const hasStructured = Boolean(
+  structured?.personal_info?.name?.trim() ||
+  structured?.personal_info?.summary?.trim() ||
+  structured?.skills?.length ||
+  structured?.education?.length ||
+  structured?.experience?.length ||
+  structured?.projects?.length
+  )
+  console.log("[resume] structured_data present:", hasStructured)
+  console.log("[resume] resume_text length:", resumeText.length)
+  if (payload?.mode === "text_resume" && !hasStructured) {
   setResumeState({
   type: "text",
   structured: null,
-  text: payload?.resume_text || "",
+  text: resumeText,
   })
   return emptyResume
   }
-  const structured =
-  payload?.resume ||
-  ((payload as FullResumeSchema)?.personal_info ? (payload as FullResumeSchema) : emptyResume)
+  if (!structured?.personal_info?.name?.trim() || structured.personal_info.name === "Not specified") {
+  structured.personal_info.name = "Candidate Name"
+  }
+  setResumeState({ type: null, structured: null, text: null })
   setResumeState({
   type: "structured",
   structured,
-  text: null,
+  text: resumeText || null,
   })
   return structured
   }
 
   const generateResume = useCallback(async (params: GenerateResumeParams) => {
-  const { text, files = [], jobDescription = "", language, profileData = {} } = params
+  const { text, voiceTranscript = "", files = [], jobDescription = "", language, profileData = {} } = params
   setError(null)
   setErrorSuggestions([])
   setIsGenerating(true)
   startStatusLoop(language)
 
-  const buildFormData = (payloadText: string) => {
+  const buildFormData = (payloadText: string, payloadVoiceTranscript: string) => {
   const formData = new FormData()
   const safeInputText = payloadText?.trim() || ""
+  const safeVoiceTranscript = payloadVoiceTranscript?.trim() || ""
   const safeJobDescription = jobDescription?.trim() || ""
   const payload = {
   // Send a single canonical input field to avoid conflicts.
   input_text: safeInputText,
+  voice_transcript: safeVoiceTranscript,
   job_description: safeJobDescription,
   language,
   profile_data: profileData,
   }
-  console.log("Resume API Payload:", {
-  input_text: safeInputText,
-  job_description: safeJobDescription,
-  language,
-  })
+  console.log("API PAYLOAD:", payload)
   formData.append("payload", JSON.stringify(payload))
   files.forEach((file) => formData.append("files", file))
   return formData
   }
 
   try {
-  const response = await apiClient.client.post<GenerateResumeResult>("/resume/generate-ai", buildFormData(text))
+  const response = await apiClient.client.post<GenerateResumeResult>("/resume/generate-ai", buildFormData(text, voiceTranscript))
   const apiResponse = response.data || {}
+  console.log("FINAL RESPONSE:", apiResponse)
   console.log("API RESPONSE:", apiResponse)
   const nextResume = applyResumeResponse(apiResponse)
   setGenerationMetadata(apiResponse?.metadata || null)
@@ -268,7 +369,7 @@ export function useResumeAI() {
   if (shouldRetryForJson) {
   try {
   const retryPrompt = `${text}\n\n${invalidJsonRetryHintByLocale[language] || invalidJsonRetryHintByLocale.en}`
-  const retryResponse = await apiClient.client.post<GenerateResumeResult>("/resume/generate-ai", buildFormData(retryPrompt))
+  const retryResponse = await apiClient.client.post<GenerateResumeResult>("/resume/generate-ai", buildFormData(retryPrompt, voiceTranscript))
   const retryPayload = retryResponse.data || {}
   console.log("API RESPONSE:", retryPayload)
   const retryResume = applyResumeResponse(retryPayload)

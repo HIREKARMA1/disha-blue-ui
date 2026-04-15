@@ -81,6 +81,13 @@ export function PostResumePreferences({ resume, className }: PostResumePreferenc
         preferredLocations: locations,
         fromResumeFlow: true,
       })
+      console.log("[job-recommendation] payload", {
+        skills: derivedSkills,
+        education: resume.education.map((item) => `${item.degree} ${item.field_of_study}`.trim()).filter(Boolean),
+        experience: resume.experience.map((item) => `${item.role} ${item.company}`.trim()).filter(Boolean),
+        preferred_role: role,
+        locations,
+      })
 
       try {
         await profileService.updateProfile({

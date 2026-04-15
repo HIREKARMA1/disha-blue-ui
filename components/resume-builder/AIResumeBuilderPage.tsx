@@ -24,6 +24,7 @@ import type { FullResumeSchema } from "@/hooks/useResumeAI"
 import { useResumeAI } from "@/hooks/useResumeAI"
 import { useLocale } from "@/contexts/LocaleContext"
 import { t } from "@/lib/i18n"
+import { apiClient } from "@/lib/api"
 import { useProfile } from "@/hooks/useProfile"
 import { ExecutiveResumePreview } from "./ResumePreview"
 import { PostResumePreferences } from "./PostResumePreferences"
@@ -64,6 +65,7 @@ declare global {
 const mkId = () => `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`
 const VOICE_SILENCE_MS = 2000
 const MIN_RESUME_INPUT_LEN = 10
+const ODIA_MISRECOGNITIONS = ["mona", "new", "naa"]
 
 interface LocalChatMessage {
   id: string
@@ -159,11 +161,16 @@ export function AIResumeBuilderPage() {
   const [quickEditOpen, setQuickEditOpen] = useState(false)
   const [quickEditDraft, setQuickEditDraft] = useState<FullResumeSchema | null>(null)
   const recognitionRef = useRef<SpeechRecognitionLike | null>(null)
+  const mediaRecorderRef = useRef<MediaRecorder | null>(null)
+  const mediaStreamRef = useRef<MediaStream | null>(null)
+  const mediaChunksRef = useRef<BlobPart[]>([])
   const printRef = useRef<HTMLDivElement>(null)
   const voiceTranscriptRef = useRef("")
   const silenceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const manualStopRef = useRef(false)
   const odiaFallbackTriedRef = useRef(false)
+  const odiaStrictRetryTriedRef = useRef(false)
+  const romanizedOdiaDetectedRef = useRef(false)
   const voiceStatusTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const parsedTextResume = useMemo(() => {
     const raw = (textResume || "").trim()
@@ -210,10 +217,22 @@ export function AIResumeBuilderPage() {
   }, [previousResume, currentResume])
 
   useEffect(() => {
+    if (resumeState.type === "structured") {
+      console.log("STRUCTURED DATA IN UI:", resumeData)
+    }
+  }, [resumeState.type, resumeData])
+
+  useEffect(() => {
     const id = window.setInterval(() => {
       setPlaceholderIndex((prev) => (prev + 1) % guidedPlaceholders.length)
     }, PLACEHOLDER_ROTATION_MS)
     return () => window.clearInterval(id)
+  }, [])
+
+  useEffect(() => {
+    return () => {
+      stopMediaStream()
+    }
   }, [])
 
   const extractInputPreview = (text: string): ExtractedInputPreview => {
@@ -321,6 +340,13 @@ export function AIResumeBuilderPage() {
     }
   }
 
+  const stopMediaStream = () => {
+    if (mediaStreamRef.current) {
+      mediaStreamRef.current.getTracks().forEach((track) => track.stop())
+      mediaStreamRef.current = null
+    }
+  }
+
   const flashVoiceStatus = (message: string, timeoutMs = 2500) => {
     setVoiceStatus(message)
     if (voiceStatusTimerRef.current) {
@@ -401,7 +427,178 @@ export function AIResumeBuilderPage() {
     }
   }
 
+  const isAsciiOnly = (value: string): boolean => {
+    const content = (value || "").trim()
+    if (!content) return true
+    return /^[\x00-\x7F]+$/.test(content)
+  }
+
+  const shouldRetryOdiaRecognition = (text: string): boolean => {
+    const cleaned = (text || "").trim()
+    if (!cleaned) return true
+    if (isAsciiOnly(cleaned)) return true
+    if (cleaned.split(/\s+/).filter(Boolean).length < 3) return true
+    const lowered = cleaned.toLowerCase()
+    return ODIA_MISRECOGNITIONS.some((token) => lowered.includes(token))
+  }
+
+  const convertRomanizedOdiaToScript = async (text: string): Promise<string> => {
+    const raw = (text || "").trim()
+    if (!raw) return ""
+    try {
+      const response = await fetch("https://inputtools.google.com/request?itc=or-t-i0-und&num=1&cp=0&cs=1&ie=utf-8&oe=utf-8&app=demopage", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
+        },
+        body: `text=${encodeURIComponent(raw)}`,
+      })
+      if (!response.ok) return raw
+      const data = await response.json()
+      const converted = data?.[1]?.[0]?.[1]?.[0]
+      return typeof converted === "string" && converted.trim() ? converted.trim() : raw
+    } catch {
+      return raw
+    }
+  }
+
+  const preprocessAudioBlob = async (inputBlob: Blob): Promise<Blob> => {
+    try {
+      const audioContext = new AudioContext()
+      const arrayBuffer = await inputBlob.arrayBuffer()
+      const decoded = await audioContext.decodeAudioData(arrayBuffer)
+      const targetSampleRate = 16000
+      const source = decoded.getChannelData(0)
+      const ratio = decoded.sampleRate / targetSampleRate
+      const targetLength = Math.max(1, Math.floor(source.length / ratio))
+      const resampled = new Float32Array(targetLength)
+      for (let i = 0; i < targetLength; i += 1) {
+        const srcIndex = Math.min(source.length - 1, Math.floor(i * ratio))
+        resampled[i] = source[srcIndex]
+      }
+      let peak = 0
+      for (let i = 0; i < resampled.length; i += 1) {
+        const abs = Math.abs(resampled[i])
+        if (abs > peak) peak = abs
+      }
+      const gain = peak > 0 ? Math.min(1 / peak, 3) : 1
+      for (let i = 0; i < resampled.length; i += 1) {
+        resampled[i] = Math.max(-1, Math.min(1, resampled[i] * gain))
+      }
+      const wavBuffer = new ArrayBuffer(44 + resampled.length * 2)
+      const view = new DataView(wavBuffer)
+      const writeString = (offset: number, value: string) => {
+        for (let i = 0; i < value.length; i += 1) view.setUint8(offset + i, value.charCodeAt(i))
+      }
+      writeString(0, "RIFF")
+      view.setUint32(4, 36 + resampled.length * 2, true)
+      writeString(8, "WAVE")
+      writeString(12, "fmt ")
+      view.setUint32(16, 16, true)
+      view.setUint16(20, 1, true)
+      view.setUint16(22, 1, true)
+      view.setUint32(24, targetSampleRate, true)
+      view.setUint32(28, targetSampleRate * 2, true)
+      view.setUint16(32, 2, true)
+      view.setUint16(34, 16, true)
+      writeString(36, "data")
+      view.setUint32(40, resampled.length * 2, true)
+      let offset = 44
+      for (let i = 0; i < resampled.length; i += 1) {
+        const s = Math.max(-1, Math.min(1, resampled[i]))
+        view.setInt16(offset, s < 0 ? s * 0x8000 : s * 0x7fff, true)
+        offset += 2
+      }
+      await audioContext.close()
+      return new Blob([wavBuffer], { type: "audio/wav" })
+    } catch {
+      return inputBlob
+    }
+  }
+
+  const transcribeOdiaVoice = async (audioBlob: Blob): Promise<string> => {
+    const processed = await preprocessAudioBlob(audioBlob)
+    const formData = new FormData()
+    formData.append("audio", processed, "voice.wav")
+    formData.append("language_hint", "or")
+    const response = await apiClient.client.post("/resume/transcribe-voice", formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    })
+    return typeof response?.data?.transcript === "string" ? response.data.transcript.trim() : ""
+  }
+
   const toggleRecording = () => {
+  if (locale === "or") {
+  if (isRecording) {
+  manualStopRef.current = true
+  clearSilenceTimer()
+  mediaRecorderRef.current?.stop()
+  setIsRecording(false)
+  setVoicePhase("processing")
+  setVoiceStatus("Processing voice input...")
+  return
+  }
+  navigator.mediaDevices
+  .getUserMedia({ audio: true })
+  .then((stream) => {
+  mediaStreamRef.current = stream
+  const recorder = new MediaRecorder(stream)
+  mediaRecorderRef.current = recorder
+  mediaChunksRef.current = []
+  voiceTranscriptRef.current = ""
+  setLiveTranscript("")
+  setTranscript("")
+  setVoiceErrorHint("")
+  setVoicePhase("listening")
+  setVoiceStatus("Listening...")
+  manualStopRef.current = false
+
+  recorder.ondataavailable = (event) => {
+  if (event.data && event.data.size > 0) mediaChunksRef.current.push(event.data)
+  }
+  recorder.onstop = () => {
+  const blob = new Blob(mediaChunksRef.current, { type: recorder.mimeType || "audio/webm" })
+  stopMediaStream()
+  setIsRecording(false)
+  if (manualStopRef.current && blob.size < 1024) {
+  setVoicePhase("idle")
+  manualStopRef.current = false
+  return
+  }
+  setVoicePhase("processing")
+  setVoiceStatus("Transcribing Odia voice...")
+  void transcribeOdiaVoice(blob)
+  .then((transcribed) => {
+  voiceTranscriptRef.current = transcribed
+  setTranscript(transcribed)
+  setLiveTranscript(transcribed)
+  if (!transcribed || transcribed.split(/\s+/).filter(Boolean).length < 3) {
+  setVoiceErrorHint("Voice input not detected. Please type your input or switch to English/Hindi.")
+  setVoicePhase("idle")
+  return
+  }
+  setVoicePhase("completed")
+  setVoiceStatus("Generating your resume...")
+  void handleSend({ contentOverride: transcribed, bypassConfirmation: true })
+  })
+  .catch(() => {
+  setVoiceErrorHint("Voice input failed. Please try again.")
+  setVoicePhase("idle")
+  })
+  .finally(() => {
+  manualStopRef.current = false
+  })
+  }
+  recorder.start()
+  scheduleSilenceStop()
+  setIsRecording(true)
+  })
+  .catch(() => {
+  setVoiceErrorHint("Microphone permission denied. Please allow microphone access.")
+  setVoicePhase("idle")
+  })
+  return
+  }
   if (isRecording) {
       manualStopRef.current = true
       clearSilenceTimer()
@@ -417,22 +614,18 @@ export function AIResumeBuilderPage() {
     return
   }
   const recognition = new Speech()
-  recognition.lang = locale === "or" ? "or-IN" : locale === "hi" ? "hi-IN" : "en-IN"
+  recognition.lang = locale === "hi" ? "hi-IN" : "en-IN"
   recognition.interimResults = true
   voiceTranscriptRef.current = ""
   setLiveTranscript("")
   setTranscript("")
   odiaFallbackTriedRef.current = false
+  odiaStrictRetryTriedRef.current = false
+  romanizedOdiaDetectedRef.current = false
     manualStopRef.current = false
   setVoiceErrorHint("")
   setVoicePhase("listening")
-  setVoiceStatus(
-  locale === "or"
-  ? "Odia speech detected... translating to professional English."
-  : locale === "hi"
-  ? "Hindi speech detected... translating to professional English."
-  : "Listening..."
-  )
+  setVoiceStatus(locale === "hi" ? "Hindi speech detected... translating to professional English." : "Listening...")
   recognition.onresult = (event) => {
   const nextText = Array.from(event.results)
   .map((res) => res[0]?.transcript || "")
@@ -462,26 +655,22 @@ export function AIResumeBuilderPage() {
   setIsRecording(false)
   setVoiceStatus((prev) => (prev.includes("Translation unavailable") ? prev : ""))
       if (!voiceTranscriptRef.current.trim() && !manualStopRef.current) {
-  if (locale === "or" && !odiaFallbackTriedRef.current) {
-  odiaFallbackTriedRef.current = true
-  recognition.lang = useHindiVoiceFallback ? "hi-IN" : "en-IN"
-  flashVoiceStatus(
-  useHindiVoiceFallback
-  ? "Trying with Hindi voice for better recognition..."
-  : "Retrying voice input in English..."
-  )
+  setVoiceErrorHint("Voice input not detected. Please type your input or switch to English/Hindi.")
+  setVoicePhase("idle")
+  } else {
+  const transcriptText = voiceTranscriptRef.current.trim()
+  if (!manualStopRef.current && !odiaStrictRetryTriedRef.current && shouldRetryOdiaRecognition(transcriptText)) {
+  odiaStrictRetryTriedRef.current = true
+  flashVoiceStatus("Retrying voice input for better recognition...", 2600)
   try {
   recognition.start()
   setIsRecording(true)
   scheduleSilenceStop()
   return
   } catch {
-  // fall through to user hint below
+  // Continue with existing validation hints.
   }
   }
-  setVoiceErrorHint("Voice input not detected. Please type your input or switch to English/Hindi.")
-  setVoicePhase("idle")
-  } else {
   if (voiceTranscriptRef.current.trim().length < 3) {
   setVoiceErrorHint("Voice input not detected. Please type your input or switch to English/Hindi.")
   setVoicePhase("idle")
@@ -512,12 +701,13 @@ export function AIResumeBuilderPage() {
   setIsRecording(true)
   }
 
-  const runGeneration = async (content: string, finalInput: string) => {
+  const runGeneration = async (content: string, finalInput: string, voiceTranscriptPayload: string = "") => {
   setMessages((prev) => [...prev, { id: mkId(), role: "user", content }])
   setPendingConfirmation(null)
   try {
   const generated = await generateResume({
       text: finalInput,
+      voiceTranscript: voiceTranscriptPayload,
   language: locale,
       jobDescription: "",
   files: attachments.map((a) => a.file),
@@ -571,7 +761,14 @@ export function AIResumeBuilderPage() {
   }
   const rawText = finalInput
   console.log("Sending input:", rawText)
-  const translatedText = await safeTranslateToEnglish(rawText)
+  let normalizedInput = rawText
+  romanizedOdiaDetectedRef.current = false
+  if (locale === "or" && isAsciiOnly(rawText)) {
+  romanizedOdiaDetectedRef.current = true
+  setVoiceStatus("Romanized Odia detected. Converting before translation...")
+  normalizedInput = await convertRomanizedOdiaToScript(rawText)
+  }
+  const translatedText = await safeTranslateToEnglish(normalizedInput)
   const finalPayloadInput = translatedText && translatedText.trim().length > 5 ? translatedText.trim() : rawText
   console.log("Raw Transcript:", rawText)
   console.log("Translated Text:", translatedText)
@@ -588,7 +785,10 @@ export function AIResumeBuilderPage() {
   preview,
   })
   }
-  await runGeneration(rawText, finalPayloadInput)
+  const voiceTranscriptPayload = options?.contentOverride
+  ? rawText
+  : (!inputValue.trim() && transcript.trim() ? transcript.trim() : "")
+  await runGeneration(rawText, finalPayloadInput, voiceTranscriptPayload)
   }
 
   const handleSyncSuccess = () => {
