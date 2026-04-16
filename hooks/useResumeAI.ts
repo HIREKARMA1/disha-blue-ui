@@ -98,10 +98,25 @@ interface GenerateResumeResult {
   locale_used?: string
   metadata?: Record<string, unknown> & { ats_feedback?: AtsFeedback }
 }
+
+interface LiveTranscribeResult {
+  transcript_text: string
+  translated_text: string
+  language: string
+  status: string
+  debug?: Record<string, unknown>
+}
 interface ResumeState {
   type: "structured" | "text" | null
   structured: FullResumeSchema | null
   text: string | null
+}
+
+interface TranscribeAudioOptions {
+  language?: SupportedLocale
+  priorTranscript?: string
+  debugMode?: boolean
+  chunkId?: string
 }
 
 const statusStepsByLocale: Record<SupportedLocale, string[]> = {
@@ -365,6 +380,20 @@ export function useResumeAI() {
   [resumeData]
   )
 
+  const transcribeAudioChunk = useCallback(async (audioBlob: Blob, options?: TranscribeAudioOptions) => {
+    const formData = new FormData()
+    const language = (options?.language || "or") as SupportedLocale
+    const mimeType = audioBlob.type || "audio/webm;codecs=opus"
+    // Keep key name in sync with backend UploadFile parameter.
+    formData.append("file", new File([audioBlob], "live-audio.webm", { type: mimeType }))
+    formData.append("language", language)
+    formData.append("prior_transcript", options?.priorTranscript || "")
+    formData.append("debug_mode", options?.debugMode ? "true" : "false")
+    formData.append("chunk_id", options?.chunkId || "")
+    const response = await apiClient.client.post<LiveTranscribeResult>("/resume/transcribe-live", formData)
+    return response.data
+  }, [])
+
   return {
   resumeState,
   resumeData,
@@ -384,6 +413,7 @@ export function useResumeAI() {
   saveError,
   generateResume,
   saveToProfile,
+  transcribeAudioChunk,
   }
 }
 

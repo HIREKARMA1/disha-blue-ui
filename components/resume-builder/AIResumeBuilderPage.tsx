@@ -28,42 +28,11 @@ import { useProfile } from "@/hooks/useProfile"
 import { ExecutiveResumePreview } from "./ResumePreview"
 import { PostResumePreferences } from "./PostResumePreferences"
 
-interface SpeechRecognitionResultItem {
-  transcript: string
-}
-
-interface SpeechRecognitionResultLike {
-  [index: number]: SpeechRecognitionResultItem
-}
-
-interface SpeechRecognitionEventLike {
-  results: ArrayLike<SpeechRecognitionResultLike>
-}
-
-interface SpeechRecognitionLike {
-  lang: string
-  interimResults: boolean
-  onresult: ((event: SpeechRecognitionEventLike) => void) | null
-  onend: (() => void) | null
-  onerror?: ((event: { error?: string }) => void) | null
-  start: () => void
-  stop: () => void
-}
-
-type SpeechRecognitionType = {
-  new (): SpeechRecognitionLike
-}
-
-declare global {
-  interface Window {
-  SpeechRecognition?: SpeechRecognitionType
-  webkitSpeechRecognition?: SpeechRecognitionType
-  }
-}
-
 const mkId = () => `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`
 const VOICE_SILENCE_MS = 2000
 const MIN_RESUME_INPUT_LEN = 10
+const AUDIO_CHUNK_MS = 1000
+const AUDIO_FLUSH_MS = 4000
 
 interface LocalChatMessage {
   id: string
@@ -85,6 +54,20 @@ interface PendingConfirmation {
 interface ParsedTextResumeSection {
   title: string
   lines: string[]
+}
+
+interface ChunkDebugItem {
+  id: string
+  bytes: number
+  latencyMs: number
+  rawTranscript: string
+  translatedText: string
+  status: "ok" | "error" | "empty"
+  backendDebug?: Record<string, unknown>
+}
+const normalizeChunkStatus = (status: string | undefined): ChunkDebugItem["status"] => {
+  if (status === "error" || status === "empty") return status
+  return "ok"
 }
 
 const formatResumeAsAssistantMessage = (resume: FullResumeSchema) => JSON.stringify(resume, null, 2)
@@ -135,7 +118,7 @@ const isValidResumeInput = (text: string): boolean => {
 export function AIResumeBuilderPage() {
   const { locale } = useLocale()
   const { profile } = useProfile()
-  const { resumeState, resumeData, setResumeData, generateResume, generationMetadata, textResume, isGenerating, isSaving, statusMessage, error, errorSuggestions, saveToProfile } = useResumeAI()
+  const { resumeState, resumeData, setResumeData, generateResume, generationMetadata, textResume, isGenerating, isSaving, statusMessage, error, errorSuggestions, saveToProfile, transcribeAudioChunk } = useResumeAI()
   const [messages, setMessages] = useState<LocalChatMessage[]>([])
   const [attachments, setAttachments] = useState<Array<{ id: string; file: File; name: string }>>([])
   const [inputValue, setInputValue] = useState("")
@@ -145,7 +128,6 @@ export function AIResumeBuilderPage() {
   const [voiceErrorHint, setVoiceErrorHint] = useState("")
   const [voicePhase, setVoicePhase] = useState<VoicePhase>("idle")
   const [liveTranscript, setLiveTranscript] = useState("")
-  const [useHindiVoiceFallback, setUseHindiVoiceFallback] = useState(true)
   const [placeholderIndex, setPlaceholderIndex] = useState(0)
   const [pendingConfirmation, setPendingConfirmation] = useState<PendingConfirmation | null>(null)
   const [resumeVersions, setResumeVersions] = useState<FullResumeSchema[]>([])
@@ -158,13 +140,18 @@ export function AIResumeBuilderPage() {
   const [showSavedBadge, setShowSavedBadge] = useState(false)
   const [quickEditOpen, setQuickEditOpen] = useState(false)
   const [quickEditDraft, setQuickEditDraft] = useState<FullResumeSchema | null>(null)
-  const recognitionRef = useRef<SpeechRecognitionLike | null>(null)
+  const [debugMode, setDebugMode] = useState(false)
+  const [chunkDebugLog, setChunkDebugLog] = useState<ChunkDebugItem[]>([])
+  const mediaRecorderRef = useRef<MediaRecorder | null>(null)
+  const mediaStreamRef = useRef<MediaStream | null>(null)
+  const audioChunkBufferRef = useRef<Blob[]>([])
+  const flushIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
   const printRef = useRef<HTMLDivElement>(null)
   const voiceTranscriptRef = useRef("")
+  const translatedVoiceTranscriptRef = useRef("")
   const silenceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const manualStopRef = useRef(false)
-  const odiaFallbackTriedRef = useRef(false)
-  const voiceStatusTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const chunkCounterRef = useRef(0)
   const parsedTextResume = useMemo(() => {
     const raw = (textResume || "").trim()
     if (!raw) return [] as ParsedTextResumeSection[]
@@ -321,21 +308,10 @@ export function AIResumeBuilderPage() {
     }
   }
 
-  const flashVoiceStatus = (message: string, timeoutMs = 2500) => {
-    setVoiceStatus(message)
-    if (voiceStatusTimerRef.current) {
-      clearTimeout(voiceStatusTimerRef.current)
-    }
-    voiceStatusTimerRef.current = setTimeout(() => {
-      setVoiceStatus((prev) => (prev === message ? "" : prev))
-      voiceStatusTimerRef.current = null
-    }, timeoutMs)
-  }
-
   const scheduleSilenceStop = () => {
     clearSilenceTimer()
     silenceTimerRef.current = setTimeout(() => {
-      recognitionRef.current?.stop()
+      mediaRecorderRef.current?.stop()
       setVoicePhase("processing")
       setVoiceStatus("Processing voice input...")
     }, VOICE_SILENCE_MS)
@@ -401,115 +377,168 @@ export function AIResumeBuilderPage() {
     }
   }
 
-  const toggleRecording = () => {
-  if (isRecording) {
+  const processAudioChunk = async (audioChunk: Blob) => {
+    console.info("[voice-upload] outgoing blob size(bytes):", audioChunk.size)
+    if (!audioChunk.size) {
+      console.warn("[voice-upload] blocked empty blob before transport")
+      setVoiceErrorHint("Captured audio blob is empty. Please retry recording.")
+      return
+    }
+    const chunkId = `chunk-${++chunkCounterRef.current}`
+    const startedAt = performance.now()
+    try {
+      const response = await transcribeAudioChunk(audioChunk, {
+        language: locale,
+        priorTranscript: voiceTranscriptRef.current,
+        debugMode,
+        chunkId,
+      })
+      const latencyMs = Math.round(performance.now() - startedAt)
+      if (debugMode) {
+        const debugItem: ChunkDebugItem = {
+          id: chunkId,
+          bytes: audioChunk.size,
+          latencyMs,
+          rawTranscript: response?.transcript_text || "",
+          translatedText: response?.translated_text || "",
+          status: normalizeChunkStatus(response?.status),
+          backendDebug: response?.debug,
+        }
+        setChunkDebugLog((prev) => [debugItem, ...prev].slice(0, 40))
+      }
+      if (response?.status === "error") return
+      const chunkTranscript = (response?.transcript_text || "").trim()
+      const chunkEnglish = (response?.translated_text || "").trim()
+      if (!chunkTranscript && !chunkEnglish) return
+      if (chunkTranscript) {
+        const mergedTranscript = `${voiceTranscriptRef.current} ${chunkTranscript}`.trim()
+        voiceTranscriptRef.current = mergedTranscript
+        setLiveTranscript(mergedTranscript)
+        setTranscript(mergedTranscript)
+      }
+      if (chunkEnglish) {
+        translatedVoiceTranscriptRef.current = `${translatedVoiceTranscriptRef.current} ${chunkEnglish}`.trim()
+      }
+      scheduleSilenceStop()
+    } catch {
+      if (debugMode) {
+        const latencyMs = Math.round(performance.now() - startedAt)
+        const debugItem: ChunkDebugItem = {
+          id: chunkId,
+          bytes: audioChunk.size,
+          latencyMs,
+          rawTranscript: "",
+          translatedText: "",
+          status: "error",
+        }
+        setChunkDebugLog((prev) => [debugItem, ...prev].slice(0, 40))
+      }
+      setVoiceErrorHint("Live transcription failed for a chunk. Continuing...")
+    }
+  }
+
+  const stopMediaTracks = () => {
+    mediaStreamRef.current?.getTracks().forEach((track) => track.stop())
+    mediaStreamRef.current = null
+  }
+
+  const clearFlushInterval = () => {
+    if (flushIntervalRef.current) {
+      clearInterval(flushIntervalRef.current)
+      flushIntervalRef.current = null
+    }
+  }
+
+  const flushBufferedAudioForTranscription = async () => {
+    const chunks = audioChunkBufferRef.current
+    if (!chunks.length) return
+    const combinedBlob = new Blob(chunks, { type: "audio/webm;codecs=opus" })
+    audioChunkBufferRef.current = []
+    await processAudioChunk(combinedBlob)
+  }
+
+  const toggleRecording = async () => {
+    if (isRecording) {
       manualStopRef.current = true
       clearSilenceTimer()
-  recognitionRef.current?.stop()
-  setIsRecording(false)
-  setVoicePhase("processing")
-  setVoiceStatus("Processing voice input...")
-  return
-  }
-  const Speech = window.SpeechRecognition || window.webkitSpeechRecognition
-  if (!Speech) {
-    setVoiceErrorHint("Speech recognition is not supported in this browser.")
-    return
-  }
-  const recognition = new Speech()
-  recognition.lang = locale === "or" ? "or-IN" : locale === "hi" ? "hi-IN" : "en-IN"
-  recognition.interimResults = true
-  voiceTranscriptRef.current = ""
-  setLiveTranscript("")
-  setTranscript("")
-  odiaFallbackTriedRef.current = false
-    manualStopRef.current = false
-  setVoiceErrorHint("")
-  setVoicePhase("listening")
-  setVoiceStatus(
-  locale === "or"
-  ? "Odia speech detected... translating to professional English."
-  : locale === "hi"
-  ? "Hindi speech detected... translating to professional English."
-  : "Listening..."
-  )
-  recognition.onresult = (event) => {
-  const nextText = Array.from(event.results)
-  .map((res) => res[0]?.transcript || "")
-  .join(" ")
-  voiceTranscriptRef.current = nextText
-  setLiveTranscript(nextText)
-  setTranscript(nextText)
-      scheduleSilenceStop()
-  }
-  recognition.onerror = (event) => {
-    const kind = event?.error || ""
-    if (kind === "not-allowed" || kind === "service-not-allowed") {
-      setVoiceErrorHint("Microphone permission denied. Please allow microphone access.")
-    } else if (kind === "no-speech") {
-      setVoiceErrorHint(t(locale, "resumeAI.noAudioDetected"))
-    } else if (kind === "language-not-supported") {
-      setVoiceErrorHint("Voice not supported for selected language. Please type your input.")
-    } else {
-      setVoiceErrorHint("Voice input failed. Please try again.")
+      clearFlushInterval()
+      mediaRecorderRef.current?.stop()
+      setIsRecording(false)
+      setVoicePhase("processing")
+      setVoiceStatus("Processing voice input...")
+      return
     }
-    setVoicePhase("idle")
-    clearSilenceTimer()
-    setIsRecording(false)
-  }
-  recognition.onend = () => {
-      clearSilenceTimer()
-  setIsRecording(false)
-  setVoiceStatus((prev) => (prev.includes("Translation unavailable") ? prev : ""))
-      if (!voiceTranscriptRef.current.trim() && !manualStopRef.current) {
-  if (locale === "or" && !odiaFallbackTriedRef.current) {
-  odiaFallbackTriedRef.current = true
-  recognition.lang = useHindiVoiceFallback ? "hi-IN" : "en-IN"
-  flashVoiceStatus(
-  useHindiVoiceFallback
-  ? "Trying with Hindi voice for better recognition..."
-  : "Retrying voice input in English..."
-  )
-  try {
-  recognition.start()
-  setIsRecording(true)
-  scheduleSilenceStop()
-  return
-  } catch {
-  // fall through to user hint below
-  }
-  }
-  setVoiceErrorHint("Voice input not detected. Please type your input or switch to English/Hindi.")
-  setVoicePhase("idle")
-  } else {
-  if (voiceTranscriptRef.current.trim().length < 3) {
-  setVoiceErrorHint("Voice input not detected. Please type your input or switch to English/Hindi.")
-  setVoicePhase("idle")
-  manualStopRef.current = false
-  return
-  }
-  if (voiceTranscriptRef.current.trim().length < MIN_RESUME_INPUT_LEN) {
-  setVoiceErrorHint("Please provide more details like your skills or education.")
-  setVoicePhase("idle")
-  manualStopRef.current = false
-  return
-  }
-  setVoicePhase("completed")
-  setVoiceStatus("Generating your resume...")
-  void handleSend({ contentOverride: voiceTranscriptRef.current, bypassConfirmation: true })
-  }
+
+    if (!navigator?.mediaDevices?.getUserMedia || typeof MediaRecorder === "undefined") {
+      setVoiceErrorHint("Live microphone capture is not supported in this browser.")
+      return
+    }
+
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
+      mediaStreamRef.current = stream
+      const preferredMimeType =
+        typeof MediaRecorder !== "undefined" && MediaRecorder.isTypeSupported("audio/webm;codecs=opus")
+          ? "audio/webm;codecs=opus"
+          : "audio/webm"
+      const recorder = new MediaRecorder(stream, { mimeType: preferredMimeType })
+      mediaRecorderRef.current = recorder
+      voiceTranscriptRef.current = ""
+      translatedVoiceTranscriptRef.current = ""
+      chunkCounterRef.current = 0
+      setChunkDebugLog([])
+      audioChunkBufferRef.current = []
+      setLiveTranscript("")
+      setTranscript("")
       manualStopRef.current = false
-  }
-  try {
-  recognition.start()
-  } catch {
-  setVoiceErrorHint("Voice not supported for selected language. Please type your input.")
-  setVoicePhase("idle")
-  return
-  }
-    scheduleSilenceStop()
-  recognitionRef.current = recognition
-  setIsRecording(true)
+      setVoiceErrorHint("")
+      setVoicePhase("listening")
+      setVoiceStatus("Listening... live Odia transcription is active.")
+
+      recorder.ondataavailable = (event: BlobEvent) => {
+        if (!event.data || event.data.size === 0) return
+        audioChunkBufferRef.current.push(event.data)
+      }
+
+      recorder.onstop = async () => {
+        clearSilenceTimer()
+        clearFlushInterval()
+        await flushBufferedAudioForTranscription()
+        stopMediaTracks()
+        setIsRecording(false)
+        const englishForResume = translatedVoiceTranscriptRef.current.trim()
+        const rawTranscript = voiceTranscriptRef.current.trim()
+        if (!rawTranscript) {
+          setVoiceErrorHint("Voice input not detected. Please try again.")
+          setVoicePhase("idle")
+          manualStopRef.current = false
+          return
+        }
+        const payloadForResume = englishForResume || rawTranscript
+        if (payloadForResume.length < MIN_RESUME_INPUT_LEN) {
+          setVoiceErrorHint("Please provide more details like your skills or education.")
+          setVoicePhase("idle")
+          manualStopRef.current = false
+          return
+        }
+        setVoicePhase("completed")
+        setVoiceStatus("Generating your resume from translated transcript...")
+        void handleSend({ contentOverride: payloadForResume, bypassConfirmation: true })
+        manualStopRef.current = false
+      }
+
+      recorder.start(AUDIO_CHUNK_MS)
+      flushIntervalRef.current = setInterval(() => {
+        void flushBufferedAudioForTranscription()
+      }, AUDIO_FLUSH_MS)
+      setIsRecording(true)
+      scheduleSilenceStop()
+    } catch {
+      clearFlushInterval()
+      stopMediaTracks()
+      setVoiceErrorHint("Microphone permission denied or unavailable.")
+      setVoicePhase("idle")
+    }
   }
 
   const runGeneration = async (content: string, finalInput: string) => {
@@ -812,10 +841,38 @@ export function AIResumeBuilderPage() {
   </p>
   )}
   {voiceStatus && <p className="text-xs text-secondary-700 dark:text-secondary-300">{voiceStatus}</p>}
+  <label className="inline-flex w-fit items-center gap-2 rounded-md border border-border bg-background px-2 py-1 text-[11px] text-muted-foreground">
+    <input
+      type="checkbox"
+      checked={debugMode}
+      onChange={(e) => setDebugMode(e.target.checked)}
+      className="h-3.5 w-3.5 rounded border-border"
+    />
+    DEBUG MODE
+  </label>
   {liveTranscript && (
   <p className="rounded-lg border border-border bg-muted/30 px-2 py-1 text-xs text-foreground">
     Live transcript: {liveTranscript}
   </p>
+  )}
+  {debugMode && chunkDebugLog.length > 0 && (
+    <div className="space-y-2 rounded-lg border border-border bg-background p-2 text-[11px]">
+      <p className="font-semibold text-foreground">Live Chunk Diagnostics</p>
+      {chunkDebugLog.map((item) => (
+        <div key={item.id} className="space-y-1 rounded border border-border/80 bg-muted/20 p-2">
+          <p className="font-medium text-foreground">
+            {item.id} | {item.status.toUpperCase()} | {item.bytes} bytes | {item.latencyMs} ms
+          </p>
+          <p className="text-muted-foreground">Raw: {item.rawTranscript || "(empty)"}</p>
+          <p className="text-muted-foreground">Translated: {item.translatedText || "(empty)"}</p>
+          {item.backendDebug ? (
+            <p className="text-muted-foreground">
+              Backend timing: STT {String(item.backendDebug.transcription_time_ms ?? "-")} ms, Translation {String(item.backendDebug.translation_time_ms ?? "-")} ms
+            </p>
+          ) : null}
+        </div>
+      ))}
+    </div>
   )}
   {voiceErrorHint && <p className="text-xs text-amber-700 dark:text-amber-300">{voiceErrorHint}</p>}
   {printStatus && <p className="text-xs text-muted-foreground">{printStatus}</p>}
@@ -949,17 +1006,6 @@ export function AIResumeBuilderPage() {
   {isGenerating ? <Loader2 className="h-4 w-4 animate-spin" /> : <span className="inline-flex items-center gap-1"><Send className="h-4 w-4" />Generate Resume</span>}
   </button>
   </div>
-  {locale === "or" && (
-  <label className="mt-2 inline-flex items-center gap-2 text-xs text-muted-foreground">
-    <input
-      type="checkbox"
-      checked={useHindiVoiceFallback}
-      onChange={(e) => setUseHindiVoiceFallback(e.target.checked)}
-      className="h-3.5 w-3.5 rounded border-border"
-    />
-    Use Hindi voice for better recognition
-  </label>
-  )}
   </div>
   </motion.section>
 
