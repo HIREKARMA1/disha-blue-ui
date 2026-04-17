@@ -135,19 +135,44 @@ export function Navbar({
   const active = pathname === href
   if (isTransparentVariant) {
   return cn(
-  'rounded-lg px-3 py-1.5 text-sm font-medium transition-colors',
+  'rounded-lg px-3 py-1.5 text-sm font-medium whitespace-nowrap transition-colors',
   active
   ? 'bg-sage/25 text-slate-900 shadow-sm dark:bg-emerald-800 dark:text-white'
   : 'text-slate-900 hover:bg-sage/15 hover:text-sage-deep dark:text-emerald-50 dark:hover:bg-emerald-800/65 dark:hover:text-white',
   )
   }
   return cn(
-  'rounded-lg px-3 py-1.5 text-sm font-medium transition-colors',
+  'rounded-lg px-3 py-1.5 text-sm font-medium whitespace-nowrap transition-colors',
   active
   ? 'bg-white/95 text-slate-900 shadow-sm ring-1 ring-sage-deep/25 dark:bg-emerald-800 dark:text-white dark:ring-emerald-600/50'
   : 'text-slate-900 hover:bg-white/60 hover:text-slate-950 dark:text-emerald-50 dark:hover:bg-emerald-800/70 dark:hover:text-white',
   )
   }
+
+  const isShowcaseNavItem = (href: string) =>
+  href === '/jobs' ||
+  href === '/auth/register?type=student' ||
+  href === '/auth/register?type=corporate' ||
+  href === '/#features' ||
+  href === '/#about' ||
+  href === `mailto:${BRANDING.supportEmail}`
+
+  const showcaseNavLinkClass = (href: string) =>
+  cn(
+  'rounded-lg border px-3.5 py-1.5 text-sm font-semibold whitespace-nowrap transition-colors',
+  isTransparentVariant
+  ? 'border-sage-deep/30 bg-sage/10 text-slate-900 hover:bg-sage/20 dark:border-emerald-500/55 dark:bg-emerald-800/40 dark:text-emerald-50 dark:hover:bg-emerald-700/60'
+  : 'border-sage-deep/35 bg-white/70 text-slate-900 hover:bg-white dark:border-emerald-500/60 dark:bg-emerald-900/65 dark:text-emerald-50 dark:hover:bg-emerald-800',
+  pathname === href && 'ring-1 ring-sage-deep/30 dark:ring-emerald-400/60',
+  )
+
+  const mobileNavItemClass = (href: string) =>
+  cn(
+  'w-full justify-start whitespace-nowrap',
+  isShowcaseNavItem(href)
+  ? 'rounded-lg border border-sage-deep/35 bg-white/70 font-semibold text-slate-900 hover:bg-white dark:border-emerald-500/60 dark:bg-emerald-900/65 dark:text-emerald-50 dark:hover:bg-emerald-800'
+  : mobileNavItemGhostClass,
+  )
 
   const mobileNavItemGhostClass = isTransparentVariant
   ? 'text-slate-900 hover:bg-sage/15 hover:text-sage-deep dark:text-emerald-50 dark:hover:bg-emerald-800/60 dark:hover:text-white'
@@ -358,7 +383,7 @@ export function Navbar({
   <a
   key={item.label}
   href={item.href}
-  className={marketingNavLinkClass(item.href)}
+  className={isShowcaseNavItem(item.href) ? showcaseNavLinkClass(item.href) : marketingNavLinkClass(item.href)}
   >
   {item.label}
   </a>
@@ -366,7 +391,7 @@ export function Navbar({
   <Link
   key={item.href}
   href={item.href}
-  className={marketingNavLinkClass(item.href)}
+  className={isShowcaseNavItem(item.href) ? showcaseNavLinkClass(item.href) : marketingNavLinkClass(item.href)}
   >
   {item.label}
   </Link>
@@ -484,11 +509,11 @@ export function Navbar({
   {navLinks.map((item) =>
   item.external ? (
   <a key={item.label} href={item.href} onClick={() => setIsMobileMenuOpen(false)}>
-  <Button variant="ghost" className={cn('w-full justify-start', mobileNavItemGhostClass)}>{item.label}</Button>
+  <Button variant="ghost" className={mobileNavItemClass(item.href)}>{item.label}</Button>
   </a>
   ) : (
   <Link key={item.href} href={item.href} onClick={() => setIsMobileMenuOpen(false)}>
-  <Button variant="ghost" className={cn('w-full justify-start', mobileNavItemGhostClass)}>{item.label}</Button>
+  <Button variant="ghost" className={mobileNavItemClass(item.href)}>{item.label}</Button>
   </Link>
   )
   )}
