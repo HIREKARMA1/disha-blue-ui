@@ -50,13 +50,6 @@ type SpeechRecognitionType = {
   new (): SpeechRecognitionLike
 }
 
-declare global {
-  interface Window {
-  SpeechRecognition?: SpeechRecognitionType
-  webkitSpeechRecognition?: SpeechRecognitionType
-  }
-}
-
 const mkId = () => `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`
 
 const safeGetLocalStorage = (key: string, fallback = ''): string => {
@@ -132,7 +125,11 @@ export function ChatBot() {
   setIsRecording(false)
   return
   }
-  const Speech = window.SpeechRecognition || window.webkitSpeechRecognition
+  const speechWindow = window as Window & {
+  SpeechRecognition?: SpeechRecognitionType
+  webkitSpeechRecognition?: SpeechRecognitionType
+  }
+  const Speech = speechWindow.SpeechRecognition || speechWindow.webkitSpeechRecognition
   if (!Speech) return
   const recognition = new Speech()
   recognition.lang = locale === 'hi' ? 'hi-IN' : locale === 'or' ? 'or-IN' : 'en-IN'

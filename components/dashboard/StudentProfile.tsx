@@ -132,7 +132,11 @@ const [profileData, completionData] = await Promise.all([
  }
  }
 
- const handleSave = async (sectionId: string, formData: ProfileUpdateData) => {
+ const handleSave = async (
+ sectionId: string,
+ formData: ProfileUpdateData,
+ options?: { showSuccessToast?: boolean }
+ ) => {
  try {
  setSaving(true)
  setError(null)
@@ -151,10 +155,12 @@ const completionData = await profileService.getProfileCompletion()
 
  setEditing(null)
 
- // Only show success toast if there were actual changes
- // The form validation already ensures we only get here if there are changes
-const sectionName = profileSections.find(s => s.id === sectionId)?.title || 'Profile'
-toast.success(`${sectionName} updated successfully!`)
+ // Only show success toast if requested
+const showSuccessToast = options?.showSuccessToast ?? true
+ if (showSuccessToast) {
+ const sectionName = profileSections.find(s => s.id === sectionId)?.title || 'Profile'
+ toast.success(`${sectionName} updated successfully!`)
+ }
 
  } catch (error: any) {
  console.error('Error saving profile:', error)
@@ -384,7 +390,7 @@ toast.success(`${sectionName} updated successfully!`)
  <ProfileSectionForm
  section={{ id:'basic', title:'Basic Information', icon: User, fields: ['name','email','phone','dob','gender','country','state','city','bio','profile_picture'], completed: false }}
  profile={profile}
- onSave={(formData) => handleSave('basic', formData)}
+ onSave={(formData, options) => handleSave('basic', formData, options)}
  saving={saving}
  onCancel={() => setEditing(null)}
  />
@@ -502,7 +508,7 @@ toast.success(`${sectionName} updated successfully!`)
  <ProfileSectionForm
  section={{ id:'academic', title:'Academic Information', icon: GraduationCap, fields: ['institution','degree','branch','graduation_year','btech_cgpa','twelfth_institution','twelfth_stream','twelfth_year','twelfth_grade_percentage','tenth_institution','tenth_stream','tenth_year','tenth_grade_percentage'], completed: false }}
  profile={profile}
- onSave={(formData) => handleSave('academic', formData)}
+ onSave={(formData, options) => handleSave('academic', formData, options)}
  saving={saving}
  onCancel={() => setEditing(null)}
  />
@@ -608,7 +614,7 @@ toast.success(`${sectionName} updated successfully!`)
  <ProfileSectionForm
  section={{ id:'skills', title:'Skills & Interests', icon: Zap, fields: ['technical_skills','soft_skills','certifications','preferred_industry','job_roles_of_interest','location_preferences','preferred_job_city','preferred_job_district','preferred_job_state','preferred_job_remote','open_to_relocation'], completed: false }}
  profile={profile}
- onSave={(formData) => handleSave('skills', formData)}
+ onSave={(formData, options) => handleSave('skills', formData, options)}
  saving={saving}
  onCancel={() => setEditing(null)}
  />
@@ -719,7 +725,7 @@ toast.success(`${sectionName} updated successfully!`)
  <ProfileSectionForm
  section={{ id:'experience', title:'Experience & Projects', icon: Trophy, fields: ['internship_experience','project_details','extracurricular_activities'], completed: false }}
  profile={profile}
- onSave={(formData) => handleSave('experience', formData)}
+ onSave={(formData, options) => handleSave('experience', formData, options)}
  saving={saving}
  onCancel={() => setEditing(null)}
  />
@@ -833,7 +839,7 @@ toast.success(`${sectionName} updated successfully!`)
  <ProfileSectionForm
  section={{ id:'documents', title:'Documents & Certificates', icon: Shield, fields: ['resume','10th_certificate','12th_certificate','internship_certificates'], completed: false }}
  profile={profile}
- onSave={(formData) => handleSave('documents', formData)}
+ onSave={(formData, options) => handleSave('documents', formData, options)}
  saving={saving}
  onCancel={() => setEditing(null)}
  />
@@ -967,7 +973,7 @@ toast.success(`${sectionName} updated successfully!`)
  <ProfileSectionForm
  section={{ id:'social', title:'Social Profiles', icon: Globe, fields: ['linkedin_profile','github_profile','personal_website'], completed: false }}
  profile={profile}
- onSave={(formData) => handleSave('social', formData)}
+ onSave={(formData, options) => handleSave('social', formData, options)}
  saving={saving}
  onCancel={() => setEditing(null)}
  />
@@ -1079,7 +1085,7 @@ interface ProfileSectionFormProps {
  completed: boolean
  }
  profile: StudentProfile
- onSave: (formData: any) => void
+ onSave: (formData: any, options?: { showSuccessToast?: boolean }) => void
  saving: boolean
  onCancel: () => void
 }
@@ -1319,12 +1325,6 @@ const hasSocialProfiles = socialFields.some(field =>
 
  // Documents Validation
  if (section.id ==='documents') {
- // Resume is required
- if (!cleanedFormData.resume) {
- validationErrors.push('Resume is required')
- hasValidationErrors = true
- }
-
  // Validate file URLs if provided
 const documentFields = ['resume','tenth_certificate','twelfth_certificate','internship_certificates']
  documentFields.forEach(field => {
@@ -1424,6 +1424,23 @@ setFormData({ ...formData, [field]: fileUrl })
  }
 
  const handleFileRemove = (field: string) => {
+ if (field === 'profile_picture') {
+ void (async () => {
+ try {
+ await profileService.removeProfilePicture()
+ setFormData((prev: any) => ({ ...prev, profile_picture:'' }))
+ setUploadError(null)
+ setUploadSuccess('profile_picture')
+ setTimeout(() => setUploadSuccess(null), 3000)
+ await onSave({ profile_picture: null }, { showSuccessToast: false })
+ toast.success('Profile picture removed successfully')
+ } catch (error: any) {
+ setUploadError(error?.message || 'Failed to remove profile picture')
+ toast.error(error?.message || 'Failed to remove profile picture')
+ }
+ })()
+ return
+ }
  setFormData({ ...formData, [field]:''})
  setUploadError(null)
  }
