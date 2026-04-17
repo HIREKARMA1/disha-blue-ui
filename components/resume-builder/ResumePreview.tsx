@@ -114,44 +114,43 @@ export function ExecutiveResumePreview({ resume, sectionLabels, emptyHint }: Exe
   <h1 className="text-3xl font-semibold tracking-tight">{resume.personal_info.name || 'Your Name'}</h1>
   <p className="mt-1 text-sm text-[#374151]">
   {[
-  resume.personal_info.email,
-  resume.personal_info.phone,
-  resume.personal_info.location,
+  resume.personal_info.email || "Email",
+  resume.personal_info.phone || "Phone",
+  resume.personal_info.location || "Location",
   ]
-  .filter(Boolean)
   .join(' · ')}
   </p>
-  {(resume.personal_info.linkedin || resume.personal_info.github || resume.personal_info.portfolio) && (
   <p className="mt-1 text-xs text-[#4B5563]">
-  {[resume.personal_info.linkedin, resume.personal_info.github, resume.personal_info.portfolio]
-  .filter(Boolean)
-  .join('  |  ')}
+  {[
+    resume.personal_info.linkedin || "LinkedIn",
+    resume.personal_info.github || "GitHub",
+    resume.personal_info.portfolio || "Portfolio",
+  ].join('  |  ')}
   </p>
-  )}
   </header>
 
-  {resume.personal_info.summary && (
   <section className="mt-5">
   <h2 className="text-xs font-semibold uppercase tracking-[0.16em] text-primary">
   {sectionLabels?.summary || 'Professional Summary'}
   </h2>
-  <p className="mt-2 text-sm leading-relaxed text-[#1F2937]">{resume.personal_info.summary}</p>
+  <p className="mt-2 text-sm leading-relaxed text-[#1F2937]">{resume.personal_info.summary || " "}</p>
   </section>
-  )}
 
-  {resume.experience.length > 0 && (
   <section className="mt-5">
   <h2 className="text-xs font-semibold uppercase tracking-[0.16em] text-primary">
   {sectionLabels?.experience || 'Work Experience'}
   </h2>
   <div className="mt-2 space-y-3">
-  {resume.experience.map((item, idx) => (
+  {(resume.experience.length > 0
+    ? resume.experience
+    : [{ company: "", role: "", start_date: "", end_date: "", location: "", bullets: [] }]
+  ).map((item, idx) => (
   <div key={`${item.company}-${idx}`}>
   <div className="flex flex-wrap items-center justify-between gap-2">
-  <p className="text-sm font-semibold text-[#111827]">{item.role} · {item.company}</p>
-  <p className="text-xs text-[#4B5563]">{item.start_date} - {item.end_date}</p>
+  <p className="text-sm font-semibold text-[#111827]">{item.role || "Role"} · {item.company || "Company"}</p>
+  <p className="text-xs text-[#4B5563]">{item.start_date || "Start"} - {item.end_date || "End"}</p>
   </div>
-  <p className="text-xs text-[#6B7280]">{item.location}</p>
+  <p className="text-xs text-[#6B7280]">{item.location || "Location"}</p>
   {item.bullets.length > 0 && (
   <ul className="mt-1 list-disc pl-5 text-sm text-[#1F2937]">
   {item.bullets.map((bullet, bulletIdx) => (
@@ -163,43 +162,47 @@ export function ExecutiveResumePreview({ resume, sectionLabels, emptyHint }: Exe
   ))}
   </div>
   </section>
-  )}
 
-  {resume.education.length > 0 && (
   <section className="mt-5">
   <h2 className="text-xs font-semibold uppercase tracking-[0.16em] text-primary">
   {sectionLabels?.education || 'Education'}
   </h2>
   <div className="mt-2 space-y-2">
-  {resume.education.map((item, idx) => (
+  {(resume.education.length > 0
+    ? resume.education
+    : [{ institution: "", degree: "", field_of_study: "", start_date: "", end_date: "", score: "", highlights: [] }]
+  ).map((item, idx) => (
   <div key={`${item.institution}-${idx}`}>
-  <p className="text-sm font-semibold text-[#111827]">{item.degree} {item.field_of_study ? `in ${item.field_of_study}` : ''}</p>
-  <p className="text-xs text-[#4B5563]">{item.institution} · {item.start_date} - {item.end_date} {item.score ? `· ${item.score}` : ''}</p>
+  <p className="text-sm font-semibold text-[#111827]">
+    {item.degree || "Degree"} {item.field_of_study ? `in ${item.field_of_study}` : "in Field of Study"}
+  </p>
+  <p className="text-xs text-[#4B5563]">
+    {item.institution || "Institution"} · {item.start_date || "Start"} - {item.end_date || "End"} {item.score ? `· ${item.score}` : ""}
+  </p>
   </div>
   ))}
   </div>
   </section>
-  )}
 
-  {resume.skills.length > 0 && (
   <section className="mt-5">
   <h2 className="text-xs font-semibold uppercase tracking-[0.16em] text-primary">
   {sectionLabels?.skills || 'Skills'}
   </h2>
-  <p className="mt-2 text-sm text-[#1F2937]">{resume.skills.join(' · ')}</p>
+  <p className="mt-2 text-sm text-[#1F2937]">{resume.skills.length > 0 ? resume.skills.join(' · ') : " "}</p>
   </section>
-  )}
 
-  {resume.projects.length > 0 && (
   <section className="mt-5">
   <h2 className="text-xs font-semibold uppercase tracking-[0.16em] text-primary">
   {sectionLabels?.projects || 'Projects'}
   </h2>
   <div className="mt-2 space-y-3">
-  {resume.projects.map((project, idx) => (
+  {(resume.projects.length > 0
+    ? resume.projects
+    : [{ name: "", role: "", tech_stack: [], description: "", bullets: [], link: "" }]
+  ).map((project, idx) => (
   <div key={`${project.name}-${idx}`}>
-  <p className="text-sm font-semibold text-[#111827]">{project.name}</p>
-  {project.description && <p className="text-sm text-[#374151]">{project.description}</p>}
+  <p className="text-sm font-semibold text-[#111827]">{project.name || "Project Name"}</p>
+  <p className="text-sm text-[#374151]">{project.description || " "}</p>
   {project.bullets.length > 0 && (
   <ul className="mt-1 list-disc pl-5 text-sm text-[#1F2937]">
   {project.bullets.map((bullet, bulletIdx) => (
@@ -211,20 +214,17 @@ export function ExecutiveResumePreview({ resume, sectionLabels, emptyHint }: Exe
   ))}
   </div>
   </section>
-  )}
 
-  {resume.certifications.length > 0 && (
   <section className="mt-5">
   <h2 className="text-xs font-semibold uppercase tracking-[0.16em] text-primary">
   {sectionLabels?.certifications || 'Certifications'}
   </h2>
   <ul className="mt-2 list-disc pl-5 text-sm text-[#1F2937]">
-  {resume.certifications.map((cert, idx) => (
+  {(resume.certifications.length > 0 ? resume.certifications : [" "]).map((cert, idx) => (
   <li key={`${cert}-${idx}`}>{cert}</li>
   ))}
   </ul>
   </section>
-  )}
 
   <style jsx global>{`
   @media print {
