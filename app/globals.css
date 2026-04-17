@@ -173,6 +173,22 @@ body.hide-sidebar .main-navbar {
     width: 100% !important;
     max-width: 100% !important;
   }
+
+  /*
+   * @tailwindcss/forms: checked checkboxes use background-color: currentColor and a white SVG tick.
+   * When an input sits inside a label with text-muted-foreground (or similar), color can inherit
+   * and the fill becomes too light — the tick looks missing. Pin to theme primary for contrast.
+   */
+  input:where([type="checkbox"]),
+  input:where([type="radio"]) {
+    color: hsl(var(--primary));
+    accent-color: hsl(var(--primary));
+  }
+
+  .dark input:where([type="checkbox"]),
+  .dark input:where([type="radio"]) {
+    background-color: hsl(var(--background));
+  }
 }
 
 @layer components {
@@ -190,11 +206,23 @@ body.hide-sidebar .main-navbar {
     color: #ffffff;
   }
 
-  .dashboard-flat * {
+  /*
+   * Flatten decorative chrome, but do NOT strip checkbox/radio background-image:
+   * @tailwindcss/forms paints the tick via background-image — the old .dashboard-flat * rule
+   * made every checked box look empty (white tick on forced light gray bg).
+   */
+  .dashboard-flat *:not(input[type='checkbox']):not(input[type='radio']) {
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
     background-image: none !important;
     box-shadow: none !important;
+  }
+
+  .dashboard-flat input[type='checkbox']:checked,
+  .dashboard-flat input[type='radio']:checked {
+    background-color: hsl(var(--primary)) !important;
+    border-color: hsl(var(--primary)) !important;
+    color: hsl(var(--primary)) !important;
   }
 
   .dashboard-flat .card,

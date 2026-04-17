@@ -13,17 +13,30 @@ const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
   ({ className, label, description, ...props }, ref) => {
   return (
   <div className="flex items-start space-x-3">
-  <div className="relative flex items-center">
-  <input
-  type="checkbox"
-  className={cn(
-  "peer h-4 w-4 shrink-0 rounded-sm border border-gray-300 dark:border-gray-600 ring-offset-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary-600 data-[state=checked]:text-primary-50 data-[state=checked]:border-primary-600",
+  <div className={cn(
+  "relative inline-flex h-4 w-4 shrink-0 items-center justify-center",
   className
   )}
+  >
+  <input
+  type="checkbox"
+  className="peer absolute inset-0 z-10 m-0 h-full w-full cursor-pointer appearance-none opacity-0"
   ref={ref}
   {...props}
   />
-  <Check className="absolute h-3 w-3 text-white opacity-0 peer-checked:opacity-100 pointer-events-none" />
+  <span
+  aria-hidden
+  className={cn(
+  "pointer-events-none absolute inset-0 flex items-center justify-center rounded-sm border border-input bg-background ring-offset-background transition-colors",
+  "peer-focus-visible:outline-none peer-focus-visible:ring-2 peer-focus-visible:ring-ring peer-focus-visible:ring-offset-2",
+  "peer-checked:border-primary peer-checked:bg-primary",
+  "peer-disabled:opacity-50",
+  "[&_svg]:shrink-0 [&_svg]:text-primary-foreground [&_svg]:opacity-0 [&_svg]:transition-opacity",
+  "peer-checked:[&_svg]:opacity-100"
+  )}
+  >
+  <Check strokeWidth={3} className="h-3 w-3" aria-hidden />
+  </span>
   </div>
   {(label || description) && (
   <div className="grid gap-1.5 leading-none">
