@@ -210,6 +210,32 @@ export class ProfileService {
   }
 
   /**
+  * Remove profile picture
+  */
+  async removeProfilePicture(): Promise<{ message: string }> {
+  try {
+  if (!apiClient.isAuthenticated()) {
+  throw new Error('User not authenticated. Please log in.')
+  }
+
+  const response = await apiClient.client.delete('/students/profile-picture')
+  return response.data
+  } catch (error: any) {
+  console.error('Error removing profile picture:', error)
+  
+  if (error.response?.status === 401) {
+  throw new Error('Authentication failed. Please log in again.')
+  } else if (error.response?.status === 404) {
+  throw new Error('Student profile not found.')
+  } else if (error.response?.status >= 500) {
+  throw new Error('Server error. Please try again later.')
+  } else {
+  throw new Error(error.response?.data?.detail || 'Failed to remove profile picture.')
+  }
+  }
+  }
+
+  /**
   * Upload resume
   */
   async uploadResume(file: File): Promise<FileUploadResponse> {

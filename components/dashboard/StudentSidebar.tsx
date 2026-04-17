@@ -33,6 +33,7 @@ interface NavItem {
  href: string
  icon: LucideIcon
  description: string
+aliases?: string[]
 }
 
 interface NavGroup {
@@ -53,13 +54,21 @@ export function StudentSidebar({ className =''}: StudentSidebarProps) {
  const { locale } = useLocale()
  const navGroups: NavGroup[] = [
  {
- title: t(locale,'dashboard.groups.overview'),
- items: [{ label: t(locale,'common.dashboard'), href:'/dashboard/student', icon: LayoutDashboard, description:'Your career control center'}],
+title: 'Overview',
+items: [
+{ label: 'Dashboard', href:'/dashboard/student', icon: LayoutDashboard, description:'Your career control center'},
+{
+label:'Local Jobs',
+href:'/dashboard/discover-jobs',
+aliases: ['/dashboard/student/jobs'],
+icon: Compass,
+description:'Local and personalized roles',
+},
+],
  },
  {
  title: t(locale,'dashboard.groups.jobs'),
  items: [
- { label:'Discover Jobs', href:'/dashboard/discover-jobs', icon: Compass, description:'Local and personalized roles'},
  { label:'Applications', href:'/dashboard/student/applications', icon: ClipboardList, description:'Track your pipeline status'},
  ],
  },
@@ -108,8 +117,14 @@ export function StudentSidebar({ className =''}: StudentSidebarProps) {
  :'text-slate-700 hover:text-slate-900 dark:text-emerald-200 dark:hover:text-white',
  )
 
+ const isItemActive = (item: NavItem) => {
+ if (pathname === item.href) return true
+ if (item.aliases?.includes(pathname || '')) return true
+ return false
+ }
+
  const renderMobileRow = (item: NavItem) => {
- const isActive = pathname === item.href
+const isActive = isItemActive(item)
  return (
  <Link
  key={item.href}
@@ -141,7 +156,7 @@ export function StudentSidebar({ className =''}: StudentSidebarProps) {
  {/* Desktop: slim sage icon rail (reference UI) */}
  <aside
  className={cn(
- 'student-sidebar fixed inset-y-0 left-0 z-40 hidden w-16 flex-col bg-sage dark:bg-emerald-950 lg:flex',
+'student-sidebar fixed inset-y-0 left-0 z-40 hidden w-16 flex-col bg-sage pt-16 dark:bg-emerald-950 lg:flex',
  'rounded-none',
  className,
  )}
@@ -149,7 +164,7 @@ export function StudentSidebar({ className =''}: StudentSidebarProps) {
  <nav className="flex min-h-0 flex-1 flex-col items-center px-0 py-4">
  <div className="flex min-h-0 w-full flex-1 flex-col items-center gap-3 overflow-y-auto overflow-x-hidden px-2">
  {allItems.map((item) => {
- const isActive = pathname === item.href
+const isActive = isItemActive(item)
  return (
  <SidebarRailHoverCard
  key={item.href}
@@ -177,7 +192,7 @@ export function StudentSidebar({ className =''}: StudentSidebarProps) {
  <div className="student-mobile-nav fixed bottom-0 left-0 right-0 z-50 border-t border-sage-deep bg-sage pb-safe dark:border-emerald-800 dark:bg-emerald-950 lg:hidden">
  <div className="grid grid-cols-5 gap-1 px-2 py-2">
  {allItems.slice(0, 4).map((item) => {
- const isActive = pathname === item.href
+const isActive = isItemActive(item)
  return (
  <Link
  key={item.href}
