@@ -69,8 +69,12 @@ export function ChatBot() {
   const [input, setInput] = useState('')
   const [isRecording, setIsRecording] = useState(false)
   const [showScrollDown, setShowScrollDown] = useState(false)
-  const isStudentDashboardRoute = pathname?.startsWith('/dashboard/student')
-  const mobileBottomOffsetClass = isStudentDashboardRoute
+  const hasMobileBottomNav =
+  pathname?.startsWith('/dashboard/student') ||
+  pathname?.startsWith('/dashboard/corporate') ||
+  pathname?.startsWith('/dashboard/admin')
+
+  const mobileBottomOffsetClass = hasMobileBottomNav
   ? 'bottom-[calc(5.5rem+env(safe-area-inset-bottom))]'
   : 'bottom-[calc(1rem+env(safe-area-inset-bottom))]'
 
