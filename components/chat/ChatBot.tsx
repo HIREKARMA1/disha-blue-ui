@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import * as Dialog from '@radix-ui/react-dialog'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useDropzone } from 'react-dropzone'
+import { usePathname } from 'next/navigation'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
@@ -60,6 +61,7 @@ const safeGetLocalStorage = (key: string, fallback = ''): string => {
 }
 
 export function ChatBot() {
+  const pathname = usePathname()
   const { user } = useAuth()
   const { locale } = useLocale()
   const { messages, attachments, setAttachments, sendMessage, isPending, canSend, error, stop } = useChat()
@@ -67,6 +69,11 @@ export function ChatBot() {
   const [input, setInput] = useState('')
   const [isRecording, setIsRecording] = useState(false)
   const [showScrollDown, setShowScrollDown] = useState(false)
+  const isStudentDashboardRoute = pathname?.startsWith('/dashboard/student')
+  const mobileBottomOffsetClass = isStudentDashboardRoute
+  ? 'bottom-[calc(5.5rem+env(safe-area-inset-bottom))]'
+  : 'bottom-[calc(1rem+env(safe-area-inset-bottom))]'
+
   const listRef = useRef<HTMLDivElement | null>(null)
   const recognitionRef = useRef<SpeechRecognitionLike | null>(null)
   const folderInputRef = useRef<HTMLInputElement | null>(null)
@@ -154,7 +161,7 @@ export function ChatBot() {
   <Dialog.Root open={open} onOpenChange={setOpen}>
   <Dialog.Trigger asChild>
   <button
-  className="fixed bottom-6 right-5 z-[80] inline-flex h-14 w-14 items-center justify-center rounded-full border border-primary/30 bg-gradient-to-r from-primary to-secondary text-primary-foreground shadow-large transition hover:scale-[1.02]"
+  className={`fixed right-5 z-[80] inline-flex h-14 w-14 items-center justify-center rounded-full border border-primary/30 bg-gradient-to-r from-primary to-secondary text-primary-foreground shadow-large transition hover:scale-[1.02] ${mobileBottomOffsetClass} md:bottom-6`}
   aria-label="Open Opportunity Assistant"
   >
   <Bot className="h-6 w-6" />
@@ -177,7 +184,7 @@ export function ChatBot() {
   initial={{ opacity: 0, y: 16, scale: 0.98 }}
   animate={{ opacity: 1, y: 0, scale: 1 }}
   exit={{ opacity: 0, y: 10, scale: 0.98 }}
-  className="fixed bottom-5 right-5 z-[100] flex h-[78vh] w-[min(94vw,520px)] flex-col overflow-hidden rounded-3xl border border-border/80 bg-card/70 shadow-[0_30px_80px_rgba(35,18,66,0.25)] backdrop-blur-xl"
+  className={`fixed right-5 z-[100] flex h-[72vh] w-[min(94vw,520px)] flex-col overflow-hidden rounded-3xl border border-border/80 bg-card/70 shadow-[0_30px_80px_rgba(35,18,66,0.25)] backdrop-blur-xl ${mobileBottomOffsetClass} md:bottom-5 md:h-[78vh]`}
   >
   <div className="flex items-center justify-between border-b border-border/70 px-4 py-3">
   <div>

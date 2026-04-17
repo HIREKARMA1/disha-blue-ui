@@ -75,11 +75,19 @@ export function Navbar({
   const isDashboardRoute = pathname?.startsWith('/dashboard')
   const isStudentDashboardRoute = pathname?.startsWith('/dashboard/student')
   const isStudentProfileRoute = pathname?.startsWith('/dashboard/student/profile')
+  const showMobileMarketingMenu = !isDashboardRoute
   /** Full marketing nav + Sign in / Find jobs / Post jobs on every non-dashboard route (home, jobs, auth, about, etc.). */
   const showMarketingAuthCluster = !isDashboardRoute
   const dashboardSegments = (pathname || '').split('/').filter(Boolean)
-  const dashboardSection = dashboardSegments[2]
-  ? dashboardSegments[2].replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase())
+  const rawDashboardSection =
+  dashboardSegments[2] ||
+  (dashboardSegments[1] && dashboardSegments[1] !== user?.user_type ? dashboardSegments[1] : undefined)
+  const dashboardSectionMap: Record<string, string> = {
+  'discover-jobs': 'Discover Job',
+  }
+  const dashboardSection = rawDashboardSection
+  ? (dashboardSectionMap[rawDashboardSection] ||
+  rawDashboardSection.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase()))
   : 'Overview'
   const dashboardRoleLabel =
   user?.user_type === 'student'
@@ -210,7 +218,7 @@ export function Navbar({
 
   {/* Desktop Navigation */}
   <div className="hidden min-w-0 flex-1 items-center justify-end gap-4 lg:flex">
-  {isDashboardRoute && !isStudentProfileRoute ? (
+  {isDashboardRoute ? (
   <div className="flex flex-1 items-center justify-center">
   <div className="inline-flex items-center gap-2 rounded-2xl border border-sage-deep/50 bg-white/40 px-3 py-1.5 text-xs font-medium text-slate-900 shadow-sm dark:border-emerald-800/65 dark:bg-emerald-900/60 dark:text-emerald-50">
   <span className="rounded-none bg-sage-deep px-2 py-0.5 font-semibold text-white dark:bg-emerald-700 dark:text-white">{dashboardRoleLabel}</span>
@@ -427,17 +435,17 @@ export function Navbar({
   )}
 
   {!textOnly && <LanguageSwitcher variant={isTransparentVariant ? 'surface' : 'bar'} />}
-  {!isStudentProfileRoute && (
   <ThemeToggle variant={isTransparentVariant ? 'surface' : 'bar'} labelsOnly={textOnly} />
-  )}
   </div>
   </div>
 
   {/* Mobile Menu Button */}
   <div className="ml-auto flex items-center gap-2 lg:hidden">
-  {!isStudentProfileRoute && (
-  <ThemeToggle variant={isTransparentVariant ? 'surface' : 'bar'} labelsOnly={textOnly} />
+  {!textOnly && (
+  <LanguageSwitcher compact variant={isTransparentVariant ? 'surface' : 'bar'} />
   )}
+  <ThemeToggle variant={isTransparentVariant ? 'surface' : 'bar'} labelsOnly={textOnly} />
+  {showMobileMarketingMenu && (
   <Button
   variant="ghost"
   size="sm"
@@ -457,11 +465,12 @@ export function Navbar({
   <Menu className="w-5 h-5" />
   )}
   </Button>
+  )}
   </div>
   </div>
 
   {/* Mobile Menu */}
-  {isMobileMenuOpen && (
+  {showMobileMarketingMenu && isMobileMenuOpen && (
   <div
   className={cn(
   'absolute left-0 right-0 top-full border-t lg:hidden',
