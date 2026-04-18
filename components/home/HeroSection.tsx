@@ -24,39 +24,38 @@ export default function HeroSection() {
         />
 
         <div
-          className="pointer-events-none absolute inset-0 bg-gradient-to-r from-black/18 via-black/6 to-transparent dark:from-emerald-950/26 dark:via-emerald-950/10 dark:to-transparent"
+          className="pointer-events-none absolute inset-0 bg-gradient-to-l from-black/28 via-black/10 to-transparent dark:from-emerald-950/35 dark:via-emerald-950/14 dark:to-transparent"
           aria-hidden
         />
 
-        <div className="absolute inset-0 flex items-end justify-center p-3 sm:justify-start sm:p-8 lg:p-12">
+        <div className="absolute inset-0 flex items-end p-3 sm:p-8 lg:p-12">
           <motion.div
-            initial={{ opacity: 0, x: -14 }}
+            initial={{ opacity: 0, x: 14 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.45, delay: 0.1 }}
-            className="w-full max-w-lg rounded-2xl border border-white/20 bg-black/15 p-4 text-center text-white backdrop-blur-[1.5px] sm:max-w-md sm:p-6 sm:text-left"
+            className="ml-auto flex w-full max-w-lg flex-col items-stretch rounded-none border border-slate-200/90 bg-[#f1f1ee] p-6 text-left text-slate-900 shadow-none sm:max-w-md sm:p-8 dark:border-emerald-800 dark:bg-emerald-950 dark:text-emerald-50"
           >
-            <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/80 sm:text-xs sm:tracking-[0.22em]">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-sage-deep sm:text-xs dark:text-emerald-300">
               Career growth simplified
             </p>
-            <h1 className="mt-2 font-display text-3xl font-bold leading-[1.02] drop-shadow-[0_3px_10px_rgba(0,0,0,0.35)] sm:mt-3 sm:text-5xl">
-              Find Your
-              <br />
-              Next Opportunity
+            <h1 className="mt-4 font-display text-3xl font-bold leading-[1.12] tracking-tight sm:mt-5 sm:text-5xl sm:leading-[1.08]">
+              <span className="block">Find Your</span>
+              <span className="block">Next Opportunity</span>
             </h1>
-            <p className="mx-auto mt-3 max-w-md text-sm leading-relaxed text-white/90 sm:mx-0 sm:mt-4 sm:text-base">
+            <p className="mt-4 max-w-prose text-sm leading-relaxed text-slate-600 sm:mt-5 sm:text-base dark:text-emerald-200/85">
               Disha helps students discover better-fit jobs and helps employers hire with a cleaner, faster workflow.
             </p>
 
-            <div className="mt-5 flex flex-col items-stretch gap-2.5 sm:mt-6 sm:flex-row sm:flex-wrap sm:items-center sm:justify-start sm:gap-3">
+            <div className="mt-6 flex flex-col gap-3 sm:mt-8 sm:flex-row sm:flex-wrap sm:items-center">
               <Link href="/auth/register?type=student" className="w-full sm:w-auto">
-                <Button className="h-10 w-full rounded-lg bg-white px-5 text-sm font-semibold text-slate-900 hover:bg-slate-100 sm:h-11 sm:w-auto sm:px-6">
+                <Button className="h-11 w-full rounded-none border-0 bg-sage-deep px-6 text-sm font-semibold text-white shadow-none hover:bg-sage-deep/90 dark:bg-emerald-600 dark:hover:bg-emerald-500 sm:w-auto">
                   Get Started
                 </Button>
               </Link>
               <Link href="/auth/register?type=corporate" className="w-full sm:w-auto">
                 <Button
                   variant="outline"
-                  className="h-10 w-full rounded-lg border-white/60 bg-transparent px-5 text-sm font-semibold text-white hover:bg-white/10 sm:h-11 sm:w-auto sm:px-6"
+                  className="h-11 w-full rounded-none border-2 border-slate-300 bg-[#f1f1ee] px-6 text-sm font-semibold text-slate-900 shadow-none hover:border-sage-deep hover:bg-[#e8e8e4] dark:border-emerald-600 dark:bg-emerald-950 dark:text-emerald-50 dark:hover:bg-emerald-900 sm:w-auto"
                 >
                   For Employers
                 </Button>
