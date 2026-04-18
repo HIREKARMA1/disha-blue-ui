@@ -115,7 +115,7 @@ export function Navbar({
   const getNavbarClasses = () => {
   if (isTransparentVariant) {
   return (
-  'w-full z-50 fixed top-0 left-0 right-0 border-b border-slate-200/90 border-t-[3px] border-t-sage-deep bg-white/92 shadow-[0_4px_24px_-6px_rgba(15,23,42,0.09)] backdrop-blur-md dark:border-emerald-800/65 dark:border-t-emerald-500/85 dark:bg-emerald-950/92 dark:shadow-none'
+  'w-full z-50 fixed top-0 left-0 right-0 border-b border-slate-200/90 border-t-[3px] border-t-sage-deep bg-white/92 shadow-[0_4px_24px_-6px_rgba(15,23,42,0.09)] backdrop-blur-md dark:border-emerald-600/35 dark:border-t-emerald-400/80 dark:bg-emerald-950/95 dark:shadow-none'
   )
   }
   return (
@@ -124,11 +124,11 @@ export function Navbar({
   }
 
   const marketingNavInnerClass = isTransparentVariant
-  ? 'border border-slate-200/90 bg-white/88 shadow-[0_4px_24px_-6px_rgba(15,23,42,0.06)] dark:border-emerald-800/65 dark:bg-emerald-900/40 dark:shadow-none'
+  ? 'border border-slate-200/90 bg-white/88 shadow-[0_4px_24px_-6px_rgba(15,23,42,0.06)] ring-1 ring-black/[0.03] dark:border-emerald-500/40 dark:bg-emerald-900/55 dark:shadow-none dark:ring-1 dark:ring-inset dark:ring-emerald-400/12'
   : 'border border-sage-deep/50 bg-white/40 shadow-sm dark:border-emerald-800/60 dark:bg-emerald-900/50'
 
   const marketingAuthClusterClass = isTransparentVariant
-  ? 'border border-slate-200/90 bg-white/90 shadow-[0_4px_24px_-6px_rgba(15,23,42,0.06)] dark:border-emerald-800/65 dark:bg-emerald-900/45 dark:shadow-none'
+  ? 'border border-slate-200/90 bg-white/90 shadow-[0_4px_24px_-6px_rgba(15,23,42,0.06)] ring-1 ring-black/[0.03] dark:border-emerald-500/40 dark:bg-emerald-900/55 dark:shadow-none dark:ring-1 dark:ring-inset dark:ring-emerald-400/12'
   : 'border border-sage-deep/50 bg-white/45 shadow-sm dark:border-emerald-800/60 dark:bg-emerald-900/55'
 
   const marketingNavLinkClass = (href: string) => {
@@ -137,8 +137,8 @@ export function Navbar({
   return cn(
   'rounded-lg px-3 py-1.5 text-sm font-medium transition-colors',
   active
-  ? 'bg-sage/25 text-slate-900 shadow-sm dark:bg-emerald-800 dark:text-white'
-  : 'text-slate-900 hover:bg-sage/15 hover:text-sage-deep dark:text-emerald-50 dark:hover:bg-emerald-800/65 dark:hover:text-white',
+  ? 'bg-sage/25 text-slate-900 shadow-sm ring-1 ring-sage-deep/15 dark:bg-emerald-800/90 dark:text-white dark:ring-emerald-400/25'
+  : 'text-slate-900 hover:bg-sage/15 hover:text-sage-deep dark:text-emerald-50 dark:hover:bg-emerald-800/55 dark:hover:text-white',
   )
   }
   return cn(

@@ -22,7 +22,7 @@ const stories = [
 export default function ConnectionStoriesSection() {
   return (
     <section
-      className="bg-sage/10 py-16 dark:bg-emerald-900/25 md:py-24"
+      className="relative z-[1] -mt-px border-0 bg-sage/10 py-16 dark:bg-emerald-950 md:py-24"
       aria-labelledby="connection-stories-heading"
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
