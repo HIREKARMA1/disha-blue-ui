@@ -6,7 +6,6 @@ import type { MouseEvent } from "react"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { StepForm } from "@/components/signup/StepForm"
-import { VoiceInput } from "@/components/signup/VoiceInput"
 import { getOnboardingStep, getSignupData, saveSignupData, saveStep, setOnboardingStep, uploadOnboardingDocument } from "@/lib/onboarding"
 import { useAuth } from "@/hooks/useAuth"
 
@@ -76,40 +75,6 @@ export default function SignupStep2Page() {
     return Object.keys(nextErrors).length === 0
   }
 
-  const parseVoiceEducation = (text: string) => {
-    const lower = text.toLowerCase()
-    const year = (lower.match(/\b(19|20)\d{2}\b/) || [])[0] || ""
-    const percent = (lower.match(/(\d{1,3}(?:\.\d+)?)\s*(%|percent|percentage)/) || [])[1] || ""
-    if (lower.includes("10th") || lower.includes("tenth") || lower.includes("दस") || lower.includes("das")) {
-      setEducation((prev) => ({
-        ...prev,
-        tenth: {
-          ...prev.tenth,
-          percentage: percent || prev.tenth.percentage,
-          year_of_passing: year || prev.tenth.year_of_passing,
-        },
-      }))
-    } else if (lower.includes("12th") || lower.includes("twelfth") || lower.includes("बारह") || lower.includes("barah")) {
-      setEducation((prev) => ({
-        ...prev,
-        twelfth: {
-          ...prev.twelfth,
-          percentage: percent || prev.twelfth.percentage,
-          year_of_passing: year || prev.twelfth.year_of_passing,
-        },
-      }))
-    } else if (lower.includes("graduation") || lower.includes("college") || lower.includes("btech")) {
-      setEducation((prev) => ({
-        ...prev,
-        graduation: {
-          ...prev.graduation,
-          cgpa: percent || prev.graduation.cgpa,
-          year_of_passing: year || prev.graduation.year_of_passing,
-        },
-      }))
-    }
-  }
-
   const handleUpload = async (section: "tenth" | "twelfth" | "graduation", file?: File) => {
     if (!file) return
     setUploadingSection(section)
@@ -177,14 +142,9 @@ export default function SignupStep2Page() {
       subtitle="Add 10th, 12th, Graduation details."
       step={2}
       totalSteps={4}
-      helperHint="You can speak your education details"
-      helperVoiceText="You can speak your education details"
+      helperHint="Manual entry and upload only."
+      helperVoiceText="Manual entry and upload only."
     >
-      <VoiceInput
-        label="🎤 Add Education"
-        onTranscript={parseVoiceEducation}
-        onParsedSuggestions={() => undefined}
-      />
       <div className="space-y-4">
         <div className="rounded-xl border bg-card p-4 shadow-sm">
           <h3 className="mb-3 text-base font-semibold">📘 10th Details</h3>

@@ -6,7 +6,7 @@ import type { MouseEvent } from "react"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { StepForm } from "@/components/signup/StepForm"
-import { VoiceInput } from "@/components/signup/VoiceInput"
+import { FieldVoiceButton } from "@/components/signup/FieldVoiceButton"
 import { getOnboardingStep, getSignupData, saveSignupData, saveStep, setOnboardingStep } from "@/lib/onboarding"
 import { useAuth } from "@/hooks/useAuth"
 
@@ -96,25 +96,6 @@ export default function SignupStep3Page() {
       helperHint="Speak your skills like electrician, helper, or driver"
       helperVoiceText="Speak your skills like electrician, helper, or driver"
     >
-      <VoiceInput
-        label="🎤 Speak skills"
-        onTranscript={(text) => setSkillsText((prev) => (prev ? `${prev}, ${text}` : text))}
-        onParsedSuggestions={(parsed) => {
-          const parsedSkills = parsed?.skills
-          if (Array.isArray(parsedSkills) && parsedSkills.length) {
-            setSkillsText((prev) => [...normalize(prev), ...parsedSkills].join(", "))
-            setSkillsMeta((prev) => {
-              const map = new Map(prev.map((item) => [item.name.toLowerCase(), item]))
-              parsedSkills.forEach((skill) => {
-                if (!map.has(String(skill).toLowerCase())) {
-                  map.set(String(skill).toLowerCase(), { name: String(skill), source: "auto-detected" })
-                }
-              })
-              return Array.from(map.values())
-            })
-          }
-        }}
-      />
       <Input
         className="rounded-xl border px-4 py-3 focus-visible:ring-2 focus-visible:ring-primary"
         placeholder="e.g. Electrician, Welding, Plumbing"
@@ -129,7 +110,30 @@ export default function SignupStep3Page() {
             })
           )
         }}
+        rightIcon={
+          <FieldVoiceButton
+            fieldType="skills"
+            ariaLabel="Speak skills"
+            onParsed={({ translatedText, parsed }) => {
+              const fallback = normalize(translatedText)
+              const parsedSkills = Array.isArray(parsed?.skills) ? parsed.skills.map((item: any) => String(item).trim()).filter(Boolean) : []
+              const nextSkills = parsedSkills.length > 0 ? parsedSkills : fallback
+              if (!nextSkills.length) return
+              setSkillsText((prev) => [...normalize(prev), ...nextSkills].join(", "))
+              setSkillsMeta((prev) => {
+                const map = new Map(prev.map((item) => [item.name.toLowerCase(), item]))
+                nextSkills.forEach((skill) => {
+                  if (!map.has(skill.toLowerCase())) {
+                    map.set(skill.toLowerCase(), { name: skill, source: "auto-detected" })
+                  }
+                })
+                return Array.from(map.values())
+              })
+            }}
+          />
+        }
       />
+      <p className="text-xs text-muted-foreground">Hindi/English supported</p>
       {skillsMeta.length > 0 && (
         <div className="flex flex-wrap gap-2">
           {skillsMeta.map((item) => (

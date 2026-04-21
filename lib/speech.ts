@@ -16,6 +16,8 @@ const hindiPrompts: Record<string, string> = {
 async function translateForSpeech(text: string, targetLang: "en" | "hi"): Promise<string> {
   const source = (text || "").trim()
   if (!source || targetLang === "en") return source
+  // If text is already Hindi, speak it directly.
+  if (/[\u0900-\u097F]/.test(source)) return source
   // Fast path for common onboarding prompts to avoid network latency.
   if (hindiPrompts[source]) return hindiPrompts[source]
   try {
@@ -29,20 +31,36 @@ async function translateForSpeech(text: string, targetLang: "en" | "hi"): Promis
   }
 }
 
-export async function speakText(text: string) {
+export async function speakText(text: string, lang?: "en" | "hi") {
   if (typeof window === "undefined" || !("speechSynthesis" in window)) return
-  const selectedLang = getSignupLanguage()
+  const selectedLang = lang || getSignupLanguage()
   const translated = await translateForSpeech(text, selectedLang)
   const utterance = new SpeechSynthesisUtterance(translated || text)
-  const voices = window.speechSynthesis.getVoices()
-  const hiVoice = voices.find((voice) => voice.lang.toLowerCase().startsWith("hi"))
+  const synth = window.speechSynthesis
+  const voices = synth.getVoices()
 
-  if (selectedLang === "hi" && hiVoice) {
-    utterance.lang = "hi-IN"
-    utterance.voice = hiVoice
-  } else {
-    utterance.lang = "en-IN"
+  if (voices.length === 0) {
+    synth.onvoiceschanged = () => {
+      synth.onvoiceschanged = null
+      void speakText(text, selectedLang)
+    }
+    return
   }
-  window.speechSynthesis.cancel()
-  window.speechSynthesis.speak(utterance)
+
+  let voice: SpeechSynthesisVoice | undefined
+  if (selectedLang === "hi") {
+    voice =
+      voices.find((v) => v.lang.toLowerCase().includes("hi-in")) ||
+      voices.find((v) => v.lang.toLowerCase().includes("hi"))
+  } else {
+    voice =
+      voices.find((v) => v.lang.toLowerCase().includes("en-in")) ||
+      voices.find((v) => v.lang.toLowerCase().includes("en-us")) ||
+      voices.find((v) => v.lang.toLowerCase().includes("en"))
+  }
+
+  utterance.lang = selectedLang === "hi" ? "hi-IN" : "en-IN"
+  utterance.voice = voice || null
+  synth.cancel()
+  synth.speak(utterance)
 }

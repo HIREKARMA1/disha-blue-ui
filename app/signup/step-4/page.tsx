@@ -6,7 +6,7 @@ import type { MouseEvent } from "react"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { StepForm } from "@/components/signup/StepForm"
-import { VoiceInput } from "@/components/signup/VoiceInput"
+import { FieldVoiceButton } from "@/components/signup/FieldVoiceButton"
 import { getOnboardingStep, getSignupData, saveSignupData, saveStep, setOnboardingStep } from "@/lib/onboarding"
 import { useAuth } from "@/hooks/useAuth"
 
@@ -16,6 +16,8 @@ export default function SignupStep4Page() {
   const initial = getSignupData()
   const [type, setType] = useState("work")
   const [description, setDescription] = useState("")
+  const [company, setCompany] = useState("")
+  const [duration, setDuration] = useState("")
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
@@ -33,7 +35,10 @@ export default function SignupStep4Page() {
   const saveStepData = async () => {
     console.log("SAVE API CALL START")
     try {
-      const experience = description ? [{ type, description }] : []
+      const structuredDescription = [duration ? `Duration: ${duration}` : "", company ? `Company: ${company}` : "", description]
+        .filter(Boolean)
+        .join(" | ")
+      const experience = description ? [{ type, description: structuredDescription }] : []
       const response = await saveStep("step-4", { experience }, initial.userId)
       console.log("SAVE API RESPONSE:", response)
       saveSignupData({ ...initial, experience })
@@ -83,9 +88,32 @@ export default function SignupStep4Page() {
       helperHint="Share your work experience to improve job matching"
       helperVoiceText="Share your work experience to improve job matching"
     >
-      <VoiceInput label="🎤 Add experience" onTranscript={setDescription} />
       <Input className="rounded-xl border px-4 py-3 focus-visible:ring-2 focus-visible:ring-primary" placeholder="Type: work / internship / training" value={type} onChange={(e) => setType(e.target.value)} />
-      <Input className="rounded-xl border px-4 py-3 focus-visible:ring-2 focus-visible:ring-primary" placeholder="Description" value={description} onChange={(e) => setDescription(e.target.value)} />
+      <Input className="rounded-xl border px-4 py-3 focus-visible:ring-2 focus-visible:ring-primary" placeholder="Duration (e.g. 2 years)" value={duration} onChange={(e) => setDuration(e.target.value)} />
+      <Input className="rounded-xl border px-4 py-3 focus-visible:ring-2 focus-visible:ring-primary" placeholder="Company (optional)" value={company} onChange={(e) => setCompany(e.target.value)} />
+      <div className="space-y-1">
+        <div className="relative">
+          <textarea
+            className="min-h-[96px] w-full rounded-xl border px-4 py-3 pr-12 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+            placeholder="Describe your role and work details"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+          />
+          <div className="absolute right-3 top-3">
+            <FieldVoiceButton
+              fieldType="experience"
+              ariaLabel="Speak experience"
+              onParsed={({ translatedText, parsed }) => {
+                setDescription(String(parsed?.description || translatedText || "").trim())
+                if (parsed?.role) setType(String(parsed.role))
+                if (parsed?.company) setCompany(String(parsed.company))
+                if (parsed?.duration) setDuration(String(parsed.duration))
+              }}
+            />
+          </div>
+        </div>
+        <p className="text-xs text-muted-foreground">Hindi/English supported</p>
+      </div>
       <div className="fixed bottom-0 left-0 z-40 w-full border-t bg-white p-4 shadow-md dark:bg-zinc-900 md:static md:border-0 md:bg-transparent md:p-0 md:shadow-none">
         <div className="mx-auto flex max-w-xl justify-between gap-3 md:mt-6">
           <Button type="button" variant="outline" className="h-12 w-1/2 rounded-xl border border-gray-300 text-gray-700" onClick={(e) => void onPrevious(e)} loading={loading}>

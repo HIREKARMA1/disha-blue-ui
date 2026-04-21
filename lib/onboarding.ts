@@ -170,8 +170,11 @@ export async function fetchOnboardingProgress(userId: string) {
   return response.data as { user_id: string; current_step: "step-1" | "step-2" | "step-3" | "step-4" | "review" }
 }
 
-export async function parseVoiceText(text: string, field?: "name" | "skills" | "education" | "experience" | "general") {
-  const response = await apiClient.client.post("/onboarding/parse-voice", { text, field })
+export async function parseVoiceText(
+  text: string,
+  field?: "name" | "phone" | "location" | "skills" | "education" | "experience" | "general"
+) {
+  const response = await apiClient.client.post("/onboarding/parse-voice", { text, field, field_type: field })
   return response.data as {
     original_text: string
     translated_text: string

@@ -6,7 +6,7 @@ import type { MouseEvent } from "react"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { StepForm } from "@/components/signup/StepForm"
-import { VoiceInput } from "@/components/signup/VoiceInput"
+import { FieldVoiceButton } from "@/components/signup/FieldVoiceButton"
 import { getOnboardingStep, getSignupData, saveSignupData, saveStep, setOnboardingStep, startOnboardingSession } from "@/lib/onboarding"
 import { useAuth } from "@/hooks/useAuth"
 
@@ -101,26 +101,66 @@ export default function SignupStep1Page() {
       subtitle="Minimal typing, voice supported."
       step={1}
       totalSteps={4}
-      helperHint="You can speak or type your name"
-      helperVoiceText="You can speak or type your name"
+      helperHint="Use mic for name, phone, and location (Hindi/English)."
+      helperVoiceText="Use mic for name, phone, and location."
     >
-      <VoiceInput
-        label="🎤 Fill Name + Location"
-        fieldType="name"
-        onTranscript={(text) => setForm((prev) => ({ ...prev, name: prev.name || text }))}
-        onParsedSuggestions={(parsed) =>
-          setForm((prev) => ({
-            ...prev,
-            name: prev.name || parsed?.name || prev.name,
-            phone: prev.phone || parsed?.phone || prev.phone,
-            location: prev.location || parsed?.location || prev.location,
-          }))
-        }
-      />
-      <Input className="rounded-xl border px-4 py-3 focus-visible:ring-2 focus-visible:ring-primary" placeholder="Name" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
-      <Input className="rounded-xl border px-4 py-3 focus-visible:ring-2 focus-visible:ring-primary" placeholder="Phone" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} />
+      <div className="space-y-1">
+        <Input
+          className="rounded-xl border px-4 py-3 focus-visible:ring-2 focus-visible:ring-primary"
+          placeholder="Name"
+          value={form.name}
+          onChange={(e) => setForm({ ...form, name: e.target.value })}
+          rightIcon={
+            <FieldVoiceButton
+              fieldType="name"
+              ariaLabel="Speak name"
+              onParsed={({ translatedText, parsed }) =>
+                setForm((prev) => ({ ...prev, name: String(parsed?.name || translatedText || "").trim() }))
+              }
+            />
+          }
+        />
+        <p className="text-xs text-muted-foreground">Hindi/English supported</p>
+      </div>
+      <div className="space-y-1">
+        <Input
+          className="rounded-xl border px-4 py-3 focus-visible:ring-2 focus-visible:ring-primary"
+          placeholder="Phone"
+          value={form.phone}
+          onChange={(e) => setForm({ ...form, phone: e.target.value.replace(/\D/g, "") })}
+          rightIcon={
+            <FieldVoiceButton
+              fieldType="phone"
+              ariaLabel="Speak phone number"
+              onParsed={({ translatedText, parsed }) => {
+                const phone = String(parsed?.phone || translatedText || "").replace(/\D/g, "")
+                setForm((prev) => ({ ...prev, phone }))
+              }}
+            />
+          }
+        />
+        <p className="text-xs text-muted-foreground">Hindi/English supported</p>
+      </div>
       <Input className="rounded-xl border px-4 py-3 focus-visible:ring-2 focus-visible:ring-primary" placeholder="Email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} />
-      <Input className="rounded-xl border px-4 py-3 focus-visible:ring-2 focus-visible:ring-primary" placeholder="Location" value={form.location} onChange={(e) => setForm({ ...form, location: e.target.value })} />
+      <div className="space-y-1">
+        <Input
+          className="rounded-xl border px-4 py-3 focus-visible:ring-2 focus-visible:ring-primary"
+          placeholder="Location"
+          value={form.location}
+          onChange={(e) => setForm({ ...form, location: e.target.value })}
+          rightIcon={
+            <FieldVoiceButton
+              fieldType="location"
+              ariaLabel="Speak location"
+              onParsed={({ translatedText, parsed }) => {
+                const location = String(parsed?.location || translatedText || "").trim()
+                setForm((prev) => ({ ...prev, location }))
+              }}
+            />
+          }
+        />
+        <p className="text-xs text-muted-foreground">Hindi/English supported</p>
+      </div>
       <div className="fixed bottom-0 left-0 z-40 w-full border-t bg-white p-4 shadow-md dark:bg-zinc-900 md:static md:border-0 md:bg-transparent md:p-0 md:shadow-none">
         <div className="mx-auto flex max-w-xl justify-between gap-3 md:mt-6">
           <Button type="button" variant="outline" disabled onClick={(e) => void onPrevious(e)} className="h-12 w-1/2 rounded-xl border border-gray-300 text-gray-700 opacity-60">
