@@ -70,14 +70,7 @@ export function getOnboardingEntryRoute() {
   if (typeof window === "undefined") return "/signup/step-1"
   const step = getOnboardingStep()
   if (step && step !== "review") {
-    const shouldContinue = window.confirm(
-      "Continue where you left off?\n\nOK = Continue\nCancel = Start Fresh"
-    )
-    if (shouldContinue) {
-      return stepToRoute[step] || "/signup/step-1"
-    }
-    resetOnboarding()
-    return "/signup/step-1"
+    return stepToRoute[step] || "/signup/step-1"
   }
   localStorage.removeItem("onboarding_step")
   return "/signup/step-1"
