@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import type { ActiveUserType } from '@/types/auth'
+import { apiClient } from '@/lib/api'
 
 export interface User {
   id: string
@@ -9,9 +10,6 @@ export interface User {
   name?: string
 }
 
-const isActiveUserType = (value: unknown): value is ActiveUserType =>
-  value === 'student' || value === 'corporate' || value === 'admin'
-
 export function useAuth() {
   const [user, setUser] = useState<User | null>(null)
   const [isLoading, setIsLoading] = useState(true)
@@ -19,17 +17,22 @@ export function useAuth() {
   const router = useRouter()
 
   useEffect(() => {
-  checkAuthStatus()
+  void checkAuthStatus()
   }, [])
 
-  const checkAuthStatus = () => {
+  const checkAuthStatus = async () => {
+  setIsLoading(true)
   try {
-  const accessToken = localStorage.getItem('access_token')
+  const token =
+  localStorage.getItem("access_token") ||
+  localStorage.getItem("token")
   const refreshToken = localStorage.getItem('refresh_token')
+  const hasToken = !!token
+  setIsAuthenticated(hasToken)
   
-  if (accessToken && refreshToken) {
+  if (token && refreshToken) {
   // Check if these are temporary tokens (from registration)
-  if (accessToken === 'temp-access-token' && refreshToken === 'temp-refresh-token') {
+  if (token === 'temp-access-token' && refreshToken === 'temp-refresh-token') {
   // Handle temporary authentication from registration
   const tempUserData = localStorage.getItem('temp_user_data')
   if (tempUserData) {
@@ -50,39 +53,22 @@ export function useAuth() {
   return
   }
 
-  // Check if token is expired (basic check)
   try {
-  const tokenPayload = JSON.parse(atob(accessToken.split('.')[1]))
-  const currentTime = Date.now() / 1000
-  
-  if (tokenPayload.exp > currentTime) {
-  // Token is valid, get user data
-  const userData = localStorage.getItem('user_data')
-  if (userData) {
-  const parsedUser = JSON.parse(userData)
-  setUser(parsedUser)
+  const me = await apiClient.getCurrentUser()
+  setUser({
+  id: me.id,
+  email: me.email,
+  user_type: me.user_type as ActiveUserType,
+  name: me.name
+  })
   setIsAuthenticated(true)
-  } else {
-  // If no user data, try to get it from token payload
-  const userFromToken = {
-  id: tokenPayload.sub || 'temp-id',
-  email: tokenPayload.email || '',
-  user_type: isActiveUserType(tokenPayload.user_type) ? tokenPayload.user_type : 'student',
-  name: tokenPayload.name || ''
-  }
-  setUser(userFromToken)
-  setIsAuthenticated(true)
-  // Store the user data for future use
-  localStorage.setItem('user_data', JSON.stringify(userFromToken))
-  }
-  } else {
-  // Token expired, clear everything
-  logout()
-  }
   } catch (error) {
-  console.error('Error parsing token:', error)
-  // If we can't parse the token, clear everything
-  logout()
+  console.error('Error fetching current user:', error)
+  localStorage.removeItem('access_token')
+  localStorage.removeItem('token')
+  localStorage.removeItem('refresh_token')
+  setUser(null)
+  setIsAuthenticated(false)
   }
   } else {
   setIsAuthenticated(false)
@@ -90,7 +76,11 @@ export function useAuth() {
   }
   } catch (error) {
   console.error('Error checking auth status:', error)
-  logout()
+  localStorage.removeItem('access_token')
+  localStorage.removeItem('token')
+  localStorage.removeItem('refresh_token')
+  setUser(null)
+  setIsAuthenticated(false)
   } finally {
   setIsLoading(false)
   }
@@ -98,16 +88,16 @@ export function useAuth() {
 
   const login = (userData: User, accessToken: string, refreshToken: string) => {
   localStorage.setItem('access_token', accessToken)
+  localStorage.setItem('token', accessToken)
   localStorage.setItem('refresh_token', refreshToken)
-  localStorage.setItem('user_data', JSON.stringify(userData))
   setUser(userData)
   setIsAuthenticated(true)
   }
 
   const logout = () => {
   localStorage.removeItem('access_token')
+  localStorage.removeItem('token')
   localStorage.removeItem('refresh_token')
-  localStorage.removeItem('user_data')
   localStorage.removeItem('temp_user_data')
   localStorage.removeItem('temp_user_type')
   setUser(null)
@@ -117,6 +107,10 @@ export function useAuth() {
 
   const redirectIfAuthenticated = (redirectPath: string = '/dashboard') => {
   if (isAuthenticated && user) {
+  if (user.user_type === 'student' && localStorage.getItem('hk_onboarding_status') !== 'completed') {
+  router.push('/signup/step-1')
+  return true
+  }
   // Redirect to appropriate dashboard based on user type
   const dashboardPath = `/dashboard/${user.user_type}`
   router.push(dashboardPath)
@@ -126,6 +120,15 @@ export function useAuth() {
   }
 
   const requireAuth = (redirectPath: string = '/auth/login') => {
+  const pathname = typeof window !== "undefined" ? window.location.pathname : ""
+  const isOnboardingRoute = pathname.startsWith("/signup/")
+  if (!isAuthenticated && !isOnboardingRoute) {
+  router.push('/auth/login')
+  return false
+  }
+  if (!isAuthenticated && isOnboardingRoute) {
+  return true
+  }
   if (!isAuthenticated) {
   router.push(redirectPath)
   return false
@@ -140,11 +143,14 @@ export function useAuth() {
   }
 
   const getToken = () => {
-  return localStorage.getItem('access_token')
+  return localStorage.getItem('access_token') || localStorage.getItem('token')
   }
+
+  const userType = user?.user_type ?? null
 
   return {
   user,
+  userType,
   isAuthenticated,
   isLoading,
   login,

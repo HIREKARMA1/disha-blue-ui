@@ -1,6 +1,5 @@
 "use client"
 
-import { useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { Navbar } from "@/components/ui/navbar"
 import { useAuth } from "@/hooks/useAuth"
@@ -15,16 +14,11 @@ import PartnersSection from "@/components/home/PartnersSection"
 import FAQSection from "@/components/home/FAQSection"
 import CTASection from "@/components/home/CTASection"
 import { Footer } from "@/components/ui/footer"
+import { getOnboardingEntryRoute } from "@/lib/onboarding"
 
 export default function HomePage() {
-  const { user, isAuthenticated, isLoading } = useAuth()
+  const { isLoading } = useAuth()
   const router = useRouter()
-
-  useEffect(() => {
-  if (!isLoading && isAuthenticated && user) {
-  router.replace(`/dashboard/${user.user_type}`)
-  }
-  }, [isLoading, isAuthenticated, user, router])
 
   if (isLoading) {
   return (
@@ -39,13 +33,17 @@ export default function HomePage() {
   )
   }
 
-  if (isAuthenticated) {
-  return null
-  }
-
   return (
   <main className="min-h-screen bg-[#F7F7F5] text-slate-900 dark:bg-emerald-950 dark:text-emerald-50">
   <Navbar variant="transparent" />
+  <div className="px-4 pt-24">
+    <button
+      onClick={() => router.push(getOnboardingEntryRoute())}
+      className="rounded-md border bg-white px-4 py-2 text-sm font-semibold dark:bg-emerald-900"
+    >
+      Test Onboarding
+    </button>
+  </div>
   <HeroSection />
   <ConnectionStoriesSection />
   <RoleSplitSection />

@@ -2,9 +2,17 @@
 
 import { motion } from "framer-motion"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
+import { getOnboardingEntryRoute } from "@/lib/onboarding"
 
 export default function RoleSplitSection() {
+  const router = useRouter()
+
+  const handleFindJobsClick = () => {
+    router.push(getOnboardingEntryRoute())
+  }
+
   return (
     <section className="bg-white py-16 dark:bg-emerald-950 md:py-24" id="roles">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -39,14 +47,15 @@ export default function RoleSplitSection() {
               </li>
             </ul>
             <div className="mt-8">
-              <Link href="/auth/register?type=student" className="w-full sm:w-auto">
+              <div className="w-full sm:w-auto">
                 <Button
+                  onClick={handleFindJobsClick}
                   size="lg"
                   className="h-11 w-full rounded-none border-0 bg-sage-deep text-white shadow-none hover:bg-sage-deep/90 dark:bg-emerald-600 dark:hover:bg-emerald-500 sm:w-auto"
                 >
-                  Find jobs
+                  🎓 Find Jobs (Student)
                 </Button>
-              </Link>
+              </div>
             </div>
           </motion.article>
 
@@ -77,7 +86,7 @@ export default function RoleSplitSection() {
                   variant="outline"
                   className="h-11 w-full rounded-none border-2 border-slate-300 bg-white shadow-none hover:border-sage-deep hover:bg-slate-50 dark:border-emerald-600 dark:bg-emerald-950 dark:text-emerald-50 dark:hover:bg-emerald-900 sm:w-auto"
                 >
-                  Hire talent
+                  🏢 Hire Talent (Corporate)
                 </Button>
               </Link>
             </div>

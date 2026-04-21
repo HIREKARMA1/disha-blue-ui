@@ -1,0 +1,166 @@
+"use client"
+
+import { useEffect, useState } from "react"
+import { useRouter } from "next/navigation"
+import type { MouseEvent } from "react"
+import { Input } from "@/components/ui/input"
+import { Button } from "@/components/ui/button"
+import { StepForm } from "@/components/signup/StepForm"
+import { VoiceInput } from "@/components/signup/VoiceInput"
+import { getOnboardingStep, getSignupData, saveSignupData, saveStep, setOnboardingStep } from "@/lib/onboarding"
+import { useAuth } from "@/hooks/useAuth"
+
+export default function SignupStep3Page() {
+  const router = useRouter()
+  const { userType, isLoading } = useAuth()
+  const initial = getSignupData()
+  const [skillsText, setSkillsText] = useState(initial.skills.join(", "))
+  const [loading, setLoading] = useState(false)
+  const [retry, setRetry] = useState(false)
+  const [skillsMeta, setSkillsMeta] = useState<Array<{ name: string; source: "auto-detected" | "verified" }>>(
+    initial.skillsMeta || []
+  )
+
+  useEffect(() => {
+    console.log("ROUTER READY", typeof router.push)
+    if (!isLoading && userType === "corporate") {
+      router.replace("/auth/register?type=corporate")
+      return
+    }
+    if (isLoading) return
+    setOnboardingStep("step-3")
+  }, [isLoading, router, userType])
+
+  if (isLoading) return null
+
+  const normalize = (value: string) =>
+    value
+      .split(",")
+      .map((s) => s.trim())
+      .filter(Boolean)
+
+  const saveStepData = async () => {
+    console.log("SAVE API CALL START")
+    try {
+      const skills = normalize(skillsText)
+      const meta = skills.map((name) => {
+        const found = skillsMeta.find((item) => item.name.toLowerCase() === name.toLowerCase())
+        return found || { name, source: "verified" as const }
+      })
+      const response = await saveStep("step-3", { skills: meta }, initial.userId)
+      console.log("SAVE API RESPONSE:", response)
+      saveSignupData({ ...initial, skills, skillsMeta: meta })
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const handleSaveAndNavigate = async (
+    nextRoute: string,
+    nextStep: "step-2" | "step-4"
+  ) => {
+    const currentStep = getOnboardingStep()
+    console.log("STEP NAV START")
+    console.log("STEP:", currentStep)
+    setLoading(true)
+    saveStepData()
+      .then(() => {
+        console.log("STEP SAVED OK")
+      })
+      .catch((err) => console.log(err))
+    setOnboardingStep(nextStep)
+    console.log("STEP LOCAL UPDATED:", nextStep)
+    setLoading(false)
+    router.push(nextRoute)
+    console.log("NAVIGATED TO:", nextRoute)
+  }
+
+  const onSubmit = async (e?: MouseEvent<HTMLButtonElement>) => {
+    e?.preventDefault?.()
+    console.log("NEXT CLICKED")
+    await handleSaveAndNavigate("/signup/step-4", "step-4")
+  }
+
+  const onPrevious = async (e?: MouseEvent<HTMLButtonElement>) => {
+    e?.preventDefault?.()
+    console.log("PREVIOUS CLICKED")
+    await handleSaveAndNavigate("/signup/step-2", "step-2")
+  }
+
+  return (
+    <StepForm
+      title="What skills do you have?"
+      subtitle="Hindi and English voice supported."
+      step={3}
+      totalSteps={4}
+      helperHint="Speak your skills like electrician, helper, or driver"
+      helperVoiceText="Speak your skills like electrician, helper, or driver"
+    >
+      <VoiceInput
+        label="🎤 Speak skills"
+        onTranscript={(text) => setSkillsText((prev) => (prev ? `${prev}, ${text}` : text))}
+        onParsedSuggestions={(parsed) => {
+          const parsedSkills = parsed?.skills
+          if (Array.isArray(parsedSkills) && parsedSkills.length) {
+            setSkillsText((prev) => [...normalize(prev), ...parsedSkills].join(", "))
+            setSkillsMeta((prev) => {
+              const map = new Map(prev.map((item) => [item.name.toLowerCase(), item]))
+              parsedSkills.forEach((skill) => {
+                if (!map.has(String(skill).toLowerCase())) {
+                  map.set(String(skill).toLowerCase(), { name: String(skill), source: "auto-detected" })
+                }
+              })
+              return Array.from(map.values())
+            })
+          }
+        }}
+      />
+      <Input
+        className="rounded-xl border px-4 py-3 focus-visible:ring-2 focus-visible:ring-primary"
+        placeholder="e.g. Electrician, Welding, Plumbing"
+        value={skillsText}
+        onChange={(e) => {
+          setSkillsText(e.target.value)
+          const list = normalize(e.target.value)
+          setSkillsMeta((prev) =>
+            list.map((name) => {
+              const found = prev.find((item) => item.name.toLowerCase() === name.toLowerCase())
+              return found || { name, source: "verified" }
+            })
+          )
+        }}
+      />
+      {skillsMeta.length > 0 && (
+        <div className="flex flex-wrap gap-2">
+          {skillsMeta.map((item) => (
+            <button
+              key={`${item.name}-${item.source}`}
+              type="button"
+              className="rounded-full border px-3 py-1 text-xs"
+              onClick={() => {
+                const filtered = skillsMeta.filter((chip) => chip.name.toLowerCase() !== item.name.toLowerCase())
+                setSkillsMeta(filtered)
+                setSkillsText(filtered.map((chip) => chip.name).join(", "))
+              }}
+            >
+              {item.name} · {item.source === "auto-detected" ? "Auto-detected" : "Verified"}
+            </button>
+          ))}
+        </div>
+      )}
+      <div className="fixed bottom-0 left-0 z-40 w-full border-t bg-white p-4 shadow-md dark:bg-zinc-900 md:static md:border-0 md:bg-transparent md:p-0 md:shadow-none">
+        <div className="mx-auto flex max-w-xl justify-between gap-3 md:mt-6">
+          <Button type="button" variant="outline" className="h-12 w-1/2 rounded-xl border border-gray-300 text-gray-700" onClick={(e) => void onPrevious(e)} loading={loading}>
+            Previous
+          </Button>
+          <Button type="button" className="h-12 w-1/2 rounded-xl bg-primary text-white" onClick={(e) => void onSubmit(e)} loading={loading}>
+            Next
+          </Button>
+        </div>
+      </div>
+      {retry && (
+        <Button variant="outline" className="h-12 w-full rounded-xl" onClick={onSubmit}>Retry Save</Button>
+      )}
+    </StepForm>
+  )
+}

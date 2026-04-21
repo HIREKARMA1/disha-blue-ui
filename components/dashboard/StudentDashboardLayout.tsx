@@ -14,8 +14,6 @@ import { apiClient } from '@/lib/api'
 import { LoadingOverlay } from './LoadingOverlay'
 import Link from 'next/link'
 import { DashboardTopbar } from './DashboardTopbar'
-import { RecommendationOnboardingCard } from './RecommendationOnboardingCard'
-import { getRecommendationReadiness } from '@/lib/recommendationReadiness'
 import type { StudentProfile } from '@/services/profileService'
 import { useSidebarPreviewMode } from '@/hooks/useSidebarPreviewMode'
 interface StudentDashboardLayoutProps {
@@ -26,7 +24,6 @@ function StudentDashboardContent({ children }: StudentDashboardLayoutProps) {
  const isSidebarPreview = useSidebarPreviewMode()
  const [studentName, setStudentName] = useState<string>('Student')
  const [studentProfile, setStudentProfile] = useState<StudentProfile | null>(null)
- const [showOnboardingModal, setShowOnboardingModal] = useState(false)
  const { user } = useAuth()
 
  // Check student access and fetch profile
@@ -45,12 +42,6 @@ function StudentDashboardContent({ children }: StudentDashboardLayoutProps) {
  setStudentName(profileData.name)
  } else if (user?.name) {
  setStudentName(user.name)
- }
-
- const readiness = getRecommendationReadiness(profileData)
- const hasSeenPrompt = localStorage.getItem('ai_pref_onboarding_seen') === '1'
- if (!hasSeenPrompt && !readiness.isReady && !isSidebarPreview) {
- setShowOnboardingModal(true)
  }
 
  } catch (error: any) {
@@ -78,23 +69,11 @@ function StudentDashboardContent({ children }: StudentDashboardLayoutProps) {
  }
  }
 
- const handleDismissOnboarding = () => {
- localStorage.setItem('ai_pref_onboarding_seen','1')
- setShowOnboardingModal(false)
- }
-
- const readiness = getRecommendationReadiness(studentProfile)
-
  const main = (
  <main className="relative min-h-screen dashboard-overview-page px-4 py-6 pb-safe text-slate-900 sm:px-6 lg:px-8 lg:py-8">
  <div className="mx-auto w-full max-w-[1320px]">
  <div className="dashboard-overview-shell space-y-6">
  <DashboardTopbar role="student"/>
- {!readiness.isReady && !isSidebarPreview && (
- <div className="mb-6">
- <RecommendationOnboardingCard profile={studentProfile} onSaved={refreshProfile} />
- </div>
- )}
  {children ? (
  <>
  <div>{children}</div>
@@ -194,17 +173,6 @@ function StudentDashboardContent({ children }: StudentDashboardLayoutProps) {
  <Navbar />
  <StudentSidebar />
  <div className="pt-16 lg:pl-16">{main}</div>
- {showOnboardingModal && (
- <RecommendationOnboardingCard
- profile={studentProfile}
- showAsModal
- onSaved={async () => {
- localStorage.setItem('ai_pref_onboarding_seen','1')
- await refreshProfile()
- }}
- onDismiss={handleDismissOnboarding}
- />
- )}
  </div>
  )
 }

@@ -25,7 +25,7 @@ class ApiClient {
   // Add request interceptor to include auth token
   this.client.interceptors.request.use(
   (config) => {
-  const token = localStorage.getItem('access_token');
+  const token = localStorage.getItem('access_token') || localStorage.getItem('token');
   if (token) {
   config.headers.Authorization = `Bearer ${token}`;
   }
@@ -61,6 +61,7 @@ class ApiClient {
   if (refreshToken) {
   const response = await this.refreshToken(refreshToken);
   localStorage.setItem('access_token', response.access_token);
+  localStorage.setItem('token', response.access_token);
   localStorage.setItem('refresh_token', response.refresh_token);
 
   originalRequest.headers.Authorization = `Bearer ${response.access_token}`;
@@ -69,6 +70,7 @@ class ApiClient {
   } catch (refreshError) {
   // Refresh failed, redirect to login
   localStorage.removeItem('access_token');
+  localStorage.removeItem('token');
   localStorage.removeItem('refresh_token');
   window.location.href = '/auth/login';
   }
@@ -106,6 +108,36 @@ class ApiClient {
   return response.data;
   }
 
+  async sendOtp(email: string): Promise<{ message: string }> {
+  const response: AxiosResponse = await this.client.post('/auth/send-otp', { email });
+  return response.data;
+  }
+
+  async verifyOtp(payload: { email: string; otp: string }): Promise<{ success: boolean; message: string }> {
+  const response: AxiosResponse = await this.client.post('/auth/verify-otp', payload);
+  return response.data;
+  }
+
+  async completeRegistration(payload: {
+  email: string;
+  phone?: string;
+  name: string;
+  onboarding_user_id: string;
+  }): Promise<{
+  access_token: string;
+  refresh_token: string;
+  token_type: string;
+  user: {
+  id: string;
+  email: string;
+  name: string;
+  user_type: string;
+  };
+  }> {
+  const response: AxiosResponse = await this.client.post('/auth/complete-registration', payload);
+  return response.data;
+  }
+
   // OTP verification during registration
   async verifyOtpAndRegisterStudent(code: string, data: StudentRegisterRequest): Promise<{ message: string; student_id: string; email: string }> {
   const response: AxiosResponse = await this.client.post(`/auth/register/student/verify-otp?code=${code}`, data);
@@ -133,9 +165,15 @@ class ApiClient {
   return response.data;
   }
 
+  async getCurrentUser(): Promise<UserInfo> {
+  const response: AxiosResponse = await this.client.get('/auth/me');
+  return response.data;
+  }
+
   // Helper method to set auth tokens
   setAuthTokens(accessToken: string, refreshToken: string): void {
   localStorage.setItem('access_token', accessToken);
+  localStorage.setItem('token', accessToken);
   localStorage.setItem('refresh_token', refreshToken);
   }
 
@@ -177,6 +215,7 @@ class ApiClient {
   // Utility methods
   clearAuthTokens() {
   localStorage.removeItem('access_token');
+  localStorage.removeItem('token');
   localStorage.removeItem('refresh_token');
   }
 
