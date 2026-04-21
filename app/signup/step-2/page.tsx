@@ -16,9 +16,8 @@ export default function SignupStep2Page() {
   const initial = getSignupData()
   const [education, setEducation] = useState(initial.education)
   const [loading, setLoading] = useState(false)
-  const [uploadingIdx, setUploadingIdx] = useState<number | null>(null)
-  const [visibleIdx, setVisibleIdx] = useState(0)
-  const [simpleMode, setSimpleMode] = useState(false)
+  const [uploadingSection, setUploadingSection] = useState<"tenth" | "twelfth" | "graduation" | null>(null)
+  const [errors, setErrors] = useState<Record<string, string>>({})
 
   useEffect(() => {
     console.log("ROUTER READY", typeof router.push)
@@ -28,27 +27,103 @@ export default function SignupStep2Page() {
     }
     if (isLoading) return
     setOnboardingStep("step-2")
-    setSimpleMode(localStorage.getItem("hk_simple_mode") === "true")
   }, [isLoading, router, userType])
 
   if (isLoading) return null
 
-  const update = (idx: number, value: string) => {
-    const next = [...education]
-    next[idx] = { ...next[idx], details: value }
-    setEducation(next)
+  const updateField = (
+    section: "tenth" | "twelfth" | "graduation",
+    field: "school_name" | "percentage" | "year_of_passing" | "college_name" | "cgpa",
+    value: string
+  ) => {
+    setEducation((prev) => ({
+      ...prev,
+      [section]: {
+        ...prev[section],
+        [field]: value,
+      },
+    }))
   }
 
-  const handleUpload = async (idx: number, file?: File) => {
+  const validate = () => {
+    const nextErrors: Record<string, string> = {}
+    const yearRegex = /^(19|20)\d{2}$/
+    const nowYear = new Date().getFullYear()
+    const validatePercentage = (value: string, key: string) => {
+      if (!value.trim()) return
+      const numeric = Number(value)
+      if (Number.isNaN(numeric) || numeric < 0 || numeric > 100) {
+        nextErrors[key] = "Value must be between 0 and 100"
+      }
+    }
+    const validateYear = (value: string, key: string) => {
+      if (!value.trim()) return
+      const numeric = Number(value)
+      if (!yearRegex.test(value) || numeric > nowYear + 1 || numeric < 1950) {
+        nextErrors[key] = "Enter a valid 4-digit year"
+      }
+    }
+
+    validatePercentage(education.tenth.percentage, "tenth.percentage")
+    validatePercentage(education.twelfth.percentage, "twelfth.percentage")
+    validatePercentage(education.graduation.cgpa, "graduation.cgpa")
+
+    validateYear(education.tenth.year_of_passing, "tenth.year_of_passing")
+    validateYear(education.twelfth.year_of_passing, "twelfth.year_of_passing")
+    validateYear(education.graduation.year_of_passing, "graduation.year_of_passing")
+
+    setErrors(nextErrors)
+    return Object.keys(nextErrors).length === 0
+  }
+
+  const parseVoiceEducation = (text: string) => {
+    const lower = text.toLowerCase()
+    const year = (lower.match(/\b(19|20)\d{2}\b/) || [])[0] || ""
+    const percent = (lower.match(/(\d{1,3}(?:\.\d+)?)\s*(%|percent|percentage)/) || [])[1] || ""
+    if (lower.includes("10th") || lower.includes("tenth") || lower.includes("दस") || lower.includes("das")) {
+      setEducation((prev) => ({
+        ...prev,
+        tenth: {
+          ...prev.tenth,
+          percentage: percent || prev.tenth.percentage,
+          year_of_passing: year || prev.tenth.year_of_passing,
+        },
+      }))
+    } else if (lower.includes("12th") || lower.includes("twelfth") || lower.includes("बारह") || lower.includes("barah")) {
+      setEducation((prev) => ({
+        ...prev,
+        twelfth: {
+          ...prev.twelfth,
+          percentage: percent || prev.twelfth.percentage,
+          year_of_passing: year || prev.twelfth.year_of_passing,
+        },
+      }))
+    } else if (lower.includes("graduation") || lower.includes("college") || lower.includes("btech")) {
+      setEducation((prev) => ({
+        ...prev,
+        graduation: {
+          ...prev.graduation,
+          cgpa: percent || prev.graduation.cgpa,
+          year_of_passing: year || prev.graduation.year_of_passing,
+        },
+      }))
+    }
+  }
+
+  const handleUpload = async (section: "tenth" | "twelfth" | "graduation", file?: File) => {
     if (!file) return
-    setUploadingIdx(idx)
+    setUploadingSection(section)
     try {
       const response = await uploadOnboardingDocument(file)
-      const next = [...education]
-      next[idx] = { ...next[idx], documents: [...(next[idx].documents || []), response.file_url] }
-      setEducation(next)
+      setEducation((prev) => ({
+        ...prev,
+        [section]: {
+          ...prev[section],
+          certificate_url: response.file_url,
+        },
+      }))
     } finally {
-      setUploadingIdx(null)
+      setUploadingSection(null)
     }
   }
 
@@ -86,6 +161,7 @@ export default function SignupStep2Page() {
   const onSubmit = async (e?: MouseEvent<HTMLButtonElement>) => {
     e?.preventDefault?.()
     console.log("NEXT CLICKED")
+    if (!validate()) return
     await handleSaveAndNavigate("/signup/step-3", "step-3")
   }
 
@@ -106,38 +182,61 @@ export default function SignupStep2Page() {
     >
       <VoiceInput
         label="🎤 Add Education"
-        onTranscript={(text) => update(2, text)}
-        onParsedSuggestions={(parsed) => {
-          const level = parsed?.education?.level
-          const stream = parsed?.education?.stream
-          if (!level) return
-          const idx = education.findIndex((e) => e.level.toLowerCase() === String(level).toLowerCase())
-          if (idx >= 0) update(idx, stream ? `${education[idx].details} ${stream}`.trim() : education[idx].details)
-        }}
+        onTranscript={parseVoiceEducation}
+        onParsedSuggestions={() => undefined}
       />
-      {education.map((item, idx) => (
-        (!simpleMode || idx === visibleIdx) && (
-        <div key={item.level} className="space-y-2 rounded-lg border p-3">
-          <Input className="rounded-xl border px-4 py-3 focus-visible:ring-2 focus-visible:ring-primary" placeholder={`${item.level} details`} value={item.details} onChange={(e) => update(idx, e.target.value)} />
-          <input
-            type="file"
-            accept=".pdf,image/*"
-            onChange={(e) => void handleUpload(idx, e.target.files?.[0])}
-            className="text-xs"
-          />
-          {uploadingIdx === idx && <p className="text-xs text-muted-foreground">Uploading document...</p>}
-          {item.documents?.length > 0 && (
-            <p className="text-xs text-emerald-700">{item.documents.length} document(s) linked</p>
-          )}
-          {simpleMode && (
-            <div className="flex gap-2">
-              <Button type="button" variant="outline" className="h-9" onClick={() => setVisibleIdx(Math.max(0, visibleIdx - 1))}>Previous</Button>
-              <Button type="button" variant="outline" className="h-9" onClick={() => setVisibleIdx(Math.min(education.length - 1, visibleIdx + 1))}>Next Field</Button>
-            </div>
-          )}
+      <div className="space-y-4">
+        <div className="rounded-xl border bg-card p-4 shadow-sm">
+          <h3 className="mb-3 text-base font-semibold">📘 10th Details</h3>
+          <div className="grid gap-3 md:grid-cols-2">
+            <Input placeholder="School Name" value={education.tenth.school_name} onChange={(e) => updateField("tenth", "school_name", e.target.value)} />
+            <Input type="number" placeholder="Percentage" value={education.tenth.percentage} onChange={(e) => updateField("tenth", "percentage", e.target.value)} />
+            <Input type="number" placeholder="Year of Passing" value={education.tenth.year_of_passing} onChange={(e) => updateField("tenth", "year_of_passing", e.target.value)} />
+          </div>
+          {errors["tenth.percentage"] && <p className="mt-2 text-xs text-red-600">{errors["tenth.percentage"]}</p>}
+          {errors["tenth.year_of_passing"] && <p className="mt-1 text-xs text-red-600">{errors["tenth.year_of_passing"]}</p>}
+          <label className="mt-3 block rounded-lg border border-dashed p-3 text-sm">
+            Upload Certificate (PDF/JPG/PNG)
+            <input type="file" accept=".pdf,.jpg,.jpeg,.png" onChange={(e) => void handleUpload("tenth", e.target.files?.[0])} className="mt-2 block text-xs" />
+          </label>
+          <p className="mt-2 text-xs">{education.tenth.certificate_url ? "✔ Uploaded" : "Not uploaded"}</p>
+          {uploadingSection === "tenth" && <p className="text-xs text-muted-foreground">Uploading document...</p>}
         </div>
-        )
-      ))}
+
+        <div className="rounded-xl border bg-card p-4 shadow-sm">
+          <h3 className="mb-3 text-base font-semibold">📗 12th Details</h3>
+          <div className="grid gap-3 md:grid-cols-2">
+            <Input placeholder="School/College Name" value={education.twelfth.school_name} onChange={(e) => updateField("twelfth", "school_name", e.target.value)} />
+            <Input type="number" placeholder="Percentage" value={education.twelfth.percentage} onChange={(e) => updateField("twelfth", "percentage", e.target.value)} />
+            <Input type="number" placeholder="Year of Passing" value={education.twelfth.year_of_passing} onChange={(e) => updateField("twelfth", "year_of_passing", e.target.value)} />
+          </div>
+          {errors["twelfth.percentage"] && <p className="mt-2 text-xs text-red-600">{errors["twelfth.percentage"]}</p>}
+          {errors["twelfth.year_of_passing"] && <p className="mt-1 text-xs text-red-600">{errors["twelfth.year_of_passing"]}</p>}
+          <label className="mt-3 block rounded-lg border border-dashed p-3 text-sm">
+            Upload Certificate (PDF/JPG/PNG)
+            <input type="file" accept=".pdf,.jpg,.jpeg,.png" onChange={(e) => void handleUpload("twelfth", e.target.files?.[0])} className="mt-2 block text-xs" />
+          </label>
+          <p className="mt-2 text-xs">{education.twelfth.certificate_url ? "✔ Uploaded" : "Not uploaded"}</p>
+          {uploadingSection === "twelfth" && <p className="text-xs text-muted-foreground">Uploading document...</p>}
+        </div>
+
+        <div className="rounded-xl border bg-card p-4 shadow-sm">
+          <h3 className="mb-3 text-base font-semibold">🎓 Graduation Details</h3>
+          <div className="grid gap-3 md:grid-cols-2">
+            <Input placeholder="University/College Name" value={education.graduation.college_name} onChange={(e) => updateField("graduation", "college_name", e.target.value)} />
+            <Input type="number" placeholder="CGPA / Percentage" value={education.graduation.cgpa} onChange={(e) => updateField("graduation", "cgpa", e.target.value)} />
+            <Input type="number" placeholder="Year of Passing" value={education.graduation.year_of_passing} onChange={(e) => updateField("graduation", "year_of_passing", e.target.value)} />
+          </div>
+          {errors["graduation.cgpa"] && <p className="mt-2 text-xs text-red-600">{errors["graduation.cgpa"]}</p>}
+          {errors["graduation.year_of_passing"] && <p className="mt-1 text-xs text-red-600">{errors["graduation.year_of_passing"]}</p>}
+          <label className="mt-3 block rounded-lg border border-dashed p-3 text-sm">
+            Upload Certificate (PDF/JPG/PNG)
+            <input type="file" accept=".pdf,.jpg,.jpeg,.png" onChange={(e) => void handleUpload("graduation", e.target.files?.[0])} className="mt-2 block text-xs" />
+          </label>
+          <p className="mt-2 text-xs">{education.graduation.certificate_url ? "✔ Uploaded" : "Not uploaded"}</p>
+          {uploadingSection === "graduation" && <p className="text-xs text-muted-foreground">Uploading document...</p>}
+        </div>
+      </div>
       <div className="fixed bottom-0 left-0 z-40 w-full border-t bg-white p-4 shadow-md dark:bg-zinc-900 md:static md:border-0 md:bg-transparent md:p-0 md:shadow-none">
         <div className="mx-auto flex max-w-xl justify-between gap-3 md:mt-6">
           <Button type="button" variant="outline" className="h-12 w-1/2 rounded-xl border border-gray-300 text-gray-700" onClick={(e) => void onPrevious(e)} loading={loading}>

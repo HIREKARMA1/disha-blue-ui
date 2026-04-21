@@ -9,7 +9,26 @@ const STEP_KEY = "onboarding_step"
 export type SignupData = {
   userId?: string
   basicInfo: { name: string; phone: string; email: string; location: string; latitude?: number; longitude?: number }
-  education: Array<{ level: string; details: string; documents: string[] }>
+  education: {
+    tenth: {
+      school_name: string
+      percentage: string
+      year_of_passing: string
+      certificate_url: string
+    }
+    twelfth: {
+      school_name: string
+      percentage: string
+      year_of_passing: string
+      certificate_url: string
+    }
+    graduation: {
+      college_name: string
+      cgpa: string
+      year_of_passing: string
+      certificate_url: string
+    }
+  }
   skills: string[]
   skillsMeta?: Array<{ name: string; source: "auto-detected" | "verified" }>
   experience: Array<{ type: string; description: string }>
@@ -20,11 +39,11 @@ export type SignupData = {
 
 export const defaultSignupData: SignupData = {
   basicInfo: { name: "", phone: "", email: "", location: "", latitude: undefined, longitude: undefined },
-  education: [
-    { level: "10th", details: "", documents: [] },
-    { level: "12th", details: "", documents: [] },
-    { level: "graduation", details: "", documents: [] },
-  ],
+  education: {
+    tenth: { school_name: "", percentage: "", year_of_passing: "", certificate_url: "" },
+    twelfth: { school_name: "", percentage: "", year_of_passing: "", certificate_url: "" },
+    graduation: { college_name: "", cgpa: "", year_of_passing: "", certificate_url: "" },
+  },
   skills: [],
   experience: [],
   template: "simple-ats",
@@ -69,7 +88,37 @@ export function getSignupData(): SignupData {
   const raw = localStorage.getItem(KEY)
   if (!raw) return defaultSignupData
   try {
-    return { ...defaultSignupData, ...JSON.parse(raw) }
+    const parsed = JSON.parse(raw)
+    const next = { ...defaultSignupData, ...parsed }
+    const legacyEducation = parsed?.education
+    if (Array.isArray(legacyEducation)) {
+      const fromLevel = (level: string) =>
+        legacyEducation.find((item: any) => String(item?.level || "").toLowerCase() === level.toLowerCase()) || {}
+      const tenth = fromLevel("10th")
+      const twelfth = fromLevel("12th")
+      const graduation = fromLevel("graduation")
+      next.education = {
+        tenth: {
+          school_name: tenth.details || "",
+          percentage: "",
+          year_of_passing: "",
+          certificate_url: (tenth.documents || [])[0] || "",
+        },
+        twelfth: {
+          school_name: twelfth.details || "",
+          percentage: "",
+          year_of_passing: "",
+          certificate_url: (twelfth.documents || [])[0] || "",
+        },
+        graduation: {
+          college_name: graduation.details || "",
+          cgpa: "",
+          year_of_passing: "",
+          certificate_url: (graduation.documents || [])[0] || "",
+        },
+      }
+    }
+    return next
   } catch {
     return defaultSignupData
   }

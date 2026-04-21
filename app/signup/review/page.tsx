@@ -54,7 +54,11 @@ export default function SignupReviewPage() {
       setSuggestedRoles(jobsResponse.data.suggested_roles || [])
       setResumeScore(Number(jobsResponse.data.resume_score || 0))
       const skillsCount = (data.skillsMeta?.length || data.skills.length || 0) > 0 ? 34 : 0
-      const educationCount = (data.education || []).filter((item) => String(item.details || "").trim()).length > 0 ? 33 : 0
+      const hasEducation =
+        Boolean(data.education?.tenth?.school_name?.trim()) ||
+        Boolean(data.education?.twelfth?.school_name?.trim()) ||
+        Boolean(data.education?.graduation?.college_name?.trim())
+      const educationCount = hasEducation ? 33 : 0
       const experienceCount = (data.experience || []).filter((item) => String(item.description || "").trim()).length > 0 ? 33 : 0
       setProfileStrength(skillsCount + educationCount + experienceCount)
       saveSignupData({
