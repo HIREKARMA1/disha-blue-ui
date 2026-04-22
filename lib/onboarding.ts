@@ -71,21 +71,10 @@ export const resetOnboarding = () => {
   clearLegacyBrowserStorage()
 }
 
-const stepToRoute: Record<string, string> = {
-  "step-1": "/signup/step-1",
-  "step-2": "/signup/step-2",
-  "step-3": "/signup/step-3",
-  "step-4": "/signup/step-4",
-  review: "/signup/review",
-}
-
 export function getOnboardingEntryRoute() {
-  if (typeof window === "undefined") return "/signup/step-1"
-  const step = getOnboardingStep()
-  if (step && step !== "review") {
-    return stepToRoute[step] || "/signup/step-1"
+  if (typeof window !== "undefined") {
+    localStorage.removeItem("onboarding_step")
   }
-  localStorage.removeItem("onboarding_step")
   return "/signup/step-1"
 }
 
