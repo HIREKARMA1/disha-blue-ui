@@ -34,7 +34,9 @@ export type SignupData = {
   experience: Array<{ type: string; description: string }>
   resume?: any
   resumeHtml?: string
-  template?: "simple-ats" | "modern-clean" | "compact"
+  /** Unix ms when resume was last saved from "Regenerate Resume" */
+  resumeUpdatedAt?: number
+  template?: "blue_collar_basic" | "compact_professional" | "simple-ats" | "modern-clean" | "compact"
 }
 
 export const defaultSignupData: SignupData = {
@@ -46,7 +48,7 @@ export const defaultSignupData: SignupData = {
   },
   skills: [],
   experience: [],
-  template: "simple-ats",
+  template: "blue_collar_basic",
 }
 
 export const resetOnboarding = () => {

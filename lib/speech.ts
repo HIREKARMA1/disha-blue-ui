@@ -13,54 +13,120 @@ const hindiPrompts: Record<string, string> = {
   "Share your work experience to improve job matching": "जॉब मैचिंग बेहतर करने के लिए अपना काम का अनुभव बताएं",
 }
 
-async function translateForSpeech(text: string, targetLang: "en" | "hi"): Promise<string> {
+let voiceCache: { hi: SpeechSynthesisVoice | null; en: SpeechSynthesisVoice | null } | null = null
+let voicesListenerAttached = false
+
+function attachVoicesListener(synth: SpeechSynthesis) {
+  if (voicesListenerAttached) return
+  voicesListenerAttached = true
+  synth.addEventListener("voiceschanged", () => {
+    voiceCache = null
+  })
+}
+
+function resolveVoices(synth: SpeechSynthesis): { hi: SpeechSynthesisVoice | null; en: SpeechSynthesisVoice | null } {
+  if (voiceCache) return voiceCache
+  const voices = synth.getVoices()
+  const hi =
+    voices.find((v) => v.lang.toLowerCase().includes("hi-in")) ||
+    voices.find((v) => v.lang.toLowerCase().includes("hi")) ||
+    null
+  const en =
+    voices.find((v) => v.lang.toLowerCase().includes("en-in")) ||
+    voices.find((v) => v.lang.toLowerCase().includes("en-us")) ||
+    voices.find((v) => v.lang.toLowerCase().includes("en")) ||
+    null
+  voiceCache = { hi, en }
+  return voiceCache
+}
+
+async function translateToHindiForSpeech(text: string): Promise<string> {
   const source = (text || "").trim()
-  if (!source || targetLang === "en") return source
-  // If text is already Hindi, speak it directly.
+  if (!source) return ""
   if (/[\u0900-\u097F]/.test(source)) return source
-  // Fast path for common onboarding prompts to avoid network latency.
-  if (hindiPrompts[source]) return hindiPrompts[source]
   try {
     const response = await apiClient.client.post("/onboarding/translate-text", {
       text: source,
       target_language: "hi",
     })
-    return String(response.data?.translated_text || source).trim()
-  } catch {
+    const out = String(response.data?.translated_text || "").trim()
+    if (!out) {
+      console.error("Hindi TTS: translate API returned empty Hindi text.")
+      return source
+    }
+    return out
+  } catch (err) {
+    console.error("Hindi TTS: translate API failed:", err)
     return source
   }
 }
 
+async function translateForSpeech(text: string, targetLang: "en" | "hi"): Promise<string> {
+  const source = (text || "").trim()
+  if (!source || targetLang === "en") return source
+  if (/[\u0900-\u097F]/.test(source)) return source
+  if (hindiPrompts[source]) return hindiPrompts[source]
+  return translateToHindiForSpeech(source)
+}
+
 export async function speakText(text: string, lang?: "en" | "hi") {
-  if (typeof window === "undefined" || !("speechSynthesis" in window)) return
+  if (typeof window === "undefined" || !("speechSynthesis" in window)) {
+    console.error("TTS: speechSynthesis is not available in this environment.")
+    return
+  }
   const selectedLang = lang || getSignupLanguage()
-  const translated = await translateForSpeech(text, selectedLang)
-  const utterance = new SpeechSynthesisUtterance(translated || text)
   const synth = window.speechSynthesis
-  const voices = synth.getVoices()
+  attachVoicesListener(synth)
+
+  let voices = synth.getVoices()
+  if (voices.length === 0) {
+    await new Promise<void>((resolve) => {
+      const onReady = () => {
+        synth.removeEventListener("voiceschanged", onReady)
+        voiceCache = null
+        resolve()
+      }
+      synth.addEventListener("voiceschanged", onReady)
+      window.setTimeout(() => {
+        synth.removeEventListener("voiceschanged", onReady)
+        voiceCache = null
+        resolve()
+      }, 2500)
+    })
+    voices = synth.getVoices()
+  }
 
   if (voices.length === 0) {
-    synth.onvoiceschanged = () => {
-      synth.onvoiceschanged = null
-      void speakText(text, selectedLang)
-    }
+    console.error("TTS: No speech voices loaded after waiting; cannot speak.")
     return
   }
 
+  let textForUtterance = await translateForSpeech(text, selectedLang)
+
+  const { hi, en } = resolveVoices(synth)
   let voice: SpeechSynthesisVoice | undefined
+
   if (selectedLang === "hi") {
-    voice =
-      voices.find((v) => v.lang.toLowerCase().includes("hi-in")) ||
-      voices.find((v) => v.lang.toLowerCase().includes("hi"))
+    voice = hi || undefined
+    if (!voice) {
+      console.warn("Hindi TTS: no hi-IN / Hindi SpeechSynthesis voice found.")
+      if (!/[\u0900-\u097F]/.test(textForUtterance)) {
+        textForUtterance = await translateToHindiForSpeech(text)
+      }
+      if (!/[\u0900-\u097F]/.test(textForUtterance)) {
+        console.error("Hindi TTS: text is still not Hindi script; browser fallback may sound wrong.")
+      }
+    }
   } else {
-    voice =
-      voices.find((v) => v.lang.toLowerCase().includes("en-in")) ||
-      voices.find((v) => v.lang.toLowerCase().includes("en-us")) ||
-      voices.find((v) => v.lang.toLowerCase().includes("en"))
+    voice = en || undefined
   }
 
+  const utterance = new SpeechSynthesisUtterance(textForUtterance || text)
   utterance.lang = selectedLang === "hi" ? "hi-IN" : "en-IN"
   utterance.voice = voice || null
+  utterance.onerror = (ev) => {
+    console.error("TTS: SpeechSynthesisUtterance error:", ev?.error || ev)
+  }
   synth.cancel()
   synth.speak(utterance)
 }

@@ -1,21 +1,35 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { useRouter } from "next/navigation"
 import { apiClient } from "@/lib/api"
 import { completeOnboardingSession, getOnboardingStep, getSignupData, saveSignupData, setOnboardingStep } from "@/lib/onboarding"
-import { ResumePreview } from "@/components/signup/ResumePreview"
+import { ResumePreview, type OnboardingResumeTemplate } from "@/components/signup/ResumePreview"
 import { CourseCard } from "@/components/dashboard/CourseCard"
 import { speakText } from "@/lib/speech"
 import { useAuth } from "@/hooks/useAuth"
 
+function formatRelativeMinutes(ts: number | undefined): string {
+  if (ts == null || !Number.isFinite(ts)) return "time not recorded yet"
+  const mins = Math.floor((Date.now() - ts) / 60_000)
+  if (mins < 1) return "less than a minute ago"
+  if (mins === 1) return "1 minute ago"
+  return `${mins} minutes ago`
+}
+
 export default function SignupReviewPage() {
   const router = useRouter()
   const { userType, isLoading } = useAuth()
-  const [loading, setLoading] = useState(true)
+  const [pageLoading, setPageLoading] = useState(true)
+  const [resumeRegenerating, setResumeRegenerating] = useState(false)
   const [resume, setResume] = useState<any>(null)
   const [resumeHtml, setResumeHtml] = useState<string>("")
-  const [template, setTemplate] = useState<"simple-ats" | "modern-clean" | "compact">("simple-ats")
+  const [atsScore, setAtsScore] = useState<number>(0)
+  const [template, setTemplate] = useState<OnboardingResumeTemplate>(() => {
+    const t = getSignupData().template
+    if (t === "compact" || t === "compact_professional") return "compact_professional"
+    return "blue_collar_basic"
+  })
   const [courses, setCourses] = useState<any[]>([])
   const [jobs, setJobs] = useState<any[]>([])
   const [suggestedRoles, setSuggestedRoles] = useState<string[]>([])
@@ -31,51 +45,125 @@ export default function SignupReviewPage() {
   const [otp, setOtp] = useState("")
   const [otpError, setOtpError] = useState("")
   const [profileStrength, setProfileStrength] = useState(0)
+  const [resumeUpdatedAt, setResumeUpdatedAt] = useState<number | undefined>(() => getSignupData().resumeUpdatedAt)
+  const lastRegenerateAtRef = useRef(0)
 
-  const run = async (forceRegenerate = false, overrideTemplate = template) => {
+  const computeProfileStrength = (data: ReturnType<typeof getSignupData>) => {
+    const skillsCount = (data.skillsMeta?.length || data.skills.length || 0) > 0 ? 34 : 0
+    const hasEducation =
+      Boolean(data.education?.tenth?.school_name?.trim()) ||
+      Boolean(data.education?.twelfth?.school_name?.trim()) ||
+      Boolean(data.education?.graduation?.college_name?.trim())
+    const educationCount = hasEducation ? 33 : 0
+    const experienceCount = (data.experience || []).filter((item) => String(item.description || "").trim()).length > 0 ? 33 : 0
+    return skillsCount + educationCount + experienceCount
+  }
+
+  const loadReviewPageData = async () => {
     const data = getSignupData()
-    if (!data.userId) return
+    if (!data.userId) {
+      setPageLoading(false)
+      return
+    }
+    setError("")
     try {
-      const resumeResponse = await apiClient.client.post("/onboarding/generate-resume", {
-        user_id: data.userId,
-        force_regenerate: forceRegenerate,
-        template: overrideTemplate,
-      })
-      const courseResponse = await apiClient.client.get("/onboarding/courses/recommend", {
-        params: { user_id: data.userId, location: data.basicInfo.location, category: "all" },
-      })
-      const jobsResponse = await apiClient.client.get("/jobs/match", {
-        params: { user_id: data.userId, limit: 6 },
-      })
-      setResume(resumeResponse.data.resume_json)
-      setResumeHtml(resumeResponse.data.resume_html || "")
+      const [courseResponse, jobsResponse] = await Promise.all([
+        apiClient.client.get("/onboarding/courses/recommend", {
+          params: { user_id: data.userId, location: data.basicInfo.location, category: "all" },
+        }),
+        apiClient.client.get("/jobs/match", {
+          params: { user_id: data.userId, limit: 6 },
+        }),
+      ])
+      const d = getSignupData()
+      setProfileStrength(computeProfileStrength(d))
+      if (d.resume) {
+        setResume(d.resume)
+        setResumeHtml(d.resumeHtml || "")
+        setAtsScore(Number(d.resume?.ats_score ?? 0))
+        const resumeTpl = d.resume?.template as OnboardingResumeTemplate | undefined
+        if (resumeTpl === "compact_professional" || resumeTpl === "blue_collar_basic") {
+          setTemplate(resumeTpl)
+        } else {
+          const storedTpl = d.template
+          if (storedTpl === "compact" || storedTpl === "compact_professional") setTemplate("compact_professional")
+          else setTemplate("blue_collar_basic")
+        }
+      }
+      setResumeUpdatedAt(d.resumeUpdatedAt)
       setCourses(courseResponse.data.courses || [])
       setJobs(jobsResponse.data.jobs || [])
       setSuggestedRoles(jobsResponse.data.suggested_roles || [])
       setResumeScore(Number(jobsResponse.data.resume_score || 0))
-      const skillsCount = (data.skillsMeta?.length || data.skills.length || 0) > 0 ? 34 : 0
-      const hasEducation =
-        Boolean(data.education?.tenth?.school_name?.trim()) ||
-        Boolean(data.education?.twelfth?.school_name?.trim()) ||
-        Boolean(data.education?.graduation?.college_name?.trim())
-      const educationCount = hasEducation ? 33 : 0
-      const experienceCount = (data.experience || []).filter((item) => String(item.description || "").trim()).length > 0 ? 33 : 0
-      setProfileStrength(skillsCount + educationCount + experienceCount)
+    } catch (err) {
+      console.error("Onboarding review: load failed:", err)
+      setError("Could not load courses or job matches. Check your connection and try again.")
+    } finally {
+      setPageLoading(false)
+      setRetrying(false)
+    }
+  }
+
+  const regenerateResume = async () => {
+    const now = Date.now()
+    if (now - lastRegenerateAtRef.current < 5000) {
+      setToast("Please wait a few seconds before regenerating again.")
+      window.setTimeout(() => setToast(""), 2200)
+      return
+    }
+    lastRegenerateAtRef.current = now
+
+    const data = getSignupData()
+    if (!data.userId) return
+    setResumeRegenerating(true)
+    setError("")
+    try {
+      const tpl = template
+      const resumeResponse = await apiClient.client.post("/onboarding/generate-resume", {
+        user_id: data.userId,
+        force_regenerate: true,
+        template: tpl,
+      })
+      const [courseResponse, jobsResponse] = await Promise.all([
+        apiClient.client.get("/onboarding/courses/recommend", {
+          params: { user_id: data.userId, location: data.basicInfo.location, category: "all" },
+        }),
+        apiClient.client.get("/jobs/match", {
+          params: { user_id: data.userId, limit: 6 },
+        }),
+      ])
+      setResume(resumeResponse.data.resume_json)
+      setResumeHtml(resumeResponse.data.resume_html || "")
+      const nextTpl = resumeResponse.data.resume_json?.template as OnboardingResumeTemplate | undefined
+      if (nextTpl === "compact_professional" || nextTpl === "blue_collar_basic") {
+        setTemplate(nextTpl)
+      }
+      setAtsScore(Number(resumeResponse.data.ats_score ?? 0))
+      setCourses(courseResponse.data.courses || [])
+      setJobs(jobsResponse.data.jobs || [])
+      setSuggestedRoles(jobsResponse.data.suggested_roles || [])
+      setResumeScore(Number(jobsResponse.data.resume_score || 0))
+      const fresh = getSignupData()
+      const updatedAt = Date.now()
+      setProfileStrength(computeProfileStrength(fresh))
+      setResumeUpdatedAt(updatedAt)
       saveSignupData({
-        ...data,
+        ...fresh,
         resume: resumeResponse.data.resume_json,
         resumeHtml: resumeResponse.data.resume_html,
-        template: overrideTemplate,
+        template: nextTpl === "compact_professional" || nextTpl === "blue_collar_basic" ? nextTpl : tpl,
+        resumeUpdatedAt: updatedAt,
       })
-      setError("")
       window.setTimeout(() => {
         const section = document.getElementById("instant-job-list")
         if (section) section.scrollIntoView({ behavior: "smooth", block: "start" })
       }, 250)
-    } catch {
-      setError("Resume API failed. Please retry.")
+    } catch (err) {
+      console.error("Onboarding review: regenerate failed:", err)
+      setError("Resume generation failed. Check your connection and try again.")
+      lastRegenerateAtRef.current = 0
     } finally {
-      setLoading(false)
+      setResumeRegenerating(false)
       setRetrying(false)
     }
   }
@@ -88,14 +176,19 @@ export default function SignupReviewPage() {
     }
     if (isLoading) return
     setOnboardingStep("review")
-    void run()
+    void loadReviewPageData()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoading, userType])
 
   if (isLoading) return null
 
-  if (loading) {
-    return <div className="mx-auto max-w-xl p-6 text-lg font-semibold">Your resume is building...</div>
+  if (pageLoading) {
+    return (
+      <div className="mx-auto flex max-w-xl flex-col items-center gap-3 p-10 text-center">
+        <p className="text-lg font-semibold">Loading your review…</p>
+        <p className="text-sm text-muted-foreground">Fetching courses and job matches.</p>
+      </div>
+    )
   }
 
   const onPrevious = async () => {
@@ -161,8 +254,17 @@ export default function SignupReviewPage() {
         </div>
       </div>
       <div className="space-y-1">
-        <h1 className="text-2xl font-semibold">Your resume is ready 🎉</h1>
+        <h1 className="text-2xl font-semibold">Your resume is ready</h1>
         <p className="text-sm text-muted-foreground">You are now ready to apply for jobs</p>
+        {resume ? (
+          <p className="text-sm text-muted-foreground">
+            Using saved resume (last updated {formatRelativeMinutes(resumeUpdatedAt)})
+          </p>
+        ) : (
+          <p className="text-sm text-muted-foreground">
+            No resume loaded yet. Click &quot;Regenerate Resume&quot; to build one from your profile (nothing is sent until you do).
+          </p>
+        )}
         {otpError && <p className="text-sm text-red-600">{otpError}</p>}
       </div>
       {showOtpModal && (
@@ -252,7 +354,19 @@ export default function SignupReviewPage() {
       )}
       <section className="rounded-xl border p-3">
         <div className="flex items-center justify-between text-sm font-medium">
-          <span>Resume Strength</span>
+          <span>ATS resume score</span>
+          <span>{atsScore}%</span>
+        </div>
+        <div className="mt-2 h-2 w-full rounded-full bg-muted">
+          <div className="h-full rounded-full bg-sky-600" style={{ width: `${Math.max(0, Math.min(100, atsScore))}%` }} />
+        </div>
+        <p className="mt-2 text-xs text-muted-foreground">
+          Based on skills, experience, education, and summary completeness for blue-collar job platforms.
+        </p>
+      </section>
+      <section className="rounded-xl border p-3">
+        <div className="flex items-center justify-between text-sm font-medium">
+          <span>Resume strength (job match)</span>
           <span>{resumeScore}%</span>
         </div>
         <div className="mt-2 h-2 w-full rounded-full bg-muted">
@@ -288,43 +402,70 @@ export default function SignupReviewPage() {
             className="ml-2 rounded border px-2 py-1 text-xs"
             onClick={() => {
               setRetrying(true)
-              void run(true, template)
+              if (error.includes("Could not load")) {
+                void loadReviewPageData()
+              } else {
+                void regenerateResume()
+              }
             }}
+            disabled={resumeRegenerating}
           >
             {retrying ? "Retrying..." : "Retry"}
           </button>
         </div>
       )}
+      <div className="flex flex-wrap items-center gap-3">
+        <button
+          type="button"
+          className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground disabled:opacity-60"
+          disabled={resumeRegenerating || !getSignupData().userId}
+          onClick={() => void regenerateResume()}
+        >
+          {resumeRegenerating ? "Regenerating…" : "Regenerate Resume"}
+        </button>
+        <p className="text-xs text-muted-foreground">Resume is only rebuilt when you use this button (not on page load or template change).</p>
+      </div>
+      <div className="relative rounded-xl border p-3">
+        {resumeRegenerating && (
+          <div className="absolute inset-0 z-10 flex items-center justify-center rounded-xl bg-background/80 backdrop-blur-sm">
+            <p className="text-sm font-medium text-foreground">Regenerating resume...</p>
+          </div>
+        )}
+        <ResumePreview
+          resume={resume}
+          resumeHtml={resumeHtml}
+          template={template}
+          regenerating={resumeRegenerating}
+          onTemplateChange={(next) => {
+            setTemplate(next)
+            const d = getSignupData()
+            saveSignupData({ ...d, template: next })
+          }}
+          onChange={(next) => {
+            setResume(next)
+            const d = getSignupData()
+            saveSignupData({ ...d, resume: next })
+          }}
+        />
+      </div>
       {resume && (
-        <>
-          <ResumePreview
-            resume={resume}
-            template={template}
-            onTemplateChange={(next) => {
-              setTemplate(next)
-              setLoading(true)
-              void run(true, next)
-            }}
-            onChange={setResume}
-          />
-          <button
-            type="button"
-            className="rounded-md border px-3 py-2 text-sm font-medium"
-            disabled={loadingSpeech}
-            onClick={async () => {
-              const summary = String(resume?.summary || "").trim()
-              if (!summary) return
-              setLoadingSpeech(true)
-              try {
-                await speakText(summary)
-              } finally {
-                setLoadingSpeech(false)
-              }
-            }}
-          >
-            {loadingSpeech ? "Preparing audio..." : "Listen to your resume"}
-          </button>
-        </>
+        <button
+          type="button"
+          className="rounded-md border px-3 py-2 text-sm font-medium"
+          disabled={loadingSpeech || resumeRegenerating}
+          onClick={async () => {
+            const summary = String(resume?.professional_summary || resume?.summary || "").trim()
+            if (!summary) return
+            setLoadingSpeech(true)
+            try {
+              await speakText(summary)
+            } finally {
+              setLoadingSpeech(false)
+            }
+          }}
+        >
+          {loadingSpeech ? "Preparing audio..." : "Listen to your resume"}
+        </button>
       )}
       {resumeHtml && (
         <section className="rounded-xl border p-3">
