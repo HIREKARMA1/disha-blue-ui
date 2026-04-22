@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { StepForm } from "@/components/signup/StepForm"
 import { FieldVoiceButton } from "@/components/signup/FieldVoiceButton"
+import { getSignupLanguage } from "@/components/signup/LanguageSwitcher"
 import { getOnboardingStep, getSignupData, saveSignupData, saveStep, setOnboardingStep, startOnboardingSession } from "@/lib/onboarding"
 import { useAuth } from "@/hooks/useAuth"
 
@@ -16,12 +17,24 @@ export default function SignupStep1Page() {
   const initial = getSignupData()
   const [form, setForm] = useState(initial.basicInfo)
   const [loading, setLoading] = useState(false)
+  const [selectedLanguage, setSelectedLanguage] = useState<"en" | "hi">("en")
 
   useEffect(() => {
     console.log("ROUTER READY", typeof router.push)
     localStorage.removeItem("onboarding_step")
     localStorage.removeItem("onboarding_data")
     setOnboardingStep("step-1")
+  }, [])
+
+  useEffect(() => {
+    setSelectedLanguage(getSignupLanguage())
+    const onLanguageChange = () => setSelectedLanguage(getSignupLanguage())
+    window.addEventListener("hk_language_changed", onLanguageChange as EventListener)
+    window.addEventListener("storage", onLanguageChange)
+    return () => {
+      window.removeEventListener("hk_language_changed", onLanguageChange as EventListener)
+      window.removeEventListener("storage", onLanguageChange)
+    }
   }, [])
 
   useEffect(() => {
@@ -101,8 +114,8 @@ export default function SignupStep1Page() {
       subtitle="Minimal typing, voice supported."
       step={1}
       totalSteps={4}
-      helperHint="Use mic for name, phone, and location (Hindi/English)."
-      helperVoiceText="Use mic for name, phone, and location."
+      helperHint={selectedLanguage === "hi" ? "नाम, फोन और लोकेशन के लिए माइक का उपयोग करें (हिंदी/English)।" : "Use mic for name, phone, and location (Hindi/English)."}
+      helperVoiceText={selectedLanguage === "hi" ? "नाम, फोन और लोकेशन के लिए माइक का उपयोग करें।" : "Use mic for name, phone, and location."}
     >
       <div className="space-y-1">
         <Input

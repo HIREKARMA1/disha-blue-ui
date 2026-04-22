@@ -51,13 +51,24 @@ export const defaultSignupData: SignupData = {
   template: "blue_collar_basic",
 }
 
-export const resetOnboarding = () => {
+let inMemorySignupData: SignupData = defaultSignupData
+let inMemoryStatus: "in_progress" | "completed" | null = null
+let inMemoryStep: "step-1" | "step-2" | "step-3" | "step-4" | "review" | null = null
+
+function clearLegacyBrowserStorage() {
   if (typeof window === "undefined") return
   localStorage.removeItem("onboarding_step")
   localStorage.removeItem("onboarding_data")
   localStorage.removeItem("onboarding_session")
   localStorage.removeItem(KEY)
   localStorage.removeItem(STATUS_KEY)
+}
+
+export const resetOnboarding = () => {
+  inMemorySignupData = defaultSignupData
+  inMemoryStatus = null
+  inMemoryStep = null
+  clearLegacyBrowserStorage()
 }
 
 const stepToRoute: Record<string, string> = {
@@ -79,81 +90,42 @@ export function getOnboardingEntryRoute() {
 }
 
 export function getSignupData(): SignupData {
-  if (typeof window === "undefined") return defaultSignupData
-  const raw = localStorage.getItem(KEY)
-  if (!raw) return defaultSignupData
-  try {
-    const parsed = JSON.parse(raw)
-    const next = { ...defaultSignupData, ...parsed }
-    const legacyEducation = parsed?.education
-    if (Array.isArray(legacyEducation)) {
-      const fromLevel = (level: string) =>
-        legacyEducation.find((item: any) => String(item?.level || "").toLowerCase() === level.toLowerCase()) || {}
-      const tenth = fromLevel("10th")
-      const twelfth = fromLevel("12th")
-      const graduation = fromLevel("graduation")
-      next.education = {
-        tenth: {
-          school_name: tenth.details || "",
-          percentage: "",
-          year_of_passing: "",
-          certificate_url: (tenth.documents || [])[0] || "",
-        },
-        twelfth: {
-          school_name: twelfth.details || "",
-          percentage: "",
-          year_of_passing: "",
-          certificate_url: (twelfth.documents || [])[0] || "",
-        },
-        graduation: {
-          college_name: graduation.details || "",
-          cgpa: "",
-          year_of_passing: "",
-          certificate_url: (graduation.documents || [])[0] || "",
-        },
-      }
-    }
-    return next
-  } catch {
-    return defaultSignupData
-  }
+  clearLegacyBrowserStorage()
+  return inMemorySignupData
 }
 
 export function saveSignupData(data: SignupData) {
-  localStorage.setItem(KEY, JSON.stringify(data))
+  inMemorySignupData = data
 }
 
 export function startOnboardingSession(seed?: Partial<SignupData>) {
-  const existing = getSignupData()
+  clearLegacyBrowserStorage()
+  const existing = inMemorySignupData
   const next = { ...existing, ...seed }
-  localStorage.setItem(KEY, JSON.stringify(next))
-  localStorage.setItem(STATUS_KEY, "in_progress")
+  inMemorySignupData = next
+  inMemoryStatus = "in_progress"
   return next
 }
 
 export function completeOnboardingSession() {
-  localStorage.setItem(STATUS_KEY, "completed")
-  localStorage.setItem(STEP_KEY, "review")
+  inMemoryStatus = "completed"
+  inMemoryStep = "review"
 }
 
 export function isOnboardingInProgress() {
-  if (typeof window === "undefined") return false
-  return localStorage.getItem(STATUS_KEY) === "in_progress"
+  return inMemoryStatus === "in_progress"
 }
 
 export function isOnboardingCompleted() {
-  if (typeof window === "undefined") return false
-  return localStorage.getItem(STATUS_KEY) === "completed"
+  return inMemoryStatus === "completed"
 }
 
 export function setOnboardingStep(step: "step-1" | "step-2" | "step-3" | "step-4" | "review") {
-  if (typeof window === "undefined") return
-  localStorage.setItem(STEP_KEY, step)
+  inMemoryStep = step
 }
 
 export function getOnboardingStep() {
-  if (typeof window === "undefined") return null
-  return localStorage.getItem(STEP_KEY)
+  return inMemoryStep
 }
 
 export async function saveStep(step: string, payload: any, userId?: string) {

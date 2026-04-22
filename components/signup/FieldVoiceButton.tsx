@@ -6,7 +6,7 @@ import { getSignupLanguage } from "@/components/signup/LanguageSwitcher"
 import { useSpeechToText } from "@/hooks/useSpeechToText"
 import { parseVoiceText } from "@/lib/onboarding"
 
-type VoiceFieldType = "name" | "phone" | "location" | "skills" | "experience"
+type VoiceFieldType = "name" | "phone" | "location" | "skills" | "education" | "experience"
 
 interface FieldVoiceButtonProps {
   fieldType: VoiceFieldType

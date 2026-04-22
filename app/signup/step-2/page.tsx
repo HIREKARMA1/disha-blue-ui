@@ -6,6 +6,7 @@ import type { MouseEvent } from "react"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { StepForm } from "@/components/signup/StepForm"
+import { FieldVoiceButton } from "@/components/signup/FieldVoiceButton"
 import { getOnboardingStep, getSignupData, saveSignupData, saveStep, setOnboardingStep, uploadOnboardingDocument } from "@/lib/onboarding"
 import { useAuth } from "@/hooks/useAuth"
 
@@ -75,6 +76,27 @@ export default function SignupStep2Page() {
     return Object.keys(nextErrors).length === 0
   }
 
+  const normalizeNumericVoiceValue = (value: string, mode: "year" | "score") => {
+    if (mode === "year") return value.replace(/\D/g, "").slice(0, 4)
+    return value.replace(/[^0-9.]/g, "")
+  }
+
+  const getParsedEducationValue = (
+    parsed: Record<string, any>,
+    section: "tenth" | "twelfth" | "graduation",
+    field: "school_name" | "percentage" | "year_of_passing" | "college_name" | "cgpa",
+    translatedText: string
+  ) => {
+    const parsedEducation = parsed?.education || {}
+    const parsedSection = parsedEducation?.[section] || {}
+    const directValue = parsedSection?.[field] ?? parsed?.[field]
+    const fallbackText = String(directValue || translatedText || "").trim()
+    if (!fallbackText) return ""
+    if (field === "year_of_passing") return normalizeNumericVoiceValue(fallbackText, "year")
+    if (field === "percentage" || field === "cgpa") return normalizeNumericVoiceValue(fallbackText, "score")
+    return fallbackText
+  }
+
   const handleUpload = async (section: "tenth" | "twelfth" | "graduation", file?: File) => {
     if (!file) return
     setUploadingSection(section)
@@ -142,16 +164,60 @@ export default function SignupStep2Page() {
       subtitle="Add 10th, 12th, Graduation details."
       step={2}
       totalSteps={4}
-      helperHint="Manual entry and upload only."
-      helperVoiceText="Manual entry and upload only."
+      helperHint="Use mic for education fields and upload certificates."
+      helperVoiceText="Use mic for education fields and upload certificates."
     >
       <div className="space-y-4">
         <div className="rounded-xl border bg-card p-4 shadow-sm">
           <h3 className="mb-3 text-base font-semibold">📘 10th Details</h3>
           <div className="grid gap-3 md:grid-cols-2">
-            <Input placeholder="School Name" value={education.tenth.school_name} onChange={(e) => updateField("tenth", "school_name", e.target.value)} />
-            <Input type="number" placeholder="Percentage" value={education.tenth.percentage} onChange={(e) => updateField("tenth", "percentage", e.target.value)} />
-            <Input type="number" placeholder="Year of Passing" value={education.tenth.year_of_passing} onChange={(e) => updateField("tenth", "year_of_passing", e.target.value)} />
+            <Input
+              placeholder="School Name"
+              value={education.tenth.school_name}
+              onChange={(e) => updateField("tenth", "school_name", e.target.value)}
+              rightIcon={
+                <FieldVoiceButton
+                  fieldType="education"
+                  ariaLabel="Speak 10th school name"
+                  onParsed={({ translatedText, parsed }) => {
+                    const next = getParsedEducationValue(parsed, "tenth", "school_name", translatedText)
+                    if (next) updateField("tenth", "school_name", next)
+                  }}
+                />
+              }
+            />
+            <Input
+              type="number"
+              placeholder="Percentage"
+              value={education.tenth.percentage}
+              onChange={(e) => updateField("tenth", "percentage", e.target.value)}
+              rightIcon={
+                <FieldVoiceButton
+                  fieldType="education"
+                  ariaLabel="Speak 10th percentage"
+                  onParsed={({ translatedText, parsed }) => {
+                    const next = getParsedEducationValue(parsed, "tenth", "percentage", translatedText)
+                    if (next) updateField("tenth", "percentage", next)
+                  }}
+                />
+              }
+            />
+            <Input
+              type="number"
+              placeholder="Year of Passing"
+              value={education.tenth.year_of_passing}
+              onChange={(e) => updateField("tenth", "year_of_passing", e.target.value)}
+              rightIcon={
+                <FieldVoiceButton
+                  fieldType="education"
+                  ariaLabel="Speak 10th passing year"
+                  onParsed={({ translatedText, parsed }) => {
+                    const next = getParsedEducationValue(parsed, "tenth", "year_of_passing", translatedText)
+                    if (next) updateField("tenth", "year_of_passing", next)
+                  }}
+                />
+              }
+            />
           </div>
           {errors["tenth.percentage"] && <p className="mt-2 text-xs text-red-600">{errors["tenth.percentage"]}</p>}
           {errors["tenth.year_of_passing"] && <p className="mt-1 text-xs text-red-600">{errors["tenth.year_of_passing"]}</p>}
@@ -166,9 +232,53 @@ export default function SignupStep2Page() {
         <div className="rounded-xl border bg-card p-4 shadow-sm">
           <h3 className="mb-3 text-base font-semibold">📗 12th Details</h3>
           <div className="grid gap-3 md:grid-cols-2">
-            <Input placeholder="School/College Name" value={education.twelfth.school_name} onChange={(e) => updateField("twelfth", "school_name", e.target.value)} />
-            <Input type="number" placeholder="Percentage" value={education.twelfth.percentage} onChange={(e) => updateField("twelfth", "percentage", e.target.value)} />
-            <Input type="number" placeholder="Year of Passing" value={education.twelfth.year_of_passing} onChange={(e) => updateField("twelfth", "year_of_passing", e.target.value)} />
+            <Input
+              placeholder="School/College Name"
+              value={education.twelfth.school_name}
+              onChange={(e) => updateField("twelfth", "school_name", e.target.value)}
+              rightIcon={
+                <FieldVoiceButton
+                  fieldType="education"
+                  ariaLabel="Speak 12th school or college name"
+                  onParsed={({ translatedText, parsed }) => {
+                    const next = getParsedEducationValue(parsed, "twelfth", "school_name", translatedText)
+                    if (next) updateField("twelfth", "school_name", next)
+                  }}
+                />
+              }
+            />
+            <Input
+              type="number"
+              placeholder="Percentage"
+              value={education.twelfth.percentage}
+              onChange={(e) => updateField("twelfth", "percentage", e.target.value)}
+              rightIcon={
+                <FieldVoiceButton
+                  fieldType="education"
+                  ariaLabel="Speak 12th percentage"
+                  onParsed={({ translatedText, parsed }) => {
+                    const next = getParsedEducationValue(parsed, "twelfth", "percentage", translatedText)
+                    if (next) updateField("twelfth", "percentage", next)
+                  }}
+                />
+              }
+            />
+            <Input
+              type="number"
+              placeholder="Year of Passing"
+              value={education.twelfth.year_of_passing}
+              onChange={(e) => updateField("twelfth", "year_of_passing", e.target.value)}
+              rightIcon={
+                <FieldVoiceButton
+                  fieldType="education"
+                  ariaLabel="Speak 12th passing year"
+                  onParsed={({ translatedText, parsed }) => {
+                    const next = getParsedEducationValue(parsed, "twelfth", "year_of_passing", translatedText)
+                    if (next) updateField("twelfth", "year_of_passing", next)
+                  }}
+                />
+              }
+            />
           </div>
           {errors["twelfth.percentage"] && <p className="mt-2 text-xs text-red-600">{errors["twelfth.percentage"]}</p>}
           {errors["twelfth.year_of_passing"] && <p className="mt-1 text-xs text-red-600">{errors["twelfth.year_of_passing"]}</p>}
@@ -183,9 +293,53 @@ export default function SignupStep2Page() {
         <div className="rounded-xl border bg-card p-4 shadow-sm">
           <h3 className="mb-3 text-base font-semibold">🎓 Graduation Details</h3>
           <div className="grid gap-3 md:grid-cols-2">
-            <Input placeholder="University/College Name" value={education.graduation.college_name} onChange={(e) => updateField("graduation", "college_name", e.target.value)} />
-            <Input type="number" placeholder="CGPA / Percentage" value={education.graduation.cgpa} onChange={(e) => updateField("graduation", "cgpa", e.target.value)} />
-            <Input type="number" placeholder="Year of Passing" value={education.graduation.year_of_passing} onChange={(e) => updateField("graduation", "year_of_passing", e.target.value)} />
+            <Input
+              placeholder="University/College Name"
+              value={education.graduation.college_name}
+              onChange={(e) => updateField("graduation", "college_name", e.target.value)}
+              rightIcon={
+                <FieldVoiceButton
+                  fieldType="education"
+                  ariaLabel="Speak graduation university or college name"
+                  onParsed={({ translatedText, parsed }) => {
+                    const next = getParsedEducationValue(parsed, "graduation", "college_name", translatedText)
+                    if (next) updateField("graduation", "college_name", next)
+                  }}
+                />
+              }
+            />
+            <Input
+              type="number"
+              placeholder="CGPA / Percentage"
+              value={education.graduation.cgpa}
+              onChange={(e) => updateField("graduation", "cgpa", e.target.value)}
+              rightIcon={
+                <FieldVoiceButton
+                  fieldType="education"
+                  ariaLabel="Speak graduation CGPA or percentage"
+                  onParsed={({ translatedText, parsed }) => {
+                    const next = getParsedEducationValue(parsed, "graduation", "cgpa", translatedText)
+                    if (next) updateField("graduation", "cgpa", next)
+                  }}
+                />
+              }
+            />
+            <Input
+              type="number"
+              placeholder="Year of Passing"
+              value={education.graduation.year_of_passing}
+              onChange={(e) => updateField("graduation", "year_of_passing", e.target.value)}
+              rightIcon={
+                <FieldVoiceButton
+                  fieldType="education"
+                  ariaLabel="Speak graduation passing year"
+                  onParsed={({ translatedText, parsed }) => {
+                    const next = getParsedEducationValue(parsed, "graduation", "year_of_passing", translatedText)
+                    if (next) updateField("graduation", "year_of_passing", next)
+                  }}
+                />
+              }
+            />
           </div>
           {errors["graduation.cgpa"] && <p className="mt-2 text-xs text-red-600">{errors["graduation.cgpa"]}</p>}
           {errors["graduation.year_of_passing"] && <p className="mt-1 text-xs text-red-600">{errors["graduation.year_of_passing"]}</p>}
