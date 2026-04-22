@@ -97,7 +97,7 @@ export default function SignupStep3Page() {
       helperVoiceText="Speak your skills like electrician, helper, or driver"
     >
       <Input
-        className="rounded-xl border px-4 py-3 focus-visible:ring-2 focus-visible:ring-primary"
+        className="rounded-xl border border-border bg-background px-4 py-3 text-base transition-all duration-200 ease-in-out focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary"
         placeholder="e.g. Electrician, Welding, Plumbing"
         value={skillsText}
         onChange={(e) => {
@@ -140,7 +140,7 @@ export default function SignupStep3Page() {
             <button
               key={`${item.name}-${item.source}`}
               type="button"
-              className="rounded-full border px-3 py-1 text-xs"
+              className="rounded-full border border-border bg-background px-3 py-1 text-xs text-foreground transition-all duration-200 ease-in-out hover:bg-muted"
               onClick={() => {
                 const filtered = skillsMeta.filter((chip) => chip.name.toLowerCase() !== item.name.toLowerCase())
                 setSkillsMeta(filtered)
@@ -152,18 +152,18 @@ export default function SignupStep3Page() {
           ))}
         </div>
       )}
-      <div className="fixed bottom-0 left-0 z-40 w-full border-t bg-white p-4 shadow-md dark:bg-zinc-900 md:static md:border-0 md:bg-transparent md:p-0 md:shadow-none">
+      <div className="fixed bottom-0 left-0 z-40 w-full border-t border-border bg-background/80 p-4 shadow-sm backdrop-blur-md md:static md:border-0 md:bg-transparent md:p-0 md:shadow-none md:backdrop-blur-none">
         <div className="mx-auto flex max-w-xl justify-between gap-3 md:mt-6">
-          <Button type="button" variant="outline" className="h-12 w-1/2 rounded-xl border border-gray-300 text-gray-700" onClick={(e) => void onPrevious(e)} loading={loading}>
+          <Button type="button" variant="outline" className="h-11 w-1/2 rounded-xl border border-border bg-background px-6 text-foreground transition-all duration-200 ease-in-out hover:bg-muted disabled:cursor-not-allowed disabled:opacity-50" onClick={(e) => void onPrevious(e)} loading={loading}>
             Previous
           </Button>
-          <Button type="button" className="h-12 w-1/2 rounded-xl bg-primary text-white" onClick={(e) => void onSubmit(e)} loading={loading}>
+          <Button type="button" className="h-11 w-1/2 rounded-xl bg-primary px-6 font-medium text-primary-foreground shadow-sm transition-all duration-200 ease-in-out hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50" onClick={(e) => void onSubmit(e)} loading={loading}>
             Next
           </Button>
         </div>
       </div>
       {retry && (
-        <Button variant="outline" className="h-12 w-full rounded-xl" onClick={onSubmit}>Retry Save</Button>
+        <Button variant="outline" className="h-11 w-full rounded-xl border border-border bg-background px-6 text-foreground transition-all duration-200 ease-in-out hover:bg-muted disabled:cursor-not-allowed disabled:opacity-50" onClick={onSubmit}>Retry Save</Button>
       )}
     </StepForm>
   )

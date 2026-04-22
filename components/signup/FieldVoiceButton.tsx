@@ -62,7 +62,7 @@ export function FieldVoiceButton({ fieldType, onParsed, ariaLabel }: FieldVoiceB
       <button
         type="button"
         onClick={() => void onClick()}
-        className={`inline-flex h-7 w-7 items-center justify-center rounded-full border bg-primary/10 text-primary transition hover:bg-primary/20 ${isListening ? "animate-pulse" : ""}`}
+        className={`inline-flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-md transition-all duration-200 ease-in-out hover:bg-primary/90 ${isListening ? "animate-pulse ring-4 ring-primary/20" : ""}`}
         aria-label={ariaLabel}
         title={`Voice input (${selectedLanguage === "hi" ? "Hindi/English" : "English/Hindi"})`}
       >

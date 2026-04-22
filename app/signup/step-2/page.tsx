@@ -168,10 +168,11 @@ export default function SignupStep2Page() {
       helperVoiceText="Use mic for education fields and upload certificates."
     >
       <div className="space-y-4">
-        <div className="rounded-xl border bg-card p-4 shadow-sm">
-          <h3 className="mb-3 text-base font-semibold">📘 10th Details</h3>
+        <div className="rounded-xl border border-border bg-background p-4 shadow-sm transition-all duration-200 ease-in-out">
+          <h3 className="mb-3 text-base font-semibold text-foreground">📘 10th Details</h3>
           <div className="grid gap-3 md:grid-cols-2">
             <Input
+              className="rounded-xl border border-border bg-background px-4 py-3 text-base transition-all duration-200 ease-in-out focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary"
               placeholder="School Name"
               value={education.tenth.school_name}
               onChange={(e) => updateField("tenth", "school_name", e.target.value)}
@@ -188,6 +189,7 @@ export default function SignupStep2Page() {
             />
             <Input
               type="number"
+              className={`rounded-xl border bg-background px-4 py-3 text-base transition-all duration-200 ease-in-out focus-visible:ring-2 ${errors["tenth.percentage"] ? "border-red-500 focus-visible:border-red-500 focus-visible:ring-red-500" : "border-border focus-visible:border-primary focus-visible:ring-primary"}`}
               placeholder="Percentage"
               value={education.tenth.percentage}
               onChange={(e) => updateField("tenth", "percentage", e.target.value)}
@@ -204,6 +206,7 @@ export default function SignupStep2Page() {
             />
             <Input
               type="number"
+              className={`rounded-xl border bg-background px-4 py-3 text-base transition-all duration-200 ease-in-out focus-visible:ring-2 ${errors["tenth.year_of_passing"] ? "border-red-500 focus-visible:border-red-500 focus-visible:ring-red-500" : "border-border focus-visible:border-primary focus-visible:ring-primary"}`}
               placeholder="Year of Passing"
               value={education.tenth.year_of_passing}
               onChange={(e) => updateField("tenth", "year_of_passing", e.target.value)}
@@ -221,18 +224,19 @@ export default function SignupStep2Page() {
           </div>
           {errors["tenth.percentage"] && <p className="mt-2 text-xs text-red-600">{errors["tenth.percentage"]}</p>}
           {errors["tenth.year_of_passing"] && <p className="mt-1 text-xs text-red-600">{errors["tenth.year_of_passing"]}</p>}
-          <label className="mt-3 block rounded-lg border border-dashed p-3 text-sm">
+          <label className="mt-3 block rounded-xl border border-dashed border-border bg-background p-3 text-sm text-foreground transition-all duration-200 ease-in-out">
             Upload Certificate (PDF/JPG/PNG)
             <input type="file" accept=".pdf,.jpg,.jpeg,.png" onChange={(e) => void handleUpload("tenth", e.target.files?.[0])} className="mt-2 block text-xs" />
           </label>
-          <p className="mt-2 text-xs">{education.tenth.certificate_url ? "✔ Uploaded" : "Not uploaded"}</p>
+          <p className="mt-2 text-xs text-muted-foreground">{education.tenth.certificate_url ? "✔ Uploaded" : "Not uploaded"}</p>
           {uploadingSection === "tenth" && <p className="text-xs text-muted-foreground">Uploading document...</p>}
         </div>
 
-        <div className="rounded-xl border bg-card p-4 shadow-sm">
-          <h3 className="mb-3 text-base font-semibold">📗 12th Details</h3>
+        <div className="rounded-xl border border-border bg-background p-4 shadow-sm transition-all duration-200 ease-in-out">
+          <h3 className="mb-3 text-base font-semibold text-foreground">📗 12th Details</h3>
           <div className="grid gap-3 md:grid-cols-2">
             <Input
+              className="rounded-xl border border-border bg-background px-4 py-3 text-base transition-all duration-200 ease-in-out focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary"
               placeholder="School/College Name"
               value={education.twelfth.school_name}
               onChange={(e) => updateField("twelfth", "school_name", e.target.value)}
@@ -249,6 +253,7 @@ export default function SignupStep2Page() {
             />
             <Input
               type="number"
+              className={`rounded-xl border bg-background px-4 py-3 text-base transition-all duration-200 ease-in-out focus-visible:ring-2 ${errors["twelfth.percentage"] ? "border-red-500 focus-visible:border-red-500 focus-visible:ring-red-500" : "border-border focus-visible:border-primary focus-visible:ring-primary"}`}
               placeholder="Percentage"
               value={education.twelfth.percentage}
               onChange={(e) => updateField("twelfth", "percentage", e.target.value)}
@@ -265,6 +270,7 @@ export default function SignupStep2Page() {
             />
             <Input
               type="number"
+              className={`rounded-xl border bg-background px-4 py-3 text-base transition-all duration-200 ease-in-out focus-visible:ring-2 ${errors["twelfth.year_of_passing"] ? "border-red-500 focus-visible:border-red-500 focus-visible:ring-red-500" : "border-border focus-visible:border-primary focus-visible:ring-primary"}`}
               placeholder="Year of Passing"
               value={education.twelfth.year_of_passing}
               onChange={(e) => updateField("twelfth", "year_of_passing", e.target.value)}
@@ -282,18 +288,19 @@ export default function SignupStep2Page() {
           </div>
           {errors["twelfth.percentage"] && <p className="mt-2 text-xs text-red-600">{errors["twelfth.percentage"]}</p>}
           {errors["twelfth.year_of_passing"] && <p className="mt-1 text-xs text-red-600">{errors["twelfth.year_of_passing"]}</p>}
-          <label className="mt-3 block rounded-lg border border-dashed p-3 text-sm">
+          <label className="mt-3 block rounded-xl border border-dashed border-border bg-background p-3 text-sm text-foreground transition-all duration-200 ease-in-out">
             Upload Certificate (PDF/JPG/PNG)
             <input type="file" accept=".pdf,.jpg,.jpeg,.png" onChange={(e) => void handleUpload("twelfth", e.target.files?.[0])} className="mt-2 block text-xs" />
           </label>
-          <p className="mt-2 text-xs">{education.twelfth.certificate_url ? "✔ Uploaded" : "Not uploaded"}</p>
+          <p className="mt-2 text-xs text-muted-foreground">{education.twelfth.certificate_url ? "✔ Uploaded" : "Not uploaded"}</p>
           {uploadingSection === "twelfth" && <p className="text-xs text-muted-foreground">Uploading document...</p>}
         </div>
 
-        <div className="rounded-xl border bg-card p-4 shadow-sm">
-          <h3 className="mb-3 text-base font-semibold">🎓 Graduation Details</h3>
+        <div className="rounded-xl border border-border bg-background p-4 shadow-sm transition-all duration-200 ease-in-out">
+          <h3 className="mb-3 text-base font-semibold text-foreground">🎓 Graduation Details</h3>
           <div className="grid gap-3 md:grid-cols-2">
             <Input
+              className="rounded-xl border border-border bg-background px-4 py-3 text-base transition-all duration-200 ease-in-out focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary"
               placeholder="University/College Name"
               value={education.graduation.college_name}
               onChange={(e) => updateField("graduation", "college_name", e.target.value)}
@@ -310,6 +317,7 @@ export default function SignupStep2Page() {
             />
             <Input
               type="number"
+              className={`rounded-xl border bg-background px-4 py-3 text-base transition-all duration-200 ease-in-out focus-visible:ring-2 ${errors["graduation.cgpa"] ? "border-red-500 focus-visible:border-red-500 focus-visible:ring-red-500" : "border-border focus-visible:border-primary focus-visible:ring-primary"}`}
               placeholder="CGPA / Percentage"
               value={education.graduation.cgpa}
               onChange={(e) => updateField("graduation", "cgpa", e.target.value)}
@@ -326,6 +334,7 @@ export default function SignupStep2Page() {
             />
             <Input
               type="number"
+              className={`rounded-xl border bg-background px-4 py-3 text-base transition-all duration-200 ease-in-out focus-visible:ring-2 ${errors["graduation.year_of_passing"] ? "border-red-500 focus-visible:border-red-500 focus-visible:ring-red-500" : "border-border focus-visible:border-primary focus-visible:ring-primary"}`}
               placeholder="Year of Passing"
               value={education.graduation.year_of_passing}
               onChange={(e) => updateField("graduation", "year_of_passing", e.target.value)}
@@ -343,20 +352,20 @@ export default function SignupStep2Page() {
           </div>
           {errors["graduation.cgpa"] && <p className="mt-2 text-xs text-red-600">{errors["graduation.cgpa"]}</p>}
           {errors["graduation.year_of_passing"] && <p className="mt-1 text-xs text-red-600">{errors["graduation.year_of_passing"]}</p>}
-          <label className="mt-3 block rounded-lg border border-dashed p-3 text-sm">
+          <label className="mt-3 block rounded-xl border border-dashed border-border bg-background p-3 text-sm text-foreground transition-all duration-200 ease-in-out">
             Upload Certificate (PDF/JPG/PNG)
             <input type="file" accept=".pdf,.jpg,.jpeg,.png" onChange={(e) => void handleUpload("graduation", e.target.files?.[0])} className="mt-2 block text-xs" />
           </label>
-          <p className="mt-2 text-xs">{education.graduation.certificate_url ? "✔ Uploaded" : "Not uploaded"}</p>
+          <p className="mt-2 text-xs text-muted-foreground">{education.graduation.certificate_url ? "✔ Uploaded" : "Not uploaded"}</p>
           {uploadingSection === "graduation" && <p className="text-xs text-muted-foreground">Uploading document...</p>}
         </div>
       </div>
-      <div className="fixed bottom-0 left-0 z-40 w-full border-t bg-white p-4 shadow-md dark:bg-zinc-900 md:static md:border-0 md:bg-transparent md:p-0 md:shadow-none">
+      <div className="fixed bottom-0 left-0 z-40 w-full border-t border-border bg-background/80 p-4 shadow-sm backdrop-blur-md md:static md:border-0 md:bg-transparent md:p-0 md:shadow-none md:backdrop-blur-none">
         <div className="mx-auto flex max-w-xl justify-between gap-3 md:mt-6">
-          <Button type="button" variant="outline" className="h-12 w-1/2 rounded-xl border border-gray-300 text-gray-700" onClick={(e) => void onPrevious(e)} loading={loading}>
+          <Button type="button" variant="outline" className="h-11 w-1/2 rounded-xl border border-border bg-background px-6 text-foreground transition-all duration-200 ease-in-out hover:bg-muted disabled:cursor-not-allowed disabled:opacity-50" onClick={(e) => void onPrevious(e)} loading={loading}>
             Previous
           </Button>
-          <Button type="button" className="h-12 w-1/2 rounded-xl bg-primary text-white" onClick={(e) => void onSubmit(e)} loading={loading}>
+          <Button type="button" className="h-11 w-1/2 rounded-xl bg-primary px-6 font-medium text-primary-foreground shadow-sm transition-all duration-200 ease-in-out hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50" onClick={(e) => void onSubmit(e)} loading={loading}>
             Next
           </Button>
         </div>

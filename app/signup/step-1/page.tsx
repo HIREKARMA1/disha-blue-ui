@@ -119,7 +119,7 @@ export default function SignupStep1Page() {
     >
       <div className="space-y-1">
         <Input
-          className="rounded-xl border px-4 py-3 focus-visible:ring-2 focus-visible:ring-primary"
+          className="rounded-xl border border-border bg-background px-4 py-3 text-base transition-all duration-200 ease-in-out focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary"
           placeholder="Name"
           value={form.name}
           onChange={(e) => setForm({ ...form, name: e.target.value })}
@@ -137,7 +137,7 @@ export default function SignupStep1Page() {
       </div>
       <div className="space-y-1">
         <Input
-          className="rounded-xl border px-4 py-3 focus-visible:ring-2 focus-visible:ring-primary"
+          className="rounded-xl border border-border bg-background px-4 py-3 text-base transition-all duration-200 ease-in-out focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary"
           placeholder="Phone"
           value={form.phone}
           onChange={(e) => setForm({ ...form, phone: e.target.value.replace(/\D/g, "") })}
@@ -154,10 +154,10 @@ export default function SignupStep1Page() {
         />
         <p className="text-xs text-muted-foreground">Hindi/English supported</p>
       </div>
-      <Input className="rounded-xl border px-4 py-3 focus-visible:ring-2 focus-visible:ring-primary" placeholder="Email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} />
+      <Input className="rounded-xl border border-border bg-background px-4 py-3 text-base transition-all duration-200 ease-in-out focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary" placeholder="Email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} />
       <div className="space-y-1">
         <Input
-          className="rounded-xl border px-4 py-3 focus-visible:ring-2 focus-visible:ring-primary"
+          className="rounded-xl border border-border bg-background px-4 py-3 text-base transition-all duration-200 ease-in-out focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary"
           placeholder="Location"
           value={form.location}
           onChange={(e) => setForm({ ...form, location: e.target.value })}
@@ -174,12 +174,12 @@ export default function SignupStep1Page() {
         />
         <p className="text-xs text-muted-foreground">Hindi/English supported</p>
       </div>
-      <div className="fixed bottom-0 left-0 z-40 w-full border-t bg-white p-4 shadow-md dark:bg-zinc-900 md:static md:border-0 md:bg-transparent md:p-0 md:shadow-none">
+      <div className="fixed bottom-0 left-0 z-40 w-full border-t border-border bg-background/80 p-4 shadow-sm backdrop-blur-md md:static md:border-0 md:bg-transparent md:p-0 md:shadow-none md:backdrop-blur-none">
         <div className="mx-auto flex max-w-xl justify-between gap-3 md:mt-6">
-          <Button type="button" variant="outline" disabled onClick={(e) => void onPrevious(e)} className="h-12 w-1/2 rounded-xl border border-gray-300 text-gray-700 opacity-60">
+          <Button type="button" variant="outline" disabled onClick={(e) => void onPrevious(e)} className="h-11 w-1/2 rounded-xl border border-border bg-background px-6 text-foreground transition-all duration-200 ease-in-out hover:bg-muted disabled:cursor-not-allowed disabled:opacity-50">
             Previous
           </Button>
-          <Button type="button" className="h-12 w-1/2 rounded-xl bg-primary text-white" onClick={(e) => void onSubmit(e)} loading={loading}>
+          <Button type="button" className="h-11 w-1/2 rounded-xl bg-primary px-6 font-medium text-primary-foreground shadow-sm transition-all duration-200 ease-in-out hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50" onClick={(e) => void onSubmit(e)} loading={loading}>
             Next
           </Button>
         </div>

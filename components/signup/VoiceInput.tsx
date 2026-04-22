@@ -88,7 +88,7 @@ export function VoiceInput({ label, onTranscript, onParsedSuggestions, fieldType
       <div className="flex flex-col items-center gap-2">
         <Button
           type="button"
-          className={`h-16 w-16 rounded-full bg-primary p-0 text-white hover:scale-105 hover:bg-primary ${isListening ? "animate-pulse" : ""}`}
+          className={`h-16 w-16 rounded-full bg-primary p-0 text-primary-foreground shadow-md transition-all duration-200 ease-in-out hover:scale-105 hover:bg-primary/90 ${isListening ? "animate-pulse ring-4 ring-primary/20" : ""}`}
           onClick={isListening ? handleStop : startListening}
           aria-label={label}
         >
@@ -102,14 +102,14 @@ export function VoiceInput({ label, onTranscript, onParsedSuggestions, fieldType
       {displayText && <p className="text-sm text-muted-foreground">{displayText}</p>}
       {detectedFromVoice && <p className="text-xs text-muted-foreground">(Detected from voice)</p>}
       {suggestedText && (
-        <div className={`rounded-xl border p-4 space-y-2 ${fieldType === "name" ? "bg-primary/10 border-primary/30" : "bg-muted/20"}`}>
-          <p className={`${fieldType === "name" ? "text-base font-semibold" : "text-sm font-medium"}`}>
+        <div className="space-y-2 rounded-xl border border-border bg-muted/40 p-4 transition-all duration-200 ease-in-out">
+          <p className={`${fieldType === "name" ? "text-base font-semibold text-foreground" : "text-sm font-medium text-foreground"}`}>
             Is this correct?
           </p>
-          {!isEditingSuggestion && <p className="text-sm font-semibold text-foreground">{suggestedText}</p>}
+          {!isEditingSuggestion && <p className="text-sm text-foreground"><span className="font-semibold text-primary">{suggestedText}</span></p>}
           {isEditingSuggestion && (
             <Input
-              className="rounded-xl border px-4 py-3 focus-visible:ring-2 focus-visible:ring-primary"
+              className="rounded-xl border border-border bg-background px-4 py-3 text-base transition-all duration-200 ease-in-out focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary"
               value={editableSuggestion}
               onChange={(e) => setEditableSuggestion(e.target.value)}
               placeholder="Edit suggested text"
@@ -118,7 +118,7 @@ export function VoiceInput({ label, onTranscript, onParsedSuggestions, fieldType
           <div className="flex gap-2">
             <Button
               type="button"
-              className={`h-9 ${fieldType === "name" ? "px-5" : ""}`}
+              className={`h-11 rounded-xl bg-primary px-6 font-medium text-primary-foreground shadow-sm transition-all duration-200 ease-in-out hover:bg-primary/90 ${fieldType === "name" ? "px-5" : ""}`}
               onClick={() => {
                 const accepted = (isEditingSuggestion ? editableSuggestion : suggestedText).trim()
                 if (!accepted) return
@@ -132,7 +132,7 @@ export function VoiceInput({ label, onTranscript, onParsedSuggestions, fieldType
             <Button
               type="button"
               variant="outline"
-              className={`h-9 ${fieldType === "name" ? "px-5" : ""}`}
+              className={`h-11 rounded-xl border border-border bg-background px-6 text-foreground transition-all duration-200 ease-in-out hover:bg-muted ${fieldType === "name" ? "px-5" : ""}`}
               onClick={() => {
                 setIsEditingSuggestion(true)
               }}
@@ -149,7 +149,7 @@ export function VoiceInput({ label, onTranscript, onParsedSuggestions, fieldType
             <button
               type="button"
               key={chip}
-              className="rounded-full border px-3 py-1 text-xs bg-muted/40"
+              className="rounded-full border border-border bg-muted/40 px-3 py-1 text-xs text-foreground transition-all duration-200 ease-in-out hover:bg-muted"
               onClick={() => onTranscript(chip)}
             >
               {chip}
