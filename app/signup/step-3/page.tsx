@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { StepForm } from "@/components/signup/StepForm"
 import { FieldVoiceButton } from "@/components/signup/FieldVoiceButton"
+import { Sparkles, Wrench } from "lucide-react"
 import { getOnboardingStep, getSignupData, saveSignupData, saveStep, setOnboardingStep } from "@/lib/onboarding"
 import { useAuth } from "@/hooks/useAuth"
 
@@ -89,15 +90,19 @@ export default function SignupStep3Page() {
 
   return (
     <StepForm
-      title="What skills do you have?"
-      subtitle="Hindi and English voice supported."
+      title="Skills & Expertise"
+      subtitle="Add your core skills. Hindi and English voice supported."
       step={3}
       totalSteps={4}
       helperHint="Speak your skills like electrician, helper, or driver"
       helperVoiceText="Speak your skills like electrician, helper, or driver"
     >
+      <label className="mb-2 flex items-center gap-2 text-base font-semibold text-foreground">
+        <Wrench className="h-4 w-4 text-primary" />
+        Skills
+      </label>
       <Input
-        className="rounded-xl border border-border bg-background px-4 py-3 text-base transition-all duration-200 ease-in-out focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary"
+        className="rounded-xl border border-border bg-muted/20 px-4 py-3 text-base transition-all duration-200 ease-in-out focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary"
         placeholder="e.g. Electrician, Welding, Plumbing"
         value={skillsText}
         onChange={(e) => {
@@ -140,24 +145,27 @@ export default function SignupStep3Page() {
             <button
               key={`${item.name}-${item.source}`}
               type="button"
-              className="rounded-full border border-border bg-background px-3 py-1 text-xs text-foreground transition-all duration-200 ease-in-out hover:bg-muted"
+              className="rounded-full border border-border bg-background/80 px-3 py-1 text-xs text-foreground transition-all duration-200 ease-in-out hover:bg-muted"
               onClick={() => {
                 const filtered = skillsMeta.filter((chip) => chip.name.toLowerCase() !== item.name.toLowerCase())
                 setSkillsMeta(filtered)
                 setSkillsText(filtered.map((chip) => chip.name).join(", "))
               }}
             >
-              {item.name} · {item.source === "auto-detected" ? "Auto-detected" : "Verified"}
+              <span className="inline-flex items-center gap-1">
+                {item.source === "auto-detected" ? <Sparkles className="h-3 w-3 text-primary" /> : null}
+                {item.name} · {item.source === "auto-detected" ? "Auto-detected" : "Verified"}
+              </span>
             </button>
           ))}
         </div>
       )}
-      <div className="fixed bottom-0 left-0 z-40 w-full border-t border-border bg-background/80 p-4 shadow-sm backdrop-blur-md md:static md:border-0 md:bg-transparent md:p-0 md:shadow-none md:backdrop-blur-none">
-        <div className="mx-auto flex max-w-xl justify-between gap-3 md:mt-6">
-          <Button type="button" variant="outline" className="h-11 w-1/2 rounded-xl border border-border bg-background px-6 text-foreground transition-all duration-200 ease-in-out hover:bg-muted disabled:cursor-not-allowed disabled:opacity-50" onClick={(e) => void onPrevious(e)} loading={loading}>
+      <div className="fixed bottom-0 left-0 z-40 w-full border-t border-border/70 bg-background/85 p-4 shadow-lg backdrop-blur-md md:static md:border-0 md:bg-transparent md:p-0 md:shadow-none md:backdrop-blur-none">
+        <div className="mx-auto flex max-w-2xl justify-between gap-3 rounded-2xl border border-border/70 bg-background/90 p-2 md:mt-6 md:border-0 md:bg-transparent md:p-0">
+          <Button type="button" variant="outline" className="h-12 w-1/2 rounded-xl border border-border bg-background px-6 text-sm font-medium text-foreground transition-all duration-200 ease-in-out hover:bg-muted disabled:cursor-not-allowed disabled:opacity-50" onClick={(e) => void onPrevious(e)} loading={loading}>
             Previous
           </Button>
-          <Button type="button" className="h-11 w-1/2 rounded-xl bg-primary px-6 font-medium text-primary-foreground shadow-sm transition-all duration-200 ease-in-out hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50" onClick={(e) => void onSubmit(e)} loading={loading}>
+          <Button type="button" className="h-12 w-1/2 rounded-xl bg-primary px-6 text-sm font-semibold text-primary-foreground shadow-sm transition-all duration-200 ease-in-out hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50" onClick={(e) => void onSubmit(e)} loading={loading}>
             Next
           </Button>
         </div>

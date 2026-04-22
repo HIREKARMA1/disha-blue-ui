@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { StepForm } from "@/components/signup/StepForm"
 import { FieldVoiceButton } from "@/components/signup/FieldVoiceButton"
+import { Mail, MapPin, Phone, UserRound } from "lucide-react"
 import { getSignupLanguage } from "@/components/signup/LanguageSwitcher"
 import { getOnboardingStep, getSignupData, saveSignupData, saveStep, setOnboardingStep, startOnboardingSession } from "@/lib/onboarding"
 import { useAuth } from "@/hooks/useAuth"
@@ -110,17 +111,21 @@ export default function SignupStep1Page() {
 
   return (
     <StepForm
-      title="Hi 👋 What should we call you?"
-      subtitle="Minimal typing, voice supported."
+      title="Personal Information"
+      subtitle="Tell us about yourself. You can also use voice commands."
       step={1}
       totalSteps={4}
       helperHint={selectedLanguage === "hi" ? "नाम, फोन और लोकेशन के लिए माइक का उपयोग करें (हिंदी/English)।" : "Use mic for name, phone, and location (Hindi/English)."}
       helperVoiceText={selectedLanguage === "hi" ? "नाम, फोन और लोकेशन के लिए माइक का उपयोग करें।" : "Use mic for name, phone, and location."}
     >
       <div className="space-y-1">
+        <label className="mb-2 flex items-center gap-2 text-base font-semibold text-foreground">
+          <UserRound className="h-4 w-4 text-primary" />
+          Full Name
+        </label>
         <Input
-          className="rounded-xl border border-border bg-background px-4 py-3 text-base transition-all duration-200 ease-in-out focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary"
-          placeholder="Name"
+          className="rounded-xl border border-border bg-muted/20 px-4 py-3 text-base transition-all duration-200 ease-in-out focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary"
+          placeholder="Enter your full name"
           value={form.name}
           onChange={(e) => setForm({ ...form, name: e.target.value })}
           rightIcon={
@@ -136,9 +141,25 @@ export default function SignupStep1Page() {
         <p className="text-xs text-muted-foreground">Hindi/English supported</p>
       </div>
       <div className="space-y-1">
+        <label className="mb-2 flex items-center gap-2 text-base font-semibold text-foreground">
+          <Mail className="h-4 w-4 text-primary" />
+          Email Address
+        </label>
         <Input
-          className="rounded-xl border border-border bg-background px-4 py-3 text-base transition-all duration-200 ease-in-out focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary"
-          placeholder="Phone"
+          className="rounded-xl border border-border bg-muted/20 px-4 py-3 text-base transition-all duration-200 ease-in-out focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary"
+          placeholder="Enter your email"
+          value={form.email}
+          onChange={(e) => setForm({ ...form, email: e.target.value })}
+        />
+      </div>
+      <div className="space-y-1">
+        <label className="mb-2 flex items-center gap-2 text-base font-semibold text-foreground">
+          <Phone className="h-4 w-4 text-primary" />
+          Phone Number
+        </label>
+        <Input
+          className="rounded-xl border border-border bg-muted/20 px-4 py-3 text-base transition-all duration-200 ease-in-out focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary"
+          placeholder="Enter your phone number"
           value={form.phone}
           onChange={(e) => setForm({ ...form, phone: e.target.value.replace(/\D/g, "") })}
           rightIcon={
@@ -154,11 +175,14 @@ export default function SignupStep1Page() {
         />
         <p className="text-xs text-muted-foreground">Hindi/English supported</p>
       </div>
-      <Input className="rounded-xl border border-border bg-background px-4 py-3 text-base transition-all duration-200 ease-in-out focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary" placeholder="Email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} />
       <div className="space-y-1">
+        <label className="mb-2 flex items-center gap-2 text-base font-semibold text-foreground">
+          <MapPin className="h-4 w-4 text-primary" />
+          Location
+        </label>
         <Input
-          className="rounded-xl border border-border bg-background px-4 py-3 text-base transition-all duration-200 ease-in-out focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary"
-          placeholder="Location"
+          className="rounded-xl border border-border bg-muted/20 px-4 py-3 text-base transition-all duration-200 ease-in-out focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary"
+          placeholder="City, Country"
           value={form.location}
           onChange={(e) => setForm({ ...form, location: e.target.value })}
           rightIcon={
@@ -174,12 +198,12 @@ export default function SignupStep1Page() {
         />
         <p className="text-xs text-muted-foreground">Hindi/English supported</p>
       </div>
-      <div className="fixed bottom-0 left-0 z-40 w-full border-t border-border bg-background/80 p-4 shadow-sm backdrop-blur-md md:static md:border-0 md:bg-transparent md:p-0 md:shadow-none md:backdrop-blur-none">
-        <div className="mx-auto flex max-w-xl justify-between gap-3 md:mt-6">
-          <Button type="button" variant="outline" disabled onClick={(e) => void onPrevious(e)} className="h-11 w-1/2 rounded-xl border border-border bg-background px-6 text-foreground transition-all duration-200 ease-in-out hover:bg-muted disabled:cursor-not-allowed disabled:opacity-50">
+      <div className="fixed bottom-0 left-0 z-40 w-full border-t border-border/70 bg-background/85 p-4 shadow-lg backdrop-blur-md md:static md:border-0 md:bg-transparent md:p-0 md:shadow-none md:backdrop-blur-none">
+        <div className="mx-auto flex max-w-2xl justify-between gap-3 rounded-2xl border border-border/70 bg-background/90 p-2 md:mt-6 md:border-0 md:bg-transparent md:p-0">
+          <Button type="button" variant="outline" disabled onClick={(e) => void onPrevious(e)} className="h-12 w-1/2 rounded-xl border border-border bg-background px-6 text-sm font-medium text-foreground transition-all duration-200 ease-in-out hover:bg-muted disabled:cursor-not-allowed disabled:opacity-50">
             Previous
           </Button>
-          <Button type="button" className="h-11 w-1/2 rounded-xl bg-primary px-6 font-medium text-primary-foreground shadow-sm transition-all duration-200 ease-in-out hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50" onClick={(e) => void onSubmit(e)} loading={loading}>
+          <Button type="button" className="h-12 w-1/2 rounded-xl bg-primary px-6 text-sm font-semibold text-primary-foreground shadow-sm transition-all duration-200 ease-in-out hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50" onClick={(e) => void onSubmit(e)} loading={loading}>
             Next
           </Button>
         </div>
