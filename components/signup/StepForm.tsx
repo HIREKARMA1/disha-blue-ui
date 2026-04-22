@@ -33,31 +33,33 @@ export function StepForm({ title, subtitle, step, totalSteps = 4, helperHint, he
     <section className="mx-auto max-w-2xl space-y-6 rounded-3xl border border-border/70 bg-background/95 p-6 shadow-sm backdrop-blur-sm transition-all duration-200 ease-in-out md:p-8">
       {step ? (
         <div className="rounded-2xl border border-border/60 bg-muted/20 p-3 md:p-4">
-          <div className="flex items-center gap-2 overflow-x-auto pb-1">
+          <div className="grid grid-cols-4 items-start gap-2">
             {steps.slice(0, totalSteps).map((stepItem, index, list) => {
               const Icon = stepItem.icon
               const isActive = stepItem.id === step
               const isCompleted = stepItem.id < step
               return (
-                <div key={stepItem.id} className="flex min-w-0 items-center gap-2">
-                  <div className="flex flex-col items-center gap-1">
-                    <div
-                      className={`flex h-10 w-10 items-center justify-center rounded-xl border text-sm transition-all duration-200 ${
-                        isActive
-                          ? "border-primary/70 bg-primary/15 text-primary shadow-sm"
-                          : isCompleted
-                            ? "border-primary/40 bg-primary/10 text-primary"
-                            : "border-border bg-background text-muted-foreground"
-                      }`}
-                    >
-                      <Icon className="h-4 w-4" />
-                    </div>
-                    <span className={`text-[11px] font-medium ${isActive || isCompleted ? "text-foreground" : "text-muted-foreground"}`}>
-                      {stepItem.label}
-                    </span>
+                <div key={stepItem.id} className="relative flex min-w-0 flex-col items-center gap-1.5">
+                  <div
+                    className={`flex h-10 w-10 items-center justify-center rounded-xl border text-sm transition-all duration-200 ${
+                      isActive
+                        ? "border-primary/70 bg-primary/15 text-primary shadow-sm"
+                        : isCompleted
+                          ? "border-primary/40 bg-primary/10 text-primary"
+                          : "border-border bg-background text-muted-foreground"
+                    }`}
+                  >
+                    <Icon className="h-4 w-4" />
                   </div>
+                  <span className={`text-center text-[11px] font-medium leading-tight ${isActive || isCompleted ? "text-foreground" : "text-muted-foreground"}`}>
+                    {stepItem.label}
+                  </span>
                   {index < list.length - 1 ? (
-                    <div className={`h-[2px] w-8 rounded-full ${stepItem.id < step ? "bg-primary/40" : "bg-border"}`} />
+                    <div
+                      className={`absolute left-[calc(50%+20px)] top-5 h-[2px] w-[calc(100%-24px)] rounded-full ${
+                        stepItem.id < step ? "bg-primary/40" : "bg-border"
+                      }`}
+                    />
                   ) : null}
                 </div>
               )
