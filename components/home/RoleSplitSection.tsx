@@ -53,7 +53,7 @@ export default function RoleSplitSection() {
                   size="lg"
                   className="h-11 w-full rounded-none border-0 bg-sage-deep text-white shadow-none hover:bg-sage-deep/90 dark:bg-emerald-600 dark:hover:bg-emerald-500 sm:w-auto"
                 >
-                  🎓 Find Jobs (Student)
+                  Find Jobs (Student)
                 </Button>
               </div>
             </div>
@@ -86,7 +86,7 @@ export default function RoleSplitSection() {
                   variant="outline"
                   className="h-11 w-full rounded-none border-2 border-slate-300 bg-white shadow-none hover:border-sage-deep hover:bg-slate-50 dark:border-emerald-600 dark:bg-emerald-950 dark:text-emerald-50 dark:hover:bg-emerald-900 sm:w-auto"
                 >
-                  🏢 Hire Talent (Corporate)
+                  Hire Talent (Corporate)
                 </Button>
               </Link>
             </div>

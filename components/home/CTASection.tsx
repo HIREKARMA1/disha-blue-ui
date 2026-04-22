@@ -57,7 +57,7 @@ export default function CTASection() {
               size="lg"
               className="h-12 w-full rounded-none border-0 bg-white px-6 text-sage-deep shadow-none hover:bg-emerald-50 dark:text-emerald-950 sm:w-auto"
             >
-              🎓 Find Jobs (Student)
+              Find Jobs (Student)
             </Button>
           </div>
           <Link href="/auth/register?type=corporate" className="w-full sm:w-auto">
@@ -66,7 +66,7 @@ export default function CTASection() {
               variant="outline"
               className="h-12 w-full rounded-none border-2 border-white/80 bg-transparent px-6 text-white shadow-none hover:bg-white/10 sm:w-auto"
             >
-              🏢 Hire Talent (Corporate)
+              Hire Talent (Corporate)
             </Button>
           </Link>
         </motion.div>

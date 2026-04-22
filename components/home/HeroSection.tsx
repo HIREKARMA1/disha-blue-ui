@@ -87,7 +87,7 @@ export default function HeroSection() {
                   onClick={handleFindJobsClick}
                   className="h-11 min-h-[44px] w-full rounded-none border-0 bg-emerald-100 px-5 text-sm font-semibold text-sage-deep shadow-none ring-0 ring-offset-0 hover:bg-emerald-50 focus-visible:ring-2 focus-visible:ring-emerald-300/80 focus-visible:ring-offset-0 dark:bg-emerald-200 dark:text-emerald-950 dark:hover:bg-emerald-100 sm:w-auto sm:px-6 md:min-h-[3rem] md:px-8 md:text-base"
                 >
-                  🎓 Find Jobs (Student)
+                  Find Jobs (Student)
                 </Button>
               </div>
               <Link href="/auth/register?type=corporate" className="w-full min-w-0 sm:w-auto sm:min-w-[9.5rem]">
@@ -95,7 +95,7 @@ export default function HeroSection() {
                   variant="outline"
                   className="h-11 min-h-[44px] w-full rounded-none border-2 border-emerald-200/85 bg-transparent px-5 text-sm font-semibold text-white shadow-none ring-0 ring-offset-0 hover:bg-emerald-500/15 focus-visible:ring-2 focus-visible:ring-emerald-300/70 focus-visible:ring-offset-0 dark:border-emerald-400/85 dark:bg-emerald-950/25 dark:text-emerald-50 dark:hover:bg-emerald-800/45 sm:w-auto sm:px-6 md:min-h-[3rem] md:px-8 md:text-base"
                 >
-                  🏢 Hire Talent (Corporate)
+                  Hire Talent (Corporate)
                 </Button>
               </Link>
             </div>
