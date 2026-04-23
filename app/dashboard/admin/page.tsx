@@ -3,7 +3,7 @@
 import { AdminDashboardLayout } from '@/components/dashboard/AdminDashboardLayout'
 
 export default function AdminDashboard() {
-    return (
-        <AdminDashboardLayout />
-    )
+ return (
+ <AdminDashboardLayout />
+ )
 }

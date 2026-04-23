@@ -1,19 +1,26 @@
 "use client"
 
 import { motion } from "framer-motion"
-import { ArrowRight } from "lucide-react"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { BRANDING } from "@/config/branding"
 import { Button } from "@/components/ui/button"
+import { getOnboardingEntryRoute } from "@/lib/onboarding"
 
 export default function CTASection() {
+  const router = useRouter()
+
+  const handleFindJobsClick = () => {
+    router.push(getOnboardingEntryRoute())
+  }
+
   return (
-    <section className="relative overflow-hidden bg-foreground py-16 text-background md:py-24 dark:bg-zinc-950">
+    <section className="relative overflow-hidden border-t border-sage-deep/30 bg-sage-deep py-16 text-white md:py-24 dark:border-emerald-800 dark:bg-emerald-950">
       <div
         className="pointer-events-none absolute inset-0 opacity-40"
         style={{
-          backgroundImage: `radial-gradient(circle at 30% 20%, hsl(258 90% 59% / 0.35), transparent 45%),
-            radial-gradient(circle at 80% 80%, hsl(187 92% 41% / 0.3), transparent 40%)`,
+          backgroundImage: `radial-gradient(circle at 25% 30%, rgb(163 177 138 / 0.45), transparent 50%),
+            radial-gradient(circle at 85% 70%, rgb(143 159 120 / 0.35), transparent 45%)`,
         }}
       />
       <div className="relative z-10 mx-auto max-w-4xl px-4 text-center sm:px-6">
@@ -21,7 +28,7 @@ export default function CTASection() {
           initial={{ opacity: 0, y: 14 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="font-display text-3xl font-semibold leading-tight sm:text-4xl md:text-5xl"
+          className="font-display text-3xl font-semibold leading-tight text-white sm:text-4xl md:text-5xl"
         >
           Ready to turn intent into hires?
         </motion.h2>
@@ -30,12 +37,11 @@ export default function CTASection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 0.06 }}
-          className="mx-auto mt-4 max-w-2xl text-base text-zinc-300 md:text-lg"
+          className="mx-auto mt-4 max-w-2xl text-base text-emerald-50/95 md:text-lg dark:text-emerald-200/90"
         >
-          Join {BRANDING.appName} to connect talent and employers with AI-informed matching,
-          polished pipelines, and hyperlocal discovery—without the legacy portal feel.
+          Join {BRANDING.appName} to connect talent and employers with AI-informed matching, polished pipelines, and hyperlocal discovery—without the legacy portal feel.
         </motion.p>
-        <div className="mx-auto mt-6 inline-flex rounded-full border border-white/20 bg-white/5 px-4 py-1.5 text-xs font-medium text-zinc-200">
+        <div className="mx-auto mt-6 inline-flex rounded-none border border-white/30 bg-white/10 px-4 py-1.5 text-xs font-medium text-emerald-50">
           Join as a job seeker or employer in under 2 minutes
         </div>
         <motion.div
@@ -45,22 +51,22 @@ export default function CTASection() {
           transition={{ delay: 0.12 }}
           className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row"
         >
-          <Link href="/auth/register?type=student" className="w-full sm:w-auto">
+          <div className="w-full sm:w-auto">
             <Button
+              onClick={handleFindJobsClick}
               size="lg"
-              className="h-12 w-full rounded-full border-0 bg-background px-6 text-foreground shadow-medium hover:bg-background/90 sm:w-auto"
+              className="h-12 w-full rounded-none border-0 bg-white px-6 text-sage-deep shadow-none hover:bg-emerald-50 dark:text-emerald-950 sm:w-auto"
             >
-              I&apos;m looking for a role
-              <ArrowRight className="ml-2 h-4 w-4" />
+              Find Jobs (Student)
             </Button>
-          </Link>
+          </div>
           <Link href="/auth/register?type=corporate" className="w-full sm:w-auto">
             <Button
               size="lg"
               variant="outline"
-              className="h-12 w-full rounded-full border-2 border-white/40 bg-transparent px-6 text-white hover:bg-white/10 sm:w-auto"
+              className="h-12 w-full rounded-none border-2 border-white/80 bg-transparent px-6 text-white shadow-none hover:bg-white/10 sm:w-auto"
             >
-              I&apos;m hiring talent
+              Hire Talent (Corporate)
             </Button>
           </Link>
         </motion.div>

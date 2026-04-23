@@ -35,43 +35,43 @@ export function useLookup(
   const [error, setError] = useState<string | null>(null)
 
   const fetchData = async () => {
-    if (!enabled) return
+  if (!enabled) return
 
-    setLoading(true)
-    setError(null)
-    
-    try {
-      const result = await fetchFunction()
-      setData(result)
-    } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Failed to fetch data'
-      setError(errorMessage)
-      console.error('useLookup error:', err)
-    } finally {
-      setLoading(false)
-    }
+  setLoading(true)
+  setError(null)
+  
+  try {
+  const result = await fetchFunction()
+  setData(result)
+  } catch (err) {
+  const errorMessage = err instanceof Error ? err.message : 'Failed to fetch data'
+  setError(errorMessage)
+  console.error('useLookup error:', err)
+  } finally {
+  setLoading(false)
+  }
   }
 
   const refetch = async () => {
-    await fetchData()
+  await fetchData()
   }
 
   const clearCache = () => {
-    lookupService.clearCache()
+  lookupService.clearCache()
   }
 
   useEffect(() => {
-    if (refetchOnMount) {
-      fetchData()
-    }
+  if (refetchOnMount) {
+  fetchData()
+  }
   }, [enabled, refetchOnMount])
 
   return {
-    data,
-    loading,
-    error,
-    refetch,
-    clearCache
+  data,
+  loading,
+  error,
+  refetch,
+  clearCache
   }
 }
 

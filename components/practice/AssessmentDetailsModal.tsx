@@ -6,234 +6,234 @@ import { Button } from '@/components/ui/button'
 import { JobAssessment } from '@/types/practice'
 
 interface AssessmentDetailsModalProps {
-    isOpen: boolean
-    onClose: () => void
-    assessment: JobAssessment | null
-    onStart: (assessment: JobAssessment) => void
+  isOpen: boolean
+  onClose: () => void
+  assessment: JobAssessment | null
+  onStart: (assessment: JobAssessment) => void
 }
 
 export function AssessmentDetailsModal({ isOpen, onClose, assessment, onStart }: AssessmentDetailsModalProps) {
-    if (!assessment) return null
+  if (!assessment) return null
 
-    const formatDuration = (minutes: number) => {
-        const hours = Math.floor(minutes / 60)
-        const mins = minutes % 60
-        if (hours > 0) return `${hours}h ${mins}m`
-        return `${mins}m`
-    }
+  const formatDuration = (minutes: number) => {
+  const hours = Math.floor(minutes / 60)
+  const mins = minutes % 60
+  if (hours > 0) return `${hours}h ${mins}m`
+  return `${mins}m`
+  }
 
-    return (
-        <Transition appear show={isOpen} as={Fragment}>
-            <Dialog as="div" className="relative z-50" onClose={onClose}>
-                <Transition.Child
-                    as={Fragment}
-                    enter="ease-out duration-300"
-                    enterFrom="opacity-0"
-                    enterTo="opacity-100"
-                    leave="ease-in duration-200"
-                    leaveFrom="opacity-100"
-                    leaveTo="opacity-0"
-                >
-                    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm" />
-                </Transition.Child>
+  return (
+  <Transition appear show={isOpen} as={Fragment}>
+  <Dialog as="div" className="relative z-50" onClose={onClose}>
+  <Transition.Child
+  as={Fragment}
+  enter="ease-out duration-300"
+  enterFrom="opacity-0"
+  enterTo="opacity-100"
+  leave="ease-in duration-200"
+  leaveFrom="opacity-100"
+  leaveTo="opacity-0"
+  >
+  <div className="fixed inset-0 bg-black/50 backdrop-blur-sm" />
+  </Transition.Child>
 
-                <div className="fixed inset-0 overflow-y-auto">
-                    <div className="flex min-h-full items-center justify-center p-4 text-center">
-                        <Transition.Child
-                            as={Fragment}
-                            enter="ease-out duration-300"
-                            enterFrom="opacity-0 scale-95"
-                            enterTo="opacity-100 scale-100"
-                            leave="ease-in duration-200"
-                            leaveFrom="opacity-100 scale-100"
-                            leaveTo="opacity-0 scale-95"
-                        >
-                            <Dialog.Panel className="w-full max-w-2xl flex flex-col max-h-[85vh] transform overflow-hidden rounded-2xl bg-white dark:bg-gray-800 text-left align-middle shadow-xl transition-all border border-gray-200 dark:border-gray-700">
-                                {/* Header */}
-                                <div className="p-6 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-gray-900 dark:to-gray-800 flex-shrink-0">
-                                    <div className="flex items-start justify-between">
-                                        <div className="flex-1">
-                                            <div className="flex items-center gap-3 mb-2">
-                                                <Dialog.Title as="h3" className="text-2xl font-bold leading-6 text-gray-900 dark:text-gray-100">
-                                                    {assessment.assessment_name}
-                                                </Dialog.Title>
-                                                <span className={`px-3 py-1 text-sm font-medium rounded-full ${assessment.status === 'ACTIVE'
-                                                    ? 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400'
-                                                    : 'bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-400'
-                                                    }`}>
-                                                    {assessment.status}
-                                                </span>
-                                            </div>
-                                            <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
-                                                <Briefcase className="w-4 h-4" />
-                                                <span>Hiring Assessment</span>
-                                                <span className="text-gray-300 dark:text-gray-600">•</span>
-                                                <span className="font-mono">{assessment.disha_assessment_id}</span>
-                                            </div>
-                                        </div>
-                                        <button
-                                            onClick={onClose}
-                                            className="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-white dark:hover:bg-gray-700 rounded-lg transition-all duration-200"
-                                        >
-                                            <X className="w-6 h-6" />
-                                        </button>
-                                    </div>
-                                </div>
+  <div className="fixed inset-0 overflow-y-auto">
+  <div className="flex min-h-full items-center justify-center p-4 text-center">
+  <Transition.Child
+  as={Fragment}
+  enter="ease-out duration-300"
+  enterFrom="opacity-0 scale-95"
+  enterTo="opacity-100 scale-100"
+  leave="ease-in duration-200"
+  leaveFrom="opacity-100 scale-100"
+  leaveTo="opacity-0 scale-95"
+  >
+  <Dialog.Panel className="flex max-h-[85vh] w-full max-w-2xl transform flex-col overflow-hidden rounded-2xl border border-slate-200/90 bg-white text-left align-middle shadow-xl transition-all dark:border-emerald-800/70 dark:bg-emerald-950/50">
+  {/* Header */}
+  <div className="flex-shrink-0 border-b border-slate-200/90 bg-gradient-to-r from-sage/20 to-emerald-50/90 p-6 dark:border-emerald-800/60 dark:from-emerald-950 dark:to-slate-900">
+  <div className="flex items-start justify-between">
+  <div className="flex-1">
+  <div className="flex items-center gap-3 mb-2">
+  <Dialog.Title as="h3" className="text-2xl font-bold leading-6 text-slate-900 dark:text-emerald-50">
+  {assessment.assessment_name}
+  </Dialog.Title>
+  <span className={`px-3 py-1 text-sm font-medium rounded-full ${assessment.status === 'ACTIVE'
+  ? 'bg-emerald-100 text-emerald-900 dark:bg-emerald-900/45 dark:text-emerald-300'
+  : 'bg-slate-100 text-slate-700 dark:bg-emerald-950/50 dark:text-emerald-300'
+  }`}>
+  {assessment.status}
+  </span>
+  </div>
+  <div className="flex items-center gap-2 text-sm text-slate-600 dark:text-emerald-200/85">
+  <Briefcase className="w-4 h-4" />
+  <span>Hiring Assessment</span>
+  <span className="text-slate-300 dark:text-emerald-700">•</span>
+  <span className="font-mono">{assessment.disha_assessment_id}</span>
+  </div>
+  </div>
+  <button
+  onClick={onClose}
+  className="rounded-lg p-2 text-slate-400 transition-all duration-200 hover:bg-white hover:text-slate-600 dark:hover:bg-emerald-900/50 dark:hover:text-emerald-100"
+  >
+  <X className="w-6 h-6" />
+  </button>
+  </div>
+  </div>
 
-                                {/* Content */}
-                                <div className="p-6 flex-1 overflow-y-auto">
-                                    {/* Description */}
-                                    <div className="mb-6">
-                                        <h3 className="text-base font-semibold text-gray-900 dark:text-white mb-3 flex items-center gap-2">
-                                            <BookOpen className="w-5 h-5 text-blue-600 dark:text-blue-400" />
-                                            Description
-                                        </h3>
-                                        <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
-                                            This assessment is designed to evaluate your skills for the applied role.
-                                            Please ensure you have a stable internet connection before starting.
-                                        </p>
-                                    </div>
+  {/* Content */}
+  <div className="p-6 flex-1 overflow-y-auto">
+  {/* Description */}
+  <div className="mb-6">
+  <h3 className="mb-3 flex items-center gap-2 text-base font-semibold text-slate-900 dark:text-emerald-50">
+  <BookOpen className="h-5 w-5 text-sage-deep dark:text-emerald-400" />
+  Description
+  </h3>
+  <p className="text-sm leading-relaxed text-slate-600 dark:text-emerald-200/85">
+  This assessment is designed to evaluate your skills for the applied role.
+  Please ensure you have a stable internet connection before starting.
+  </p>
+  </div>
 
-                                    {/* Stats Grid */}
-                                    <div className="grid grid-cols-2 gap-4 mb-6">
-                                        <div className="flex items-center gap-3 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
-                                            <div className="p-2 bg-blue-100 dark:bg-blue-800 rounded-lg">
-                                                <Clock className="w-5 h-5 text-blue-600 dark:text-blue-400" />
-                                            </div>
-                                            <div>
-                                                <p className="text-xs text-gray-600 dark:text-gray-400 mb-1">Duration</p>
-                                                <p className="text-base font-bold text-blue-600 dark:text-blue-400">
-                                                    {formatDuration(assessment.total_duration_minutes)}
-                                                </p>
-                                            </div>
-                                        </div>
+  {/* Stats Grid */}
+  <div className="grid grid-cols-2 gap-4 mb-6">
+  <div className="flex items-center gap-3 rounded-lg border border-sage/40 bg-sage/15 p-4 dark:border-emerald-800/60 dark:bg-emerald-900/25">
+  <div className="rounded-lg bg-sage/25 p-2 dark:bg-emerald-900/50">
+  <Clock className="h-5 w-5 text-sage-deep dark:text-emerald-300" />
+  </div>
+  <div>
+  <p className="mb-1 text-xs text-slate-600 dark:text-emerald-200/75">Duration</p>
+  <p className="text-base font-bold text-sage-deep dark:text-emerald-200">
+  {formatDuration(assessment.total_duration_minutes)}
+  </p>
+  </div>
+  </div>
 
-                                        <div className="flex items-center gap-3 p-4 bg-purple-50 dark:bg-purple-900/20 rounded-lg border border-purple-200 dark:border-purple-800">
-                                            <div className="p-2 bg-purple-100 dark:bg-purple-800 rounded-lg">
-                                                <Hash className="w-5 h-5 text-purple-600 dark:text-purple-400" />
-                                            </div>
-                                            <div>
-                                                <p className="text-xs text-gray-600 dark:text-gray-400 mb-1">Rounds</p>
-                                                <p className="text-base font-bold text-purple-600 dark:text-purple-400">
-                                                    {assessment.round_count} Rounds
-                                                </p>
-                                            </div>
-                                        </div>
+  <div className="flex items-center gap-3 rounded-lg border border-emerald-200/80 bg-emerald-50/80 p-4 dark:border-emerald-800/60 dark:bg-emerald-900/20">
+  <div className="rounded-lg bg-emerald-100/90 p-2 dark:bg-emerald-900/50">
+  <Hash className="h-5 w-5 text-emerald-700 dark:text-emerald-300" />
+  </div>
+  <div>
+  <p className="mb-1 text-xs text-slate-600 dark:text-emerald-200/75">Rounds</p>
+  <p className="text-base font-bold text-emerald-800 dark:text-emerald-200">
+  {assessment.round_count} Rounds
+  </p>
+  </div>
+  </div>
 
-                                        <div className="flex items-center gap-3 p-4 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-200 dark:border-green-800">
-                                            <div className="p-2 bg-green-100 dark:bg-green-800 rounded-lg">
-                                                <Brain className="w-5 h-5 text-green-600 dark:text-green-400" />
-                                            </div>
-                                            <div>
-                                                <p className="text-xs text-gray-600 dark:text-gray-400 mb-1">Mode</p>
-                                                <p className="text-base font-bold text-green-600 dark:text-green-400">
-                                                    {assessment.mode || 'Online'}
-                                                </p>
-                                            </div>
-                                        </div>
+  <div className="flex items-center gap-3 rounded-lg border border-emerald-200/80 bg-emerald-50/80 p-4 dark:border-emerald-800/60 dark:bg-emerald-900/25">
+  <div className="rounded-lg bg-emerald-100/90 p-2 dark:bg-emerald-900/50">
+  <Brain className="h-5 w-5 text-emerald-800 dark:text-emerald-300" />
+  </div>
+  <div>
+  <p className="mb-1 text-xs text-slate-600 dark:text-emerald-200/75">Mode</p>
+  <p className="text-base font-bold text-emerald-900 dark:text-emerald-100">
+  {assessment.mode || 'Online'}
+  </p>
+  </div>
+  </div>
 
-                                        <div className="flex items-center gap-3 p-4 bg-orange-50 dark:bg-orange-900/20 rounded-lg border border-orange-200 dark:border-orange-800">
-                                            <div className="p-2 bg-orange-100 dark:bg-orange-800 rounded-lg">
-                                                <Calendar className="w-5 h-5 text-orange-600 dark:text-orange-400" />
-                                            </div>
-                                            <div>
-                                                <p className="text-xs text-gray-600 dark:text-gray-400 mb-1">Created</p>
-                                                <p className="text-base font-bold text-orange-600 dark:text-orange-400">
-                                                    {new Date(assessment.created_at).toLocaleDateString()}
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
+  <div className="flex items-center gap-3 rounded-lg border border-sage/40 bg-sage/15 p-4 dark:border-emerald-800/60 dark:bg-emerald-900/30">
+  <div className="rounded-lg bg-sage/25 p-2 dark:bg-emerald-900/50">
+  <Calendar className="h-5 w-5 text-sage-deep dark:text-emerald-300" />
+  </div>
+  <div>
+  <p className="mb-1 text-xs text-slate-600 dark:text-emerald-200/75">Created</p>
+  <p className="text-base font-bold text-sage-deep dark:text-emerald-200">
+  {new Date(assessment.created_at).toLocaleDateString()}
+  </p>
+  </div>
+  </div>
+  </div>
 
-                                    {/* Rounds List */}
-                                    {assessment.rounds && assessment.rounds.length > 0 && (
-                                        <div className="mb-6">
-                                            <h4 className="text-sm font-bold text-gray-900 dark:text-white mb-3">Assessment Rounds</h4>
-                                            <div className="space-y-3">
-                                                {assessment.rounds.map((round) => (
-                                                    <div
-                                                        key={round.id}
-                                                        className="flex items-center justify-between p-3 rounded-lg border border-gray-100 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50 hover:bg-white dark:hover:bg-gray-800 hover:shadow-sm transition-all"
-                                                    >
-                                                        <div className="flex items-center gap-3">
-                                                            <div className={`p-2 rounded-md ${round.round_type === 'aptitude' ? 'bg-indigo-100 text-indigo-600 dark:bg-indigo-900/30 dark:text-indigo-400' :
-                                                                round.round_type === 'coding' ? 'bg-amber-100 text-amber-600 dark:bg-amber-900/30 dark:text-amber-400' :
-                                                                    'bg-slate-100 text-slate-600 dark:bg-slate-900/30 dark:text-slate-400'
-                                                                }`}>
-                                                                {round.round_type === 'coding' ? <Code className="w-4 h-4" /> :
-                                                                    round.round_type === 'aptitude' ? <Calculator className="w-4 h-4" /> :
-                                                                        <Brain className="w-4 h-4" />}
-                                                            </div>
-                                                            <div>
-                                                                <h5 className="text-sm font-medium text-gray-900 dark:text-white">
-                                                                    {round.round_number}. {round.round_name}
-                                                                </h5>
-                                                                <p className="text-xs text-gray-500 dark:text-gray-400 capitalize">
-                                                                    {round.round_type.replace('_', ' ')}
-                                                                </p>
-                                                            </div>
-                                                        </div>
-                                                        <div className="flex items-center gap-1.5 text-xs font-medium text-gray-600 dark:text-gray-400 bg-white dark:bg-gray-900 px-2 py-1 rounded border border-gray-200 dark:border-gray-700">
-                                                            <Clock className="w-3 h-3" />
-                                                            {round.duration_minutes}m
-                                                        </div>
-                                                    </div>
-                                                ))}
-                                            </div>
-                                        </div>
-                                    )}
+  {/* Rounds List */}
+  {assessment.rounds && assessment.rounds.length > 0 && (
+  <div className="mb-6">
+  <h4 className="mb-3 text-sm font-bold text-slate-900 dark:text-emerald-50">Assessment Rounds</h4>
+  <div className="space-y-3">
+  {assessment.rounds.map((round) => (
+  <div
+  key={round.id}
+  className="flex items-center justify-between rounded-lg border border-slate-200/80 bg-sage/5 p-3 transition-all hover:bg-white hover:shadow-sm dark:border-emerald-800/50 dark:bg-emerald-950/30 dark:hover:bg-emerald-900/40"
+  >
+  <div className="flex items-center gap-3">
+  <div className={`rounded-md p-2 ${round.round_type === 'aptitude' ? 'bg-sage/25 text-sage-deep dark:bg-emerald-900/40 dark:text-emerald-300' :
+  round.round_type === 'coding' ? 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300' :
+  'bg-slate-100 text-slate-600 dark:bg-emerald-950/50 dark:text-emerald-200/80'
+  }`}>
+  {round.round_type === 'coding' ? <Code className="w-4 h-4" /> :
+  round.round_type === 'aptitude' ? <Calculator className="w-4 h-4" /> :
+  <Brain className="w-4 h-4" />}
+  </div>
+  <div>
+  <h5 className="text-sm font-medium text-slate-900 dark:text-emerald-50">
+  {round.round_number}. {round.round_name}
+  </h5>
+  <p className="text-xs capitalize text-slate-500 dark:text-emerald-200/70">
+  {round.round_type.replace('_', ' ')}
+  </p>
+  </div>
+  </div>
+  <div className="flex items-center gap-1.5 rounded border border-slate-200/90 bg-white px-2 py-1 text-xs font-medium text-slate-600 dark:border-emerald-800/60 dark:bg-emerald-950/50 dark:text-emerald-200/80">
+  <Clock className="h-3 w-3 shrink-0 text-sage-deep dark:text-emerald-400" />
+  {round.duration_minutes}m
+  </div>
+  </div>
+  ))}
+  </div>
+  </div>
+  )}
 
-                                    {/* Instructions */}
-                                    <div className="p-5 bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20 rounded-lg border border-blue-200 dark:border-blue-700">
-                                        <h4 className="text-sm font-bold text-blue-900 dark:text-blue-100 mb-3 flex items-center gap-2">
-                                            <Target className="w-4 h-4" />
-                                            Test Instructions
-                                        </h4>
-                                        <ul className="text-sm text-blue-800 dark:text-blue-200 space-y-2">
-                                            <li className="flex items-start gap-2">
-                                                <span className="text-blue-600 dark:text-blue-400">•</span>
-                                                <span>Complete all rounds within the time limit.</span>
-                                            </li>
-                                            <li className="flex items-start gap-2">
-                                                <span className="text-blue-600 dark:text-blue-400">•</span>
-                                                <span>Do not refresh the page during the assessment.</span>
-                                            </li>
-                                            <li className="flex items-start gap-2">
-                                                <span className="text-blue-600 dark:text-blue-400">•</span>
-                                                <span>Ensure your camera and microphone are working if required.</span>
-                                            </li>
-                                            <li className="flex items-start gap-2">
-                                                <span className="text-blue-600 dark:text-blue-400">•</span>
-                                                <span>Malpractice or tab switching may lead to disqualification.</span>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
+  {/* Instructions */}
+  <div className="rounded-lg border border-sage/40 bg-gradient-to-br from-sage/15 to-emerald-50/80 p-5 dark:border-emerald-800/60 dark:from-emerald-950/60 dark:to-emerald-900/25">
+  <h4 className="mb-3 flex items-center gap-2 text-sm font-bold text-sage-deep dark:text-emerald-100">
+  <Target className="h-4 w-4" />
+  Test Instructions
+  </h4>
+  <ul className="space-y-2 text-sm text-slate-700 dark:text-emerald-200/90">
+  <li className="flex items-start gap-2">
+  <span className="text-sage-deep dark:text-emerald-400">•</span>
+  <span>Complete all rounds within the time limit.</span>
+  </li>
+  <li className="flex items-start gap-2">
+  <span className="text-sage-deep dark:text-emerald-400">•</span>
+  <span>Do not refresh the page during the assessment.</span>
+  </li>
+  <li className="flex items-start gap-2">
+  <span className="text-sage-deep dark:text-emerald-400">•</span>
+  <span>Ensure your camera and microphone are working if required.</span>
+  </li>
+  <li className="flex items-start gap-2">
+  <span className="text-sage-deep dark:text-emerald-400">•</span>
+  <span>Malpractice or tab switching may lead to disqualification.</span>
+  </li>
+  </ul>
+  </div>
+  </div>
 
-                                {/* Footer */}
-                                <div className="p-6 border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 flex-shrink-0">
-                                    <div className="flex gap-3">
-                                        <Button
-                                            variant="outline"
-                                            onClick={onClose}
-                                            className="flex-1 py-6 text-sm font-medium hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-200"
-                                        >
-                                            Close
-                                        </Button>
-                                        <Button
-                                            onClick={() => onStart(assessment)}
-                                            className="flex-1 py-6 text-sm font-medium bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white shadow-lg hover:shadow-xl transition-all duration-200"
-                                        >
-                                            <Play className="w-5 h-5 mr-2" />
-                                            Start Assessment
-                                        </Button>
-                                    </div>
-                                </div>
-                            </Dialog.Panel>
-                        </Transition.Child>
-                    </div>
-                </div>
-            </Dialog>
-        </Transition>
-    )
+  {/* Footer */}
+  <div className="flex-shrink-0 border-t border-slate-200/90 bg-white p-6 dark:border-emerald-800/60 dark:bg-emerald-950/40">
+  <div className="flex gap-3">
+  <Button
+  variant="outline"
+  onClick={onClose}
+  className="flex-1 py-6 text-sm font-medium transition-all duration-200 hover:bg-sage/10 dark:hover:bg-emerald-900/40"
+  >
+  Close
+  </Button>
+  <Button
+  onClick={() => onStart(assessment)}
+  className="flex-1 bg-gradient-to-r from-sage-deep to-emerald-600 py-6 text-sm font-medium text-white shadow-lg transition-all duration-200 hover:from-sage-deep/95 hover:to-emerald-600/95 hover:shadow-xl dark:from-emerald-700 dark:to-emerald-500 dark:hover:from-emerald-600 dark:hover:to-emerald-400"
+  >
+  <Play className="w-5 h-5 mr-2" />
+  Start Assessment
+  </Button>
+  </div>
+  </div>
+  </Dialog.Panel>
+  </Transition.Child>
+  </div>
+  </div>
+  </Dialog>
+  </Transition>
+  )
 }

@@ -4,9 +4,9 @@ import { StudentDashboardLayout } from '@/components/dashboard/StudentDashboardL
 import { PracticeDashboard } from '@/components/practice/PracticeDashboard'
 
 export default function StudentPracticePage() {
-    return (
-        <StudentDashboardLayout>
-            <PracticeDashboard />
-        </StudentDashboardLayout>
-    )
+ return (
+ <StudentDashboardLayout>
+ <PracticeDashboard />
+ </StudentDashboardLayout>
+ )
 }

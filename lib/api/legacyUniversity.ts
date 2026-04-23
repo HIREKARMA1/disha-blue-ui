@@ -6,7 +6,7 @@ import type { UniversityRegisterRequest } from '@/types/legacy-auth'
 export const legacyUniversityApiClient = {
   registerUniversity: (data: UniversityRegisterRequest) => apiClient.registerUniversity(data),
   verifyOtpAndRegisterUniversity: (code: string, data: UniversityRegisterRequest) =>
-    apiClient.verifyOtpAndRegisterUniversity(code, data),
+  apiClient.verifyOtpAndRegisterUniversity(code, data),
   getUniversityProfile: () => apiClient.getUniversityProfile(),
   updateUniversityProfile: (data: any) => apiClient.updateUniversityProfile(data),
   getUniversityDashboard: () => apiClient.getUniversityDashboard(),
@@ -27,16 +27,16 @@ export const legacyUniversityApiClient = {
   getUniversityApplications: (params: any = {}) => apiClient.getUniversityApplications(params),
   exportUniversityApplications: (params: any = {}) => apiClient.exportUniversityApplications(params),
   updateUniversityApplicationStatus: (
-    applicationId: string,
-    status: string,
-    notes?: string,
-    interviewDate?: string,
-    interviewLocation?: string
+  applicationId: string,
+  status: string,
+  notes?: string,
+  interviewDate?: string,
+  interviewLocation?: string
   ) => apiClient.updateUniversityApplicationStatus(applicationId, status, notes, interviewDate, interviewLocation),
   getUniversityLicenses: () => apiClient.getUniversityLicenses(),
   getUniversityLicenseRequests: () => apiClient.getUniversityLicenseRequests(),
   checkBatchEligibility: (batch: string, degree?: string | string[], branches?: string[]) =>
-    apiClient.checkBatchEligibility(batch, degree, branches),
+  apiClient.checkBatchEligibility(batch, degree, branches),
 }
 
 export default legacyUniversityApiClient

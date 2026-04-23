@@ -10,28 +10,28 @@ export function useStudentProfile() {
   const { user } = useAuth()
 
   useEffect(() => {
-    const fetchProfile = async () => {
-      if (!user || user.user_type !== 'student') {
-        setIsLoading(false)
-        return
-      }
+  const fetchProfile = async () => {
+  if (!user || user.user_type !== 'student') {
+  setIsLoading(false)
+  return
+  }
 
-      try {
-        setIsLoading(true)
-        setError(null)
-        
-        const profileData = await apiClient.getStudentProfile()
-        setProfile(profileData)
-      } catch (err) {
-        const error = err instanceof Error ? err : new Error('Failed to fetch student profile')
-        setError(error)
-        console.error('Error fetching student profile:', err)
-      } finally {
-        setIsLoading(false)
-      }
-    }
+  try {
+  setIsLoading(true)
+  setError(null)
+  
+  const profileData = await apiClient.getStudentProfile()
+  setProfile(profileData)
+  } catch (err) {
+  const error = err instanceof Error ? err : new Error('Failed to fetch student profile')
+  setError(error)
+  console.error('Error fetching student profile:', err)
+  } finally {
+  setIsLoading(false)
+  }
+  }
 
-    fetchProfile()
+  fetchProfile()
   }, [user])
 
   return { profile, isLoading, error }

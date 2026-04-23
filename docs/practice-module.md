@@ -28,22 +28,22 @@ The Practice Module is a comprehensive assessment system that allows students to
 ```
 components/
 ├── practice/
-│   ├── PracticeDashboard.tsx          # Main dashboard with module grid
-│   ├── PracticeCard.tsx               # Individual module cards
-│   ├── PracticeExam.tsx               # Main exam interface
-│   ├── QuestionTabsBar.tsx            # Question navigation tabs
-│   ├── QuestionPanel.tsx              # Question display panel
-│   ├── OptionsPanel.tsx               # Answer options panel
-│   ├── ExamTimer.tsx                  # Countdown timer
-│   ├── ResultReport.tsx               # Results and analytics
-│   ├── PDFExport.tsx                  # PDF generation utility
-│   └── __tests__/
-│       └── PracticeCard.test.tsx      # Unit tests
+│  ├── PracticeDashboard.tsx  # Main dashboard with module grid
+│  ├── PracticeCard.tsx  # Individual module cards
+│  ├── PracticeExam.tsx  # Main exam interface
+│  ├── QuestionTabsBar.tsx  # Question navigation tabs
+│  ├── QuestionPanel.tsx  # Question display panel
+│  ├── OptionsPanel.tsx  # Answer options panel
+│  ├── ExamTimer.tsx  # Countdown timer
+│  ├── ResultReport.tsx  # Results and analytics
+│  ├── PDFExport.tsx  # PDF generation utility
+│  └── __tests__/
+│  └── PracticeCard.test.tsx  # Unit tests
 ├── admin/
-│   ├── AdminPracticeManager.tsx       # Admin dashboard
-│   ├── AdminQuestionEditor.tsx        # Question CRUD interface
-│   ├── AdminBulkUploader.tsx          # Bulk upload interface
-│   └── AdminAttemptViewer.tsx         # Student attempts viewer
+│  ├── AdminPracticeManager.tsx  # Admin dashboard
+│  ├── AdminQuestionEditor.tsx  # Question CRUD interface
+│  ├── AdminBulkUploader.tsx  # Bulk upload interface
+│  └── AdminAttemptViewer.tsx  # Student attempts viewer
 ```
 
 ### Data Types
@@ -93,13 +93,13 @@ The Practice Module uses the following key dependencies:
 ```json
 {
   "dependencies": {
-    "react": "^18.2.0",
-    "next": "14.0.4",
-    "typescript": "^5.3.3",
-    "framer-motion": "^10.16.16",
-    "lucide-react": "^0.303.0",
-    "react-hot-toast": "^2.4.1",
-    "html2pdf.js": "^0.11.2"
+  "react": "^18.2.0",
+  "next": "14.0.4",
+  "typescript": "^5.3.3",
+  "framer-motion": "^10.16.16",
+  "lucide-react": "^0.303.0",
+  "react-hot-toast": "^2.4.1",
+  "html2pdf.js": "^0.11.2"
   }
 }
 ```
@@ -107,89 +107,89 @@ The Practice Module uses the following key dependencies:
 ### Setup Steps
 
 1. **Add Practice Route to Sidebar**
-   ```typescript
-   // In components/dashboard/StudentSidebar.tsx
-   {
-     label: 'Practice',
-     href: '/dashboard/student/practice',
-     icon: Brain,
-     description: 'Practice tests and assessments',
-     color: 'from-rose-500 to-pink-600'
-   }
-   ```
+  ```typescript
+  // In components/dashboard/StudentSidebar.tsx
+  {
+  label: 'Practice',
+  href: '/dashboard/student/practice',
+  icon: Brain,
+  description: 'Practice tests and assessments',
+  color: 'from-rose-500 to-pink-600'
+  }
+  ```
 
 2. **Create Practice Page**
-   ```typescript
-   // app/dashboard/student/practice/page.tsx
-   "use client"
-   import { StudentDashboardLayout } from '@/components/dashboard/StudentDashboardLayout'
-   import { PracticeDashboard } from '@/components/practice/PracticeDashboard'
+  ```typescript
+  // app/dashboard/student/practice/page.tsx
+  "use client"
+  import { StudentDashboardLayout } from '@/components/dashboard/StudentDashboardLayout'
+  import { PracticeDashboard } from '@/components/practice/PracticeDashboard'
 
-   export default function PracticePage() {
-     return (
-       <StudentDashboardLayout>
-         <PracticeDashboard />
-       </StudentDashboardLayout>
-     )
-   }
-   ```
+  export default function PracticePage() {
+  return (
+  <StudentDashboardLayout>
+  <PracticeDashboard />
+  </StudentDashboardLayout>
+  )
+  }
+  ```
 
 3. **Add Admin Practice Route**
-   ```typescript
-   // app/dashboard/admin/practice/page.tsx
-   "use client"
-   import { AdminPracticeManager } from '@/components/admin/AdminPracticeManager'
+  ```typescript
+  // app/dashboard/admin/practice/page.tsx
+  "use client"
+  import { AdminPracticeManager } from '@/components/admin/AdminPracticeManager'
 
-   export default function AdminPracticePage() {
-     return (
-       <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-blue-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
-         <div className="container mx-auto px-4 py-8 pt-24">
-           <AdminPracticeManager />
-         </div>
-       </div>
-     )
-   }
-   ```
+  export default function AdminPracticePage() {
+  return (
+  <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-blue-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+  <div className="container mx-auto px-4 py-8 pt-24">
+  <AdminPracticeManager />
+  </div>
+  </div>
+  )
+  }
+  ```
 
 ## Usage
 
 ### Student Workflow
 
 1. **Access Practice Module**
-   - Navigate to Dashboard → Practice
-   - View available practice tests in grid layout
+  - Navigate to Dashboard → Practice
+  - View available practice tests in grid layout
 
 2. **Start Practice Test**
-   - Click "Start Practice" on any module card
-   - Exam interface opens with question navigation
+  - Click "Start Practice" on any module card
+  - Exam interface opens with question navigation
 
 3. **Take Exam**
-   - Use question tabs to navigate between questions
-   - Answer questions using provided options or text input
-   - Flag questions for review using "Mark for Review" button
-   - Use keyboard shortcuts: N (Next), P (Previous), 1-9 (Jump to question)
+  - Use question tabs to navigate between questions
+  - Answer questions using provided options or text input
+  - Flag questions for review using "Mark for Review" button
+  - Use keyboard shortcuts: N (Next), P (Previous), 1-9 (Jump to question)
 
 4. **Submit and Review**
-   - Click "Submit Exam" when finished
-   - View detailed results with score breakdown
-   - Download PDF report
-   - Review individual question explanations
+  - Click "Submit Exam" when finished
+  - View detailed results with score breakdown
+  - Download PDF report
+  - Review individual question explanations
 
 ### Admin Workflow
 
 1. **Access Admin Panel**
-   - Navigate to Admin Dashboard → Practice Management
-   - View overview statistics and module list
+  - Navigate to Admin Dashboard → Practice Management
+  - View overview statistics and module list
 
 2. **Manage Questions**
-   - Create individual questions using the question editor
-   - Upload multiple questions via CSV/Excel bulk upload
-   - Edit existing questions and manage question properties
+  - Create individual questions using the question editor
+  - Upload multiple questions via CSV/Excel bulk upload
+  - Edit existing questions and manage question properties
 
 3. **View Student Attempts**
-   - Click "View Attempts" on any module
-   - Review individual student performance
-   - Analyze question-level results and time spent
+  - Click "View Attempts" on any module
+  - Review individual student performance
+  - Analyze question-level results and time spent
 
 ## API Integration
 
@@ -202,11 +202,11 @@ The module currently uses mock data for development. The API integration points 
 // TODO: Replace with real API calls when backend is available
 /*
 export function usePracticeModules() {
-    return useQuery({
-        queryKey: ['practice-modules'],
-        queryFn: () => apiClient.get('/api/practice/modules'),
-        staleTime: 5 * 60 * 1000,
-    })
+  return useQuery({
+  queryKey: ['practice-modules'],
+  queryFn: () => apiClient.get('/api/practice/modules'),
+  staleTime: 5 * 60 * 1000,
+  })
 }
 */
 ```
@@ -215,23 +215,23 @@ export function usePracticeModules() {
 
 ```typescript
 // Student endpoints
-GET /api/practice/modules                    // List available modules
-GET /api/practice/modules/{id}/questions     // Get module questions
-POST /api/practice/submit                    // Submit exam attempt
-GET /api/practice/stats                      // Get student statistics
+GET /api/practice/modules  // List available modules
+GET /api/practice/modules/{id}/questions  // Get module questions
+POST /api/practice/submit  // Submit exam attempt
+GET /api/practice/stats  // Get student statistics
 
 // Admin endpoints
-GET /api/admin/practice/modules              // List all modules
-POST /api/admin/practice/modules             // Create module
-PUT /api/admin/practice/modules/{id}         // Update module
-DELETE /api/admin/practice/modules/{id}      // Delete module
-GET /api/admin/practice/questions            // List questions
-POST /api/admin/practice/questions           // Create question
-PUT /api/admin/practice/questions/{id}       // Update question
-DELETE /api/admin/practice/questions/{id}    // Delete question
-POST /api/admin/practice/questions/bulk      // Bulk upload questions
-GET /api/admin/practice/attempts             // List student attempts
-GET /api/admin/practice/attempts/{id}        // Get attempt details
+GET /api/admin/practice/modules  // List all modules
+POST /api/admin/practice/modules  // Create module
+PUT /api/admin/practice/modules/{id}  // Update module
+DELETE /api/admin/practice/modules/{id}  // Delete module
+GET /api/admin/practice/questions  // List questions
+POST /api/admin/practice/questions  // Create question
+PUT /api/admin/practice/questions/{id}  // Update question
+DELETE /api/admin/practice/questions/{id}  // Delete question
+POST /api/admin/practice/questions/bulk  // Bulk upload questions
+GET /api/admin/practice/attempts  // List student attempts
+GET /api/admin/practice/attempts/{id}  // Get attempt details
 ```
 
 ### API Request/Response Formats
@@ -292,8 +292,8 @@ import { PracticeCard } from '../PracticeCard'
 
 describe('PracticeCard', () => {
   it('renders module information correctly', () => {
-    render(<PracticeCard module={mockModule} onStart={mockOnStart} />)
-    expect(screen.getByText('Module Title')).toBeInTheDocument()
+  render(<PracticeCard module={mockModule} onStart={mockOnStart} />)
+  expect(screen.getByText('Module Title')).toBeInTheDocument()
   })
 })
 ```
@@ -324,14 +324,14 @@ export default {
   title: 'Practice/PracticeCard',
   component: PracticeCard,
   parameters: {
-    layout: 'centered',
+  layout: 'centered',
   },
 } as Meta
 
 export const Default: Story = {
   args: {
-    module: mockModule,
-    onStart: () => console.log('Practice started'),
+  module: mockModule,
+  onStart: () => console.log('Practice started'),
   },
 }
 ```
@@ -409,16 +409,16 @@ The Practice Module fully integrates with the existing design system:
 ### Common Issues
 
 1. **Exam Progress Not Saving**
-   - Check browser localStorage permissions
-   - Verify exam session hook is properly initialized
+  - Check browser localStorage permissions
+  - Verify exam session hook is properly initialized
 
 2. **PDF Export Not Working**
-   - Ensure html2pdf.js is properly loaded
-   - Check browser popup blockers
+  - Ensure html2pdf.js is properly loaded
+  - Check browser popup blockers
 
 3. **Questions Not Loading**
-   - Verify API endpoints are accessible
-   - Check network connectivity and CORS settings
+  - Verify API endpoints are accessible
+  - Check network connectivity and CORS settings
 
 ### Debug Mode
 
@@ -434,19 +434,19 @@ localStorage.setItem('debug', 'practice:*')
 ### From Mock to Real API
 
 1. **Update API Client**
-   ```typescript
-   // Replace mock functions in hooks/usePractice.ts
-   const modules = await apiClient.get('/api/practice/modules')
-   ```
+  ```typescript
+  // Replace mock functions in hooks/usePractice.ts
+  const modules = await apiClient.get('/api/practice/modules')
+  ```
 
 2. **Update Environment Variables**
-   ```env
-   NEXT_PUBLIC_API_URL=https://api.yourdomain.com
-   ```
+  ```env
+  NEXT_PUBLIC_API_URL=https://api.yourdomain.com
+  ```
 
 3. **Remove Mock Data**
-   - Delete mock data objects
-   - Update error handling for real API responses
+  - Delete mock data objects
+  - Update error handling for real API responses
 
 ## Contributing
 

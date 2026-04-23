@@ -3,16 +3,16 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import {
-    ArrowLeft,
-    Download,
-    Trophy,
-    Clock,
-    Target,
-    TrendingUp,
-    CheckCircle,
-    XCircle,
-    Eye,
-    EyeOff
+  ArrowLeft,
+  Download,
+  Trophy,
+  Clock,
+  Target,
+  TrendingUp,
+  CheckCircle,
+  XCircle,
+  Eye,
+  EyeOff
 } from 'lucide-react'
 import { PracticeModule, SubmitAttemptResponse } from '@/types/practice'
 import { Button } from '@/components/ui/button'
@@ -20,333 +20,333 @@ import { PDFExport } from './PDFExport'
 import { toast } from 'react-hot-toast'
 
 interface ResultReportProps {
-    result: SubmitAttemptResponse
-    module?: PracticeModule | null
-    onBackToDashboard: () => void
-    onBackToExam: () => void
+  result: SubmitAttemptResponse
+  module?: PracticeModule | null
+  onBackToDashboard: () => void
+  onBackToExam: () => void
 }
 
 export function ResultReport({
-    result,
-    module,
-    onBackToDashboard,
-    onBackToExam
+  result,
+  module,
+  onBackToDashboard,
+  onBackToExam
 }: ResultReportProps) {
-    const [showReviewMode, setShowReviewMode] = useState(false)
-    const [isExporting, setIsExporting] = useState(false)
+  const [showReviewMode, setShowReviewMode] = useState(false)
+  const [isExporting, setIsExporting] = useState(false)
 
-    const formatTime = (seconds: number) => {
-        const hours = Math.floor(seconds / 3600)
-        const minutes = Math.floor((seconds % 3600) / 60)
-        const secs = seconds % 60
+  const formatTime = (seconds: number) => {
+  const hours = Math.floor(seconds / 3600)
+  const minutes = Math.floor((seconds % 3600) / 60)
+  const secs = seconds % 60
 
-        if (hours > 0) {
-            return `${hours}h ${minutes}m ${secs}s`
-        }
-        return `${minutes}m ${secs}s`
-    }
+  if (hours > 0) {
+  return `${hours}h ${minutes}m ${secs}s`
+  }
+  return `${minutes}m ${secs}s`
+  }
 
-    const getScoreColor = (score: number) => {
-        if (score >= 80) return 'text-green-600 dark:text-green-400'
-        if (score >= 60) return 'text-yellow-600 dark:text-yellow-400'
-        return 'text-red-600 dark:text-red-400'
-    }
+  const getScoreColor = (score: number) => {
+  if (score >= 80) return 'text-sage-deep dark:text-emerald-300'
+  if (score >= 60) return 'text-amber-700 dark:text-amber-400/90'
+  return 'text-red-600 dark:text-red-400'
+  }
 
-    const handleEnterFullscreen = async () => {
-        try {
-            const elem: any = document.documentElement
-            if (elem.requestFullscreen) {
-                // navigationUI: 'hide' is supported by some browsers (e.g., Firefox)
-                await elem.requestFullscreen({ navigationUI: 'hide' } as any)
-            } else if (elem.mozRequestFullScreen) {
-                await elem.mozRequestFullScreen()
-            } else if (elem.webkitRequestFullscreen) {
-                await elem.webkitRequestFullscreen()
-            } else if (elem.msRequestFullscreen) {
-                await elem.msRequestFullscreen()
-            }
+  const handleEnterFullscreen = async () => {
+  try {
+  const elem: any = document.documentElement
+  if (elem.requestFullscreen) {
+  // navigationUI: 'hide' is supported by some browsers (e.g., Firefox)
+  await elem.requestFullscreen({ navigationUI: 'hide' } as any)
+  } else if (elem.mozRequestFullScreen) {
+  await elem.mozRequestFullScreen()
+  } else if (elem.webkitRequestFullscreen) {
+  await elem.webkitRequestFullscreen()
+  } else if (elem.msRequestFullscreen) {
+  await elem.msRequestFullscreen()
+  }
 
-            // Verify that fullscreen actually engaged
-            const becameFullscreen = !!(document.fullscreenElement || (document as any).webkitFullscreenElement || (document as any).msFullscreenElement)
-            if (!becameFullscreen) {
-                toast.error('Fullscreen was blocked. Allow fullscreen for this site and try again.')
-            }
-        } catch (error) {
-            console.error('Failed to enter fullscreen:', error)
-            toast.error('Unable to enter fullscreen. Please click again or check browser settings.')
-        }
-    }
+  // Verify that fullscreen actually engaged
+  const becameFullscreen = !!(document.fullscreenElement || (document as any).webkitFullscreenElement || (document as any).msFullscreenElement)
+  if (!becameFullscreen) {
+  toast.error('Fullscreen was blocked. Allow fullscreen for this site and try again.')
+  }
+  } catch (error) {
+  console.error('Failed to enter fullscreen:', error)
+  toast.error('Unable to enter fullscreen. Please click again or check browser settings.')
+  }
+  }
 
-    const getScoreBgColor = (score: number) => {
-        if (score >= 80) return 'bg-green-100 dark:bg-green-900/20'
-        if (score >= 60) return 'bg-yellow-100 dark:bg-yellow-900/20'
-        return 'bg-red-100 dark:bg-red-900/20'
-    }
+  const getScoreBgColor = (score: number) => {
+  if (score >= 80) return 'bg-emerald-100/90 dark:bg-emerald-900/35'
+  if (score >= 60) return 'bg-amber-100/90 dark:bg-amber-900/30'
+  return 'bg-red-100 dark:bg-red-900/20'
+  }
 
-    const handleExportPDF = async () => {
-        if (!module) {
-            toast.error('Module data not available for export')
-            return
-        }
+  const handleExportPDF = async () => {
+  if (!module) {
+  toast.error('Module data not available for export')
+  return
+  }
 
-        setIsExporting(true)
-        try {
-            await PDFExport.exportReport(result, module)
-            toast.success('Report downloaded successfully!')
-        } catch (error) {
-            console.error('Failed to export PDF:', error)
-            toast.error('Failed to download report')
-        } finally {
-            setIsExporting(false)
-        }
-    }
+  setIsExporting(true)
+  try {
+  await PDFExport.exportReport(result, module)
+  toast.success('Report downloaded successfully!')
+  } catch (error) {
+  console.error('Failed to export PDF:', error)
+  toast.error('Failed to download report')
+  } finally {
+  setIsExporting(false)
+  }
+  }
 
-    return (
-        <div className="space-y-6">
-            {/* Header */}
-            <div className="flex items-center justify-between">
-                <div className="flex items-center gap-4">
-                    <Button
-                        onClick={onBackToDashboard}
-                        variant="outline"
-                        size="sm"
-                    >
-                        <ArrowLeft className="w-4 h-4 mr-2" />
-                        Back to Practice
-                    </Button>
-                    <div>
-                        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-                            Exam Results
-                        </h1>
-                        <p className="text-gray-600 dark:text-gray-400">
-                            {module?.title || 'Practice Module'}
-                        </p>
-                    </div>
-                </div>
-                {/* <div className="flex items-center gap-2">
-                    <Button
-                        onClick={() => setShowReviewMode(!showReviewMode)}
-                        variant="outline"
-                        size="sm"
-                    >
-                        {showReviewMode ? (
-                            <>
-                                <EyeOff className="w-4 h-4 mr-2" />
-                                Hide Review
-                            </>
-                        ) : (
-                            <>
-                                <Eye className="w-4 h-4 mr-2" />
-                                Review Answers
-                            </>
-                        )}
-                    </Button>
-                    <Button
-                        onClick={handleExportPDF}
-                        disabled={isExporting}
-                        className="bg-gradient-to-r from-primary-500 to-secondary-500 hover:from-primary-600 hover:to-secondary-600"
-                    >
-                        <Download className="w-4 h-4 mr-2" />
-                        {isExporting ? 'Exporting...' : 'Download Report'}
-                    </Button>
-                </div> */}
-            </div>
+  return (
+  <div className="space-y-6">
+  {/* Header */}
+  <div className="flex items-center justify-between">
+  <div className="flex items-center gap-4">
+  <Button
+  onClick={onBackToDashboard}
+  variant="outline"
+  size="sm"
+  >
+  <ArrowLeft className="w-4 h-4 mr-2" />
+  Back to Practice
+  </Button>
+  <div>
+  <h1 className="text-2xl font-bold text-slate-900 dark:text-emerald-50">
+  Exam Results
+  </h1>
+  <p className="text-slate-600 dark:text-emerald-200/85">
+  {module?.title || 'Practice Module'}
+  </p>
+  </div>
+  </div>
+  {/* <div className="flex items-center gap-2">
+  <Button
+  onClick={() => setShowReviewMode(!showReviewMode)}
+  variant="outline"
+  size="sm"
+  >
+  {showReviewMode ? (
+  <>
+  <EyeOff className="w-4 h-4 mr-2" />
+  Hide Review
+  </>
+  ) : (
+  <>
+  <Eye className="w-4 h-4 mr-2" />
+  Review Answers
+  </>
+  )}
+  </Button>
+  <Button
+  onClick={handleExportPDF}
+  disabled={isExporting}
+  className="bg-gradient-to-r from-sage-deep to-emerald-600 hover:from-sage-deep/95 hover:to-emerald-600/95 dark:from-emerald-700 dark:to-emerald-500"
+  >
+  <Download className="w-4 h-4 mr-2" />
+  {isExporting ? 'Exporting...' : 'Download Report'}
+  </Button>
+  </div> */}
+  </div>
 
-            {/* Score Overview */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.1 }}
-                    className={`${getScoreBgColor(result.score_percent)} rounded-xl border border-gray-200 dark:border-gray-700 p-6`}
-                >
-                    <div className="flex items-center justify-between">
-                        <div>
-                            <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
-                                Overall Score
-                            </p>
-                            <p className={`text-3xl font-bold ${getScoreColor(result.score_percent)}`}>
-                                {result.score_percent.toFixed(1)}%
-                            </p>
-                        </div>
-                        <Trophy className={`w-8 h-8 ${getScoreColor(result.score_percent)}`} />
-                    </div>
-                </motion.div>
+  {/* Score Overview */}
+  <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+  <motion.div
+  initial={{ opacity: 0, y: 20 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{ delay: 0.1 }}
+  className={`${getScoreBgColor(result.score_percent)} rounded-xl border border-slate-200/90 p-6 dark:border-emerald-800/60`}
+  >
+  <div className="flex items-center justify-between">
+  <div>
+  <p className="text-sm font-medium text-slate-600 dark:text-emerald-200/80">
+  Overall Score
+  </p>
+  <p className={`text-3xl font-bold ${getScoreColor(result.score_percent)}`}>
+  {result.score_percent.toFixed(1)}%
+  </p>
+  </div>
+  <Trophy className={`w-8 h-8 ${getScoreColor(result.score_percent)}`} />
+  </div>
+  </motion.div>
 
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.2 }}
-                    className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6"
-                >
-                    <div className="flex items-center justify-between">
-                        <div>
-                            <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
-                                Time Taken
-                            </p>
-                            <p className="text-2xl font-bold text-gray-900 dark:text-white">
-                                {formatTime(result.time_taken_seconds)}
-                            </p>
-                        </div>
-                        <Clock className="w-6 h-6 text-gray-500" />
-                    </div>
-                </motion.div>
+  <motion.div
+  initial={{ opacity: 0, y: 20 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{ delay: 0.2 }}
+  className="rounded-xl border border-slate-200/90 bg-white p-6 dark:border-emerald-800/60 dark:bg-emerald-950/40"
+  >
+  <div className="flex items-center justify-between">
+  <div>
+  <p className="text-sm font-medium text-slate-600 dark:text-emerald-200/80">
+  Time Taken
+  </p>
+  <p className="text-2xl font-bold text-slate-900 dark:text-emerald-50">
+  {formatTime(result.time_taken_seconds)}
+  </p>
+  </div>
+  <Clock className="h-6 w-6 shrink-0 text-sage-deep dark:text-emerald-400" />
+  </div>
+  </motion.div>
 
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.3 }}
-                    className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6"
-                >
-                    <div className="flex items-center justify-between">
-                        <div>
-                            <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
-                                Role Fit Score
-                            </p>
-                            <p className="text-2xl font-bold text-gray-900 dark:text-white">
-                                {result.role_fit_score.toFixed(1)}%
-                            </p>
-                        </div>
-                        <Target className="w-6 h-6 text-gray-500" />
-                    </div>
-                </motion.div>
+  <motion.div
+  initial={{ opacity: 0, y: 20 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{ delay: 0.3 }}
+  className="rounded-xl border border-slate-200/90 bg-white p-6 dark:border-emerald-800/60 dark:bg-emerald-950/40"
+  >
+  <div className="flex items-center justify-between">
+  <div>
+  <p className="text-sm font-medium text-slate-600 dark:text-emerald-200/80">
+  Role Fit Score
+  </p>
+  <p className="text-2xl font-bold text-slate-900 dark:text-emerald-50">
+  {result.role_fit_score.toFixed(1)}%
+  </p>
+  </div>
+  <Target className="h-6 w-6 text-slate-500 dark:text-emerald-400/80" />
+  </div>
+  </motion.div>
 
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.4 }}
-                    className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6"
-                >
-                    <div className="flex items-center justify-between">
-                        <div>
-                            <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
-                                Correct Answers
-                            </p>
-                            <p className="text-2xl font-bold text-gray-900 dark:text-white">
-                                {result.question_results.filter(r => r.is_correct).length}/{result.question_results.length}
-                            </p>
-                        </div>
-                        <CheckCircle className="w-6 h-6 text-green-500" />
-                    </div>
-                </motion.div>
-            </div>
+  <motion.div
+  initial={{ opacity: 0, y: 20 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{ delay: 0.4 }}
+  className="rounded-xl border border-slate-200/90 bg-white p-6 dark:border-emerald-800/60 dark:bg-emerald-950/40"
+  >
+  <div className="flex items-center justify-between">
+  <div>
+  <p className="text-sm font-medium text-slate-600 dark:text-emerald-200/80">
+  Correct Answers
+  </p>
+  <p className="text-2xl font-bold text-slate-900 dark:text-emerald-50">
+  {result.question_results.filter(r => r.is_correct).length}/{result.question_results.length}
+  </p>
+  </div>
+  <CheckCircle className="h-6 w-6 text-sage-deep dark:text-emerald-400" />
+  </div>
+  </motion.div>
+  </div>
 
-            {/* Weak Areas */}
-            {result.weak_areas && result.weak_areas.length > 0 && (
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.5 }}
-                    className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6"
-                >
-                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
-                        <TrendingUp className="w-5 h-5 text-primary-500" />
-                        Areas for Improvement
-                    </h3>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                        {result.weak_areas.map((area, index) => (
-                            <div
-                                key={index}
-                                className="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg"
-                            >
-                                <div className="flex items-center justify-between mb-2">
-                                    <span className="text-sm font-medium text-gray-900 dark:text-white">
-                                        {area.tag}
-                                    </span>
-                                    <span className={`text-sm font-bold ${getScoreColor(area.accuracy)}`}>
-                                        {area.accuracy.toFixed(1)}%
-                                    </span>
-                                </div>
-                                <div className="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-2">
-                                    <div
-                                        className={`h-2 rounded-full ${area.accuracy >= 60 ? 'bg-green-500' :
-                                            area.accuracy >= 40 ? 'bg-yellow-500' : 'bg-red-500'
-                                            }`}
-                                        style={{ width: `${area.accuracy}%` }}
-                                    ></div>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                </motion.div>
-            )}
+  {/* Weak Areas */}
+  {result.weak_areas && result.weak_areas.length > 0 && (
+  <motion.div
+  initial={{ opacity: 0, y: 20 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{ delay: 0.5 }}
+  className="rounded-xl border border-slate-200/90 bg-white p-6 dark:border-emerald-800/60 dark:bg-emerald-950/40"
+  >
+  <h3 className="mb-4 flex items-center gap-2 text-lg font-semibold text-slate-900 dark:text-emerald-50">
+  <TrendingUp className="h-5 w-5 text-sage-deep dark:text-emerald-400" />
+  Areas for Improvement
+  </h3>
+  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+  {result.weak_areas.map((area, index) => (
+  <div
+  key={index}
+  className="rounded-lg border border-slate-200/80 bg-sage/10 p-4 dark:border-emerald-800/50 dark:bg-emerald-900/25"
+  >
+  <div className="mb-2 flex items-center justify-between">
+  <span className="text-sm font-medium text-slate-900 dark:text-emerald-50">
+  {area.tag}
+  </span>
+  <span className={`text-sm font-bold ${getScoreColor(area.accuracy)}`}>
+  {area.accuracy.toFixed(1)}%
+  </span>
+  </div>
+  <div className="h-2 w-full rounded-full bg-slate-200 dark:bg-emerald-900/50">
+  <div
+  className={`h-2 rounded-full ${area.accuracy >= 60 ? 'bg-sage-deep dark:bg-emerald-500' :
+  area.accuracy >= 40 ? 'bg-amber-500 dark:bg-amber-500/90' : 'bg-red-500 dark:bg-red-500/90'
+  }`}
+  style={{ width: `${area.accuracy}%` }}
+  ></div>
+  </div>
+  </div>
+  ))}
+  </div>
+  </motion.div>
+  )}
 
-            {/* Question Review */}
-            {showReviewMode && (
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.6 }}
-                    className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6"
-                >
-                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-                        Question Review
-                    </h3>
-                    <div className="space-y-4">
-                        {result.question_results.map((questionResult, index) => (
-                            <div
-                                key={index}
-                                className={`p-4 rounded-lg border ${questionResult.is_correct
-                                    ? 'bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-700'
-                                    : 'bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-700'
-                                    }`}
-                            >
-                                <div className="flex items-start gap-3">
-                                    <div className="flex-shrink-0 mt-1">
-                                        {questionResult.is_correct ? (
-                                            <CheckCircle className="w-5 h-5 text-green-600 dark:text-green-400" />
-                                        ) : (
-                                            <XCircle className="w-5 h-5 text-red-600 dark:text-red-400" />
-                                        )}
-                                    </div>
-                                    <div className="flex-1">
-                                        <div className="flex items-center gap-2 mb-2">
-                                            <span className="text-sm font-medium text-gray-900 dark:text-white">
-                                                Question {index + 1}
-                                            </span>
-                                            <span className={`px-2 py-1 rounded-full text-xs font-medium ${questionResult.is_correct
-                                                ? 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400'
-                                                : 'bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400'
-                                                }`}>
-                                                {questionResult.is_correct ? 'Correct' : 'Incorrect'}
-                                            </span>
-                                        </div>
-                                        {questionResult.explanation && (
-                                            <div
-                                                className="text-sm text-gray-600 dark:text-gray-400 prose prose-sm max-w-none"
-                                                dangerouslySetInnerHTML={{ __html: questionResult.explanation }}
-                                            />
-                                        )}
-                                    </div>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                </motion.div>
-            )}
+  {/* Question Review */}
+  {showReviewMode && (
+  <motion.div
+  initial={{ opacity: 0, y: 20 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{ delay: 0.6 }}
+  className="rounded-xl border border-slate-200/90 bg-white p-6 dark:border-emerald-800/60 dark:bg-emerald-950/40"
+  >
+  <h3 className="mb-4 text-lg font-semibold text-slate-900 dark:text-emerald-50">
+  Question Review
+  </h3>
+  <div className="space-y-4">
+  {result.question_results.map((questionResult, index) => (
+  <div
+  key={index}
+  className={`p-4 rounded-lg border ${questionResult.is_correct
+  ? 'border-emerald-200/90 bg-emerald-50/90 dark:border-emerald-700/60 dark:bg-emerald-900/25'
+  : 'bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-700'
+  }`}
+  >
+  <div className="flex items-start gap-3">
+  <div className="flex-shrink-0 mt-1">
+  {questionResult.is_correct ? (
+  <CheckCircle className="h-5 w-5 text-sage-deep dark:text-emerald-400" />
+  ) : (
+  <XCircle className="w-5 h-5 text-red-600 dark:text-red-400" />
+  )}
+  </div>
+  <div className="flex-1">
+  <div className="flex items-center gap-2 mb-2">
+  <span className="text-sm font-medium text-slate-900 dark:text-emerald-50">
+  Question {index + 1}
+  </span>
+  <span className={`px-2 py-1 rounded-full text-xs font-medium ${questionResult.is_correct
+  ? 'bg-emerald-100 text-emerald-900 dark:bg-emerald-900/40 dark:text-emerald-300'
+  : 'bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400'
+  }`}>
+  {questionResult.is_correct ? 'Correct' : 'Incorrect'}
+  </span>
+  </div>
+  {questionResult.explanation && (
+  <div
+  className="prose prose-sm max-w-none text-sm text-slate-600 dark:text-emerald-200/85 dark:prose-invert"
+  dangerouslySetInnerHTML={{ __html: questionResult.explanation }}
+  />
+  )}
+  </div>
+  </div>
+  </div>
+  ))}
+  </div>
+  </motion.div>
+  )}
 
-            {/* Action Buttons */}
-            <div className="flex items-center justify-center gap-4 pt-6">
-                {/* Retake Exam button - commented out as per requirement */}
-                {/* <Button
-                    onClick={() => {
-                        handleEnterFullscreen();
-                        onBackToExam(); // start the exam after fullscreen
-                    }}
-                    variant="outline"
-                    size="lg"
-                >
-                    Retake Exam
-                </Button> */}
+  {/* Action Buttons */}
+  <div className="flex items-center justify-center gap-4 pt-6">
+  {/* Retake Exam button - commented out as per requirement */}
+  {/* <Button
+  onClick={() => {
+  handleEnterFullscreen();
+  onBackToExam(); // start the exam after fullscreen
+  }}
+  variant="outline"
+  size="lg"
+  >
+  Retake Exam
+  </Button> */}
 
-                {/* <Button
-                    onClick={onBackToDashboard}
-                    className="bg-gradient-to-r from-primary-500 to-secondary-500 hover:from-primary-600 hover:to-secondary-600"
-                    size="lg"
-                >
-                    Go to Practice Dashboard
-                </Button> */}
-            </div>
-        </div>
-    )
+  {/* <Button
+  onClick={onBackToDashboard}
+  className="bg-gradient-to-r from-sage-deep to-emerald-600 hover:from-sage-deep/95 hover:to-emerald-600/95 dark:from-emerald-700 dark:to-emerald-500"
+  size="lg"
+  >
+  Go to Practice Dashboard
+  </Button> */}
+  </div>
+  </div>
+  )
 }

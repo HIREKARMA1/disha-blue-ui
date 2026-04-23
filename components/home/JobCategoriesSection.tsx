@@ -27,23 +27,20 @@ const categories = [
 
 export default function JobCategoriesSection() {
   return (
-    <section className="bg-background py-16 md:py-24">
+    <section className="bg-white py-16 dark:bg-emerald-950 md:py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
           <div className="max-w-2xl">
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-secondary">
-              Explore
-            </p>
-            <h2 className="mt-2 font-display text-3xl font-semibold text-foreground md:text-4xl">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-sage-deep dark:text-emerald-300">Explore</p>
+            <h2 className="mt-2 font-display text-3xl font-semibold text-slate-900 md:text-4xl dark:text-emerald-50">
               Roles across every major industry
             </h2>
-            <p className="mt-3 text-muted-foreground md:text-lg">
-              Structured discovery helps candidates move faster—and gives recruiters cleaner
-              pipelines.
+            <p className="mt-3 text-slate-600 md:text-lg dark:text-emerald-200/85">
+              Structured discovery helps candidates move faster—and gives recruiters cleaner pipelines.
             </p>
           </div>
           <Link href="/jobs">
-            <Button variant="secondary" className="w-full md:w-auto">
+            <Button variant="outline" className="w-full rounded-none border-sage-deep/40 md:w-auto dark:border-emerald-600">
               Browse all jobs
             </Button>
           </Link>
@@ -57,13 +54,13 @@ export default function JobCategoriesSection() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.04 }}
-              className="flex flex-col rounded-2xl border border-border bg-card p-5 shadow-soft transition-all hover:-translate-y-0.5 hover:border-primary/25 hover:shadow-medium"
+              className="flex flex-col rounded-none border border-slate-200 bg-sage/5 p-5 shadow-none transition-all hover:-translate-y-0.5 hover:border-sage-deep/35 dark:border-emerald-800 dark:bg-emerald-900/30 dark:hover:border-emerald-600"
             >
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-muted text-primary">
+              <div className="flex h-10 w-10 items-center justify-center rounded-none border border-sage-deep/25 bg-white text-sage-deep dark:border-emerald-600 dark:bg-emerald-900 dark:text-emerald-200">
                 <c.icon className="h-5 w-5" />
               </div>
-              <h3 className="mt-4 font-display text-lg font-semibold text-foreground">{c.label}</h3>
-              <p className="mt-1 text-sm text-muted-foreground">{c.sub}</p>
+              <h3 className="mt-4 font-display text-lg font-semibold text-slate-900 dark:text-emerald-50">{c.label}</h3>
+              <p className="mt-1 text-sm text-slate-600 dark:text-emerald-200/85">{c.sub}</p>
             </motion.div>
           ))}
         </div>

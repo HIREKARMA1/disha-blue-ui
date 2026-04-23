@@ -1,24 +1,24 @@
 import { Navbar } from '@/components/ui/navbar'
 
 export default function WhyPlatformPage() {
-    return (
-        <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-secondary-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
-            <Navbar variant="solid" />
-            <div className="container mx-auto px-4 py-20 pt-32">
-                <div className="max-w-4xl mx-auto text-center">
-                    <h1 className="text-4xl md:text-6xl font-bold text-gray-900 dark:text-white mb-6">
-                        Why This Platform?
-                    </h1>
-                    <p className="text-xl text-gray-600 dark:text-gray-300 mb-8">
-                        Discover what makes this hyper-local opportunity platform a practical choice for job seekers and employers.
-                    </p>
-                    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8">
-                        <p className="text-lg text-gray-700 dark:text-gray-300">
-                            This page is coming soon. We are preparing a complete overview of how local opportunity discovery and regional hiring work across students, employers, and admins.
-                        </p>
-                    </div>
-                </div>
-            </div>
+  return (
+    <div className="min-h-screen bg-white text-slate-900 dark:bg-emerald-950 dark:text-emerald-50">
+      <Navbar variant="transparent" />
+      <div className="container mx-auto px-4 pb-20 pt-28 sm:px-6">
+        <div className="mx-auto max-w-4xl text-center">
+          <h1 className="mb-6 font-display text-4xl font-bold tracking-tight text-slate-900 md:text-6xl dark:text-emerald-50">
+            Why This Platform?
+          </h1>
+          <p className="mb-8 text-xl text-slate-600 dark:text-emerald-200/90">
+            Discover what makes this hyper-local opportunity platform a practical choice for job seekers and employers.
+          </p>
+          <div className="rounded-none border border-slate-200 bg-sage/10 p-8 shadow-none dark:border-emerald-800 dark:bg-emerald-900/40">
+            <p className="text-lg text-slate-700 dark:text-emerald-100">
+              This page is coming soon. We are preparing a complete overview of how local opportunity discovery and regional hiring work across students, employers, and admins.
+            </p>
+          </div>
         </div>
-    )
+      </div>
+    </div>
+  )
 }

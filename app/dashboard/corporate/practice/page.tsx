@@ -4,9 +4,9 @@ import { CorporateDashboardLayout } from '@/components/dashboard/CorporateDashbo
 import { CorporatePracticeManager } from '@/components/corporate/CorporatePracticeManager'
 
 export default function CorporatePracticePage() {
-    return (
-        <CorporateDashboardLayout>
-            <CorporatePracticeManager />
-        </CorporateDashboardLayout>
-    )
+ return (
+ <CorporateDashboardLayout>
+ <CorporatePracticeManager />
+ </CorporateDashboardLayout>
+ )
 }

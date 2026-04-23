@@ -3,7 +3,7 @@
 import { CorporateProfile } from '@/components/dashboard/CorporateProfile'
 
 export default function CorporateProfilePage() {
-    return <CorporateProfile />
+ return <CorporateProfile />
 }
 
 
