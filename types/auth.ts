@@ -57,9 +57,12 @@ export interface TokenResponse {
   access_token: string;
   refresh_token: string;
   token_type: string;
-  user_type?: UserType;
-  user_id?: string;
-  name?: string;
+  user?: {
+    id: string;
+    email: string;
+    name: string;
+    user_type: UserType;
+  };
 }
 
 export interface ForgotPasswordRequest {

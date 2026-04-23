@@ -4,7 +4,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { useTheme } from 'next-themes'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { useAuth } from '@/hooks/useAuth'
 import { Button } from '@/components/ui/button'
 import { ThemeToggle } from '@/components/ui/theme-toggle'
@@ -21,6 +21,7 @@ import { t } from '@/lib/i18n'
 import { useLocale } from '@/contexts/LocaleContext'
 import { LanguageSwitcher } from '@/components/ui/language-switcher'
 import { cn } from '@/lib/utils'
+import { getOnboardingEntryRoute } from '@/lib/onboarding'
 
 interface NavbarProps {
   variant?: 'default' | 'transparent' | 'solid'
@@ -35,6 +36,7 @@ export function Navbar({
   textOnly = false,
 }: NavbarProps) {
   const { user, isAuthenticated, isLoading, logout } = useAuth()
+  const router = useRouter()
   const { theme, resolvedTheme } = useTheme()
   const pathname = usePathname()
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
@@ -52,6 +54,12 @@ export function Navbar({
   const handleLogout = () => {
   logout()
   setIsMobileMenuOpen(false)
+  }
+
+  const handleFindJobsClick = () => {
+  const route = getOnboardingEntryRoute()
+  setIsMobileMenuOpen(false)
+  router.push(route)
   }
 
   const getDashboardPath = () => {
@@ -101,7 +109,7 @@ export function Navbar({
   const fullMarketingNavLinks = [
   { href: '/', label: t(locale, 'nav.home') },
   { href: '/jobs', label: t(locale, 'nav.jobs') },
-  { href: '/auth/register?type=student', label: t(locale, 'nav.forStudents') },
+  { href: '/signup/step-1', label: t(locale, 'nav.forStudents') },
   { href: '/auth/register?type=corporate', label: t(locale, 'nav.forEmployers') },
   { href: '/#features', label: t(locale, 'nav.aiTools') },
   { href: '/#about', label: t(locale, 'nav.about') },
@@ -363,6 +371,16 @@ export function Navbar({
   {item.label}
   </a>
   ) : (
+  item.href === '/signup/step-1' ? (
+  <button
+  key={item.href}
+  type="button"
+  onClick={handleFindJobsClick}
+  className={marketingNavLinkClass(item.href)}
+  >
+  {item.label}
+  </button>
+  ) : (
   <Link
   key={item.href}
   href={item.href}
@@ -370,6 +388,7 @@ export function Navbar({
   >
   {item.label}
   </Link>
+  )
   )
   )}
   </nav>
@@ -412,9 +431,7 @@ export function Navbar({
   <Link href={getAuthLink('/auth/login')} className="text-sm font-semibold text-slate-900 transition-colors hover:text-sage-deep dark:text-emerald-50 dark:hover:text-white">
   {t(locale, 'common.signIn')}
   </Link>
-  <Link href="/auth/register?type=student">
-  <Button variant="outline" className="h-9 rounded-lg border-2 border-sage-deep/50 bg-white/80 px-4 font-semibold text-slate-900 hover:bg-sage/15 hover:text-slate-950 dark:border-emerald-400/80 dark:bg-emerald-950/40 dark:text-emerald-50 dark:hover:bg-emerald-800/70 dark:hover:text-white">Find Jobs</Button>
-  </Link>
+  <Button onClick={handleFindJobsClick} variant="outline" className="h-9 rounded-lg border-2 border-sage-deep/50 bg-white/80 px-4 font-semibold text-slate-900 hover:bg-sage/15 hover:text-slate-950 dark:border-emerald-400/80 dark:bg-emerald-950/40 dark:text-emerald-50 dark:hover:bg-emerald-800/70 dark:hover:text-white">Find Jobs</Button>
   <Link href="/auth/register?type=corporate">
   <Button className="h-9 rounded-lg bg-sage-deep px-4 font-semibold text-white shadow-sm hover:bg-sage-deep/90 dark:bg-emerald-600 dark:text-white dark:hover:bg-emerald-500">Post Jobs</Button>
   </Link>
@@ -426,7 +443,7 @@ export function Navbar({
   {t(locale, 'common.signIn')}
   </Button>
   </Link>
-  <Link href={getAuthLink('/auth/register')}>
+  <Link href="/signup/step-1">
   <Button className="bg-white px-5 font-semibold text-slate-900 shadow-sm hover:bg-white/90 dark:bg-emerald-100 dark:text-emerald-950 dark:hover:bg-white">{t(locale, 'common.signUp')}</Button>
   </Link>
   </div>
@@ -529,15 +546,13 @@ export function Navbar({
   </Link>
   {showMarketingAuthCluster ? (
   <>
-  <Link href="/auth/register?type=student" onClick={() => setIsMobileMenuOpen(false)}>
-  <Button variant="outline" className="w-full justify-center rounded-lg border-2 border-sage-deep/50 bg-white/90 font-semibold text-slate-900 hover:bg-sage/15 dark:border-emerald-400/80 dark:bg-emerald-950/40 dark:text-emerald-50 dark:hover:bg-emerald-800/70 dark:hover:text-white">Find Jobs</Button>
-  </Link>
+  <Button onClick={handleFindJobsClick} variant="outline" className="w-full justify-center rounded-lg border-2 border-sage-deep/50 bg-white/90 font-semibold text-slate-900 hover:bg-sage/15 dark:border-emerald-400/80 dark:bg-emerald-950/40 dark:text-emerald-50 dark:hover:bg-emerald-800/70 dark:hover:text-white">Find Jobs</Button>
   <Link href="/auth/register?type=corporate" onClick={() => setIsMobileMenuOpen(false)}>
   <Button className="w-full justify-center rounded-lg bg-sage-deep font-semibold text-white shadow-sm hover:bg-sage-deep/90 dark:bg-emerald-600 dark:text-white dark:hover:bg-emerald-500">Post Jobs</Button>
   </Link>
   </>
   ) : (
-  <Link href={getAuthLink('/auth/register')} onClick={() => setIsMobileMenuOpen(false)}>
+  <Link href="/signup/step-1" onClick={() => setIsMobileMenuOpen(false)}>
   <Button className="w-full justify-center bg-white font-semibold text-slate-900 shadow-sm hover:bg-white/90 dark:bg-emerald-100 dark:text-emerald-950 dark:hover:bg-white">{t(locale, 'common.signUp')}</Button>
   </Link>
   )}

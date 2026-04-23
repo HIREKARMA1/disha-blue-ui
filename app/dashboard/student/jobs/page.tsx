@@ -37,7 +37,6 @@ import {
  loadSavedJobIds,
  toggleSavedJobId,
 } from '@/components/jobs/jobs-ui'
-import { getRecommendationReadiness } from '@/lib/recommendationReadiness'
 import { useJobDiscoveryPreferencesStore } from '@/stores/jobDiscoveryPreferencesStore'
 import { JobDiscoveryPreferencesModal } from '@/components/jobs/JobDiscoveryPreferencesModal'
 interface Job {
@@ -188,8 +187,6 @@ const [profileCompletion, setProfileCompletion] = useState<ProfileCompletionResp
  const [currentApplicationJob, setCurrentApplicationJob] = useState<Job | null>(null)
  const [jobStatusFilter, setJobStatusFilter] = useState<'all'|'open'|'closed'>('open') // New filter for job status
 const [studentProfile, setStudentProfile] = useState<{ degree?: string; branch?: string } | null>(null)
- const [recommendationReadinessScore, setRecommendationReadinessScore] = useState(100)
- const [showImproveMatchesCta, setShowImproveMatchesCta] = useState(false)
  const [allFilteredJobs, setAllFilteredJobs] = useState<Job[]>([]) // Store jobs after degree/branch filtering (before status filter)
 const [baseJobs, setBaseJobs] = useState<Job[]>([]) // Store jobs after API fetch and client-side search (before degree/branch filter)
 const activeFilterCount = Object.values(filters).filter(Boolean).length + (searchTerm ? 1 : 0)
@@ -409,9 +406,6 @@ const fetchStudentProfile = async (): Promise<{ degree?: string; branch?: string
  fullProfile: profile
  })
  setStudentProfile(profileData)
- const readiness = getRecommendationReadiness(profile)
- setRecommendationReadinessScore(readiness.score)
- setShowImproveMatchesCta(!readiness.isReady)
 
  return profileData
  } catch (error) {
@@ -1557,23 +1551,6 @@ const statusFiltered = filterJobsByStatus(degreeBranchFiltered)
  </div>
  </div>
  </div>
-
- {showImproveMatchesCta && (
- <div className={cn(jobsSurfaceClass,'mb-6 p-4 sm:p-5')}>
- <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
- <div>
- <p className="text-xs font-semibold uppercase tracking-[0.14em] text-primary">Improve your AI matches</p>
- <h2 className="font-display text-lg font-semibold text-foreground">Set your job preferences for better recommendations</h2>
- <p className="text-sm text-muted-foreground">
- AI match readiness: {recommendationReadinessScore}%. Add location, role interests, and skills in profile.
- </p>
- </div>
- <a href="/dashboard/student/profile">
- <Button variant="gradient"className="rounded-none-none">Complete preferences</Button>
- </a>
- </div>
- </div>
- )}
 
  <div className={cn(jobsSurfaceClass,'mb-6 p-4 sm:p-5')}>
  <div className="flex flex-col gap-3 sm:flex-row sm:items-center">

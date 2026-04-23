@@ -17,6 +17,7 @@ import { Modal, TermsModalContent } from '@/components/ui/modal'
 import { apiClient } from '@/lib/api'
 import { UserType } from '@/types/auth'
 import { useAuth } from '@/hooks/useAuth'
+import { isOnboardingCompleted } from '@/lib/onboarding'
 import { getClientLocale, t, type SupportedLocale } from '@/lib/i18n'
 import { AuthShell } from '@/components/auth/AuthShell'
 import {
@@ -57,7 +58,7 @@ export default function LoginPage() {
   const [selectedUserType, setSelectedUserType] = useState<UserType>('student')
   const [termsAndPrivacyAccepted, setTermsAndPrivacyAccepted] = useState(false)
   const [showTermsModal, setShowTermsModal] = useState(false)
-  const [registerLink, setRegisterLink] = useState(`/auth/register?type=student`)
+  const [registerLink, setRegisterLink] = useState(`/signup/step-1`)
   const [locale, setLocale] = useState<SupportedLocale>('en')
 
   useEffect(() => {
@@ -115,9 +116,13 @@ export default function LoginPage() {
   useEffect(() => {
   if (typeof window !== 'undefined') {
   const redirectUrl = searchParams.get('redirect') || localStorage.getItem('redirect_after_login')
-  const link = redirectUrl
-  ? `/auth/register?type=${selectedUserType}&redirect=${encodeURIComponent(redirectUrl)}`
-  : `/auth/register?type=${selectedUserType}`
+      const base =
+  selectedUserType === "corporate"
+  ? "/auth/register?type=corporate"
+  : "/signup/step-1"
+      const link = redirectUrl
+  ? `${base}${base.includes("?") ? "&" : "?"}redirect=${encodeURIComponent(redirectUrl)}`
+  : base
   setRegisterLink(link)
   }
   }, [searchParams, selectedUserType])
@@ -135,13 +140,12 @@ export default function LoginPage() {
 
   // Store tokens and user data
   apiClient.setAuthTokens(response.access_token, response.refresh_token)
-
   // Use the auth hook to manage login state
   login({
-  id: response.user_id || 'temp-id',
-  email: data.email,
-  user_type: data.user_type,
-  name: data.email
+  id: response.user?.id || 'temp-id',
+  email: response.user?.email || data.email,
+  user_type: (response.user?.user_type || data.user_type),
+  name: response.user?.name || data.email
   }, response.access_token, response.refresh_token)
 
   toast.success(t(locale, 'auth.toast.loginSuccessful'))
@@ -164,7 +168,12 @@ export default function LoginPage() {
   }
 
   // Redirect based on user type if no redirect URL
-  switch (data.user_type) {
+  const resolvedUserType = response.user?.user_type || data.user_type
+  if (resolvedUserType === "student" && !isOnboardingCompleted()) {
+  router.push("/signup/step-1")
+  return
+  }
+  switch (resolvedUserType) {
   case 'student':
   router.push('/dashboard/student')
   break

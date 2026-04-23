@@ -2,10 +2,18 @@
 
 import { motion } from "framer-motion"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { BRANDING } from "@/config/branding"
 import { Button } from "@/components/ui/button"
+import { getOnboardingEntryRoute } from "@/lib/onboarding"
 
 export default function CTASection() {
+  const router = useRouter()
+
+  const handleFindJobsClick = () => {
+    router.push(getOnboardingEntryRoute())
+  }
+
   return (
     <section className="relative overflow-hidden border-t border-sage-deep/30 bg-sage-deep py-16 text-white md:py-24 dark:border-emerald-800 dark:bg-emerald-950">
       <div
@@ -43,21 +51,22 @@ export default function CTASection() {
           transition={{ delay: 0.12 }}
           className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row"
         >
-          <Link href="/auth/register?type=student" className="w-full sm:w-auto">
+          <div className="w-full sm:w-auto">
             <Button
+              onClick={handleFindJobsClick}
               size="lg"
               className="h-12 w-full rounded-none border-0 bg-white px-6 text-sage-deep shadow-none hover:bg-emerald-50 dark:text-emerald-950 sm:w-auto"
             >
-              I&apos;m looking for a role
+              Find Jobs (Student)
             </Button>
-          </Link>
+          </div>
           <Link href="/auth/register?type=corporate" className="w-full sm:w-auto">
             <Button
               size="lg"
               variant="outline"
               className="h-12 w-full rounded-none border-2 border-white/80 bg-transparent px-6 text-white shadow-none hover:bg-white/10 sm:w-auto"
             >
-              I&apos;m hiring talent
+              Hire Talent (Corporate)
             </Button>
           </Link>
         </motion.div>

@@ -2,10 +2,18 @@
 
 import Image from "next/image"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
+import { getOnboardingEntryRoute } from "@/lib/onboarding"
 
 export default function HeroSection() {
+  const router = useRouter()
+
+  const handleFindJobsClick = () => {
+    router.push(getOnboardingEntryRoute())
+  }
+
   return (
     <section className="relative overflow-hidden bg-sage/10 dark:bg-emerald-950">
       {/* Hero media starts at section top (no pt-* on section) so overlays reach the top — nav offset lives on copy only */}
@@ -74,17 +82,20 @@ export default function HeroSection() {
             </p>
 
             <div className="mt-5 flex w-full min-w-0 flex-col gap-2.5 min-[400px]:mt-6 min-[400px]:gap-3 sm:mt-8 sm:max-w-xl sm:flex-row sm:flex-wrap sm:items-stretch sm:gap-3 md:mt-10 md:gap-4">
-              <Link href="/auth/register?type=student" className="w-full min-w-0 sm:w-auto sm:min-w-[9.5rem]">
-                <Button className="h-11 min-h-[44px] w-full rounded-none border-0 bg-emerald-100 px-5 text-sm font-semibold text-sage-deep shadow-none ring-0 ring-offset-0 hover:bg-emerald-50 focus-visible:ring-2 focus-visible:ring-emerald-300/80 focus-visible:ring-offset-0 dark:bg-emerald-200 dark:text-emerald-950 dark:hover:bg-emerald-100 sm:w-auto sm:px-6 md:min-h-[3rem] md:px-8 md:text-base">
-                  Get Started
+              <div className="w-full min-w-0 sm:w-auto sm:min-w-[9.5rem]">
+                <Button
+                  onClick={handleFindJobsClick}
+                  className="h-11 min-h-[44px] w-full rounded-none border-0 bg-emerald-100 px-5 text-sm font-semibold text-sage-deep shadow-none ring-0 ring-offset-0 hover:bg-emerald-50 focus-visible:ring-2 focus-visible:ring-emerald-300/80 focus-visible:ring-offset-0 dark:bg-emerald-200 dark:text-emerald-950 dark:hover:bg-emerald-100 sm:w-auto sm:px-6 md:min-h-[3rem] md:px-8 md:text-base"
+                >
+                  Find Jobs (Student)
                 </Button>
-              </Link>
+              </div>
               <Link href="/auth/register?type=corporate" className="w-full min-w-0 sm:w-auto sm:min-w-[9.5rem]">
                 <Button
-                  variant="ghost"
+                  variant="outline"
                   className="h-11 min-h-[44px] w-full rounded-none border-2 border-emerald-200/85 bg-transparent px-5 text-sm font-semibold text-white shadow-none ring-0 ring-offset-0 hover:bg-emerald-500/15 focus-visible:ring-2 focus-visible:ring-emerald-300/70 focus-visible:ring-offset-0 dark:border-emerald-400/85 dark:bg-emerald-950/25 dark:text-emerald-50 dark:hover:bg-emerald-800/45 sm:w-auto sm:px-6 md:min-h-[3rem] md:px-8 md:text-base"
                 >
-                  For Employers
+                  Hire Talent (Corporate)
                 </Button>
               </Link>
             </div>

@@ -499,7 +499,7 @@ export function ResumeBuilder({ templateId, resumeId }: ResumeBuilderProps) {
   Log In
   </button>
   <button
-  onClick={() => window.location.href = '/auth/register'}
+  onClick={() => window.location.href = '/signup/step-1'}
   className="w-full rounded-xl border border-slate-200/90 bg-white py-2 px-4 font-medium text-slate-800 transition-colors hover:bg-sage/15 dark:border-emerald-800 dark:bg-emerald-950/50 dark:text-emerald-100 dark:hover:bg-emerald-900/40"
   >
   Create Account

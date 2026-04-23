@@ -1,7 +1,5 @@
 "use client"
 
-import { useEffect } from "react"
-import { useRouter } from "next/navigation"
 import { Navbar } from "@/components/ui/navbar"
 import { useAuth } from "@/hooks/useAuth"
 import HeroSection from "@/components/home/HeroSection"
@@ -17,14 +15,7 @@ import CTASection from "@/components/home/CTASection"
 import { Footer } from "@/components/ui/footer"
 
 export default function HomePage() {
-  const { user, isAuthenticated, isLoading } = useAuth()
-  const router = useRouter()
-
-  useEffect(() => {
-  if (!isLoading && isAuthenticated && user) {
-  router.replace(`/dashboard/${user.user_type}`)
-  }
-  }, [isLoading, isAuthenticated, user, router])
+  const { isLoading } = useAuth()
 
   if (isLoading) {
   return (
@@ -37,10 +28,6 @@ export default function HomePage() {
   </div>
   </div>
   )
-  }
-
-  if (isAuthenticated) {
-  return null
   }
 
   return (
