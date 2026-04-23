@@ -17,7 +17,7 @@ interface VoiceInputProps {
 
 export function VoiceInput({ label, onTranscript, onParsedSuggestions, fieldType = "general" }: VoiceInputProps) {
   const [selectedLanguage, setSelectedLanguage] = useState<"en" | "hi">("en")
-  const { isListening, interimText, transcript, error, isFallbackToTyping, startListening, stopListening, resetTranscript } = useSpeechToText(
+  const { isListening, transcript, error, isFallbackToTyping, startListening, stopListening, resetTranscript } = useSpeechToText(
     selectedLanguage === "hi" ? "hi-IN" : "en-IN"
   )
   const [chips, setChips] = useState<string[]>([])
@@ -42,7 +42,7 @@ export function VoiceInput({ label, onTranscript, onParsedSuggestions, fieldType
   const handleStop = async () => {
     stopListening()
     await new Promise((resolve) => window.setTimeout(resolve, 220))
-    const finalText = `${transcript} ${interimText}`.trim()
+    const finalText = transcript.trim()
     if (finalText) {
       setParsing(true)
       try {

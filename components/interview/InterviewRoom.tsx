@@ -84,6 +84,7 @@ export function InterviewRoom({
   const [finalTranscript, setFinalTranscript] = useState("")
   const [isSpeechSupported, setIsSpeechSupported] = useState(false)
   const [isProcessing, setIsProcessing] = useState(false)
+  const [manualResponse, setManualResponse] = useState("")
   const [usePremiumVoice, setUsePremiumVoice] = useState(true)
   const [availableVoices, setAvailableVoices] = useState<SpeechSynthesisVoice[]>([])
   const [aiSubtitle, setAiSubtitle] = useState("")
@@ -497,11 +498,20 @@ export function InterviewRoom({
       clearSilenceTimer()
       clearRestartListenTimer()
       clearRecognitionMaxDurationTimer()
-      recognition.stop()
+      try {
+        recognition.stop()
+      } catch {
+        // ignore browser shutdown race
+      }
       recognitionRef.current = null
-      cancelAISpeech()
     }
   }, [SILENCE_MS, cancelAISpeech, clearRecognitionMaxDurationTimer, clearRestartListenTimer, clearSilenceTimer, fillerRegex, finalizeTranscript, isAISpeaking, isStarted, onError, recognitionLang])
+
+  useEffect(() => {
+    return () => {
+      cancelAISpeech()
+    }
+  }, [cancelAISpeech])
 
   useEffect(() => {
     if (isStarted && !finalFeedback) {
@@ -542,9 +552,11 @@ export function InterviewRoom({
   }, [currentQuestion, currentQuestionPreview, normalizeSpeechText, speakText])
 
   const fallbackManualSend = async () => {
-    if (!finalTranscript.trim() || isBusy) return
-    await onSubmitTranscript(finalTranscript.trim())
+    const text = (manualResponse || finalTranscript).trim()
+    if (!text || isBusy) return
+    await onSubmitTranscript(text)
     setFinalTranscript("")
+    setManualResponse("")
   }
 
   const playCue = (frequency: number, duration = 0.08) => {
@@ -715,22 +727,38 @@ export function InterviewRoom({
           <Square className="h-4 w-4" />
           End Interview
         </button>
-        {!isSpeechSupported && (
+        {(!isSpeechSupported || isMicBlocked || isStarted) && (
           <div className="flex items-center gap-2">
             <input
-              value={finalTranscript}
-              onChange={(event) => setFinalTranscript(event.target.value)}
-              placeholder="Speech API not supported. Enter response."
+              value={manualResponse}
+              onChange={(event) => setManualResponse(event.target.value)}
+              placeholder={
+                !isSpeechSupported
+                  ? "Speech API not supported. Enter response."
+                  : isMicBlocked
+                    ? "Microphone blocked. Type your response."
+                    : "Type your answer and send it to interviewer."
+              }
               className="h-12 min-w-[280px] rounded-2xl border border-slate-200 bg-white px-3 text-sm dark:border-emerald-800 dark:bg-emerald-950/40 dark:text-emerald-100"
             />
             <button
               type="button"
               onClick={() => void fallbackManualSend()}
+              disabled={isBusy || !(manualResponse || finalTranscript).trim()}
               className="h-12 rounded-2xl bg-slate-900 px-4 text-sm font-semibold text-white hover:bg-slate-800 dark:bg-emerald-700 dark:hover:bg-emerald-600"
             >
               Send
             </button>
           </div>
+        )}
+        {isStarted && currentQuestion?.trim() && (
+          <button
+            type="button"
+            onClick={() => void speakText(currentQuestion, { finalChunk: false, skipStartDelay: true })}
+            className="h-12 rounded-2xl border border-emerald-300 bg-emerald-50 px-4 text-sm font-semibold text-emerald-700 hover:bg-emerald-100 dark:border-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-200 dark:hover:bg-emerald-900/50"
+          >
+            Repeat AI Question
+          </button>
         )}
       </div>
     </div>

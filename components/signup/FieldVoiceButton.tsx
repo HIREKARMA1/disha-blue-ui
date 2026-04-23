@@ -18,7 +18,7 @@ export function FieldVoiceButton({ fieldType, onParsed, ariaLabel }: FieldVoiceB
   const [selectedLanguage, setSelectedLanguage] = useState<"en" | "hi">("en")
   const [localError, setLocalError] = useState<string | null>(null)
   const [isParsing, setIsParsing] = useState(false)
-  const { isListening, interimText, transcript, error, startListening, stopListening, resetTranscript, isFallbackToTyping } = useSpeechToText(
+  const { isListening, transcript, error, startListening, stopListening, resetTranscript, isFallbackToTyping } = useSpeechToText(
     selectedLanguage === "hi" ? "hi-IN" : "en-IN"
   )
 
@@ -42,7 +42,7 @@ export function FieldVoiceButton({ fieldType, onParsed, ariaLabel }: FieldVoiceB
     }
     stopListening()
     await new Promise((resolve) => window.setTimeout(resolve, 220))
-    const text = `${transcript} ${interimText}`.trim()
+    const text = transcript.trim()
     if (!text) return
     setIsParsing(true)
     try {
