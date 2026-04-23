@@ -15,6 +15,7 @@ const hindiPrompts: Record<string, string> = {
 
 let voiceCache: { hi: SpeechSynthesisVoice | null; en: SpeechSynthesisVoice | null } | null = null
 let voicesListenerAttached = false
+let replacingUtterance = false
 
 function attachVoicesListener(synth: SpeechSynthesis) {
   if (voicesListenerAttached) return
@@ -124,9 +125,19 @@ export async function speakText(text: string, lang?: "en" | "hi") {
   const utterance = new SpeechSynthesisUtterance(textForUtterance || text)
   utterance.lang = selectedLang === "hi" ? "hi-IN" : "en-IN"
   utterance.voice = voice || null
+  utterance.rate = 1
+  utterance.pitch = 1
+  utterance.volume = 1
   utterance.onerror = (ev) => {
+    const err = String((ev as any)?.error || "")
+    if (err === "canceled" && replacingUtterance) return
     console.error("TTS: SpeechSynthesisUtterance error:", ev?.error || ev)
   }
-  synth.cancel()
+  replacingUtterance = synth.speaking || synth.pending
+  if (replacingUtterance) synth.cancel()
+  if (typeof synth.resume === "function") synth.resume()
   synth.speak(utterance)
+  window.setTimeout(() => {
+    replacingUtterance = false
+  }, 200)
 }

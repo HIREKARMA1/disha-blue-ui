@@ -17,7 +17,7 @@ interface VoiceInputProps {
 
 export function VoiceInput({ label, onTranscript, onParsedSuggestions, fieldType = "general" }: VoiceInputProps) {
   const [selectedLanguage, setSelectedLanguage] = useState<"en" | "hi">("en")
-  const { isListening, interimText, error, isFallbackToTyping, startListening, stopListening } = useSpeechToText(
+  const { isListening, interimText, transcript, error, isFallbackToTyping, startListening, stopListening, resetTranscript } = useSpeechToText(
     selectedLanguage === "hi" ? "hi-IN" : "en-IN"
   )
   const [chips, setChips] = useState<string[]>([])
@@ -41,12 +41,14 @@ export function VoiceInput({ label, onTranscript, onParsedSuggestions, fieldType
 
   const handleStop = async () => {
     stopListening()
-    if (interimText.trim()) {
+    await new Promise((resolve) => window.setTimeout(resolve, 220))
+    const finalText = `${transcript} ${interimText}`.trim()
+    if (finalText) {
       setParsing(true)
       try {
-        const response = await parseVoiceText(interimText.trim(), fieldType)
+        const response = await parseVoiceText(finalText, fieldType)
         const parsedName = String(response.parsed?.name || "").trim()
-        const translatedText = (response.translated_text || interimText).trim()
+        const translatedText = (response.translated_text || finalText).trim()
         if (fieldType === "name") {
           console.log("FORCED NAME:", response.parsed?.name)
           const safeName = parsedName || String(response.translated_text || "").trim()
@@ -89,7 +91,10 @@ export function VoiceInput({ label, onTranscript, onParsedSuggestions, fieldType
         <Button
           type="button"
           className={`h-16 w-16 rounded-full bg-primary p-0 text-primary-foreground shadow-md transition-all duration-200 ease-in-out hover:scale-105 hover:bg-primary/90 ${isListening ? "animate-pulse ring-4 ring-primary/20" : ""}`}
-          onClick={isListening ? handleStop : startListening}
+          onClick={isListening ? handleStop : () => {
+            resetTranscript()
+            void startListening()
+          }}
           aria-label={label}
         >
           {isListening ? <Square className="h-6 w-6" /> : <Mic className="h-7 w-7" />}
