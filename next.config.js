@@ -22,9 +22,10 @@ const nextConfig = {
   },
   async rewrites() {
   // Get API configuration from environment variables directly
-  const apiBaseUrl =
-  process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8000";
-  const apiVersion = process.env.NEXT_PUBLIC_API_VERSION || "v1";
+  const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+  if (!apiBaseUrl) {
+  throw new Error("Missing required environment variable: NEXT_PUBLIC_API_BASE_URL");
+  }
 
   return [
   {

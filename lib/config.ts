@@ -1,18 +1,26 @@
 /**
  * Application configuration loaded from environment variables
  */
+const requireEnv = (name: string): string => {
+  const value = process.env[name];
+  if (!value) {
+    throw new Error(`Missing required environment variable: ${name}`);
+  }
+  return value;
+};
+
 export const config = {
   // API Configuration
   api: {
-  baseUrl: process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000',
+  baseUrl: requireEnv('NEXT_PUBLIC_API_BASE_URL'),
   version: process.env.NEXT_PUBLIC_API_VERSION || 'v1',
-  fullUrl: `${process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000'}/api/${process.env.NEXT_PUBLIC_API_VERSION || 'v1'}`,
+  fullUrl: `${requireEnv('NEXT_PUBLIC_API_BASE_URL')}/api/${process.env.NEXT_PUBLIC_API_VERSION || 'v1'}`,
   },
   
   // App Configuration
   app: {
   name: process.env.NEXT_PUBLIC_APP_NAME || 'HireKarma',
-  url: process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000',
+  url: requireEnv('NEXT_PUBLIC_APP_URL'),
   },
   
   // Feature Flags
