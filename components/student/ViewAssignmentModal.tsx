@@ -51,9 +51,9 @@ export function ViewAssignmentModal({ isOpen, onClose, jobId, jobTitle, isOnCamp
   }
   }
 
-  const handleStartTest = (moduleId: string) => {
-  // Redirect to practice test page
-  router.push(`/dashboard/student/practice/${moduleId}`)
+  const handleStartTest = () => {
+  // Practice has been replaced by AI communication assessments.
+  router.push('/ai-communication')
   onClose()
   }
 
@@ -185,7 +185,7 @@ export function ViewAssignmentModal({ isOpen, onClose, jobId, jobTitle, isOnCamp
   {/* Submit Assignment Button */}
   <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
   <Button
-  onClick={() => handleStartTest(module.id)}
+  onClick={() => handleStartTest()}
   className="w-full bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white shadow-lg hover:shadow-xl transition-all"
   >
   <Play className="w-4 h-4 mr-2" />

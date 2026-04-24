@@ -882,7 +882,11 @@ class ApiClient {
   return response.data;
   }
 
+<<<<<<< Updated upstream
   // AI Communication Assessment
+=======
+  // AI Communication Assessments
+>>>>>>> Stashed changes
   async startAICommunicationSession(data: {
     language: string;
     mode: 'hr_interview' | 'casual_conversation' | 'group_discussion';
@@ -895,20 +899,32 @@ class ApiClient {
     sessionId: string;
     userText: string;
     language: string;
+<<<<<<< Updated upstream
   }): Promise<{ sessionId: string; detectedLanguage: string; aiText: string }> {
+=======
+  }): Promise<{ sessionId: string; aiText: string; language: string }> {
+>>>>>>> Stashed changes
     const response: AxiosResponse = await this.client.post('/ai-communication/message', data);
     return response.data;
   }
 
+<<<<<<< Updated upstream
   async getAICommunicationTTS(text: string, language: string): Promise<Blob> {
     const response: AxiosResponse = await this.client.post(
       '/ai-communication/tts',
       { text, language },
+=======
+  async getAICommunicationTTS(text: string): Promise<Blob> {
+    const response: AxiosResponse = await this.client.post(
+      '/ai-communication/tts',
+      { text },
+>>>>>>> Stashed changes
       { responseType: 'blob' }
     );
     return response.data;
   }
 
+<<<<<<< Updated upstream
   async transcribeAICommunicationAudio(audioFile: File, language: string): Promise<{ text: string }> {
     const formData = new FormData();
     formData.append('audio', audioFile);
@@ -928,6 +944,20 @@ class ApiClient {
     grammar: number;
     suggestions: string[];
     summary: string;
+=======
+  async evaluateAICommunication(data: {
+    sessionId: string;
+    transcript: Array<{ role: 'user' | 'ai'; text: string }>;
+    language: string;
+  }): Promise<{
+    fluency: number;
+    confidence: number;
+    grammarAccuracy: number;
+    vocabularyLevel: number;
+    keyStrengths: string[];
+    areasOfImprovement: string[];
+    actionableSuggestions: string[];
+>>>>>>> Stashed changes
   }> {
     const response: AxiosResponse = await this.client.post('/ai-communication/evaluate', data);
     return response.data;
