@@ -177,7 +177,7 @@ function CareerAlignPageContent() {
       }
     }
     setTimerSeconds(0)
-    await session.startInterview()
+    return await session.startInterview()
   }
 
   const handleEnd = async () => {
@@ -234,6 +234,7 @@ function CareerAlignPageContent() {
           <InterviewRoom
             stream={mediaStream}
             currentQuestion={session.currentQuestion}
+            spokenPrompt={session.spokenPrompt || session.currentQuestion}
             currentQuestionPreview={session.currentQuestionPreview}
             language={language || "en"}
             personality={personality || "friendly_mentor"}
@@ -256,8 +257,12 @@ function CareerAlignPageContent() {
             onFinalSummaryEnd={() => setStep("result")}
             onSubmitTranscript={async (transcript) => {
               setPermissionError(null)
-              if (!transcript.trim()) return
-              await session.submitAnswer(transcript)
+              if (!transcript.trim()) return null
+              const nextQuestion = await session.submitAnswer(transcript)
+              return {
+                next_question: nextQuestion || "",
+                is_end: !nextQuestion,
+              }
             }}
             onError={(message) => setPermissionError(message)}
           />

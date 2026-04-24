@@ -15,14 +15,25 @@ export interface InterviewMessage {
 
 export interface InterviewFeedback {
   score: number
+  overall_score?: number
   communication: number
   confidence: number
   technical: number
   problem_solving: number
+  communication_avg?: number
+  technical_avg?: number
+  confidence_avg?: number
   emotional_state: "nervous" | "confident" | "balanced"
   strengths: string[]
   weaknesses: string[]
   suggestions: string[]
+  improvement_plan?: string[]
+  recommended_actions?: string[]
+  phase_scores?: {
+    intro: number
+    technical: number
+    behavioral: number
+  }
   timeline: number[]
   improvement_areas: string[]
   learning_path: string[]
@@ -50,6 +61,13 @@ export interface InterviewNextResponse {
   next_question: string | null
   next_question_preview?: string | null
   feedback?: InterviewFeedback
+  answer_score?: number | null
+  answer_feedback?: string | null
+  answer_skill_breakdown?: {
+    communication: number
+    technical: number
+    confidence: number
+  } | null
   coaching_hint?: string | null
   context_hint?: string | null
   response_quality_hint?: string | null
@@ -87,6 +105,7 @@ export const aiInterviewService = {
     transcript: string
     is_start?: boolean
     force_end?: boolean
+    interviewer_prompt?: string
   }) => {
     return apiClient.post("/interview-session/next", payload) as Promise<InterviewNextResponse>
   },

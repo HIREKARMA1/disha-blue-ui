@@ -1,25 +1,17 @@
 "use client"
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
-import { Clock3, Play, Square } from "lucide-react"
+import { Clock3, Mic, MicOff, Play, Square } from "lucide-react"
 import { AIAvatar } from "./AIAvatar"
 import { VideoFeed } from "./VideoFeed"
-import { aiInterviewService, InterviewFeedback, InterviewLanguage, InterviewPersonality } from "@/services/aiInterviewService"
+import { InterviewFeedback, InterviewLanguage, InterviewPersonality } from "@/services/aiInterviewService"
 
-type SpeechRecognitionLike = {
-  lang: string
-  continuous: boolean
-  interimResults: boolean
-  onresult: ((event: any) => void) | null
-  onerror: ((event: any) => void) | null
-  onend: (() => void) | null
-  start: () => void
-  stop: () => void
-}
+type ConversationState = "idle" | "ai-speaking" | "user-listening" | "processing"
 
 interface Props {
   stream: MediaStream | null
   currentQuestion: string
+  spokenPrompt?: string
   currentQuestionPreview: string
   language: InterviewLanguage
   personality: InterviewPersonality
@@ -37,9 +29,9 @@ interface Props {
   questionIndex: number
   maxQuestions: number
   elapsedTimeLabel: string
-  onStartInterview: () => void
+  onStartInterview: () => Promise<{ next_question?: string } | string | null | void>
   onEndInterview: () => void
-  onSubmitTranscript: (transcript: string) => Promise<void>
+  onSubmitTranscript: (transcript: string) => Promise<{ next_question?: string; is_end?: boolean } | null>
   onFinalSummaryEnd?: () => void
   onError?: (message: string) => void
 }
@@ -47,6 +39,7 @@ interface Props {
 export function InterviewRoom({
   stream,
   currentQuestion,
+  spokenPrompt,
   currentQuestionPreview,
   language,
   personality,
@@ -70,13 +63,15 @@ export function InterviewRoom({
   onFinalSummaryEnd,
   onError,
 }: Props) {
-  const recognitionRef = useRef<SpeechRecognitionLike | null>(null)
-  const silenceTimerRef = useRef<number | null>(null)
-  const committedTranscriptRef = useRef("")
-  const interimTranscriptRef = useRef("")
-  const isProcessingRef = useRef(false)
-  const shouldListenRef = useRef(false)
+  const runLoopRef = useRef(false)
+  const stopRecognitionRef = useRef<(() => void) | null>(null)
+  const isMountedRef = useRef(true)
+  const finalSummarySpokenRef = useRef(false)
+  const responseCountRef = useRef(0)
+  const totalWordsRef = useRef(0)
+
   const [isListening, setIsListening] = useState(false)
+  const [isMicEnabled, setIsMicEnabled] = useState(true)
   const [isMicBlocked, setIsMicBlocked] = useState(false)
   const [isUserSpeaking, setIsUserSpeaking] = useState(false)
   const [isAISpeaking, setIsAISpeaking] = useState(false)
@@ -85,8 +80,6 @@ export function InterviewRoom({
   const [isSpeechSupported, setIsSpeechSupported] = useState(false)
   const [isProcessing, setIsProcessing] = useState(false)
   const [manualResponse, setManualResponse] = useState("")
-  const [usePremiumVoice, setUsePremiumVoice] = useState(true)
-  const [availableVoices, setAvailableVoices] = useState<SpeechSynthesisVoice[]>([])
   const [aiSubtitle, setAiSubtitle] = useState("")
   const [liveMetrics, setLiveMetrics] = useState({
     fillerWordCount: 0,
@@ -97,21 +90,9 @@ export function InterviewRoom({
     engagementScore: 50,
     responseLength: 0,
   })
-  const responseCountRef = useRef(0)
-  const totalWordsRef = useRef(0)
-  const responseStartAtRef = useRef<number | null>(null)
-  const lastSpeechAtRef = useRef<number | null>(null)
-  const lastSpokenQuestionRef = useRef("")
-  const lastSpokenSentenceRef = useRef("")
-  const restartListenTimerRef = useRef<number | null>(null)
-  const recognitionMaxDurationTimerRef = useRef<number | null>(null)
-  const premiumAudioRef = useRef<HTMLAudioElement | null>(null)
-  const finalSummarySpokenRef = useRef(false)
-  const isSessionActiveRef = useRef(true)
-  const micPermissionWarnedRef = useRef(false)
-  const premiumVoiceAllowedRef = useRef(true)
+  const [conversationState, setConversationState] = useState<ConversationState>("idle")
 
-  const recognitionLang = useMemo(() => (language === "hi" ? "hi-IN" : "en-IN"), [language])
+  const recognitionLang = useMemo(() => (language === "hi" ? "hi-IN" : "en-US"), [language])
   const phaseLabelMap = useMemo(
     () => ({
       introduction: "Introduction",
@@ -134,422 +115,269 @@ export function InterviewRoom({
     [],
   )
   const progressPercent = Math.round((Math.max(0, Math.min(questionIndex, maxQuestions)) / Math.max(1, maxQuestions)) * 100)
-  useEffect(() => {
-    if (typeof window === "undefined" || !("speechSynthesis" in window)) return
-    const loadVoices = () => {
-      const voices = window.speechSynthesis.getVoices()
-      setAvailableVoices(voices)
-    }
-    loadVoices()
-    window.speechSynthesis.onvoiceschanged = () => {
-      loadVoices()
-    }
-    return () => {
-      window.speechSynthesis.onvoiceschanged = null
-    }
-  }, [])
+  const delay = useCallback((ms: number) => new Promise<void>((resolve) => window.setTimeout(resolve, ms)), [])
 
-  const SILENCE_MS = 2200
-  const AI_START_DELAY_MS = 420
-  const AI_SENTENCE_PAUSE_MS = 180
-  const fillerRegex = useMemo(() => /\b(um+|uh+|like|you know|actually|basically)\b/gi, [])
-
-  const stopListening = useCallback(() => {
-    shouldListenRef.current = false
-    recognitionRef.current?.stop()
-    setIsListening(false)
-    setIsUserSpeaking(false)
-  }, [])
-
-  const clearSilenceTimer = useCallback(() => {
-    if (silenceTimerRef.current) {
-      window.clearTimeout(silenceTimerRef.current)
-      silenceTimerRef.current = null
-    }
-  }, [])
-
-  const clearRestartListenTimer = useCallback(() => {
-    if (restartListenTimerRef.current) {
-      window.clearTimeout(restartListenTimerRef.current)
-      restartListenTimerRef.current = null
-    }
-  }, [])
-
-  const clearRecognitionMaxDurationTimer = useCallback(() => {
-    if (recognitionMaxDurationTimerRef.current) {
-      window.clearTimeout(recognitionMaxDurationTimerRef.current)
-      recognitionMaxDurationTimerRef.current = null
-    }
-  }, [])
-
-  const normalizeSpeechText = useCallback((text: string) => text.replace(/\s+/g, " ").replace(/\s+([,.!?;:])/g, "$1").trim(), [])
-
-  const cancelAISpeech = useCallback(() => {
-    if (typeof window === "undefined") return
-    premiumAudioRef.current?.pause()
-    if (premiumAudioRef.current) {
-      premiumAudioRef.current.currentTime = 0
-      premiumAudioRef.current = null
-    }
-    if ("speechSynthesis" in window && window.speechSynthesis.speaking) {
-      window.speechSynthesis.cancel()
-    }
-    setIsAISpeaking(false)
-  }, [])
-
-  const submitTranscriptWithRetry = useCallback(
-    async (transcript: string) => {
-      if (!isSessionActiveRef.current) return false
-      try {
-        await onSubmitTranscript(transcript)
-        return true
-      } catch {
-        try {
-          await onSubmitTranscript(transcript)
-          return true
-        } catch (error: any) {
-          onError?.(error?.message || "Failed to submit transcript after retry.")
-          return false
-        }
+  const getVoicesAsync = useCallback(() => {
+    return new Promise<SpeechSynthesisVoice[]>((resolve) => {
+      if (typeof window === "undefined" || !("speechSynthesis" in window)) {
+        resolve([])
+        return
       }
-    },
-    [onSubmitTranscript, onError],
-  )
+      const synth = window.speechSynthesis
+      const voices = synth.getVoices()
+      if (voices.length) {
+        resolve(voices)
+        return
+      }
+      const onVoicesChanged = () => {
+        synth.onvoiceschanged = null
+        resolve(synth.getVoices())
+      }
+      synth.onvoiceschanged = onVoicesChanged
+    })
+  }, [])
 
-  const finalizeTranscript = useCallback(async () => {
-    if (!isSessionActiveRef.current) return
-    clearSilenceTimer()
-    const transcript = `${committedTranscriptRef.current} ${interimTranscriptRef.current}`.trim()
-    if (!transcript || isProcessingRef.current) {
-      if (!transcript) onError?.("No speech detected. Please speak again.")
-      return
-    }
-    isProcessingRef.current = true
-    setIsProcessing(true)
-    setFinalTranscript(transcript)
-    setLiveTranscript("")
-    committedTranscriptRef.current = ""
-    interimTranscriptRef.current = ""
-    setIsUserSpeaking(false)
-    shouldListenRef.current = false
-    recognitionRef.current?.stop()
-    const responseDurationMs = responseStartAtRef.current ? Date.now() - responseStartAtRef.current : 0
-    const words = transcript.split(/\s+/).filter(Boolean)
-    const responseLength = words.length
-    const fillers = transcript.match(fillerRegex)?.length ?? 0
-    responseCountRef.current += 1
-    totalWordsRef.current += responseLength
-    const avgResponseLength = Math.round(totalWordsRef.current / responseCountRef.current)
-    const confidenceRaw = Math.max(0, Math.min(100, 45 + responseLength * 1.2 - fillers * 4 - liveMetrics.pauseCount * 1.2 + (responseDurationMs > 1800 ? 8 : 0)))
-    const communicationRaw = Math.max(0, Math.min(100, 55 + responseLength - fillers * 5))
-    const engagementRaw = Math.max(0, Math.min(100, 50 + (responseLength > 12 ? 20 : 5) - (responseLength < 5 ? 15 : 0)))
-    setLiveMetrics((prev) => ({
-      ...prev,
-      fillerWordCount: prev.fillerWordCount + fillers,
-      avgResponseLength,
-      confidenceLevel: Math.round((prev.confidenceLevel + confidenceRaw) / 2),
-      communicationClarity: Math.round((prev.communicationClarity + communicationRaw) / 2),
-      engagementScore: Math.round((prev.engagementScore + engagementRaw) / 2),
-      responseLength,
-    }))
-    responseStartAtRef.current = null
-    lastSpeechAtRef.current = null
-    const ok = await submitTranscriptWithRetry(transcript)
-    isProcessingRef.current = false
-    setIsProcessing(false)
-    if (!ok) {
-      shouldListenRef.current = isStarted && !isAISpeaking
-      if (shouldListenRef.current) {
-        try {
-          recognitionRef.current?.start()
-          setIsListening(true)
-        } catch {
-          // no-op
-        }
-      }
-    }
-  }, [clearSilenceTimer, fillerRegex, isAISpeaking, isStarted, liveMetrics.pauseCount, onError, submitTranscriptWithRetry])
-
-  const startListening = useCallback(() => {
-    if (!recognitionRef.current || isProcessingRef.current || !isStarted || isMicBlocked) return
-    try {
-      clearRestartListenTimer()
-      clearRecognitionMaxDurationTimer()
-      shouldListenRef.current = true
-      recognitionRef.current.lang = recognitionLang
-      recognitionRef.current.start()
-      setIsListening(true)
-      recognitionMaxDurationTimerRef.current = window.setTimeout(() => {
-        if (!recognitionRef.current || !shouldListenRef.current || isAISpeaking) return
-        try {
-          recognitionRef.current.stop()
-        } catch {
-          // no-op
-        }
-      }, 55000)
-    } catch {
-      // Ignore duplicate start attempts from browser speech engine.
-    }
-  }, [clearRecognitionMaxDurationTimer, clearRestartListenTimer, isAISpeaking, isMicBlocked, isStarted, onError, recognitionLang])
-
-  const speakText = useCallback(
-    async (text: string, options?: { finalChunk?: boolean; skipStartDelay?: boolean; onEnd?: () => void }) => {
-      if (!text?.trim() || typeof window === "undefined" || !("speechSynthesis" in window)) return
-      const finalChunk = options?.finalChunk ?? true
-      const skipStartDelay = options?.skipStartDelay ?? false
-      const onEnd = options?.onEnd
-      let didStart = false
-      let didEnd = false
-      const completeOnce = () => {
-        if (didEnd) return
-        didEnd = true
-        onEnd?.()
-      }
-      if (!skipStartDelay) {
-        await new Promise((resolve) => window.setTimeout(resolve, AI_START_DELAY_MS))
-      }
-      setIsAISpeaking(true)
-      if (skipStartDelay) {
-        // Keep existing subtitle while continuing streaming chunks.
-      } else {
-        setAiSubtitle("")
-      }
-      shouldListenRef.current = false
-      recognitionRef.current?.stop()
-      setIsListening(false)
-      const sentenceChunks = normalizeSpeechText(text)
-        .split(/(?<=[.!?])\s+/)
-        .map((chunk) => chunk.trim())
-        .filter(Boolean)
-      const startTimeout = window.setTimeout(() => {
-        if (!didStart) completeOnce()
-      }, 1500)
-      if (usePremiumVoice && premiumVoiceAllowedRef.current) {
-        try {
-          const ttsText = sentenceChunks.join(" ... ")
-          const audioBlob = await aiInterviewService.synthesizeSpeech({
-            text: ttsText,
-            language,
-            personality,
-          })
-          const url = URL.createObjectURL(audioBlob)
-          const audio = new Audio(url)
-          premiumAudioRef.current = audio
-          setAiSubtitle(ttsText)
-          audio.onplaying = () => {
-            didStart = true
-          }
-          audio.onended = () => {
-            setIsAISpeaking(false)
-            premiumAudioRef.current = null
-            URL.revokeObjectURL(url)
-            if (isStarted && finalChunk) startListening()
-            window.clearTimeout(startTimeout)
-            completeOnce()
-          }
-          audio.onerror = () => {
-            setUsePremiumVoice(false)
-            setIsAISpeaking(false)
-            premiumAudioRef.current = null
-            URL.revokeObjectURL(url)
-            if (isStarted && finalChunk) startListening()
-            window.clearTimeout(startTimeout)
-            completeOnce()
-          }
-          await audio.play()
+  const speakAndWait = useCallback(
+    (text: string) =>
+      new Promise<void>((resolve) => {
+        if (!text?.trim() || typeof window === "undefined" || !("speechSynthesis" in window)) {
+          resolve()
           return
-        } catch {
-          premiumVoiceAllowedRef.current = false
-          setUsePremiumVoice(false)
         }
-      }
-      window.speechSynthesis.cancel()
-      const voices = availableVoices.length ? availableVoices : window.speechSynthesis.getVoices()
-      const voice =
-        voices.find((item) => item.lang.includes(recognitionLang)) ??
-        voices.find((item) => item.lang.toLowerCase().includes(language)) ??
-        voices.find((item) => item.lang.toLowerCase().startsWith(recognitionLang.toLowerCase())) ??
-        null
-      console.log("Speaking AI question:", text)
-      for (let i = 0; i < sentenceChunks.length; i += 1) {
-        const chunk = sentenceChunks[i]
-        const normalizedChunk = normalizeSpeechText(chunk).toLowerCase()
-        if (!normalizedChunk || normalizedChunk === lastSpokenSentenceRef.current) continue
-        if (chunk.trim().endsWith("?")) {
-          await new Promise((resolve) => window.setTimeout(resolve, 90))
-        }
-        setAiSubtitle((prev) => (prev ? `${prev} ${chunk}` : chunk))
-        const utterance = new SpeechSynthesisUtterance(chunk)
-        utterance.lang = recognitionLang
-        const baseRate = 0.98 + Math.random() * 0.05
-        utterance.rate = i === sentenceChunks.length - 1 && chunk.includes("?") ? Math.max(0.92, baseRate - 0.04) : baseRate
-        if (voice) utterance.voice = voice
-        await new Promise<void>((resolve) => {
+        void (async () => {
+          const synth = window.speechSynthesis
+          const voices = await getVoicesAsync()
+          const isHindi = /[\u0900-\u097F]/.test(text)
+          console.log("🔊 About to speak:", text)
+          console.log("Available voices:", voices.length)
+          synth.cancel()
+          const utterance = new SpeechSynthesisUtterance(text)
+          let selectedVoice: SpeechSynthesisVoice | null = null
+          if (isHindi) {
+            selectedVoice = voices.find((v) => v.lang === "hi-IN") || null
+          }
+          if (!selectedVoice) {
+            selectedVoice = voices.find((v) => v.lang.startsWith("en")) || null
+          }
+          if (!selectedVoice) {
+            selectedVoice = voices[0] || null
+          }
+          if (selectedVoice) {
+            utterance.voice = selectedVoice
+            console.log("Using voice:", selectedVoice.name, selectedVoice.lang)
+          }
+          utterance.lang = isHindi ? "hi-IN" : "en-US"
+          utterance.rate = 1
+          utterance.pitch = 1
+          utterance.volume = 1
           utterance.onstart = () => {
-            didStart = true
-            setIsAISpeaking(true)
+            console.log("TTS STARTED")
           }
           utterance.onend = () => {
-            lastSpokenSentenceRef.current = normalizedChunk
+            console.log("TTS ENDED")
             resolve()
           }
-          utterance.onerror = () => resolve()
-          window.speechSynthesis.speak(utterance)
-        })
-        if (i < sentenceChunks.length - 1) {
-          await new Promise((resolve) => window.setTimeout(resolve, AI_SENTENCE_PAUSE_MS))
-        }
-      }
-      setIsAISpeaking(false)
-      if (isStarted && finalChunk) startListening()
-      window.clearTimeout(startTimeout)
-      completeOnce()
-    },
-    [AI_SENTENCE_PAUSE_MS, AI_START_DELAY_MS, availableVoices, isStarted, language, normalizeSpeechText, personality, recognitionLang, startListening, usePremiumVoice],
+          utterance.onerror = (e) => {
+            console.error("TTS ERROR", e)
+            resolve()
+          }
+          window.setTimeout(() => {
+            synth.speak(utterance)
+            console.log("🔊 Speak triggered")
+          }, 150)
+        })()
+      }),
+    [getVoicesAsync],
   )
 
-  useEffect(() => {
-    if (typeof window === "undefined") return
-    const SpeechCtor = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition
-    if (!SpeechCtor) {
-      setIsSpeechSupported(false)
-      return
-    }
-    setIsSpeechSupported(true)
-    const recognition = new SpeechCtor() as SpeechRecognitionLike
-    recognition.continuous = true
-    recognition.interimResults = true
-    recognition.lang = recognitionLang
-    recognition.onresult = (event: any) => {
-      if (!isSessionActiveRef.current) return
-      // Only treat as user barge-in while actively listening.
-      if (isListening && shouldListenRef.current) {
-        cancelAISpeech()
-      }
-      let interimChunk = ""
-      for (let i = event.resultIndex; i < event.results.length; i += 1) {
-        const value = event.results[i][0]?.transcript ?? ""
-        if (!value) continue
-        if (event.results[i].isFinal) {
-          committedTranscriptRef.current = `${committedTranscriptRef.current} ${value}`.trim()
-        } else {
-          interimChunk = `${interimChunk} ${value}`.trim()
-        }
-      }
-      interimTranscriptRef.current = interimChunk
-      const combined = `${committedTranscriptRef.current} ${interimTranscriptRef.current}`.trim()
-      if (!combined) return
-      if (!responseStartAtRef.current) responseStartAtRef.current = Date.now()
-      const now = Date.now()
-      if (lastSpeechAtRef.current && now - lastSpeechAtRef.current > 1200) {
-        setLiveMetrics((prev) => ({ ...prev, pauseCount: prev.pauseCount + 1 }))
-      }
-      lastSpeechAtRef.current = now
-      const liveFillers = combined.match(fillerRegex)?.length ?? 0
-      setLiveTranscript(combined)
-      setIsUserSpeaking(true)
-      setLiveMetrics((prev) => ({
-        ...prev,
-        fillerWordCount: Math.max(prev.fillerWordCount, liveFillers),
-        responseLength: combined.split(/\s+/).filter(Boolean).length,
-      }))
-      clearSilenceTimer()
-      silenceTimerRef.current = window.setTimeout(() => {
-        void finalizeTranscript()
-      }, SILENCE_MS)
-    }
-    recognition.onerror = (event: any) => {
-      if (event?.error === "network") {
-        onError?.("Network issue detected. Retrying speech recognition...")
-        shouldListenRef.current = isStarted && !isAISpeaking
-      } else if (event?.error === "no-speech") {
-        onError?.("No speech detected. Please speak clearly and try again.")
-      } else if (event?.error === "not-allowed" || event?.error === "service-not-allowed") {
-        shouldListenRef.current = false
-        setIsMicBlocked(true)
-        if (!micPermissionWarnedRef.current) {
-          micPermissionWarnedRef.current = true
-          onError?.("Microphone permission is blocked. AI voice will continue; you can type responses manually.")
-        }
-      } else {
-        onError?.(event?.error || "Speech recognition error.")
-      }
-      setIsListening(false)
-      setIsUserSpeaking(false)
-    }
-    recognition.onend = () => {
-      setIsListening(false)
-      clearRecognitionMaxDurationTimer()
-      if (isSessionActiveRef.current && shouldListenRef.current && isStarted && !isAISpeaking) {
-        clearRestartListenTimer()
-        restartListenTimerRef.current = window.setTimeout(() => {
-          try {
-            recognition.start()
-            setIsListening(true)
-          } catch {
-            // ignore browser start race
-          }
-        }, 150)
-      }
-    }
-    recognitionRef.current = recognition
-
-    return () => {
-      clearSilenceTimer()
-      clearRestartListenTimer()
-      clearRecognitionMaxDurationTimer()
-      try {
-        recognition.stop()
-      } catch {
-        // ignore browser shutdown race
-      }
-      recognitionRef.current = null
-    }
-  }, [SILENCE_MS, cancelAISpeech, clearRecognitionMaxDurationTimer, clearRestartListenTimer, clearSilenceTimer, fillerRegex, finalizeTranscript, isAISpeaking, isStarted, onError, recognitionLang])
-
-  useEffect(() => {
-    return () => {
-      cancelAISpeech()
-    }
-  }, [cancelAISpeech])
-
-  useEffect(() => {
-    if (isStarted && !finalFeedback) {
-      isSessionActiveRef.current = true
-    }
-  }, [finalFeedback, isStarted])
-
-  useEffect(() => {
-    if (!currentQuestion?.trim()) return
-    if (lastSpokenQuestionRef.current === currentQuestion) return
-    console.log("Trigger TTS:", currentQuestion)
-    lastSpokenQuestionRef.current = currentQuestion
-    const preview = currentQuestionPreview?.trim() || ""
-    const full = normalizeSpeechText(currentQuestion)
-    const normalizedPreview = normalizeSpeechText(preview)
-    const canSplitWithPreview = Boolean(normalizedPreview) && full.startsWith(normalizedPreview)
-    let remaining = canSplitWithPreview ? full.slice(normalizedPreview.length).trim() : ""
-    remaining = normalizeSpeechText(remaining)
-    if (/^[,.;:!?-]/.test(remaining) || remaining.length < 10) {
-      remaining = ""
-    }
-    console.log("Preview:", preview || "(none)")
-    console.log("Remaining:", remaining || "(none)")
-    const speakTimer = window.setTimeout(() => {
-      void (async () => {
-        if (canSplitWithPreview && normalizedPreview) {
-          await speakText(normalizedPreview, { finalChunk: !remaining, skipStartDelay: true })
-          if (remaining) {
-            await new Promise((resolve) => window.setTimeout(resolve, 100))
-            await speakText(remaining, { finalChunk: true, skipStartDelay: true })
-          }
+  const listenOnce = useCallback(
+    () =>
+      new Promise<string | null>((resolve) => {
+        if (typeof window === "undefined") {
+          resolve(null)
           return
         }
-        await speakText(full, { finalChunk: true })
-      })()
-    }, 140)
-    return () => window.clearTimeout(speakTimer)
-  }, [currentQuestion, currentQuestionPreview, normalizeSpeechText, speakText])
+        const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition
+        if (!SpeechRecognition) {
+          console.error("SpeechRecognition not supported")
+          resolve(null)
+          return
+        }
+        if (!isMicEnabled) {
+          resolve(null)
+          return
+        }
+        void (async () => {
+          try {
+            await navigator.mediaDevices.getUserMedia({ audio: true })
+          } catch {
+            setIsMicBlocked(true)
+            console.error("❌ Mic permission denied")
+            resolve(null)
+            return
+          }
+          const recognition = new SpeechRecognition()
+          let resolved = false
+          recognition.lang = "en-US"
+          recognition.continuous = false
+          recognition.interimResults = false
+          recognition.onstart = () => {
+            console.log("🎤 Listening started")
+          }
+          recognition.onresult = (event: any) => {
+            if (resolved) return
+            resolved = true
+            const recognizedText = String(event?.results?.[0]?.[0]?.transcript || "").trim()
+            console.log("🎤 User said:", recognizedText)
+            setLiveTranscript(recognizedText)
+            setFinalTranscript(recognizedText)
+            resolve(recognizedText || null)
+          }
+          recognition.onerror = (event: any) => {
+            if (String(event?.error || "").includes("not-allowed")) setIsMicBlocked(true)
+            console.error("STT ERROR:", event)
+            if (resolved) return
+            resolved = true
+            resolve(null)
+          }
+          recognition.onend = () => {
+            console.log("🎤 Listening ended")
+            if (resolved) return
+            resolved = true
+            resolve(null)
+          }
+          stopRecognitionRef.current = () => {
+            try {
+              recognition.stop()
+            } catch {
+              // no-op
+            }
+          }
+          recognition.start()
+          window.setTimeout(() => {
+            if (resolved) return
+            try {
+              recognition.stop()
+            } catch {
+              // no-op
+            }
+            resolved = true
+            resolve(null)
+          }, 6000)
+        })()
+      }),
+    [isMicEnabled],
+  )
+
+  const runVoiceLoop = useCallback(async (initialQuestion: string) => {
+    if (runLoopRef.current) return
+    runLoopRef.current = true
+    console.log("Initial question received:", initialQuestion)
+    console.log("Voice loop started")
+    let currentQ = String(initialQuestion || "").trim()
+    try {
+      while (true) {
+        console.log("Loop iteration")
+        const textToSpeak = currentQ || "Please introduce yourself"
+        console.log("About to speak:", currentQ)
+        console.log("Speaking text:", textToSpeak)
+        console.log("AI speaking:", textToSpeak)
+        setConversationState("ai-speaking")
+        setIsAISpeaking(true)
+        setAiSubtitle(textToSpeak)
+        console.log("AI SPEAK START")
+        await speakAndWait(textToSpeak)
+        console.log("AI SPEAK END")
+        setIsAISpeaking(false)
+        await delay(800)
+        console.log("Listening...")
+        console.log("MIC START")
+        setConversationState("user-listening")
+        setIsListening(true)
+        setIsUserSpeaking(true)
+        const userText = await listenOnce()
+        console.log("MIC END")
+        setIsListening(false)
+        setIsUserSpeaking(false)
+        console.log("MIC RESULT:", userText)
+        console.log("User said:", userText)
+        if (!userText) {
+          await speakAndWait("I didn't hear anything, please repeat.")
+          continue
+        }
+        const words = userText.split(/\s+/).filter(Boolean).length
+        responseCountRef.current += 1
+        totalWordsRef.current += words
+        setLiveMetrics((prev) => ({
+          ...prev,
+          avgResponseLength: Math.round(totalWordsRef.current / Math.max(1, responseCountRef.current)),
+          responseLength: words,
+          confidenceLevel: Math.max(40, Math.min(100, prev.confidenceLevel + 2)),
+          communicationClarity: Math.max(40, Math.min(100, prev.communicationClarity + 1)),
+        }))
+        setIsProcessing(true)
+        setConversationState("processing")
+        const response = await onSubmitTranscript(userText)
+        setIsProcessing(false)
+        if (!response || response.is_end) {
+          console.log("Interview ended")
+          break
+        }
+        currentQ = String(response.next_question || "").trim()
+      }
+    } catch (err) {
+      console.error("VOICE LOOP ERROR:", err)
+    }
+    setConversationState("idle")
+    setIsListening(false)
+    setIsAISpeaking(false)
+    setIsUserSpeaking(false)
+    setIsProcessing(false)
+    runLoopRef.current = false
+  }, [delay, listenOnce, onSubmitTranscript, speakAndWait])
+
+  const handleStart = useCallback(async () => {
+    playCue(720)
+    console.log("Starting voice interview...")
+    if (typeof window !== "undefined" && "speechSynthesis" in window) {
+      const synth = window.speechSynthesis
+      const unlock = new SpeechSynthesisUtterance(" ")
+      unlock.volume = 0
+      synth.speak(unlock)
+      await new Promise<void>((res) => {
+        const voices = synth.getVoices()
+        if (voices.length) {
+          res()
+          return
+        }
+        synth.onvoiceschanged = () => {
+          synth.onvoiceschanged = null
+          res()
+        }
+      })
+    }
+    const response = await onStartInterview()
+    let firstQuestion = "Please introduce yourself"
+    if (response && typeof response === "object" && response.next_question) {
+      firstQuestion = response.next_question
+    } else if (typeof response === "string") {
+      firstQuestion = response
+    }
+    console.log("First question resolved:", firstQuestion)
+    if (!firstQuestion || typeof firstQuestion !== "string") {
+      console.error("Invalid first question, aborting loop")
+      return
+    }
+    await runVoiceLoop(firstQuestion)
+  }, [onStartInterview, runVoiceLoop])
+
+  useEffect(() => {
+    const SpeechCtor = typeof window !== "undefined" ? (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition : null
+    setIsSpeechSupported(Boolean(SpeechCtor))
+    if (typeof window !== "undefined" && window.location.protocol !== "https:" && window.location.hostname !== "localhost") {
+      console.warn("⚠️ Voice features require HTTPS")
+    }
+  }, [])
 
   const fallbackManualSend = async () => {
     const text = (manualResponse || finalTranscript).trim()
@@ -578,12 +406,9 @@ export function InterviewRoom({
   useEffect(() => {
     if (!finalFeedback || finalSummarySpokenRef.current) return
     finalSummarySpokenRef.current = true
-    isSessionActiveRef.current = false
-    clearSilenceTimer()
-    clearRestartListenTimer()
-    clearRecognitionMaxDurationTimer()
-    stopListening()
-    shouldListenRef.current = false
+    runLoopRef.current = false
+    stopRecognitionRef.current?.()
+    setConversationState("ai-speaking")
     const topStrength = finalFeedback.strengths?.[0] || "clear communication"
     const topSuggestion = finalFeedback.suggestions?.[0] || "give more structured answers"
     const scoreText = typeof finalScore === "number" ? finalScore : finalFeedback.score
@@ -591,12 +416,36 @@ export function InterviewRoom({
       language === "hi"
         ? `आपके समय के लिए धन्यवाद। आपका कुल स्कोर ${scoreText} है। आपकी एक मुख्य ताकत ${topStrength} रही। सुधार के लिए ${topSuggestion} पर काम करें।`
         : `Thank you for your time. Your overall score is ${scoreText}. One key strength was ${topStrength}. One improvement area is to ${topSuggestion}.`
-    void speakText(summaryText, {
-      finalChunk: false,
-      skipStartDelay: false,
-      onEnd: () => onFinalSummaryEnd?.(),
-    })
-  }, [finalFeedback, finalScore, language, onFinalSummaryEnd, speakText])
+    void (async () => {
+      await speakAndWait(summaryText)
+      onFinalSummaryEnd?.()
+    })()
+  }, [finalFeedback, finalScore, language, onFinalSummaryEnd, speakAndWait])
+
+  useEffect(() => {
+    if (!isStarted) {
+      runLoopRef.current = false
+      stopRecognitionRef.current?.()
+      if (typeof window !== "undefined" && "speechSynthesis" in window) {
+        window.speechSynthesis.cancel()
+      }
+      setConversationState("idle")
+      setIsListening(false)
+      setIsAISpeaking(false)
+      setIsUserSpeaking(false)
+    }
+  }, [isStarted])
+
+  useEffect(() => {
+    return () => {
+      isMountedRef.current = false
+      runLoopRef.current = false
+      stopRecognitionRef.current?.()
+      if (typeof window !== "undefined" && "speechSynthesis" in window) {
+        window.speechSynthesis.cancel()
+      }
+    }
+  }, [])
 
   return (
     <div className="dashboard-overview-card bg-gradient-to-b from-white to-sage/5 p-5 transition-opacity duration-300 dark:from-emerald-950/40 dark:to-emerald-900/20">
@@ -640,13 +489,16 @@ export function InterviewRoom({
             {isAISpeaking ? "AI is speaking..." : "AI idle"}
           </span>
           <span className={`rounded-full px-3 py-1 ${isBusy || isProcessing ? "bg-violet-100 text-violet-700 dark:bg-violet-900/40 dark:text-violet-300" : "bg-slate-200 text-slate-600 dark:bg-emerald-950/40 dark:text-emerald-300"}`}>
-            {isBusy || isProcessing ? "Analyzing your answer..." : "AI ready"}
+            {isBusy || isProcessing ? "AI is thinking..." : "AI ready"}
           </span>
           <span className={`rounded-full px-3 py-1 ${isListening ? "bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300" : "bg-slate-200 text-slate-600 dark:bg-emerald-950/40 dark:text-emerald-300"}`}>
             {isListening ? "Listening..." : "Not listening"}
           </span>
           <span className={`rounded-full px-3 py-1 ${isUserSpeaking ? "bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300" : "bg-slate-200 text-slate-600 dark:bg-emerald-950/40 dark:text-emerald-300"}`}>
             {isUserSpeaking ? "User speaking..." : "Silence"}
+          </span>
+          <span className="rounded-full bg-slate-200 px-3 py-1 text-slate-600 dark:bg-emerald-950/40 dark:text-emerald-300">
+            Turn: {conversationState}
           </span>
           {isAISpeaking && <span className="h-2 w-8 animate-pulse rounded-full bg-emerald-400/80" />}
           {isAISpeaking && (
@@ -704,16 +556,31 @@ export function InterviewRoom({
       <div className="mt-5 flex flex-wrap items-center gap-3">
         <button
           type="button"
-          onClick={() => {
-            playCue(720)
-            console.log("Start interview triggered")
-            onStartInterview()
-          }}
+          onClick={() => void handleStart()}
           disabled={isStarted || isBusy}
           className="flex h-12 min-w-[140px] items-center justify-center gap-2 rounded-2xl bg-emerald-600 px-4 text-sm font-semibold text-white hover:bg-emerald-500 disabled:cursor-not-allowed disabled:opacity-50"
         >
           <Play className="h-4 w-4" />
           Start Interview
+        </button>
+        <button
+          type="button"
+          onClick={() => {
+            if (!isStarted) return
+            setIsMicEnabled((prev) => {
+              const next = !prev
+              if (!next) {
+                stopRecognitionRef.current?.()
+                setIsListening(false)
+              }
+              return next
+            })
+          }}
+          disabled={!isStarted || isBusy}
+          className="flex h-12 min-w-[120px] items-center justify-center gap-2 rounded-2xl border border-slate-300 bg-white px-4 text-sm font-semibold text-slate-700 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-50 dark:border-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-200"
+        >
+          {isMicEnabled ? <Mic className="h-4 w-4" /> : <MicOff className="h-4 w-4" />}
+          {isMicEnabled ? "Mic On" : "Mic Off"}
         </button>
         <button
           type="button"
@@ -754,7 +621,7 @@ export function InterviewRoom({
         {isStarted && currentQuestion?.trim() && (
           <button
             type="button"
-            onClick={() => void speakText(currentQuestion, { finalChunk: false, skipStartDelay: true })}
+            onClick={() => void speakAndWait(currentQuestion)}
             className="h-12 rounded-2xl border border-emerald-300 bg-emerald-50 px-4 text-sm font-semibold text-emerald-700 hover:bg-emerald-100 dark:border-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-200 dark:hover:bg-emerald-900/50"
           >
             Repeat AI Question

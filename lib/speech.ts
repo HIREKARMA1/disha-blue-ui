@@ -70,12 +70,24 @@ async function translateForSpeech(text: string, targetLang: "en" | "hi"): Promis
   return translateToHindiForSpeech(source)
 }
 
-export async function speakText(text: string, lang?: "en" | "hi") {
+export interface SpeakTextOptions {
+  lang?: "en" | "hi"
+  onStart?: () => void
+  onEnd?: () => void
+  onError?: (error: unknown) => void
+}
+
+export async function speakText(text: string, langOrOptions?: "en" | "hi" | SpeakTextOptions) {
+  const options: SpeakTextOptions =
+    typeof langOrOptions === "string" || typeof langOrOptions === "undefined"
+      ? { lang: langOrOptions }
+      : langOrOptions
   if (typeof window === "undefined" || !("speechSynthesis" in window)) {
     console.error("TTS: speechSynthesis is not available in this environment.")
+    options.onError?.("speechSynthesis_not_available")
     return
   }
-  const selectedLang = lang || getSignupLanguage()
+  const selectedLang = options.lang || getSignupLanguage()
   const synth = window.speechSynthesis
   attachVoicesListener(synth)
 
@@ -128,10 +140,18 @@ export async function speakText(text: string, lang?: "en" | "hi") {
   utterance.rate = 1
   utterance.pitch = 1
   utterance.volume = 1
+  utterance.onstart = () => {
+    options.onStart?.()
+  }
+  utterance.onend = () => {
+    options.onEnd?.()
+  }
   utterance.onerror = (ev) => {
     const err = String((ev as any)?.error || "")
     if (err === "canceled" && replacingUtterance) return
     console.error("TTS: SpeechSynthesisUtterance error:", ev?.error || ev)
+    options.onError?.(ev?.error || ev)
+    options.onEnd?.()
   }
   replacingUtterance = synth.speaking || synth.pending
   if (replacingUtterance) synth.cancel()
