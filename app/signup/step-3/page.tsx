@@ -42,12 +42,13 @@ export default function SignupStep3Page() {
 
   const saveStepData = async () => {
     console.log("SAVE API CALL START")
+    const skills = normalize(skillsText)
+    const meta = skills.map((name) => {
+      const found = skillsMeta.find((item) => item.name.toLowerCase() === name.toLowerCase())
+      return found || { name, source: "verified" as const }
+    })
+    saveSignupData({ ...initial, skills, skillsMeta: meta })
     try {
-      const skills = normalize(skillsText)
-      const meta = skills.map((name) => {
-        const found = skillsMeta.find((item) => item.name.toLowerCase() === name.toLowerCase())
-        return found || { name, source: "verified" as const }
-      })
       const response = await saveStep("step-3", { skills: meta }, initial.userId)
       console.log("SAVE API RESPONSE:", response)
       saveSignupData({ ...initial, skills, skillsMeta: meta })
@@ -64,16 +65,18 @@ export default function SignupStep3Page() {
     console.log("STEP NAV START")
     console.log("STEP:", currentStep)
     setLoading(true)
-    saveStepData()
-      .then(() => {
-        console.log("STEP SAVED OK")
-      })
-      .catch((err) => console.log(err))
-    setOnboardingStep(nextStep)
-    console.log("STEP LOCAL UPDATED:", nextStep)
-    setLoading(false)
-    router.push(nextRoute)
-    console.log("NAVIGATED TO:", nextRoute)
+    try {
+      await saveStepData()
+      console.log("STEP SAVED OK")
+      setOnboardingStep(nextStep)
+      console.log("STEP LOCAL UPDATED:", nextStep)
+      router.push(nextRoute)
+      console.log("NAVIGATED TO:", nextRoute)
+    } catch (err) {
+      console.log(err)
+    } finally {
+      setLoading(false)
+    }
   }
 
   const onSubmit = async (e?: MouseEvent<HTMLButtonElement>) => {

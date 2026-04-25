@@ -54,14 +54,71 @@ export const defaultSignupData: SignupData = {
 let inMemorySignupData: SignupData = defaultSignupData
 let inMemoryStatus: "in_progress" | "completed" | null = null
 let inMemoryStep: "step-1" | "step-2" | "step-3" | "step-4" | "review" | null = null
+let hydratedFromStorage = false
+
+function isClient() {
+  return typeof window !== "undefined"
+}
+
+function hydrateFromStorage() {
+  if (!isClient() || hydratedFromStorage) return
+  hydratedFromStorage = true
+  try {
+    const savedData = localStorage.getItem(KEY)
+    if (savedData) {
+      const parsed = JSON.parse(savedData) as Partial<SignupData>
+      inMemorySignupData = {
+        ...defaultSignupData,
+        ...parsed,
+        basicInfo: { ...defaultSignupData.basicInfo, ...(parsed.basicInfo || {}) },
+        education: {
+          tenth: { ...defaultSignupData.education.tenth, ...(parsed.education?.tenth || {}) },
+          twelfth: { ...defaultSignupData.education.twelfth, ...(parsed.education?.twelfth || {}) },
+          graduation: { ...defaultSignupData.education.graduation, ...(parsed.education?.graduation || {}) },
+        },
+      }
+    }
+    const savedStatus = localStorage.getItem(STATUS_KEY)
+    if (savedStatus === "in_progress" || savedStatus === "completed") {
+      inMemoryStatus = savedStatus
+    }
+    const savedStep = localStorage.getItem(STEP_KEY)
+    if (savedStep === "step-1" || savedStep === "step-2" || savedStep === "step-3" || savedStep === "step-4" || savedStep === "review") {
+      inMemoryStep = savedStep
+    }
+  } catch {
+    // Ignore malformed persisted data and keep defaults.
+  }
+}
+
+function persistData() {
+  if (!isClient()) return
+  localStorage.setItem(KEY, JSON.stringify(inMemorySignupData))
+}
+
+function persistStatus() {
+  if (!isClient()) return
+  if (!inMemoryStatus) {
+    localStorage.removeItem(STATUS_KEY)
+    return
+  }
+  localStorage.setItem(STATUS_KEY, inMemoryStatus)
+}
+
+function persistStep() {
+  if (!isClient()) return
+  if (!inMemoryStep) {
+    localStorage.removeItem(STEP_KEY)
+    return
+  }
+  localStorage.setItem(STEP_KEY, inMemoryStep)
+}
 
 function clearLegacyBrowserStorage() {
-  if (typeof window === "undefined") return
+  if (!isClient()) return
   localStorage.removeItem("onboarding_step")
   localStorage.removeItem("onboarding_data")
   localStorage.removeItem("onboarding_session")
-  localStorage.removeItem(KEY)
-  localStorage.removeItem(STATUS_KEY)
 }
 
 export const resetOnboarding = () => {
@@ -69,51 +126,66 @@ export const resetOnboarding = () => {
   inMemoryStatus = null
   inMemoryStep = null
   clearLegacyBrowserStorage()
+  if (!isClient()) return
+  localStorage.removeItem(KEY)
+  localStorage.removeItem(STATUS_KEY)
+  localStorage.removeItem(STEP_KEY)
 }
 
 export function getOnboardingEntryRoute() {
-  if (typeof window !== "undefined") {
-    localStorage.removeItem("onboarding_step")
-  }
+  hydrateFromStorage()
   return "/signup/step-1"
 }
 
 export function getSignupData(): SignupData {
-  clearLegacyBrowserStorage()
+  hydrateFromStorage()
   return inMemorySignupData
 }
 
 export function saveSignupData(data: SignupData) {
+  hydrateFromStorage()
   inMemorySignupData = data
+  persistData()
 }
 
 export function startOnboardingSession(seed?: Partial<SignupData>) {
+  hydrateFromStorage()
   clearLegacyBrowserStorage()
   const existing = inMemorySignupData
   const next = { ...existing, ...seed }
   inMemorySignupData = next
   inMemoryStatus = "in_progress"
+  persistData()
+  persistStatus()
   return next
 }
 
 export function completeOnboardingSession() {
+  hydrateFromStorage()
   inMemoryStatus = "completed"
   inMemoryStep = "review"
+  persistStatus()
+  persistStep()
 }
 
 export function isOnboardingInProgress() {
+  hydrateFromStorage()
   return inMemoryStatus === "in_progress"
 }
 
 export function isOnboardingCompleted() {
+  hydrateFromStorage()
   return inMemoryStatus === "completed"
 }
 
 export function setOnboardingStep(step: "step-1" | "step-2" | "step-3" | "step-4" | "review") {
+  hydrateFromStorage()
   inMemoryStep = step
+  persistStep()
 }
 
 export function getOnboardingStep() {
+  hydrateFromStorage()
   return inMemoryStep
 }
 
