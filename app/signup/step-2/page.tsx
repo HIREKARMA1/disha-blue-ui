@@ -117,6 +117,7 @@ export default function SignupStep2Page() {
 
   const saveStepData = async () => {
     console.log("SAVE API CALL START")
+    saveSignupData({ ...initial, education })
     try {
       const response = await saveStep("step-2", { education }, initial.userId)
       console.log("SAVE API RESPONSE:", response)
@@ -134,16 +135,18 @@ export default function SignupStep2Page() {
     console.log("STEP NAV START")
     console.log("STEP:", currentStep)
     setLoading(true)
-    saveStepData()
-      .then(() => {
-        console.log("STEP SAVED OK")
-      })
-      .catch((err) => console.log(err))
-    setOnboardingStep(nextStep)
-    console.log("STEP LOCAL UPDATED:", nextStep)
-    setLoading(false)
-    router.push(nextRoute)
-    console.log("NAVIGATED TO:", nextRoute)
+    try {
+      await saveStepData()
+      console.log("STEP SAVED OK")
+      setOnboardingStep(nextStep)
+      console.log("STEP LOCAL UPDATED:", nextStep)
+      router.push(nextRoute)
+      console.log("NAVIGATED TO:", nextRoute)
+    } catch (err) {
+      console.log(err)
+    } finally {
+      setLoading(false)
+    }
   }
 
   const onSubmit = async (e?: MouseEvent<HTMLButtonElement>) => {
