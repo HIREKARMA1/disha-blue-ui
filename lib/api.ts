@@ -895,7 +895,7 @@ class ApiClient {
     sessionId: string;
     userText: string;
     language: string;
-  }): Promise<{ sessionId: string; detectedLanguage: string; aiText: string }> {
+  }): Promise<{ sessionId: string; detectedLanguage: string; aiText: string; fallbackUsed?: boolean }> {
     const response: AxiosResponse = await this.client.post('/ai-communication/message', data);
     return response.data;
   }

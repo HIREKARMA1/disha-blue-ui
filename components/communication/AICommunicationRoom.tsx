@@ -48,9 +48,22 @@ export function AICommunicationRoom() {
   const [isBusy, setIsBusy] = useState(false)
   const [isEndingSession, setIsEndingSession] = useState(false)
   const [lastAudioUrl, setLastAudioUrl] = useState<string | null>(null)
+  const preferBrowserTts = true
 
   const recognitionRef = useRef<any>(null)
   const audioRef = useRef<HTMLAudioElement | null>(null)
+
+  const buildLocalEvaluation = (): Evaluation => ({
+    fluency: Math.min(100, Math.max(45, 50 + Math.min(30, transcript.length * 5))),
+    confidence: Math.min(100, Math.max(40, 48 + Math.min(30, transcript.length * 4))),
+    grammar: Math.min(100, Math.max(50, 55 + Math.min(25, transcript.length * 3))),
+    suggestions: [
+      "Keep responses in 2-3 concise, structured sentences.",
+      "Add one concrete example when answering follow-up questions.",
+      "Pause briefly between ideas to improve clarity and confidence.",
+    ],
+    summary: "Session ended with local fallback evaluation due provider/network delay.",
+  })
 
   const formattedTime = useMemo(() => {
     const mm = String(Math.floor(seconds / 60)).padStart(2, "0")
@@ -84,6 +97,22 @@ export function AICommunicationRoom() {
   }
 
   const speakAIResponse = async (text: string) => {
+    if (preferBrowserTts && "speechSynthesis" in window) {
+      try {
+        setIsAiSpeaking(true)
+        window.speechSynthesis.cancel()
+        const utterance = new SpeechSynthesisUtterance(text)
+        utterance.lang = language
+        await new Promise<void>((resolve) => {
+          utterance.onend = () => resolve()
+          utterance.onerror = () => resolve()
+          window.speechSynthesis.speak(utterance)
+        })
+        return
+      } finally {
+        setIsAiSpeaking(false)
+      }
+    }
     try {
       setIsAiSpeaking(true)
       const audioBlob = await apiClient.getAICommunicationTTS(text, language)
@@ -125,6 +154,9 @@ export function AICommunicationRoom() {
       const aiTurn: Turn = { role: "ai", text: response.aiText, language: response.detectedLanguage || language }
       setTranscript((prev) => [...prev, aiTurn])
       await speakAIResponse(response.aiText)
+      if ((response as any).fallbackUsed) {
+        toast("AI quota exhausted, using local fallback coach mode.")
+      }
     } catch (error: any) {
       toast.error(error?.response?.data?.detail || "AI message request failed")
     } finally {
@@ -181,29 +213,31 @@ export function AICommunicationRoom() {
 
   const endSession = async () => {
     if (!sessionId || isEndingSession) return
+    setIsEndingSession(true)
     stopListening()
+    setIsBusy(false)
+    setIsAiSpeaking(false)
+    audioRef.current?.pause()
+    if ("speechSynthesis" in window) {
+      window.speechSynthesis.cancel()
+    }
     try {
-      setIsEndingSession(true)
-      const feedback = await apiClient.evaluateAICommunication({
-        sessionId,
-        transcript: transcript.map((t) => ({ role: t.role, text: t.text, language: t.language })),
-        language,
-      })
+      const feedback = await Promise.race([
+        apiClient.evaluateAICommunication({
+          sessionId,
+          transcript: transcript.map((t) => ({ role: t.role, text: t.text, language: t.language })),
+          language,
+        }),
+        new Promise<Evaluation>((_, reject) =>
+          setTimeout(() => reject(new Error("Evaluation timeout")), 8000)
+        ),
+      ])
       setEvaluation(feedback)
+      setSessionId(null)
     } catch (error: any) {
-      toast.error(error?.response?.data?.detail || "Evaluation failed")
-      // Do not block the user from ending flow if backend is unavailable.
-      setEvaluation({
-        fluency: 60,
-        confidence: 58,
-        grammar: 62,
-        suggestions: [
-          "Keep answers concise and structured.",
-          "Use one example to support each point.",
-          "Practice pausing instead of using filler words.",
-        ],
-        summary: "Provider is temporarily unavailable. This is a provisional local score.",
-      })
+      toast.error(error?.response?.data?.detail || "Evaluation unavailable. Showing local result.")
+      setEvaluation(buildLocalEvaluation())
+      setSessionId(null)
     } finally {
       setIsEndingSession(false)
     }
@@ -218,6 +252,42 @@ export function AICommunicationRoom() {
     anchor.download = `ai-communication-transcript-${Date.now()}.txt`
     anchor.click()
     URL.revokeObjectURL(url)
+  }
+
+  if (evaluation) {
+    return (
+      <div className="mx-auto w-full max-w-4xl space-y-4">
+        <Card className="space-y-3 p-5">
+          <h3 className="text-lg font-semibold">Assessment Feedback</h3>
+          <div className="grid grid-cols-1 gap-3 text-sm md:grid-cols-3">
+            <div className="rounded-lg border p-3">Fluency: <strong>{evaluation.fluency}</strong>/100</div>
+            <div className="rounded-lg border p-3">Confidence: <strong>{evaluation.confidence}</strong>/100</div>
+            <div className="rounded-lg border p-3">Grammar: <strong>{evaluation.grammar}</strong>/100</div>
+          </div>
+          <p className="text-sm text-muted-foreground">{evaluation.summary}</p>
+          <ul className="list-disc space-y-1 pl-5 text-sm">
+            {evaluation.suggestions.map((s, i) => (
+              <li key={`${s}-${i}`}>{s}</li>
+            ))}
+          </ul>
+          <div className="pt-2">
+            <Button
+              onClick={() => {
+                setEvaluation(null)
+                setTranscript([])
+                setInterimText("")
+                setSeconds(0)
+                setIsBusy(false)
+                setIsAiSpeaking(false)
+                setIsEndingSession(false)
+              }}
+            >
+              Start New Session
+            </Button>
+          </div>
+        </Card>
+      </div>
+    )
   }
 
   return (
@@ -254,7 +324,7 @@ export function AICommunicationRoom() {
           {!sessionId ? (
             <Button onClick={startSession}>Start Session</Button>
           ) : (
-            <Button variant="destructive" onClick={endSession} disabled={isEndingSession || isBusy}>
+            <Button variant="destructive" onClick={endSession} disabled={isEndingSession}>
               <Square className="mr-2 h-4 w-4" /> {isEndingSession ? "Ending..." : "End Session"}
             </Button>
           )}
@@ -322,22 +392,6 @@ export function AICommunicationRoom() {
         </div>
       </Card>
 
-      {evaluation ? (
-        <Card className="space-y-3 p-5">
-          <h3 className="text-lg font-semibold">Assessment Feedback</h3>
-          <div className="grid grid-cols-1 gap-3 text-sm md:grid-cols-3">
-            <div className="rounded-lg border p-3">Fluency: <strong>{evaluation.fluency}</strong>/100</div>
-            <div className="rounded-lg border p-3">Confidence: <strong>{evaluation.confidence}</strong>/100</div>
-            <div className="rounded-lg border p-3">Grammar: <strong>{evaluation.grammar}</strong>/100</div>
-          </div>
-          <p className="text-sm text-muted-foreground">{evaluation.summary}</p>
-          <ul className="list-disc space-y-1 pl-5 text-sm">
-            {evaluation.suggestions.map((s, i) => (
-              <li key={`${s}-${i}`}>{s}</li>
-            ))}
-          </ul>
-        </Card>
-      ) : null}
     </div>
   )
 }
