@@ -69,6 +69,8 @@ export function InterviewRoom({
   const finalSummarySpokenRef = useRef(false)
   const responseCountRef = useRef(0)
   const totalWordsRef = useRef(0)
+  const noInputStreakRef = useRef(0)
+  const currentQuestionRef = useRef("")
 
   const [isListening, setIsListening] = useState(false)
   const [isMicEnabled, setIsMicEnabled] = useState(true)
@@ -81,6 +83,7 @@ export function InterviewRoom({
   const [isProcessing, setIsProcessing] = useState(false)
   const [manualResponse, setManualResponse] = useState("")
   const [aiSubtitle, setAiSubtitle] = useState("")
+  const [awaitingMicResume, setAwaitingMicResume] = useState(false)
   const [liveMetrics, setLiveMetrics] = useState({
     fillerWordCount: 0,
     pauseCount: 0,
@@ -239,20 +242,31 @@ export function InterviewRoom({
           }
           const recognition = new SpeechRecognition()
           let resolved = false
-          recognition.lang = "en-US"
-          recognition.continuous = false
-          recognition.interimResults = false
+          recognition.lang = recognitionLang
+          recognition.continuous = true
+          recognition.interimResults = true
           recognition.onstart = () => {
             console.log("🎤 Listening started")
           }
+          let finalBuffer = ""
           recognition.onresult = (event: any) => {
-            if (resolved) return
-            resolved = true
-            const recognizedText = String(event?.results?.[0]?.[0]?.transcript || "").trim()
-            console.log("🎤 User said:", recognizedText)
-            setLiveTranscript(recognizedText)
-            setFinalTranscript(recognizedText)
-            resolve(recognizedText || null)
+            let interim = ""
+            for (let i = event.resultIndex; i < event.results.length; i += 1) {
+              const result = event.results[i]
+              const chunk = String(result?.[0]?.transcript || "")
+              if (result.isFinal) finalBuffer += `${chunk} `
+              else interim += chunk
+            }
+            const preview = (finalBuffer + interim).trim()
+            if (preview) setLiveTranscript(preview)
+            if (finalBuffer.trim()) {
+              if (resolved) return
+              resolved = true
+              const recognizedText = finalBuffer.trim()
+              console.log("🎤 User said:", recognizedText)
+              setFinalTranscript(recognizedText)
+              resolve(recognizedText)
+            }
           }
           recognition.onerror = (event: any) => {
             if (String(event?.error || "").includes("not-allowed")) setIsMicBlocked(true)
@@ -284,10 +298,10 @@ export function InterviewRoom({
             }
             resolved = true
             resolve(null)
-          }, 6000)
+          }, 10000)
         })()
       }),
-    [isMicEnabled],
+    [isMicEnabled, recognitionLang],
   )
 
   const runVoiceLoop = useCallback(async (initialQuestion: string) => {
@@ -296,10 +310,12 @@ export function InterviewRoom({
     console.log("Initial question received:", initialQuestion)
     console.log("Voice loop started")
     let currentQ = String(initialQuestion || "").trim()
+    currentQuestionRef.current = currentQ
     try {
       while (true) {
         console.log("Loop iteration")
         const textToSpeak = currentQ || "Please introduce yourself"
+        currentQuestionRef.current = textToSpeak
         console.log("About to speak:", currentQ)
         console.log("Speaking text:", textToSpeak)
         console.log("AI speaking:", textToSpeak)
@@ -323,13 +339,30 @@ export function InterviewRoom({
         console.log("MIC RESULT:", userText)
         console.log("User said:", userText)
         if (!userText) {
+          noInputStreakRef.current += 1
+          if (noInputStreakRef.current >= 2) {
+            setAwaitingMicResume(true)
+            setConversationState("idle")
+            await speakAndWait(
+              language === "hi"
+                ? "माइक से आवाज़ नहीं मिल रही। कृपया Resume Mic दबाएं, फिर Listening दिखने पर बोलें।"
+                : "I am not getting your mic clearly. Press Resume Mic, then speak when Listening appears.",
+            )
+            break
+          }
           await speakAndWait(
             language === "hi"
-              ? "मैं आपकी आवाज़ साफ़ नहीं सुन पाया। कृपया थोड़ा धीमे और स्पष्ट बोलें।"
-              : "I could not hear you clearly. Please repeat a bit slower and clearly.",
+              ? noInputStreakRef.current >= 2
+                ? "मुझे आपकी आवाज़ स्पष्ट नहीं मिल रही है। कृपया छोटा उत्तर बोलें या नीचे टाइप करके Send करें।"
+                : "मैं आपकी आवाज़ साफ़ नहीं सुन पाया। कृपया थोड़ा धीमे और स्पष्ट बोलें।"
+              : noInputStreakRef.current >= 2
+                ? "I still could not catch that clearly. Please give a short answer, or type your response and press Send."
+                : "I could not hear you clearly. Please repeat a bit slower and clearly.",
           )
           continue
         }
+        noInputStreakRef.current = 0
+        setAwaitingMicResume(false)
         const words = userText.split(/\s+/).filter(Boolean).length
         responseCountRef.current += 1
         totalWordsRef.current += words
@@ -351,12 +384,14 @@ export function InterviewRoom({
         const nextFromApi = String(response.next_question || "").trim()
         if (nextFromApi) {
           currentQ = nextFromApi
+          currentQuestionRef.current = nextFromApi
         } else {
           // Guard against empty backend payloads to avoid repeating intro forever.
           currentQ =
             language === "hi"
               ? "अच्छा। अब अपने अनुभव से एक वास्तविक उदाहरण साझा कीजिए।"
               : "Good. Now share one real example from your experience with clear outcome."
+          currentQuestionRef.current = currentQ
         }
       }
     } catch (err) {
@@ -416,9 +451,23 @@ export function InterviewRoom({
   const fallbackManualSend = async () => {
     const text = (manualResponse || finalTranscript).trim()
     if (!text || isBusy) return
-    await onSubmitTranscript(text)
+    const response = await onSubmitTranscript(text)
     setFinalTranscript("")
     setManualResponse("")
+    setAwaitingMicResume(false)
+    noInputStreakRef.current = 0
+    const nextQuestion = String(response?.next_question || "").trim()
+    if (nextQuestion && !response?.is_end) {
+      await runVoiceLoop(nextQuestion)
+    }
+  }
+
+  const handleResumeMic = async () => {
+    if (isBusy) return
+    setAwaitingMicResume(false)
+    noInputStreakRef.current = 0
+    const question = currentQuestionRef.current || currentQuestion || "Please introduce yourself"
+    await runVoiceLoop(question)
   }
 
   const playCue = (frequency: number, duration = 0.08) => {
@@ -518,6 +567,9 @@ export function InterviewRoom({
         <p className="text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-emerald-400">Live transcript</p>
         <p className="mt-1 text-sm text-slate-700 dark:text-emerald-100">{liveTranscript || finalTranscript || "Your speech transcript appears here automatically."}</p>
         <p className="mt-2 text-xs text-slate-500 dark:text-emerald-400">AI subtitle: {aiSubtitle || currentQuestion || "Waiting for first question..."}</p>
+        <p className="mt-2 text-xs text-slate-500 dark:text-emerald-400">
+          How to use mic: Wait for <strong>Listening...</strong> status, then speak clearly for 2-10 seconds near your mic.
+        </p>
         <div className="mt-3 flex flex-wrap items-center gap-2 text-xs">
           <span className={`rounded-full px-3 py-1 ${isAISpeaking ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300" : "bg-slate-200 text-slate-600 dark:bg-emerald-950/40 dark:text-emerald-300"}`}>
             {isAISpeaking ? "AI is speaking..." : "AI idle"}
@@ -555,6 +607,11 @@ export function InterviewRoom({
         {isMicBlocked && (
           <div className="mt-2 rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-700 dark:border-amber-900/50 dark:bg-amber-950/20 dark:text-amber-300">
             Voice input disabled, you can type your response. AI voice output is still active.
+          </div>
+        )}
+        {awaitingMicResume && (
+          <div className="mt-2 rounded-xl border border-sky-200 bg-sky-50 px-3 py-2 text-xs text-sky-700 dark:border-sky-900/50 dark:bg-sky-950/20 dark:text-sky-300">
+            We paused auto-listening after multiple missed captures. Press <strong>Resume Mic</strong> and answer when Listening starts.
           </div>
         )}
         {contextHint && (
@@ -628,6 +685,17 @@ export function InterviewRoom({
           <Square className="h-4 w-4" />
           End Interview
         </button>
+        {awaitingMicResume && (
+          <button
+            type="button"
+            onClick={() => void handleResumeMic()}
+            disabled={isBusy}
+            className="flex h-12 min-w-[140px] items-center justify-center gap-2 rounded-2xl bg-sky-600 px-4 text-sm font-semibold text-white hover:bg-sky-500 disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            <Mic className="h-4 w-4" />
+            Resume Mic
+          </button>
+        )}
         {(!isSpeechSupported || isMicBlocked || isStarted) && (
           <div className="flex items-center gap-2">
             <input
