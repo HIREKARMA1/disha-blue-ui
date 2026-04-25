@@ -1,26 +1,34 @@
 /**
  * Application configuration loaded from environment variables
  */
-const requireEnv = (name: string): string => {
-  const value = process.env[name];
+const requireEnvValue = (name: string, value: string | undefined): string => {
   if (!value) {
     throw new Error(`Missing required environment variable: ${name}`);
   }
   return value;
 };
 
+const apiBaseUrl = requireEnvValue(
+  "NEXT_PUBLIC_API_BASE_URL",
+  process.env.NEXT_PUBLIC_API_BASE_URL
+);
+const appUrl = requireEnvValue(
+  "NEXT_PUBLIC_APP_URL",
+  process.env.NEXT_PUBLIC_APP_URL
+);
+
 export const config = {
   // API Configuration
   api: {
-  baseUrl: requireEnv('NEXT_PUBLIC_API_BASE_URL'),
+  baseUrl: apiBaseUrl,
   version: process.env.NEXT_PUBLIC_API_VERSION || 'v1',
-  fullUrl: `${requireEnv('NEXT_PUBLIC_API_BASE_URL')}/api/${process.env.NEXT_PUBLIC_API_VERSION || 'v1'}`,
+  fullUrl: `${apiBaseUrl}/api/${process.env.NEXT_PUBLIC_API_VERSION || 'v1'}`,
   },
   
   // App Configuration
   app: {
   name: process.env.NEXT_PUBLIC_APP_NAME || 'HireKarma',
-  url: requireEnv('NEXT_PUBLIC_APP_URL'),
+  url: appUrl,
   },
   
   // Feature Flags
@@ -39,11 +47,9 @@ export const config = {
  * Validate required environment variables
  */
 export function validateEnvironment() {
-  const requiredVars = [
-  'NEXT_PUBLIC_API_BASE_URL',
-  ];
-  
-  const missingVars = requiredVars.filter(varName => !process.env[varName]);
+  const missingVars: string[] = [];
+  if (!process.env.NEXT_PUBLIC_API_BASE_URL) missingVars.push('NEXT_PUBLIC_API_BASE_URL');
+  if (!process.env.NEXT_PUBLIC_APP_URL) missingVars.push('NEXT_PUBLIC_APP_URL');
   
   if (missingVars.length > 0) {
   console.warn('Missing environment variables:', missingVars);
