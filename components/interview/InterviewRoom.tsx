@@ -4,7 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { Clock3, Mic, MicOff, Play, Square } from "lucide-react"
 import { AIAvatar } from "./AIAvatar"
 import { VideoFeed } from "./VideoFeed"
-import { InterviewFeedback, InterviewLanguage, InterviewPersonality } from "@/services/aiInterviewService"
+import { aiInterviewService, InterviewFeedback, InterviewLanguage, InterviewPersonality } from "@/services/aiInterviewService"
 
 type ConversationState = "idle" | "ai-speaking" | "user-listening" | "processing"
 
@@ -137,57 +137,78 @@ export function InterviewRoom({
     })
   }, [])
 
+  const playApiTTS = useCallback(
+    async (text: string) => {
+      const blob = await aiInterviewService.synthesizeSpeech({
+        text,
+        language,
+        personality,
+      })
+      const audioUrl = URL.createObjectURL(blob)
+      try {
+        const audio = new Audio(audioUrl)
+        await audio.play()
+        await new Promise<void>((resolve) => {
+          audio.onended = () => resolve()
+          audio.onerror = () => resolve()
+        })
+      } finally {
+        URL.revokeObjectURL(audioUrl)
+      }
+    },
+    [language, personality],
+  )
+
   const speakAndWait = useCallback(
     (text: string) =>
       new Promise<void>((resolve) => {
-        if (!text?.trim() || typeof window === "undefined" || !("speechSynthesis" in window)) {
-          resolve()
-          return
-        }
+        if (!text?.trim() || typeof window === "undefined") return resolve()
         void (async () => {
+          const canUseBrowserTts = "speechSynthesis" in window
+          if (!canUseBrowserTts) {
+            try {
+              await playApiTTS(text)
+            } catch (err) {
+              console.error("API TTS fallback failed", err)
+            }
+            return resolve()
+          }
+
           const synth = window.speechSynthesis
           const voices = await getVoicesAsync()
           const isHindi = /[\u0900-\u097F]/.test(text)
-          console.log("🔊 About to speak:", text)
-          console.log("Available voices:", voices.length)
           synth.cancel()
           const utterance = new SpeechSynthesisUtterance(text)
-          let selectedVoice: SpeechSynthesisVoice | null = null
-          if (isHindi) {
-            selectedVoice = voices.find((v) => v.lang === "hi-IN") || null
-          }
-          if (!selectedVoice) {
-            selectedVoice = voices.find((v) => v.lang.startsWith("en")) || null
-          }
-          if (!selectedVoice) {
-            selectedVoice = voices[0] || null
-          }
-          if (selectedVoice) {
-            utterance.voice = selectedVoice
-            console.log("Using voice:", selectedVoice.name, selectedVoice.lang)
-          }
+          let selectedVoice: SpeechSynthesisVoice | null =
+            (isHindi ? voices.find((v) => v.lang === "hi-IN") : null) ||
+            voices.find((v) => v.lang.startsWith(isHindi ? "hi" : "en")) ||
+            voices[0] ||
+            null
+
+          if (selectedVoice) utterance.voice = selectedVoice
           utterance.lang = isHindi ? "hi-IN" : "en-US"
           utterance.rate = 1
           utterance.pitch = 1
           utterance.volume = 1
-          utterance.onstart = () => {
-            console.log("TTS STARTED")
-          }
-          utterance.onend = () => {
-            console.log("TTS ENDED")
+          utterance.onend = () => resolve()
+          utterance.onerror = async (e) => {
+            const ttsError = String((e as any)?.error || "")
+            // "interrupted" happens when synthesis is intentionally cancelled between turns.
+            if (ttsError === "interrupted" || ttsError === "canceled") {
+              return resolve()
+            }
+            console.error("Browser TTS error, trying API fallback", e)
+            try {
+              await playApiTTS(text)
+            } catch (err) {
+              console.error("API TTS fallback failed", err)
+            }
             resolve()
           }
-          utterance.onerror = (e) => {
-            console.error("TTS ERROR", e)
-            resolve()
-          }
-          window.setTimeout(() => {
-            synth.speak(utterance)
-            console.log("🔊 Speak triggered")
-          }, 150)
+          window.setTimeout(() => synth.speak(utterance), 150)
         })()
       }),
-    [getVoicesAsync],
+    [getVoicesAsync, playApiTTS],
   )
 
   const listenOnce = useCallback(
@@ -302,7 +323,11 @@ export function InterviewRoom({
         console.log("MIC RESULT:", userText)
         console.log("User said:", userText)
         if (!userText) {
-          await speakAndWait("I didn't hear anything, please repeat.")
+          await speakAndWait(
+            language === "hi"
+              ? "मैं आपकी आवाज़ साफ़ नहीं सुन पाया। कृपया थोड़ा धीमे और स्पष्ट बोलें।"
+              : "I could not hear you clearly. Please repeat a bit slower and clearly.",
+          )
           continue
         }
         const words = userText.split(/\s+/).filter(Boolean).length
@@ -323,7 +348,16 @@ export function InterviewRoom({
           console.log("Interview ended")
           break
         }
-        currentQ = String(response.next_question || "").trim()
+        const nextFromApi = String(response.next_question || "").trim()
+        if (nextFromApi) {
+          currentQ = nextFromApi
+        } else {
+          // Guard against empty backend payloads to avoid repeating intro forever.
+          currentQ =
+            language === "hi"
+              ? "अच्छा। अब अपने अनुभव से एक वास्तविक उदाहरण साझा कीजिए।"
+              : "Good. Now share one real example from your experience with clear outcome."
+        }
       }
     } catch (err) {
       console.error("VOICE LOOP ERROR:", err)

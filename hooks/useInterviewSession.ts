@@ -106,6 +106,95 @@ function buildSpokenReply(
   return `Good answer. I would rate it ${score ?? 0} out of 10. ${tip || "Try adding a concrete example."} Next question: ${nextQuestion}`
 }
 
+function buildFallbackNextQuestion(
+  language: InterviewLanguage,
+  role: string,
+  mode: InterviewMode,
+  latestAnswer?: string,
+  turnIndex = 1,
+) {
+  const answer = (latestAnswer || "").trim()
+  const compact = answer.split(/\s+/).slice(0, 8).join(" ")
+  const stage = turnIndex % 4
+
+  if (language === "hi") {
+    if (mode === "technical" && stage === 0) {
+      return `${role} role में आपने हाल ही में कौन-सा practical technical task किया और result क्या रहा?`
+    }
+    if (stage === 1) {
+      return `आपने "${compact || "अपने अनुभव"}" बताया। अब STAR format में explain करें: situation, action, result.`
+    }
+    if (stage === 2) {
+      return "अच्छा। अब बताइए उस काम में सबसे बड़ा challenge क्या था और आपने उसे कैसे solve किया?"
+    }
+    if (stage === 3) {
+      return "टीम के साथ काम करते समय आपने communication कैसे manage किया? एक real example दीजिए।"
+    }
+    return "बहुत बढ़िया। अब एक measurable outcome बताइए जिससे impact clear हो।"
+  }
+  if (mode === "technical" && stage === 0) {
+    return `For the ${role} role, describe one recent technical task you solved and the measurable outcome.`
+  }
+  if (stage === 1) {
+    return `You mentioned "${compact || "your background"}". Reframe it in STAR format: situation, action, and result.`
+  }
+  if (stage === 2) {
+    return "What was the hardest challenge in that experience, and what exact steps did you take to resolve it?"
+  }
+  if (stage === 3) {
+    return "How did you communicate with your team/stakeholders during that work? Give one real example."
+  }
+  return "Good answer. Add one quantifiable impact (time saved, accuracy improved, cost reduced, etc.)."
+}
+
+function sanitizeNextQuestion(
+  nextQuestion: string | null | undefined,
+  language: InterviewLanguage,
+  role: string,
+  mode: InterviewMode,
+  latestAnswer?: string,
+  turnIndex = 1,
+) {
+  const cleaned = String(nextQuestion || "").trim()
+  if (!cleaned) return buildFallbackNextQuestion(language, role, mode, latestAnswer, turnIndex)
+  return cleaned
+}
+
+function buildLocalInterviewFallbackFeedback(language: InterviewLanguage): InterviewFeedback {
+  const hindi = language === "hi"
+  return {
+    score: 68,
+    overall_score: 68,
+    communication: 70,
+    confidence: 66,
+    technical: 67,
+    problem_solving: 66,
+    communication_avg: 6.9,
+    technical_avg: 6.7,
+    confidence_avg: 6.6,
+    emotional_state: "balanced",
+    strengths: hindi
+      ? ["स्पष्ट बोलने का प्रयास", "संवाद जारी रखने की क्षमता"]
+      : ["Consistent speaking effort", "Good conversational continuity"],
+    weaknesses: hindi
+      ? ["कुछ उत्तर छोटे रहे", "उदाहरण और ठोस हो सकते हैं"]
+      : ["Some answers were short", "Examples can be more concrete"],
+    suggestions: hindi
+      ? ["STAR format में जवाब दें", "हर उत्तर में एक उदाहरण दें", "छोटे और structured points बोलें"]
+      : ["Use STAR format", "Add one concrete example per answer", "Keep answers short and structured"],
+    timeline: [62, 64, 66, 67, 68],
+    improvement_areas: hindi ? ["उत्तर की गहराई", "तकनीकी स्पष्टता"] : ["Answer depth", "Technical clarity"],
+    learning_path: hindi
+      ? ["रोज 15 मिनट mock interview practice", "Role-specific scenario drills"]
+      : ["Daily 15-minute mock interview practice", "Role-specific scenario drills"],
+    performance_personality: hindi ? "विकसित हो रहा कम्युनिकेटर" : "Emerging Structured Communicator",
+    key_strength_summary: hindi
+      ? "आपने वार्तालाप में निरंतरता रखी और जवाब देने की कोशिश की।"
+      : "You maintained good interview continuity and attempted each response.",
+    top_priorities: hindi ? ["उदाहरण-आधारित जवाब", "स्पष्ट संरचना", "आत्मविश्वास"] : ["Example-driven answers", "Clear structure", "Confidence"],
+  }
+}
+
 export function useInterviewSession(config: SessionConfig) {
   const [state, setState] = useState<SessionState>(initialState)
 
@@ -163,8 +252,10 @@ export function useInterviewSession(config: SessionConfig) {
     }
   }
 
-  const submitAnswer = async (answer: string) => {
-    if (!state.sessionId || !answer.trim()) return null
+  const submitAnswer = async (answer: string): Promise<{ nextQuestion: string | null; isEnd: boolean }> => {
+    if (!state.sessionId || !answer.trim()) {
+      return { nextQuestion: null, isEnd: false }
+    }
     const userMessage: InterviewMessage = {
       role: "user",
       content: answer.trim(),
@@ -206,10 +297,17 @@ export function useInterviewSession(config: SessionConfig) {
           questionType: "wrap_up",
           conversationHistory: trimHistory(outgoingHistory),
         }))
-        return null
+        return { nextQuestion: null, isEnd: true }
       }
 
-      const nextQuestion = response.next_question || ""
+      const nextQuestion = sanitizeNextQuestion(
+        response.next_question,
+        config.language,
+        config.role,
+        config.interviewMode,
+        answer.trim(),
+        outgoingHistory.filter((item) => item.role === "user").length,
+      )
       const spokenPrompt = buildSpokenReply(
         config.language,
         config.personality,
@@ -238,14 +336,33 @@ export function useInterviewSession(config: SessionConfig) {
         questionType: response.question_type ?? prev.questionType,
         conversationHistory: trimHistory([...outgoingHistory, questionMessage]),
       }))
-      return nextQuestion
+      return { nextQuestion, isEnd: false }
     } catch (error: any) {
+      const fallbackQuestion = buildFallbackNextQuestion(
+        config.language,
+        config.role,
+        config.interviewMode,
+        answer.trim(),
+        outgoingHistory.filter((item) => item.role === "user").length,
+      )
+      const questionMessage: InterviewMessage = {
+        role: "assistant",
+        content: fallbackQuestion,
+        timestamp: new Date().toISOString(),
+      }
       setState((prev) => ({
         ...prev,
-        status: "error",
-        error: error?.response?.data?.detail || "Unable to process your answer.",
+        status: "active",
+        currentQuestion: fallbackQuestion,
+        spokenPrompt: fallbackQuestion,
+        currentQuestionPreview: fallbackQuestion,
+        questionIndex: Math.max(prev.questionIndex + 1, 2),
+        phase: prev.phase,
+        questionType: "follow_up",
+        conversationHistory: trimHistory([...outgoingHistory, questionMessage]),
+        error: error?.response?.data?.detail || "AI provider unavailable, continuing in fallback mode.",
       }))
-      return null
+      return { nextQuestion: fallbackQuestion, isEnd: false }
     }
   }
 
@@ -279,10 +396,15 @@ export function useInterviewSession(config: SessionConfig) {
         questionType: "wrap_up",
       }))
     } catch (error: any) {
+      const fallbackFeedback = buildLocalInterviewFallbackFeedback(config.language)
       setState((prev) => ({
         ...prev,
-        status: "error",
-        error: error?.response?.data?.detail || "Unable to generate interview feedback.",
+        status: "ended",
+        score: fallbackFeedback.score,
+        feedback: fallbackFeedback,
+        phase: "wrap_up",
+        questionType: "wrap_up",
+        error: error?.response?.data?.detail || "Interview ended with local fallback feedback.",
       }))
     }
   }

@@ -258,10 +258,10 @@ function CareerAlignPageContent() {
             onSubmitTranscript={async (transcript) => {
               setPermissionError(null)
               if (!transcript.trim()) return null
-              const nextQuestion = await session.submitAnswer(transcript)
+              const result = await session.submitAnswer(transcript)
               return {
-                next_question: nextQuestion || "",
-                is_end: !nextQuestion,
+                next_question: result.nextQuestion || "",
+                is_end: result.isEnd,
               }
             }}
             onError={(message) => setPermissionError(message)}
