@@ -124,7 +124,7 @@ function StudentDashboardContent({ children }: StudentDashboardLayoutProps) {
  <ul className="mt-4 space-y-2.5 text-sm text-slate-600">
  <li>Complete profile and upload latest resume</li>
  <li>Prioritize saved roles before deadline</li>
- <li>Run AI communication assessments for shortlisted roles</li>
+ <li>Practice AI interview and communication rounds</li>
  <li>Review application feedback weekly</li>
  </ul>
  </div>
