@@ -146,7 +146,7 @@ function StudentDashboardContent({ children }: StudentDashboardLayoutProps) {
  <div className="mt-3 space-y-2">
  <Link href="/dashboard/student/career-align"className="block rounded-xl border border-slate-200/90 bg-white px-3 py-2 text-sm text-slate-800 shadow-sm transition hover:border-sage-deep hover:bg-sage/50 dark:bg-emerald-950/40 dark:hover:bg-emerald-900/60">AI Interview Session</Link>
  <Link href="/ai-communication"className="block rounded-xl border border-slate-200/90 bg-white px-3 py-2 text-sm text-slate-800 shadow-sm transition hover:border-sage-deep hover:bg-sage/50 dark:bg-emerald-950/40 dark:hover:bg-emerald-900/60">AI Communication Assessments</Link>
- <Link href="/dashboard/student/library"className="block rounded-xl border border-slate-200/90 bg-white px-3 py-2 text-sm text-slate-800 shadow-sm transition hover:border-sage-deep hover:bg-sage/50 dark:bg-emerald-950/40 dark:hover:bg-emerald-900/60">Learning Library</Link>
+ <Link href="/dashboard/student/courses"className="block rounded-xl border border-slate-200/90 bg-white px-3 py-2 text-sm text-slate-800 shadow-sm transition hover:border-sage-deep hover:bg-sage/50 dark:bg-emerald-950/40 dark:hover:bg-emerald-900/60">Courses</Link>
  <Link href="/dashboard/student/video-search"className="block rounded-xl border border-slate-200/90 bg-white px-3 py-2 text-sm text-slate-800 shadow-sm transition hover:border-sage-deep hover:bg-sage/50 dark:bg-emerald-950/40 dark:hover:bg-emerald-900/60">Video Search</Link>
  </div>
  </div>
