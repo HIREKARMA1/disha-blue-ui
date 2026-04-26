@@ -102,6 +102,37 @@
   color: var(--b1)
 }
 
+.disha-theme .mobile-menu-btn {
+  display: none;
+}
+
+@media(max-width:768px) {
+  .disha-theme .nlinks {
+    position: absolute;
+    top: 64px;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    background: white;
+    border-bottom: 1px solid var(--line);
+    padding: 1rem 1.5rem;
+    gap: 1rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    z-index: 199;
+  }
+
+  .disha-theme .nlinks a {
+    font-size: 0.9rem;
+    padding: 0.5rem 0;
+  }
+
+  .disha-theme .mobile-menu-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
 .disha-theme .nr {
   display: flex;
   gap: .5rem;
@@ -185,7 +216,8 @@
   margin: 0 auto;
   padding: 0 3rem;
   align-items: center;
-  gap: 4rem
+  gap: 4rem;
+  box-sizing: border-box;
 }
 
 .disha-theme .hl {
@@ -291,7 +323,8 @@
 
 .disha-theme .h-stats {
   display: flex;
-  gap: 2.5rem
+  gap: 2.5rem;
+  flex-wrap: wrap;
 }
 
 .disha-theme .hs {
@@ -900,11 +933,11 @@
 /* ── ILLUS BAND ── */
 .disha-theme .illus-band { padding: 4.5rem 0 }
 .disha-theme .illus-band-inner { display: flex; gap: 25px; justify-content: center; flex-wrap: wrap; max-width: 1180px; margin: 0 auto; padding: 0 3rem }
-.disha-theme .illus-item { flex: 1; min-width: 280px; background: #fff; border-radius: 18px; padding: 20px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.08); transition: 0.3s }
+.disha-theme .illus-item { flex: 1; min-width: 280px; background: #fff; border-radius: 18px; padding: 25px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.08); transition: 0.3s; display: flex; flex-direction: column; align-items: center }
 .disha-theme .illus-item:hover { transform: translateY(-10px) }
-.disha-theme .illus-item img { width: 100%; max-width: 220px; border-radius: 12px; margin-bottom: 15px }
-.disha-theme .illus-caption { font-size: 14px; color: #555; line-height: 1.6 }
-.disha-theme .illus-caption strong { display: block; font-size: 17px; color: #0070f3; margin-bottom: 6px }
+.disha-theme .illus-item img { width: 100%; height: 160px; object-fit: cover; border-radius: 12px; margin-bottom: 20px }
+.disha-theme .illus-caption { font-size: 14px; color: #555; line-height: 1.6; display: flex; flex-direction: column; gap: 8px }
+.disha-theme .illus-caption strong { display: block; font-size: 17px; color: #0070f3 }
 
 /* ── CTA ── */
 .disha-theme .cta { padding: 6.5rem 2.5rem; text-align: center; background: linear-gradient(135deg, #0052cc 0%, #0070f3 60%, #00c2ff 100%) }
@@ -1041,4 +1074,1067 @@
   .disha-theme .hero-content, .disha-theme .for-grid, .disha-theme .hw-layout, .disha-theme .out-split { grid-template-columns: 1fr }
   .disha-theme .bento { grid-template-columns: 1fr 1fr }
   .disha-theme .ft { grid-template-columns: 1fr 1fr }
+}
+
+/* ── TABLET & SMALL DESKTOP (768px - 900px) ── */
+@media(max-width:900px) {
+  .disha-theme .nav {
+    padding: 0 1.5rem;
+  }
+  
+  .disha-theme .nlinks {
+    gap: 1rem;
+    display: none;
+  }
+
+  .disha-theme .hero-content {
+    padding: 0 1.5rem;
+    gap: 2rem;
+    min-height: auto;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+  }
+
+  .disha-theme .h1 {
+    font-size: clamp(2rem, 3vw, 2.8rem);
+  }
+
+  .disha-theme .hdesc {
+    max-width: 100%;
+  }
+
+  .disha-theme .h-stats {
+    gap: 1.5rem;
+  }
+
+  .disha-theme .wrap {
+    padding: 0 1.5rem;
+  }
+
+  .disha-theme .sec {
+    padding: 3.5rem 0;
+  }
+
+  .disha-theme .for-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .disha-theme .hw-layout {
+    grid-template-columns: 1fr;
+    margin-top: 2rem;
+  }
+
+  .disha-theme .hwl {
+    border-right: none;
+    border-bottom: 1px solid var(--line);
+    padding-right: 0;
+    padding-bottom: 2rem;
+  }
+
+  .disha-theme .hwr {
+    padding-left: 0;
+    padding-top: 2rem;
+  }
+
+  .disha-theme .ai-strip-inner {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .disha-theme .journey-wrap {
+    flex-wrap: wrap;
+  }
+
+  .disha-theme .journey-wrap::before {
+    display: none;
+  }
+
+  .disha-theme .bento {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .disha-theme .ft {
+    grid-template-columns: 1fr;
+  }
+
+  .disha-theme .out-split {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── MOBILE (640px - 768px) ── */
+@media(max-width:768px) {
+  .disha-theme .nav {
+    padding: 0 1rem;
+  }
+
+  .disha-theme .nav .nlinks {
+    display: none;
+  }
+
+  .disha-theme .nr {
+    gap: 0.25rem;
+  }
+
+  .disha-theme .btn-o, .disha-theme .btn-f {
+    font-size: 0.7rem;
+    padding: 0.35rem 0.8rem;
+  }
+
+  .disha-theme .nl-name {
+    font-size: 1rem;
+  }
+
+  .disha-theme .hero {
+    min-height: 70vh;
+  }
+
+  .disha-theme .hero-content {
+    min-height: 70vh;
+    padding: 1rem;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .disha-theme .h1 {
+    font-size: clamp(1.6rem, 2.5vw, 2.2rem);
+    margin-bottom: 1rem;
+  }
+
+  .disha-theme .h-kicker {
+    font-size: 0.65rem;
+    margin-bottom: 1rem;
+  }
+
+  .disha-theme .hdesc {
+    font-size: 0.85rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .disha-theme .hbtns {
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .disha-theme .btn-hero, .disha-theme .btn-hero2 {
+    font-size: 0.8rem;
+    padding: 0.7rem 1.5rem;
+  }
+
+  .disha-theme .h-stats {
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .disha-theme .hs {
+    border-left: 2px solid rgba(0, 194, 255, 0.4);
+    padding-left: 0.6rem;
+    flex: 1 1 calc(50% - 0.5rem);
+    min-width: 110px;
+  }
+
+  .disha-theme .hs-n {
+    font-size: 1.4rem;
+  }
+
+  .disha-theme .hs-l {
+    font-size: 0.65rem;
+    margin-top: 0.2rem;
+  }
+
+  .disha-theme .hr {
+    padding: 1rem 0;
+  }
+
+  .disha-theme .dash-video {
+    height: 200px;
+    border-radius: 10px;
+  }
+
+  .disha-theme .wrap {
+    padding: 0 1rem;
+  }
+
+  .disha-theme .sec {
+    padding: 2.5rem 0;
+  }
+
+  .disha-theme .sh {
+    font-size: clamp(1.5rem, 2vw, 2rem);
+    margin-bottom: 0.6rem;
+  }
+
+  .disha-theme .sp {
+    font-size: 0.85rem;
+  }
+
+  .disha-theme .for-grid {
+    grid-template-columns: 1fr;
+    border-radius: 12px;
+    margin-top: 2rem;
+  }
+
+  .disha-theme .fg {
+    padding: 2rem 1.5rem;
+  }
+
+  .disha-theme .fg-h {
+    font-size: 1.1rem;
+  }
+
+  .disha-theme .fg-p {
+    font-size: 0.75rem;
+  }
+
+  .disha-theme .hw-layout {
+    grid-template-columns: 1fr;
+    margin-top: 1.5rem;
+  }
+
+  .disha-theme .hwl, .disha-theme .hwr {
+    border: none;
+    padding: 0;
+  }
+
+  .disha-theme .hwl {
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .disha-theme .hwr {
+    padding-top: 0;
+  }
+
+  .disha-theme .hws {
+    padding: 1rem 0;
+  }
+
+  .disha-theme .hwsn {
+    width: 32px;
+    height: 32px;
+    font-size: 0.75rem;
+  }
+
+  .disha-theme .hws-title {
+    font-size: 0.8rem;
+  }
+
+  .disha-theme .hws-desc {
+    font-size: 0.7rem;
+  }
+
+  .disha-theme .hw-phone {
+    border-radius: 14px;
+    padding: 1rem;
+  }
+
+  .disha-theme .ticker {
+    padding: 0.4rem 0;
+  }
+
+  .disha-theme .tick-track {
+    gap: 1.5rem;
+  }
+
+  .disha-theme .ti {
+    font-size: 0.6rem;
+  }
+
+  .disha-theme .ai-strip-inner {
+    grid-template-columns: 1fr;
+  }
+
+  .disha-theme .ai-info h3 {
+    font-size: 1rem;
+  }
+
+  .disha-theme .ai-info p {
+    font-size: 0.8rem;
+  }
+
+  .disha-theme .bento {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .disha-theme .bt-card {
+    padding: 1.5rem;
+  }
+
+  .disha-theme .journey-wrap {
+    gap: 0.5rem;
+    margin-top: 2rem;
+  }
+
+  .disha-theme .j-icon-w {
+    width: 70px;
+    height: 70px;
+    margin-bottom: 1rem;
+  }
+
+  .disha-theme .j-title {
+    font-size: 0.75rem;
+  }
+
+  .disha-theme .j-desc {
+    font-size: 0.65rem;
+  }
+
+  .disha-theme .j-badge {
+    font-size: 0.5rem;
+  }
+
+  .disha-theme .ft {
+    grid-template-columns: 1fr;
+  }
+
+  .disha-theme .out-split {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .disha-theme .ey {
+    font-size: 0.6rem;
+  }
+}
+
+/* ── SMALL MOBILE (under 640px) ── */
+@media(max-width:640px) {
+  .disha-theme {
+    font-size: 14px;
+  }
+
+  .disha-theme .nav {
+    padding: 0 0.75rem;
+    height: 56px;
+  }
+
+  .disha-theme .nav .nlinks {
+    display: none;
+  }
+
+  .disha-theme .nr {
+    gap: 0.2rem;
+  }
+
+  .disha-theme .btn-o, .disha-theme .btn-f {
+    font-size: 0.65rem;
+    padding: 0.3rem 0.6rem;
+  }
+
+  .disha-theme .nl-ic {
+    width: 28px;
+    height: 28px;
+  }
+
+  .disha-theme .nl-name {
+    font-size: 0.9rem;
+  }
+
+  .disha-theme .hero {
+    min-height: 60vh;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .disha-theme .hero-content {
+    min-height: 60vh;
+    padding: 1rem 0.75rem;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    max-width: 100%;
+  }
+
+  .disha-theme .h1 {
+    font-size: clamp(1.4rem, 2vw, 1.8rem);
+    margin-bottom: 0.8rem;
+    line-height: 1.1;
+  }
+
+  .disha-theme .h-kicker {
+    font-size: 0.6rem;
+    gap: 0.4rem;
+    margin-bottom: 0.8rem;
+  }
+
+  .disha-theme .hk-line {
+    width: 16px;
+  }
+
+  .disha-theme .hdesc {
+    font-size: 0.8rem;
+    margin-bottom: 1.2rem;
+    line-height: 1.6;
+  }
+
+  .disha-theme .hbtns {
+    gap: 0.4rem;
+    flex-wrap: wrap;
+    margin-bottom: 1.2rem;
+  }
+
+  .disha-theme .btn-hero, .disha-theme .btn-hero2 {
+    font-size: 0.75rem;
+    padding: 0.6rem 1.2rem;
+  }
+
+  .disha-theme .h-stats {
+    gap: 0.6rem;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+  }
+
+  .disha-theme .hs {
+    border-left: 1.5px solid rgba(0, 194, 255, 0.4);
+    padding-left: 0.5rem;
+    flex: 1 1 calc(50% - 0.3rem);
+    min-width: 100px;
+  }
+
+  .disha-theme .hs-n {
+    font-size: 1.1rem;
+    line-height: 1;
+  }
+
+  .disha-theme .hs-l {
+    font-size: 0.6rem;
+    margin-top: 0.15rem;
+    line-height: 1.2;
+  }
+
+  .disha-theme .dash-video {
+    height: 160px;
+    border-radius: 8px;
+    border: 1.5px solid rgba(0, 194, 255, 0.4);
+  }
+
+  .disha-theme .hr {
+    padding: 0.75rem 0;
+  }
+
+  .disha-theme .wrap {
+    padding: 0 0.75rem;
+  }
+
+  .disha-theme .sec {
+    padding: 2rem 0;
+  }
+
+  .disha-theme .ey {
+    font-size: 0.55rem;
+    gap: 0.4rem;
+    margin-bottom: 0.8rem;
+  }
+
+  .disha-theme .ey::before {
+    width: 10px;
+    height: 1px;
+  }
+
+  .disha-theme .sh {
+    font-size: clamp(1.2rem, 1.8vw, 1.6rem);
+    margin-bottom: 0.5rem;
+    line-height: 1.15;
+  }
+
+  .disha-theme .sp {
+    font-size: 0.8rem;
+    line-height: 1.6;
+  }
+
+  .disha-theme .for-grid {
+    grid-template-columns: 1fr;
+    border-radius: 10px;
+    margin-top: 1.5rem;
+    gap: 1px;
+  }
+
+  .disha-theme .fg {
+    padding: 1.5rem;
+  }
+
+  .disha-theme .fg-icon {
+    width: 40px;
+    height: 40px;
+    margin-bottom: 1rem;
+  }
+
+  .disha-theme .fg-tag {
+    font-size: 0.6rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .disha-theme .fg-h {
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .disha-theme .fg-p {
+    font-size: 0.7rem;
+    line-height: 1.5;
+  }
+
+  .disha-theme .fgl {
+    font-size: 0.7rem;
+    gap: 0.4rem;
+  }
+
+  .disha-theme .hw-layout {
+    grid-template-columns: 1fr;
+    margin-top: 1rem;
+  }
+
+  .disha-theme .hwl {
+    border-right: none;
+    border-bottom: 1px solid var(--line);
+    padding-right: 0;
+    padding-bottom: 1.2rem;
+    margin-bottom: 1.2rem;
+  }
+
+  .disha-theme .hwr {
+    padding-left: 0;
+    padding-top: 0;
+  }
+
+  .disha-theme .hw-steps {
+    gap: 0;
+  }
+
+  .disha-theme .hws {
+    padding: 0.9rem 0;
+    gap: 0.8rem;
+  }
+
+  .disha-theme .hwsn {
+    width: 28px;
+    height: 28px;
+    font-size: 0.7rem;
+    margin-top: 0;
+  }
+
+  .disha-theme .hws-title {
+    font-size: 0.75rem;
+    margin-bottom: 0.2rem;
+  }
+
+  .disha-theme .hws-desc {
+    font-size: 0.65rem;
+    line-height: 1.5;
+  }
+
+  .disha-theme .hw-phone {
+    border-radius: 10px;
+    padding: 0.75rem;
+  }
+
+  .disha-theme .ticker {
+    padding: 0.3rem 0;
+  }
+
+  .disha-theme .tick-track {
+    gap: 1rem;
+  }
+
+  .disha-theme .ti {
+    font-size: 0.55rem;
+  }
+
+  .disha-theme .ti-sq {
+    width: 3px;
+    height: 3px;
+  }
+
+  .disha-theme .ai-strip-inner {
+    grid-template-columns: 1fr;
+  }
+
+  .disha-theme .ai-info h3 {
+    font-size: 0.9rem;
+  }
+
+  .disha-theme .ai-info p {
+    font-size: 0.75rem;
+  }
+
+  .disha-theme .bento {
+    grid-template-columns: 1fr;
+    gap: 0.8rem;
+  }
+
+  .disha-theme .bt-card {
+    padding: 1.2rem;
+  }
+
+  .disha-theme .journey-wrap {
+    gap: 0.4rem;
+    margin-top: 1.5rem;
+  }
+
+  .disha-theme .j-item {
+    flex: 1 1 45%;
+  }
+
+  .disha-theme .j-icon-w {
+    width: 55px;
+    height: 55px;
+    margin-bottom: 0.8rem;
+  }
+
+  .disha-theme .j-title {
+    font-size: 0.7rem;
+    margin-bottom: 0.2rem;
+  }
+
+  .disha-theme .j-desc {
+    font-size: 0.6rem;
+    line-height: 1.4;
+  }
+
+  .disha-theme .ft {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .disha-theme .out-split {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+}
+
+/* ── BENTO GRID MOBILE ── */
+@media(max-width:768px) {
+  .disha-theme .bento {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .disha-theme .bc {
+    grid-column: auto !important;
+    grid-row: auto !important;
+    padding: 1.5rem !important;
+  }
+
+
+
+  .disha-theme .bc-ey {
+    font-size: 0.6rem;
+  }
+
+  .disha-theme .bc-h {
+    font-size: 0.9rem;
+  }
+
+  .disha-theme .bc-p {
+    font-size: 0.75rem;
+  }
+
+  .disha-theme .bc-n {
+    font-size: 2rem;
+    bottom: 0.5rem;
+    right: 0.8rem;
+    opacity: 0.08;
+  }
+}
+
+/* ── STATS BAND MOBILE ── */
+@media(max-width:900px) {
+  .disha-theme .stats-band {
+    padding: 3.5rem 0;
+  }
+  .disha-theme .sb-inner {
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem 1.5rem;
+    padding: 0 1.5rem;
+  }
+  .disha-theme .sbi::after {
+    display: none !important;
+  }
+  .disha-theme .sbi-n {
+    font-size: 2.8rem;
+  }
+}
+
+@media(max-width:480px) {
+  .disha-theme .sb-inner {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── OUTCOMES/IMPACT SECTION ── */
+@media(max-width:768px) {
+  .disha-theme .oc-card {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+
+  .disha-theme .oc-ic {
+    min-width: 40px;
+    width: 40px;
+    height: 40px;
+  }
+
+  .disha-theme .oc-title {
+    font-size: 0.8rem;
+  }
+
+  .disha-theme .oc-desc {
+    font-size: 0.7rem;
+  }
+
+  .disha-theme .uplift-box {
+    padding: 1.5rem;
+    margin-top: 1.5rem;
+  }
+
+  .disha-theme .up-pop {
+    width: auto !important;
+  }
+
+  .disha-theme .tm-card {
+    padding: 1.2rem;
+  }
+
+  .disha-theme .tm-tag {
+    font-size: 0.65rem;
+  }
+
+  .disha-theme .tm-quote {
+    font-size: 0.75rem;
+  }
+
+  .disha-theme .tm-meta {
+    font-size: 0.7rem;
+  }
+}
+
+/* ── TESTIMONIALS GRID ── */
+@media(max-width:900px) {
+  .disha-theme .wrap {
+    max-width: 1180px;
+  }
+
+  .disha-theme .wrap > div[style*="grid"] {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 1.5rem !important;
+  }
+}
+
+@media(max-width:768px) {
+  .disha-theme .wrap > div[style*="grid"] {
+    grid-template-columns: 1fr !important;
+    gap: 1rem !important;
+  }
+}
+
+/* ── WORD CLOUD MOBILE ── */
+@media(max-width:900px) {
+  .disha-theme .cloud-sec {
+    padding: 4rem 1.5rem;
+  }
+
+  .disha-theme .cloud-h {
+    font-size: clamp(1.3rem, 2vw, 1.8rem);
+  }
+
+  .disha-theme .cloud-sub {
+    font-size: 0.75rem;
+    margin-bottom: 2rem;
+  }
+
+  .disha-theme .cloud {
+    gap: 0.4rem;
+  }
+
+  .disha-theme .cw {
+    padding: 0.3rem 0.7rem;
+  }
+
+  .disha-theme .cw-lg {
+    font-size: 0.8rem;
+  }
+
+  .disha-theme .cw-md {
+    font-size: 0.7rem;
+  }
+
+  .disha-theme .cw-sm {
+    font-size: 0.6rem;
+  }
+}
+
+@media(max-width:640px) {
+  .disha-theme .cloud-sec {
+    padding: 3rem 1rem;
+  }
+
+  .disha-theme .cloud-h {
+    font-size: clamp(1.1rem, 1.8vw, 1.4rem);
+  }
+
+  .disha-theme .cloud-sub {
+    font-size: 0.7rem;
+  }
+
+  .disha-theme .cloud {
+    gap: 0.3rem;
+  }
+
+  .disha-theme .cw {
+    padding: 0.25rem 0.6rem;
+  }
+
+  .disha-theme .cw-lg {
+    font-size: 0.7rem;
+  }
+
+  .disha-theme .cw-md {
+    font-size: 0.6rem;
+  }
+
+  .disha-theme .cw-sm {
+    font-size: 0.55rem;
+  }
+}
+
+/* ── CTA SECTION MOBILE ── */
+@media(max-width:900px) {
+  .disha-theme .cta {
+    padding: 4.5rem 1.5rem;
+  }
+
+  .disha-theme .cta-h {
+    font-size: clamp(1.5rem, 2.5vw, 2.2rem);
+    margin-bottom: 0.8rem;
+  }
+
+  .disha-theme .cta-p {
+    font-size: 0.85rem;
+    margin-bottom: 2rem;
+  }
+
+  .disha-theme .cta-btns {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .disha-theme .btn-cta, .disha-theme .btn-cta2 {
+    width: 100%;
+    font-size: 0.8rem;
+    padding: 0.75rem 1.5rem;
+  }
+}
+
+@media(max-width:640px) {
+  .disha-theme .cta {
+    padding: 3rem 1rem;
+  }
+
+  .disha-theme .cta-h {
+    font-size: clamp(1.2rem, 1.8vw, 1.6rem);
+    margin-bottom: 0.6rem;
+  }
+
+  .disha-theme .cta-p {
+    font-size: 0.8rem;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+  }
+
+  .disha-theme .btn-cta, .disha-theme .btn-cta2 {
+    font-size: 0.75rem;
+    padding: 0.6rem 1.2rem;
+  }
+}
+
+/* ── FOOTER MOBILE ── */
+@media(max-width:900px) {
+  .disha-theme .ft {
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+  }
+
+  .disha-theme footer {
+    padding: 3rem 1.5rem 1.5rem;
+  }
+}
+
+@media(max-width:640px) {
+  .disha-theme .ft {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    padding-bottom: 2rem;
+  }
+
+  .disha-theme footer {
+    padding: 2rem 1rem 1rem;
+  }
+
+  .disha-theme .fl {
+    font-size: 1rem;
+  }
+
+  .disha-theme .ft-tag {
+    font-size: 0.7rem;
+    max-width: 100%;
+    margin-bottom: 0.8rem;
+  }
+
+  .disha-theme .fch {
+    font-size: 0.6rem;
+    margin-bottom: 0.7rem;
+  }
+
+  .disha-theme .fcl {
+    gap: 0.4rem;
+  }
+
+  .disha-theme .fcl a {
+    font-size: 0.7rem;
+  }
+
+  .disha-theme .fb {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .disha-theme .fb-c {
+    font-size: 0.65rem;
+  }
+
+  .disha-theme .fb-s {
+    gap: 1rem;
+  }
+
+  .disha-theme .fb-s a {
+    font-size: 0.65rem;
+  }
+}
+
+/* ── AI STRIP/CARDS MOBILE ── */
+@media(max-width:900px) {
+  .disha-theme .ai-strip-inner {
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+    padding: 0 1.5rem;
+  }
+
+  .disha-theme .ai-card {
+    padding: 1rem;
+  }
+
+  .disha-theme .ai-card-icon {
+    width: 35px;
+    height: 35px;
+    margin-bottom: 0.8rem;
+  }
+
+  .disha-theme .ai-card-title {
+    font-size: 0.8rem;
+  }
+
+  .disha-theme .ai-card-desc {
+    font-size: 0.7rem;
+    margin-bottom: 1rem;
+  }
+}
+
+@media(max-width:640px) {
+  .disha-theme .ai-strip {
+    padding: 1rem 0;
+  }
+
+  .disha-theme .ai-strip-inner {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+    padding: 0 1rem;
+  }
+
+  .disha-theme .ai-card {
+    padding: 0.9rem;
+    border-radius: 10px;
+  }
+
+  .disha-theme .ai-card-icon {
+    width: 32px;
+    height: 32px;
+    margin-bottom: 0.6rem;
+  }
+
+  .disha-theme .ai-card-title {
+    font-size: 0.75rem;
+  }
+
+  .disha-theme .ai-card-desc {
+    font-size: 0.65rem;
+    margin-bottom: 0.8rem;
+  }
+}
+
+/* ── ILLUSTRATION BAND MOBILE ── */
+@media(max-width:900px) {
+  .disha-theme .illus-band {
+    padding: 3.5rem 0;
+  }
+
+  .disha-theme .illus-band-inner {
+    padding: 0 1.5rem;
+    gap: 1rem;
+  }
+
+  .disha-theme .illus-item {
+    min-width: 220px;
+    padding: 1rem;
+  }
+
+  .disha-theme .illus-item img {
+    height: 140px;
+    margin-bottom: 1rem;
+  }
+
+  .disha-theme .illus-caption {
+    font-size: 0.8rem;
+  }
+
+  .disha-theme .illus-caption strong {
+    font-size: 1rem;
+    margin-bottom: 0.4rem;
+  }
+}
+
+@media(max-width:768px) {
+  .disha-theme .illus-band-inner {
+    flex-direction: column;
+    align-items: center;
+    padding: 0 1rem;
+  }
+
+  .disha-theme .illus-item {
+    min-width: 100%;
+    max-width: 100%;
+  }
+}
+
+@media(max-width:640px) {
+  .disha-theme .illus-band {
+    padding: 2.5rem 0;
+  }
+
+  .disha-theme .illus-item {
+    padding: 0.8rem;
+  }
+
+  .disha-theme .illus-item img {
+    height: 120px;
+    margin-bottom: 0.8rem;
+  }
+
+  .disha-theme .illus-caption {
+    font-size: 0.75rem;
+  }
+
+  .disha-theme .illus-caption strong {
+    font-size: 0.9rem;
+  }
 }

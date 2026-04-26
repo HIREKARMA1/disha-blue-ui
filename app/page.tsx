@@ -6,6 +6,7 @@ import './dishaai.css';
 
 export default function LakshyaLandingPage() {
   const [mounted, setMounted] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const particlesRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -77,17 +78,24 @@ export default function LakshyaLandingPage() {
           </div>
           <span className="nl-name">Lakshya<b></b></span>
         </div>
-        <ul className="nlinks">
-          <li><a href="#">Platform</a></li>
-          <li><a href="#">Skill Tracks</a></li>
-          <li><a href="#">For Organisations</a></li>
-          <li><a href="#">For Learners</a></li>
-          <li><a href="#">Impact</a></li>
-          <li><a href="#">About</a></li>
+        <ul className="nlinks" style={{ display: window.innerWidth < 768 ? (mobileMenuOpen ? 'flex' : 'none') : 'flex' }}>
+          <li><a href="#" onClick={() => setMobileMenuOpen(false)}>Platform</a></li>
+          <li><a href="#" onClick={() => setMobileMenuOpen(false)}>Skill Tracks</a></li>
+          <li><a href="#" onClick={() => setMobileMenuOpen(false)}>For Organisations</a></li>
+          <li><a href="#" onClick={() => setMobileMenuOpen(false)}>For Learners</a></li>
+          <li><a href="#" onClick={() => setMobileMenuOpen(false)}>Impact</a></li>
+          <li><a href="#" onClick={() => setMobileMenuOpen(false)}>About</a></li>
         </ul>
-        <div className="nr">
+        <div className="nr" style={{ display: window.innerWidth < 768 && mobileMenuOpen ? 'none' : 'flex' }}>
           <button className="btn-o">Sign in</button>
           <button className="btn-f">See Tutorial</button>
+          <button 
+            className="mobile-menu-btn"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            style={{ display: window.innerWidth < 768 ? 'flex' : 'none', background: 'none', border: 'none', color: '#0a0e1a', cursor: 'pointer', fontSize: '1.5rem', padding: 0 }}
+          >
+            {mobileMenuOpen ? '✕' : '☰'}
+          </button>
         </div>
       </nav>
 
