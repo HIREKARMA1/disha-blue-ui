@@ -1,128 +1,192 @@
-"use client"
+'use client';
 
-import { motion } from "framer-motion"
-import { Home, ArrowRight } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { ThemeToggle } from "@/components/ui/theme-toggle"
-import { LogoutButton } from "@/components/ui/logout-button"
-import Link from "next/link"
-import { BRANDING } from "@/config/branding"
+import React, { useEffect, useState, useRef } from 'react';
+import '../dishaai.css';
 
-export default function Dashboard() {
+export default function LakshyaDashboardPage() {
+  const [mounted, setMounted] = useState(false);
+  const particlesRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    setMounted(true);
+    
+    // Intersection Observers for entrance animations
+    const observerOptions = { threshold: 0.1 };
+    
+    const animateOnScroll = (selector: string, entranceStyles: any, animationStyles: any, delayFactor = 0.1) => {
+      const elements = document.querySelectorAll(selector);
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const target = entry.target as HTMLElement;
+            Object.assign(target.style, animationStyles);
+          }
+        });
+      }, observerOptions);
+
+      elements.forEach((el, i) => {
+        const target = el as HTMLElement;
+        Object.assign(target.style, entranceStyles);
+        target.style.transition = `opacity 0.5s ease ${i * delayFactor}s, transform 0.5s ease ${i * delayFactor}s, scale 0.5s ease ${i * delayFactor}s`;
+        observer.observe(target);
+      });
+    };
+
+    // Hero particles logic
+    const createParticle = () => {
+      if (!particlesRef.current) return;
+      const p = document.createElement('div');
+      p.className = 'particle';
+      const size = Math.random() * 4 + 2;
+      const x = Math.random() * 100;
+      const dur = Math.random() * 8 + 6;
+      const dx = (Math.random() - 0.5) * 200 + 'px';
+      p.style.cssText = `left:${x}%;bottom:-20px;width:${size}px;height:${size}px;--dx:${dx};animation-duration:${dur}s;animation-delay:${Math.random() * 8}s;opacity:${Math.random() * 0.6 + 0.2}`;
+      particlesRef.current.appendChild(p);
+      setTimeout(() => p.remove(), (dur + 8) * 1000);
+    };
+
+    const particleInterval = setInterval(createParticle, 400);
+    for (let i = 0; i < 15; i++) createParticle();
+
+    // Initialise animations
+    animateOnScroll('.hws', { opacity: '0', transform: 'translateX(-20px)' }, { opacity: '1', transform: 'translateX(0)' }, 0.12);
+    animateOnScroll('.bc', { opacity: '0', transform: 'translateY(30px)' }, { opacity: '1', transform: 'translateY(0)' }, 0.08);
+    animateOnScroll('.sbi', { opacity: '0', scale: '0.94' }, { opacity: '1', scale: '1' }, 0.1);
+
+    return () => {
+      clearInterval(particleInterval);
+    };
+  }, []);
+
+  if (!mounted) return <div className="disha-theme" style={{ background: '#0a0e1a', minHeight: '100vh' }} />;
+
   return (
-    <div className="min-h-screen dashboard-overview-page">
-      <header className="border-b border-slate-200/80 bg-white/90 backdrop-blur-sm dark:border-emerald-900 dark:bg-emerald-950/80">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-sage-deep text-white dark:bg-emerald-600">
-                <Home className="h-6 w-6 text-white" />
-              </div>
-              <div>
-                <h1 className="text-xl font-bold text-gray-900 dark:text-emerald-50">Dashboard</h1>
-                <p className="text-sm text-gray-600 dark:text-emerald-200/80">Welcome to {BRANDING.appName}</p>
-              </div>
+    <div className="disha-theme">
+      {/* -- NAV -- */}
+      <nav className="nav">
+        <div className="nl">
+          <div className="nl-ic">
+            <svg viewBox="0 0 18 18" fill="none">
+              <path d="M9 2v7M9 9l-4 5M9 9l4 5" stroke="#fff" strokeWidth="1.8" strokeLinecap="round" />
+              <circle cx="9" cy="2" r="1.5" fill="#fff" fillOpacity=".7" />
+            </svg>
+          </div>
+          <span className="nl-name">Lakshya<b></b></span>
+        </div>
+        <ul className="nlinks">
+          <li><a href="#">Dashboard</a></li>
+          <li><a href="#">Courses</a></li>
+          <li><a href="#">Jobs</a></li>
+          <li><a href="#">Profile</a></li>
+        </ul>
+        <div className="nr">
+          <button className="btn-o">Settings</button>
+          <button className="btn-f">Logout</button>
+        </div>
+      </nav>
+
+      {/* -- DASHBOARD HERO -- */}
+      <section className="hero">
+        <div className="hero-overlay"></div>
+        <div className="hero-grid-bg"></div>
+        <div className="hero-particles" ref={particlesRef}></div>
+
+        <div className="hero-content">
+          <div className="hl">
+            <div className="h-kicker"><span className="hk-line"></span>Welcome back, Learner</div>
+            <h1 className="h1">Your Career<br /><em>Dashboard.</em></h1>
+            <p className="hdesc">Track your skill progress, build your AI resume, and apply to verified local jobs — all from your personalized command center.</p>
+            <div className="hbtns">
+              <button className="btn-hero">Resume Builder</button>
+              <button className="btn-hero2">Skill Assessment</button>
             </div>
-            <div className="flex items-center space-x-4">
-              <ThemeToggle variant="surface" />
-              <LogoutButton />
+          </div>
+
+          <div className="hr">
+            <div className="hw-phone" style={{ maxHeight: '600px', overflow: 'hidden' }}>
+              <div className="hwp-top">
+                <span className="hwp-logo">Lakshya<b></b></span>
+                <span className="hwp-tag">Student View</span>
+              </div>
+              <div className="hw-widget">
+                <div className="hww-l">Overall Readiness</div>
+                <div className="hww-val">82%</div>
+                <div style={{ height: '5px', background: 'var(--line)', borderRadius: '3px', marginTop: '.65rem', overflow: 'hidden' }}>
+                  <div style={{ height: '100%', width: '82%', background: 'linear-gradient(90deg,var(--b1),var(--acc))', borderRadius: '3px' }}></div>
+                </div>
+              </div>
+              <div className="hw-widget">
+                <div className="hww-l">Top Matches</div>
+                {["Data Analyst", "Field Sales", "Customer Support"].map((job, i) => (
+                  <div className="job-item" key={i}>
+                    <div className="ji-co">{job}</div>
+                    <span className="ji-pct">9{2-i}%</span>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>
-      </header>
+      </section>
 
-      <main className="container mx-auto px-4 py-8">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="mx-auto max-w-4xl space-y-8"
-        >
-          <div className="dashboard-overview-shell">
-            <div className="dashboard-overview-card p-8 text-center">
-              <div className="mb-6 inline-flex h-20 w-20 items-center justify-center rounded-2xl bg-sage-deep text-white dark:bg-emerald-600">
-                <Home className="h-10 w-10 text-white" />
-              </div>
-              <h2 className="mb-4 text-3xl font-bold text-gray-900 dark:text-emerald-50">Welcome to {BRANDING.appName}!</h2>
-              <p className="mb-6 text-lg text-gray-600 dark:text-emerald-200/85">
-                Your account has been created successfully. Please check your email for verification.
-              </p>
-              <div className="flex flex-wrap justify-center gap-4">
-                <Link href="/">
-                  <Button className="rounded-full">
-                    Go to Home
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                  </Button>
-                </Link>
-                <Button variant="outline" className="rounded-full">
-                  Complete Profile
-                </Button>
-              </div>
+      {/* -- STATS -- */}
+      <section className="stats-band">
+        <div className="sb-inner">
+          <div className="sbi">
+            <div className="sbi-n">12</div>
+            <div className="sbi-l">Courses<br />In Progress</div>
+          </div>
+          <div className="sbi">
+            <div className="sbi-n">86%</div>
+            <div className="sbi-l">Interview<br />Score</div>
+          </div>
+          <div className="sbi">
+            <div className="sbi-n">4</div>
+            <div className="sbi-l">Job<br />Applications</div>
+          </div>
+          <div className="sbi">
+            <div className="sbi-n">2</div>
+            <div className="sbi-l">Digital<br />Credentials</div>
+          </div>
+        </div>
+      </section>
+
+      {/* -- BENTO FEATURES -- */}
+      <section className="sec rv">
+        <div className="wrap">
+          <div className="ey ey-n">Tools for Success</div>
+          <h2 className="sh">Unlock your <em>potential.</em></h2>
+          <div className="bento">
+            <div className="bc bc-bg-b">
+              <div className="bc-ey bcey-b">AI Resume</div>
+              <div className="bc-h bc-hb">Update Build</div>
+              <div className="bc-p bc-pb">Your ATS-optimized profile is ready for download.</div>
+              <div className="bc-n">01</div>
+            </div>
+            <div className="bc bc-bg-t">
+              <div className="bc-ey bcey-t">Mock AI</div>
+              <div className="bc-h bc-ht">Start Practice</div>
+              <div className="bc-p bc-pt">Conduct a simulated interview in your chosen sector.</div>
+              <div className="bc-n">02</div>
+            </div>
+            <div className="bc bc-bg-b2">
+              <div className="bc-ey bcey-b">Skills</div>
+              <div className="bc-h bc-hb">New Tracks</div>
+              <div className="bc-p bc-pb">Explore 5 new courses added today.</div>
+              <div className="bc-n">03</div>
             </div>
           </div>
+        </div>
+      </section>
 
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
-            <div className="dashboard-overview-card-interactive p-6 text-center">
-              <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-primary-100 dark:bg-emerald-900/60">
-                <Home className="h-6 w-6 text-primary-600 dark:text-emerald-300" />
-              </div>
-              <h3 className="mb-2 font-semibold text-gray-900 dark:text-emerald-50">Home</h3>
-              <p className="text-sm text-gray-600 dark:text-emerald-200/75">Return to main page</p>
-            </div>
-
-            <div className="dashboard-overview-card-interactive p-6 text-center">
-              <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-accent-green-100 dark:bg-emerald-900/60">
-                <ArrowRight className="h-6 w-6 text-accent-green-600 dark:text-emerald-300" />
-              </div>
-              <h3 className="mb-2 font-semibold text-gray-900 dark:text-emerald-50">Get Started</h3>
-              <p className="text-sm text-gray-600 dark:text-emerald-200/75">Begin your journey</p>
-            </div>
-
-            <div className="dashboard-overview-card-interactive p-6 text-center">
-              <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-secondary-100 dark:bg-emerald-900/60">
-                <Home className="h-6 w-6 text-secondary-600 dark:text-emerald-300" />
-              </div>
-              <h3 className="mb-2 font-semibold text-gray-900 dark:text-emerald-50">Explore</h3>
-              <p className="text-sm text-gray-600 dark:text-emerald-200/75">Discover opportunities</p>
-            </div>
-
-            <div className="dashboard-overview-card-interactive p-6 text-center">
-              <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-accent-orange-100 dark:bg-emerald-900/60">
-                <ArrowRight className="h-6 w-6 text-accent-orange-600 dark:text-emerald-300" />
-              </div>
-              <h3 className="mb-2 font-semibold text-gray-900 dark:text-emerald-50">Learn More</h3>
-              <p className="text-sm text-gray-600 dark:text-emerald-200/75">About the platform</p>
-            </div>
-          </div>
-
-          <div className="dashboard-overview-card p-8">
-            <h3 className="mb-6 text-center text-2xl font-bold text-gray-900 dark:text-emerald-50">Next Steps</h3>
-            <div className="space-y-4">
-              <div className="flex items-center space-x-4 rounded-xl bg-gray-50 p-4 dark:bg-emerald-900/30">
-                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary-500 text-sm font-bold text-white">1</div>
-                <div>
-                  <h4 className="font-semibold text-gray-900 dark:text-emerald-50">Verify Your Email</h4>
-                  <p className="text-sm text-gray-600 dark:text-emerald-200/75">Check your inbox and click the verification link</p>
-                </div>
-              </div>
-              <div className="flex items-center space-x-4 rounded-xl bg-gray-50 p-4 dark:bg-emerald-900/30">
-                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary-500 text-sm font-bold text-white">2</div>
-                <div>
-                  <h4 className="font-semibold text-gray-900 dark:text-emerald-50">Complete Your Profile</h4>
-                  <p className="text-sm text-gray-600 dark:text-emerald-200/75">Add your personal information</p>
-                </div>
-              </div>
-              <div className="flex items-center space-x-4 rounded-xl bg-gray-50 p-4 dark:bg-emerald-900/30">
-                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary-500 text-sm font-bold text-white">3</div>
-                <div>
-                  <h4 className="font-semibold text-gray-900 dark:text-emerald-50">Start Exploring</h4>
-                  <p className="text-sm text-gray-600 dark:text-emerald-200/75">Discover nearby opportunities</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </motion.div>
-      </main>
+      {/* -- FOOTER -- */}
+      <footer className="sec" style={{ background: '#f8faff', padding: '3rem 0' }}>
+        <div className="wrap" style={{ textAlign: 'center' }}>
+          <div className="nl-name" style={{ marginBottom: '1rem' }}>Lakshya<b></b></div>
+          <p className="sp" style={{ margin: '0 auto' }}>© 2026 Lakshya Platform. Elevating the youth of India.</p>
+        </div>
+      </footer>
     </div>
-  )
+  );
 }
