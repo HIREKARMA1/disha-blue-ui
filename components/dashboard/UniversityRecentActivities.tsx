@@ -41,9 +41,9 @@ export function UniversityRecentActivities({
  switch (type) {
  case'student_placed':
  return {
- bg:'bg-green-50',
- icon:'text-green-600',
- border:'border-green-200'}
+ bg:'bg-blue-50',
+ icon:'text-blue-600',
+ border:'border-blue-200'}
  case'job_approved':
  return {
  bg:'bg-blue-50',
@@ -157,7 +157,7 @@ const sampleActivities: RecentActivity[] = [
  initial={{ opacity: 0, y: 20 }}
  animate={{ opacity: 1, y: 0 }}
  transition={{ duration: 0.6 }}
- className={`dashboard-overview-card relative p-6 shadow-[0_8px_30px_-10px_rgba(15,23,42,0.12)] dark:border-emerald-800/65 dark:bg-emerald-900/35 dark:shadow-none ${className}`}
+ className={`dashboard-overview-card relative p-6 shadow-[0_8px_30px_-10px_rgba(15,23,42,0.12)] dark:border-blue-800/65 dark:bg-blue-900/35 dark:shadow-none ${className}`}
  >
  {/* Header */}
  <div className="flex items-center justify-between mb-6">
@@ -191,7 +191,7 @@ const sampleActivities: RecentActivity[] = [
  className={`group flex cursor-pointer items-start space-x-4 rounded-xl border p-4 transition-all duration-300 hover:shadow-md ${colors.border} ${colors.bg}`}
  >
  {/* Icon */}
- <div className={`rounded-xl bg-white p-2 shadow-sm dark:bg-emerald-950/60 ${colors.icon}`}>
+ <div className={`rounded-xl bg-white p-2 shadow-sm dark:bg-blue-950/60 ${colors.icon}`}>
  <Icon className="w-5 h-5"/>
  </div>
 
@@ -209,7 +209,7 @@ const sampleActivities: RecentActivity[] = [
  {/* Package highlight for placements */}
  {activity.type ==='student_placed'&& activity.package && (
  <div className="flex items-center space-x-2 mt-2">
- <div className="flex items-center space-x-1 text-xs font-medium text-green-700 bg-green-100 px-2 py-1">
+ <div className="flex items-center space-x-1 text-xs font-medium text-blue-700 bg-blue-100 px-2 py-1">
  <DollarSign className="w-3 h-3"/>
  <span>${activity.package.toLocaleString()}</span>
  </div>
@@ -255,7 +255,7 @@ const sampleActivities: RecentActivity[] = [
  Showing {Math.min(5, displayActivities.length)} of {displayActivities.length} activities
  </span>
  <div className="flex items-center space-x-4">
- <span className="flex items-center space-x-1 text-green-600">
+ <span className="flex items-center space-x-1 text-blue-600">
  <CheckCircle className="w-4 h-4"/>
  <span>{displayActivities.filter(a => a.type ==='student_placed').length} Placements</span>
  </span>

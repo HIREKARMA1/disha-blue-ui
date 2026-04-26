@@ -38,7 +38,7 @@ const chartData = [
  Growth trends over the last 6 months
  </p>
  </div>
- <div className="flex items-center space-x-2 text-sm text-green-600">
+ <div className="flex items-center space-x-2 text-sm text-blue-600">
  <TrendingUp className="w-4 h-4"/>
  <span>+18.5% growth</span>
  </div>
@@ -51,7 +51,7 @@ const chartData = [
  <span className="text-sm text-gray-600">Users</span>
  </div>
  <div className="flex items-center space-x-2">
- <div className="w-3 h-3 bg-green-500"></div>
+ <div className="w-3 h-3 bg-blue-500"></div>
  <span className="text-sm text-gray-600">Jobs</span>
  </div>
  <div className="flex items-center space-x-2">
@@ -78,7 +78,7 @@ const chartData = [
  <div className="flex items-end space-x-1 h-8">
  {/* Users bar */}
  <div
- className="bg-blue-500 rounded-none-none transition-all duration-500 hover:bg-blue-600"style={{
+ className="bg-blue-500 rounded-xl transition-all duration-500 hover:bg-blue-600"style={{
  width:'30%',
  height: `${(data.users / maxValue) * 100}%`,
  minHeight:'4px'}}
@@ -87,7 +87,7 @@ const chartData = [
 
  {/* Jobs bar */}
  <div
- className="bg-green-500 rounded-none-none transition-all duration-500 hover:bg-green-600"style={{
+ className="bg-blue-500 rounded-xl transition-all duration-500 hover:bg-blue-600"style={{
  width:'30%',
  height: `${(data.jobs / maxValue) * 100}%`,
  minHeight:'4px'}}
@@ -96,7 +96,7 @@ const chartData = [
 
  {/* Applications bar */}
  <div
- className="bg-purple-500 rounded-none-none transition-all duration-500 hover:bg-purple-600"style={{
+ className="bg-purple-500 rounded-xl transition-all duration-500 hover:bg-purple-600"style={{
  width:'30%',
  height: `${(data.applications / maxValue) * 100}%`,
  minHeight:'4px'}}
@@ -124,7 +124,7 @@ const chartData = [
 
  <div className="text-center">
  <div className="flex items-center justify-center space-x-2 mb-2">
- <Briefcase className="w-4 h-4 text-green-500"/>
+ <Briefcase className="w-4 h-4 text-blue-500"/>
  <span className="text-sm font-medium text-gray-600">
  Active Jobs
  </span>

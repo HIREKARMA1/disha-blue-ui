@@ -19,10 +19,10 @@ export function Toast({ id, title, message, type, duration = 5000, onClose }: To
   case 'success':
   return {
   icon: CheckCircle,
-  iconColor: 'text-green-400',
-  bgColor: 'bg-green-50 dark:bg-green-900/20',
-  borderColor: 'border-green-200 dark:border-green-800',
-  titleColor: 'text-green-800 dark:text-green-200'
+  iconColor: 'text-blue-400',
+  bgColor: 'bg-blue-50 dark:bg-blue-900/20',
+  borderColor: 'border-blue-200 dark:border-blue-800',
+  titleColor: 'text-blue-800 dark:text-blue-200'
   }
   case 'error':
   return {

@@ -120,13 +120,13 @@ export function SidebarRailHoverCard({
             onMouseLeave={scheduleClose}
           >
             <div
-              className="shrink-0 border-y-8 border-y-transparent border-r-[9px] border-r-white dark:border-r-emerald-900"
+              className="shrink-0 border-y-8 border-y-transparent border-r-[9px] border-r-white dark:border-r-blue-900"
               aria-hidden
             />
             <div
               className={cn(
                 "max-w-[17.5rem] overflow-hidden rounded-none border border-slate-200 bg-white shadow-none",
-                "dark:border-emerald-800 dark:bg-emerald-900 dark:shadow-black/30",
+                "dark:border-blue-800 dark:bg-blue-900 dark:shadow-black/30",
               )}
             >
               <div className="relative h-40 w-full overflow-hidden bg-gray-950">
@@ -139,26 +139,26 @@ export function SidebarRailHoverCard({
                     loading="eager"
                   />
                 ) : (
-                  <div className="flex h-full items-center justify-center bg-slate-100 dark:bg-emerald-950">
+                  <div className="flex h-full items-center justify-center bg-slate-100 dark:bg-blue-950">
                     <Icon
-                      className="h-12 w-12 text-slate-600 dark:text-emerald-200"
+                      className="h-12 w-12 text-slate-600 dark:text-blue-200"
                       strokeWidth={1.25}
                     />
                   </div>
                 )}
               </div>
               <div className="space-y-2 p-4">
-                <h3 className="text-base font-semibold leading-tight text-slate-900 dark:text-emerald-50">
+                <h3 className="text-base font-semibold leading-tight text-slate-900 dark:text-blue-50">
                   {item.label}
                 </h3>
                 {item.description ? (
-                  <p className="text-sm leading-snug text-slate-600 dark:text-emerald-200/85">
+                  <p className="text-sm leading-snug text-slate-600 dark:text-blue-200/85">
                     {item.description}
                   </p>
                 ) : null}
                 <Link
                   href={item.href}
-                  className="inline-flex items-center gap-1 pt-1 text-sm font-medium text-slate-800 hover:text-slate-950 dark:text-emerald-100 dark:hover:text-white"
+                  className="inline-flex items-center gap-1 pt-1 text-sm font-medium text-slate-800 hover:text-slate-950 dark:text-blue-100 dark:hover:text-white"
                   onClick={() => {
                     onNavigate?.()
                     setOpen(false)
@@ -183,7 +183,7 @@ export function SidebarRailHoverCard({
         data-sidebar-item={dataSidebarItem}
         className={cn(
           railLinkClassName,
-          !isActive && "rounded-none hover:bg-slate-100 dark:hover:bg-emerald-900",
+          !isActive && "rounded-none hover:bg-slate-100 dark:hover:bg-blue-900",
         )}
         onClick={() => onNavigate?.()}
         onMouseEnter={handleOpen}

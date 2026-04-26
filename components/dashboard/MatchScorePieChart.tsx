@@ -15,19 +15,19 @@ export function MatchScorePieChart({ score, size = 60, className = '' }: MatchSc
   const strokeDashoffset = circumference - (score / 100) * circumference
 
   const getScoreColor = (value: number) => {
-  if (value >= 80) return 'text-green-600'
+  if (value >= 80) return 'text-blue-600'
   if (value >= 60) return 'text-orange-600'
   return 'text-red-600'
   }
 
   const getStrokeColor = (value: number) => {
-  if (value >= 80) return 'stroke-green-500'
+  if (value >= 80) return 'stroke-blue-500'
   if (value >= 60) return 'stroke-orange-500'
   return 'stroke-red-500'
   }
 
   const getBgColor = (value: number) => {
-  if (value >= 80) return 'bg-green-50'
+  if (value >= 80) return 'bg-blue-50'
   if (value >= 60) return 'bg-orange-50'
   return 'bg-red-50'
   }

@@ -91,7 +91,7 @@ export function ColorPreview() {
   <button className="px-4 py-2 bg-secondary-500 text-white rounded hover:bg-secondary-600">
   Secondary
   </button>
-  <button className="px-4 py-2 bg-success text-white rounded hover:bg-accent-green-600">
+  <button className="px-4 py-2 bg-success text-white rounded hover:bg-accent-blue-600">
   Success
   </button>
   <button className="px-4 py-2 bg-warning text-gray-900 rounded hover:bg-accent-yellow-600">
@@ -111,7 +111,7 @@ export function ColorPreview() {
   <h3 className="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-4">Gradients</h3>
   <div className="grid grid-cols-3 gap-4">
   <div className="h-20 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-lg"></div>
-  <div className="h-20 bg-gradient-to-r from-accent-green-500 to-accent-green-600 rounded-lg"></div>
+  <div className="h-20 bg-gradient-to-r from-accent-blue-500 to-accent-blue-600 rounded-lg"></div>
   <div className="h-20 bg-gradient-to-r from-accent-orange-500 to-accent-orange-600 rounded-lg"></div>
   </div>
   </div>

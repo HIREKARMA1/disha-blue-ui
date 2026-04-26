@@ -187,7 +187,7 @@ const extendedStudent: ExtendedStudentProfile = {
  const getStatusColor = (status: string) => {
  switch (status) {
  case 'placed':
- return 'bg-green-100 text-green-800'
+ return 'bg-blue-100 text-blue-800'
  case 'unplaced':
  return 'bg-yellow-100 text-yellow-800'
  default:
@@ -214,9 +214,9 @@ const extendedStudent: ExtendedStudentProfile = {
  icon:'text-orange-600'}
  case'experience':
  return {
- active:'border-green-500 text-green-600 bg-green-50',
- indicator:'bg-green-500',
- icon:'text-green-600'}
+ active:'border-blue-500 text-blue-600 bg-blue-50',
+ indicator:'bg-blue-500',
+ icon:'text-blue-600'}
  case'placement':
  return {
  active:'border-indigo-500 text-indigo-600 bg-indigo-50',
@@ -282,7 +282,7 @@ const extendedStudent: ExtendedStudentProfile = {
  } catch (error) {
  console.error('Error rendering tab content for tab:', activeTab, error)
  return (
- <div className="bg-white rounded-none-none shadow-sm border border-gray-200 p-6">
+ <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
  <div className="text-center py-8">
  <div className="w-16 h-16 mx-auto mb-4 bg-red-100 flex items-center justify-center">
  <AlertCircle className="w-8 h-8 text-red-600"/>
@@ -379,7 +379,7 @@ const copyToClipboard = async (text: string) => {
  if (!extendedStudent) {
  console.error('StudentProfileModal - extendedStudent is undefined in renderBasicInfo')
  return (
- <div className="bg-white rounded-none-none shadow-sm border border-gray-200 p-6">
+ <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
  <div className="text-center py-8">
  <div className="w-16 h-16 mx-auto mb-4 bg-red-100 flex items-center justify-center">
  <AlertCircle className="w-8 h-8 text-red-600"/>
@@ -398,9 +398,9 @@ const copyToClipboard = async (text: string) => {
  return (
  <div className="space-y-6">
  {/* Personal Information */}
- <div className="rounded-none-none shadow-sm border border-blue-200 p-6">
+ <div className="rounded-xl shadow-sm border border-blue-200 p-6">
  <div className="flex items-center gap-3 mb-4">
- <div className="p-3 rounded-none-none shadow-lg">
+ <div className="p-3 rounded-xl shadow-lg">
  <User className="w-6 h-6 text-white"/>
  </div>
  <h3 className="text-lg font-semibold text-blue-900">
@@ -409,8 +409,8 @@ const copyToClipboard = async (text: string) => {
  </div>
  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
  <div className="space-y-3">
- <div className="flex items-center gap-3 p-3 rounded-none-none">
- <div className="p-2 bg-blue-100 rounded-none-none">
+ <div className="flex items-center gap-3 p-3 rounded-xl">
+ <div className="p-2 bg-blue-100 rounded-xl">
  <Mail className="w-4 h-4 text-blue-600"/>
  </div>
  <div>
@@ -420,20 +420,20 @@ const copyToClipboard = async (text: string) => {
  <p className="text-xs text-blue-600">Email Address</p>
  </div>
  </div>
- <div className="flex items-center gap-3 p-3 rounded-none-none">
- <div className="p-2 bg-green-100 rounded-none-none">
- <Phone className="w-4 h-4 text-green-600"/>
+ <div className="flex items-center gap-3 p-3 rounded-xl">
+ <div className="p-2 bg-blue-100 rounded-xl">
+ <Phone className="w-4 h-4 text-blue-600"/>
  </div>
  <div>
  <p className="text-sm font-medium text-gray-900">
  {extendedStudent.phone ||'Not provided'}
  </p>
- <p className="text-xs text-green-600">Phone Number</p>
+ <p className="text-xs text-blue-600">Phone Number</p>
  </div>
  </div>
  {extendedStudent.dob && (
- <div className="flex items-center gap-3 p-3 rounded-none-none">
- <div className="p-2 bg-purple-100 rounded-none-none">
+ <div className="flex items-center gap-3 p-3 rounded-xl">
+ <div className="p-2 bg-purple-100 rounded-xl">
  <Calendar className="w-4 h-4 text-purple-600"/>
  </div>
  <div>
@@ -447,8 +447,8 @@ const copyToClipboard = async (text: string) => {
  </div>
  <div className="space-y-3">
  {extendedStudent.gender && (
- <div className="flex items-center gap-3 p-3 rounded-none-none">
- <div className="p-2 bg-pink-100 rounded-none-none">
+ <div className="flex items-center gap-3 p-3 rounded-xl">
+ <div className="p-2 bg-pink-100 rounded-xl">
  <User className="w-4 h-4 text-pink-600"/>
  </div>
  <div>
@@ -459,8 +459,8 @@ const copyToClipboard = async (text: string) => {
  </div>
  </div>
  )}
- <div className="flex items-center gap-3 p-3 rounded-none-none">
- <div className="p-2 bg-orange-100 rounded-none-none">
+ <div className="flex items-center gap-3 p-3 rounded-xl">
+ <div className="p-2 bg-orange-100 rounded-xl">
  <Calendar className="w-4 h-4 text-orange-600"/>
  </div>
  <div>
@@ -471,8 +471,8 @@ const copyToClipboard = async (text: string) => {
  </div>
  </div>
  {extendedStudent.last_login && (
- <div className="flex items-center gap-3 p-3 rounded-none-none">
- <div className="p-2 bg-indigo-100 rounded-none-none">
+ <div className="flex items-center gap-3 p-3 rounded-xl">
+ <div className="p-2 bg-indigo-100 rounded-xl">
  <Calendar className="w-4 h-4 text-indigo-600"/>
  </div>
  <div>
@@ -489,10 +489,10 @@ const copyToClipboard = async (text: string) => {
 
  {/* Location Information */}
  {(extendedStudent.country || extendedStudent.state || extendedStudent.city) && (
- <div className="bg-white rounded-none-none shadow-sm border border-gray-200 p-6">
+ <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
  <div className="flex items-center gap-3 mb-4">
- <div className="p-2 bg-green-100 rounded-none-none">
- <LocationIcon className="w-5 h-5 text-green-600"/>
+ <div className="p-2 bg-blue-100 rounded-xl">
+ <LocationIcon className="w-5 h-5 text-blue-600"/>
  </div>
  <h3 className="text-lg font-semibold text-gray-900">
  Location Information
@@ -529,9 +529,9 @@ const copyToClipboard = async (text: string) => {
 
  {/* Bio */}
  {extendedStudent.bio && (
- <div className="bg-white rounded-none-none shadow-sm border border-gray-200 p-6">
+ <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
  <div className="flex items-center gap-3 mb-4">
- <div className="p-2 bg-purple-100 rounded-none-none">
+ <div className="p-2 bg-purple-100 rounded-xl">
  <FileText className="w-5 h-5 text-purple-600"/>
  </div>
  <h3 className="text-lg font-semibold text-gray-900">
@@ -552,7 +552,7 @@ const copyToClipboard = async (text: string) => {
  if (!extendedStudent) {
  console.error('StudentProfileModal - extendedStudent is undefined in renderAcademicInfo')
  return (
- <div className="bg-white rounded-none-none shadow-sm border border-gray-200 p-6">
+ <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
  <div className="text-center py-8">
  <div className="w-16 h-16 mx-auto mb-4 bg-red-100 flex items-center justify-center">
  <AlertCircle className="w-8 h-8 text-red-600"/>
@@ -571,9 +571,9 @@ const copyToClipboard = async (text: string) => {
  return (
  <div className="space-y-6">
  {/* Current Education */}
- <div className="rounded-none-none shadow-sm border border-purple-200 p-6">
+ <div className="rounded-xl shadow-sm border border-purple-200 p-6">
  <div className="flex items-center gap-3 mb-4">
- <div className="p-3 rounded-none-none shadow-lg">
+ <div className="p-3 rounded-xl shadow-lg">
  <GraduationCap className="w-6 h-6 text-white"/>
  </div>
  <h3 className="text-lg font-semibold text-purple-900">
@@ -582,8 +582,8 @@ const copyToClipboard = async (text: string) => {
  </div>
  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
  <div className="space-y-3">
- <div className="flex items-center gap-3 p-3 rounded-none-none">
- <div className="p-2 bg-blue-100 rounded-none-none">
+ <div className="flex items-center gap-3 p-3 rounded-xl">
+ <div className="p-2 bg-blue-100 rounded-xl">
  <Building className="w-4 h-4 text-blue-600"/>
  </div>
  <div>
@@ -593,8 +593,8 @@ const copyToClipboard = async (text: string) => {
  <p className="text-xs text-blue-600">Institution</p>
  </div>
  </div>
- <div className="flex items-center gap-3 p-3 rounded-none-none">
- <div className="p-2 bg-purple-100 rounded-none-none">
+ <div className="flex items-center gap-3 p-3 rounded-xl">
+ <div className="p-2 bg-purple-100 rounded-xl">
  <GraduationCap className="w-4 h-4 text-purple-600"/>
  </div>
  <div>
@@ -604,22 +604,22 @@ const copyToClipboard = async (text: string) => {
  <p className="text-xs text-purple-600">Degree</p>
  </div>
  </div>
- <div className="flex items-center gap-3 p-3 rounded-none-none">
- <div className="p-2 bg-green-100 rounded-none-none">
- <MapPin className="w-4 h-4 text-green-600"/>
+ <div className="flex items-center gap-3 p-3 rounded-xl">
+ <div className="p-2 bg-blue-100 rounded-xl">
+ <MapPin className="w-4 h-4 text-blue-600"/>
  </div>
  <div>
  <p className="text-sm font-medium text-gray-900">
  {extendedStudent.branch ||'Not specified'}
  </p>
- <p className="text-xs text-green-600">Branch</p>
+ <p className="text-xs text-blue-600">Branch</p>
  </div>
  </div>
  </div>
  <div className="space-y-3">
  {extendedStudent.graduation_year && (
- <div className="flex items-center gap-3 p-3 rounded-none-none">
- <div className="p-2 bg-orange-100 rounded-none-none">
+ <div className="flex items-center gap-3 p-3 rounded-xl">
+ <div className="p-2 bg-orange-100 rounded-xl">
  <Calendar className="w-4 h-4 text-orange-600"/>
  </div>
  <div>
@@ -631,8 +631,8 @@ const copyToClipboard = async (text: string) => {
  </div>
  )}
  {extendedStudent.btech_cgpa && (
- <div className="flex items-center gap-3 p-3 rounded-none-none">
- <div className="p-2 bg-yellow-100 rounded-none-none">
+ <div className="flex items-center gap-3 p-3 rounded-xl">
+ <div className="p-2 bg-yellow-100 rounded-xl">
  <Star className="w-4 h-4 text-yellow-600"/>
  </div>
  <div>
@@ -644,8 +644,8 @@ const copyToClipboard = async (text: string) => {
  </div>
  )}
  {extendedStudent.major && (
- <div className="flex items-center gap-3 p-3 rounded-none-none">
- <div className="p-2 bg-indigo-100 rounded-none-none">
+ <div className="flex items-center gap-3 p-3 rounded-xl">
+ <div className="p-2 bg-indigo-100 rounded-xl">
  <BookOpen className="w-4 h-4 text-indigo-600"/>
  </div>
  <div>
@@ -662,10 +662,10 @@ const copyToClipboard = async (text: string) => {
 
  {/* Class XII Details */}
  {(extendedStudent.twelfth_institution || extendedStudent.twelfth_stream || extendedStudent.twelfth_year || extendedStudent.twelfth_grade_percentage) && (
- <div className="bg-white rounded-none-none shadow-sm border border-gray-200 p-6">
+ <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
  <div className="flex items-center gap-3 mb-4">
- <div className="p-2 bg-green-100 rounded-none-none">
- <GraduationCap className="w-5 h-5 text-green-600"/>
+ <div className="p-2 bg-blue-100 rounded-xl">
+ <GraduationCap className="w-5 h-5 text-blue-600"/>
  </div>
  <h3 className="text-lg font-semibold text-gray-900">
  Class XII Details
@@ -726,9 +726,9 @@ const copyToClipboard = async (text: string) => {
 
  {/* Class X Details */}
  {(extendedStudent.tenth_institution || extendedStudent.tenth_stream || extendedStudent.tenth_year || extendedStudent.tenth_grade_percentage) && (
- <div className="bg-white rounded-none-none shadow-sm border border-gray-200 p-6">
+ <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
  <div className="flex items-center gap-3 mb-4">
- <div className="p-2 bg-orange-100 rounded-none-none">
+ <div className="p-2 bg-orange-100 rounded-xl">
  <GraduationCap className="w-5 h-5 text-orange-600"/>
  </div>
  <h3 className="text-lg font-semibold text-gray-900">
@@ -796,7 +796,7 @@ const copyToClipboard = async (text: string) => {
  if (!extendedStudent) {
  console.error('StudentProfileModal - extendedStudent is undefined in renderSkillsInfo')
  return (
- <div className="bg-white rounded-none-none shadow-sm border border-gray-200 p-6">
+ <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
  <div className="text-center py-8">
  <div className="w-16 h-16 mx-auto mb-4 bg-red-100 flex items-center justify-center">
  <AlertCircle className="w-8 h-8 text-red-600"/>
@@ -823,7 +823,7 @@ const hasSkillsData = extendedStudent.technical_skills ||
 
  if (!hasSkillsData) {
  return (
- <div className="bg-white rounded-none-none shadow-sm border border-gray-200 p-6">
+ <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
  <div className="text-center py-8">
  <div className="w-16 h-16 mx-auto mb-4 bg-gray-100 flex items-center justify-center">
  <Zap className="w-8 h-8 text-gray-400"/>
@@ -843,9 +843,9 @@ const hasSkillsData = extendedStudent.technical_skills ||
  <div className="space-y-6">
  {/* Technical Skills */}
  {extendedStudent.technical_skills && (
- <div className="rounded-none-none shadow-sm border border-orange-200 p-6">
+ <div className="rounded-xl shadow-sm border border-orange-200 p-6">
  <div className="flex items-center gap-3 mb-4">
- <div className="p-3 rounded-none-none shadow-lg">
+ <div className="p-3 rounded-xl shadow-lg">
  <Code className="w-6 h-6 text-white"/>
  </div>
  <h3 className="text-lg font-semibold text-orange-900">
@@ -866,12 +866,12 @@ const hasSkillsData = extendedStudent.technical_skills ||
 
  {/* Soft Skills */}
  {extendedStudent.soft_skills && (
- <div className="rounded-none-none shadow-sm border border-green-200 p-6">
+ <div className="rounded-xl shadow-sm border border-blue-200 p-6">
  <div className="flex items-center gap-3 mb-4">
- <div className="p-3 rounded-none-none shadow-lg">
+ <div className="p-3 rounded-xl shadow-lg">
  <Heart className="w-6 h-6 text-white"/>
  </div>
- <h3 className="text-lg font-semibold text-green-900">
+ <h3 className="text-lg font-semibold text-blue-900">
  Soft Skills
  </h3>
  </div>
@@ -879,7 +879,7 @@ const hasSkillsData = extendedStudent.technical_skills ||
  {extendedStudent.soft_skills.split(',').map((skill, index) => (
  <span
  key={index}
- className="px-3 py-1 bg-green-200 text-green-800 text-sm font-medium border border-green-300">
+ className="px-3 py-1 bg-blue-200 text-blue-800 text-sm font-medium border border-blue-300">
  {skill.trim()}
  </span>
  ))}
@@ -889,9 +889,9 @@ const hasSkillsData = extendedStudent.technical_skills ||
 
  {/* Certifications */}
  {extendedStudent.certifications && (
- <div className="rounded-none-none shadow-sm border border-purple-200 p-6">
+ <div className="rounded-xl shadow-sm border border-purple-200 p-6">
  <div className="flex items-center gap-3 mb-4">
- <div className="p-3 rounded-none-none shadow-lg">
+ <div className="p-3 rounded-xl shadow-lg">
  <Certificate className="w-6 h-6 text-white"/>
  </div>
  <h3 className="text-lg font-semibold text-purple-900">
@@ -900,8 +900,8 @@ const hasSkillsData = extendedStudent.technical_skills ||
  </div>
  <div className="space-y-2">
  {extendedStudent.certifications.split(',').map((cert, index) => (
- <div key={index} className="flex items-center gap-3 p-2 rounded-none-none">
- <div className="p-1.5 bg-purple-100 rounded-none-none">
+ <div key={index} className="flex items-center gap-3 p-2 rounded-xl">
+ <div className="p-1.5 bg-purple-100 rounded-xl">
  <Certificate className="w-4 h-4 text-purple-600"/>
  </div>
  <span className="text-sm text-gray-700 font-medium">
@@ -915,9 +915,9 @@ const hasSkillsData = extendedStudent.technical_skills ||
 
  {/* Career Preferences */}
  {(extendedStudent.preferred_industry || extendedStudent.job_roles_of_interest || extendedStudent.location_preferences) && (
- <div className="rounded-none-none shadow-sm border border-indigo-200 p-6">
+ <div className="rounded-xl shadow-sm border border-indigo-200 p-6">
  <div className="flex items-center gap-3 mb-4">
- <div className="p-3 rounded-none-none shadow-lg">
+ <div className="p-3 rounded-xl shadow-lg">
  <Target className="w-6 h-6 text-white"/>
  </div>
  <h3 className="text-lg font-semibold text-indigo-900">
@@ -961,9 +961,9 @@ const hasSkillsData = extendedStudent.technical_skills ||
 
  {/* Language Proficiency */}
  {extendedStudent.language_proficiency && (
- <div className="bg-white rounded-none-none shadow-sm border border-gray-200 p-6">
+ <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
  <div className="flex items-center gap-3 mb-4">
- <div className="p-2 bg-indigo-100 rounded-none-none">
+ <div className="p-2 bg-indigo-100 rounded-xl">
  <Languages className="w-5 h-5 text-indigo-600"/>
  </div>
  <h3 className="text-lg font-semibold text-gray-900">
@@ -984,7 +984,7 @@ const hasSkillsData = extendedStudent.technical_skills ||
  if (!extendedStudent) {
  console.error('StudentProfileModal - extendedStudent is undefined in renderExperienceInfo')
  return (
- <div className="bg-white rounded-none-none shadow-sm border border-gray-200 p-6">
+ <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
  <div className="text-center py-8">
  <div className="w-16 h-16 mx-auto mb-4 bg-red-100 flex items-center justify-center">
  <AlertCircle className="w-8 h-8 text-red-600"/>
@@ -1007,7 +1007,7 @@ const hasExperienceData = extendedStudent.internship_experience ||
 
  if (!hasExperienceData) {
  return (
- <div className="bg-white rounded-none-none shadow-sm border border-gray-200 p-6">
+ <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
  <div className="text-center py-8">
  <div className="w-16 h-16 mx-auto mb-4 bg-gray-100 flex items-center justify-center">
  <Trophy className="w-8 h-8 text-gray-400"/>
@@ -1027,16 +1027,16 @@ const hasExperienceData = extendedStudent.internship_experience ||
  <div className="space-y-6">
  {/* Internship Experience */}
  {extendedStudent.internship_experience && (
- <div className="rounded-none-none shadow-sm border border-green-200 p-6">
+ <div className="rounded-xl shadow-sm border border-blue-200 p-6">
  <div className="flex items-center gap-3 mb-4">
- <div className="p-3 rounded-none-none shadow-lg">
+ <div className="p-3 rounded-xl shadow-lg">
  <Briefcase className="w-6 h-6 text-white"/>
  </div>
- <h3 className="text-lg font-semibold text-green-900">
+ <h3 className="text-lg font-semibold text-blue-900">
  Internship Experience
  </h3>
  </div>
- <div className="p-4 rounded-none-none">
+ <div className="p-4 rounded-xl">
  <p className="text-sm text-gray-700 leading-relaxed">
  {extendedStudent.internship_experience}
  </p>
@@ -1046,16 +1046,16 @@ const hasExperienceData = extendedStudent.internship_experience ||
 
  {/* Project Details */}
  {extendedStudent.project_details && (
- <div className="rounded-none-none shadow-sm border border-orange-200 p-6">
+ <div className="rounded-xl shadow-sm border border-orange-200 p-6">
  <div className="flex items-center gap-3 mb-4">
- <div className="p-3 rounded-none-none shadow-lg">
+ <div className="p-3 rounded-xl shadow-lg">
  <Trophy className="w-6 h-6 text-white"/>
  </div>
  <h3 className="text-lg font-semibold text-orange-900">
  Project Details
  </h3>
  </div>
- <div className="p-4 rounded-none-none">
+ <div className="p-4 rounded-xl">
  <p className="text-sm text-gray-700 leading-relaxed">
  {extendedStudent.project_details}
  </p>
@@ -1065,16 +1065,16 @@ const hasExperienceData = extendedStudent.internship_experience ||
 
  {/* Extracurricular Activities */}
  {extendedStudent.extracurricular_activities && (
- <div className="rounded-none-none shadow-sm border border-purple-200 p-6">
+ <div className="rounded-xl shadow-sm border border-purple-200 p-6">
  <div className="flex items-center gap-3 mb-4">
- <div className="p-3 rounded-none-none shadow-lg">
+ <div className="p-3 rounded-xl shadow-lg">
  <Heart className="w-6 h-6 text-white"/>
  </div>
  <h3 className="text-lg font-semibold text-purple-900">
  Extracurricular Activities
  </h3>
  </div>
- <div className="p-4 rounded-none-none">
+ <div className="p-4 rounded-xl">
  <p className="text-sm text-gray-700 leading-relaxed">
  {extendedStudent.extracurricular_activities}
  </p>
@@ -1090,7 +1090,7 @@ const hasExperienceData = extendedStudent.internship_experience ||
  if (!extendedStudent) {
  console.error('StudentProfileModal - extendedStudent is undefined in renderPlacementInfo')
  return (
- <div className="bg-white rounded-none-none shadow-sm border border-gray-200 p-6">
+ <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
  <div className="text-center py-8">
  <div className="w-16 h-16 mx-auto mb-4 bg-red-100 flex items-center justify-center">
  <AlertCircle className="w-8 h-8 text-red-600"/>
@@ -1109,9 +1109,9 @@ const hasExperienceData = extendedStudent.internship_experience ||
  return (
  <div className="space-y-4">
  {/* Compact Placement Status */}
- <div className="bg-white rounded-none-none shadow-sm border border-gray-200 p-4">
+ <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
  <div className="flex items-center gap-3 mb-4">
- <div className="p-2 bg-blue-100 rounded-none-none">
+ <div className="p-2 bg-blue-100 rounded-xl">
  <TrendingUp className="w-5 h-5 text-blue-600"/>
  </div>
  <h3 className="text-lg font-semibold text-gray-900">
@@ -1121,7 +1121,7 @@ const hasExperienceData = extendedStudent.internship_experience ||
 
  <div className="grid grid-cols-2 gap-4">
  {/* Status */}
- <div className="text-center p-3 bg-gray-50 rounded-none-none">
+ <div className="text-center p-3 bg-gray-50 rounded-xl">
  <div className={`inline-flex items-center gap-2 px-3 py-1 text-sm font-medium mb-2 ${getStatusColor(extendedStudent.placement_status)}`}>
  {extendedStudent.placement_status ==='placed'? (
  <CheckCircle className="w-4 h-4"/>
@@ -1136,14 +1136,14 @@ const hasExperienceData = extendedStudent.internship_experience ||
  </p>
  )}
  {extendedStudent.package && (
- <p className="text-sm text-green-600 font-semibold">
+ <p className="text-sm text-blue-600 font-semibold">
  ₹{extendedStudent.package.toLocaleString()} LPA
  </p>
  )}
  </div>
 
  {/* Profile Completion */}
- <div className="text-center p-3 bg-gray-50 rounded-none-none">
+ <div className="text-center p-3 bg-gray-50 rounded-xl">
  <p className="text-sm font-medium text-gray-600 mb-2">Profile Completion</p>
  <div className="w-full bg-gray-200 h-2 mb-2">
  <div
@@ -1158,9 +1158,9 @@ const hasExperienceData = extendedStudent.internship_experience ||
  </div>
 
  {/* Compact Application Stats */}
- <div className="bg-white rounded-none-none shadow-sm border border-gray-200 p-4">
+ <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
  <div className="flex items-center gap-3 mb-4">
- <div className="p-2 bg-orange-100 rounded-none-none">
+ <div className="p-2 bg-orange-100 rounded-xl">
  <BarChart3 className="w-5 h-5 text-orange-600"/>
  </div>
  <h3 className="text-lg font-semibold text-gray-900">
@@ -1169,21 +1169,21 @@ const hasExperienceData = extendedStudent.internship_experience ||
  </div>
 
  <div className="grid grid-cols-3 gap-3">
- <div className="text-center p-3 bg-blue-50 rounded-none-none">
+ <div className="text-center p-3 bg-blue-50 rounded-xl">
  <FileText className="w-6 h-6 text-blue-600 mx-auto mb-1"/>
  <p className="text-2xl font-bold text-blue-600">
  {extendedStudent.total_applications}
  </p>
  <p className="text-xs text-gray-500">Applications</p>
  </div>
- <div className="text-center p-3 bg-green-50 rounded-none-none">
- <Users className="w-6 h-6 text-green-600 mx-auto mb-1"/>
- <p className="text-2xl font-bold text-green-600">
+ <div className="text-center p-3 bg-blue-50 rounded-xl">
+ <Users className="w-6 h-6 text-blue-600 mx-auto mb-1"/>
+ <p className="text-2xl font-bold text-blue-600">
  {extendedStudent.interviews_attended}
  </p>
  <p className="text-xs text-gray-500">Interviews</p>
  </div>
- <div className="text-center p-3 bg-purple-50 rounded-none-none">
+ <div className="text-center p-3 bg-purple-50 rounded-xl">
  <Award className="w-6 h-6 text-purple-600 mx-auto mb-1"/>
  <p className="text-2xl font-bold text-purple-600">
  {extendedStudent.offers_received}
@@ -1201,7 +1201,7 @@ const hasExperienceData = extendedStudent.internship_experience ||
  if (!extendedStudent) {
  console.error('StudentProfileModal - extendedStudent is undefined in renderDocumentsInfo')
  return (
- <div className="bg-white rounded-none-none shadow-sm border border-gray-200 p-6">
+ <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
  <div className="text-center py-8">
  <div className="w-16 h-16 mx-auto mb-4 bg-red-100 flex items-center justify-center">
  <AlertCircle className="w-8 h-8 text-red-600"/>
@@ -1232,7 +1232,7 @@ const hasDocuments = extendedStudent.resume ||
 
  if (!hasDocuments) {
  return (
- <div className="bg-white rounded-none-none shadow-sm border border-gray-200 p-6">
+ <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
  <div className="text-center py-8">
  <div className="w-16 h-16 mx-auto mb-4 bg-gray-100 flex items-center justify-center">
  <FileText className="w-8 h-8 text-gray-400"/>
@@ -1252,17 +1252,17 @@ const hasDocuments = extendedStudent.resume ||
  <div className="space-y-6">
  {/* Resume */}
  {extendedStudent.resume && (
- <div className="rounded-none-none shadow-sm border border-red-200 p-6">
+ <div className="rounded-xl shadow-sm border border-red-200 p-6">
  <div className="flex items-center gap-3 mb-4">
- <div className="p-3 rounded-none-none shadow-lg">
+ <div className="p-3 rounded-xl shadow-lg">
  <FileText className="w-6 h-6 text-white"/>
  </div>
  <h3 className="text-lg font-semibold text-red-900">
  Resume
  </h3>
  </div>
- <div className="flex items-center gap-3 p-3 rounded-none-none">
- <div className="p-2 bg-red-100 rounded-none-none">
+ <div className="flex items-center gap-3 p-3 rounded-xl">
+ <div className="p-2 bg-red-100 rounded-xl">
  <FileText className="w-5 h-5 text-red-600"/>
  </div>
  <span className="text-sm text-gray-700 font-medium">
@@ -1280,12 +1280,12 @@ const hasDocuments = extendedStudent.resume ||
 
  {/* Academic Certificates */}
  {(extendedStudent.tenth_certificate || extendedStudent.twelfth_certificate) && (
- <div className="rounded-none-none shadow-sm border border-green-200 p-6">
+ <div className="rounded-xl shadow-sm border border-blue-200 p-6">
  <div className="flex items-center gap-3 mb-4">
- <div className="p-3 rounded-none-none shadow-lg">
+ <div className="p-3 rounded-xl shadow-lg">
  <Certificate className="w-6 h-6 text-white"/>
  </div>
- <h3 className="text-lg font-semibold text-green-900">
+ <h3 className="text-lg font-semibold text-blue-900">
  Academic Certificates
  </h3>
  </div>
@@ -1324,9 +1324,9 @@ const hasDocuments = extendedStudent.resume ||
 
  {/* Internship Certificates */}
  {extendedStudent.internship_certificates && (
- <div className="bg-white rounded-none-none shadow-sm border border-gray-200 p-6">
+ <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
  <div className="flex items-center gap-3 mb-4">
- <div className="p-2 bg-orange-100 rounded-none-none">
+ <div className="p-2 bg-orange-100 rounded-xl">
  <Briefcase className="w-5 h-5 text-orange-600"/>
  </div>
  <h3 className="text-lg font-semibold text-gray-900">
@@ -1356,7 +1356,7 @@ const hasDocuments = extendedStudent.resume ||
  if (!extendedStudent) {
  console.error('StudentProfileModal - extendedStudent is undefined in renderSocialInfo')
  return (
- <div className="bg-white rounded-none-none shadow-sm border border-gray-200 p-6">
+ <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
  <div className="text-center py-8">
  <div className="w-16 h-16 mx-auto mb-4 bg-red-100 flex items-center justify-center">
  <AlertCircle className="w-8 h-8 text-red-600"/>
@@ -1379,7 +1379,7 @@ const hasSocialProfiles = extendedStudent.linkedin_profile ||
 
  if (!hasSocialProfiles) {
  return (
- <div className="bg-white rounded-none-none shadow-sm border border-gray-200 p-6">
+ <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
  <div className="text-center py-8">
  <div className="w-16 h-16 mx-auto mb-4 bg-gray-100 flex items-center justify-center">
  <Globe className="w-8 h-8 text-gray-400"/>
@@ -1398,9 +1398,9 @@ const hasSocialProfiles = extendedStudent.linkedin_profile ||
  return (
  <div className="space-y-6">
  {/* Social Profiles */}
- <div className="rounded-none-none shadow-sm border border-pink-200 p-6">
+ <div className="rounded-xl shadow-sm border border-pink-200 p-6">
  <div className="flex items-center gap-3 mb-4">
- <div className="p-3 rounded-none-none shadow-lg">
+ <div className="p-3 rounded-xl shadow-lg">
  <Globe className="w-6 h-6 text-white"/>
  </div>
  <h3 className="text-lg font-semibold text-pink-900">
@@ -1409,8 +1409,8 @@ const hasSocialProfiles = extendedStudent.linkedin_profile ||
  </div>
  <div className="space-y-3">
  {extendedStudent.linkedin_profile && (
- <div className="flex items-center gap-3 p-3 rounded-none-none">
- <div className="p-2 bg-blue-100 rounded-none-none">
+ <div className="flex items-center gap-3 p-3 rounded-xl">
+ <div className="p-2 bg-blue-100 rounded-xl">
  <Globe className="w-4 h-4 text-blue-600"/>
  </div>
  <span className="text-sm text-gray-700 font-medium">
@@ -1425,8 +1425,8 @@ const hasSocialProfiles = extendedStudent.linkedin_profile ||
  </div>
  )}
  {extendedStudent.github_profile && (
- <div className="flex items-center gap-3 p-3 rounded-none-none">
- <div className="p-2 bg-gray-100 rounded-none-none">
+ <div className="flex items-center gap-3 p-3 rounded-xl">
+ <div className="p-2 bg-gray-100 rounded-xl">
  <Code className="w-4 h-4 text-gray-800"/>
  </div>
  <span className="text-sm text-gray-700 font-medium">
@@ -1441,16 +1441,16 @@ const hasSocialProfiles = extendedStudent.linkedin_profile ||
  </div>
  )}
  {extendedStudent.personal_website && (
- <div className="flex items-center gap-3 p-3 rounded-none-none">
- <div className="p-2 bg-green-100 rounded-none-none">
- <Globe className="w-4 h-4 text-green-600"/>
+ <div className="flex items-center gap-3 p-3 rounded-xl">
+ <div className="p-2 bg-blue-100 rounded-xl">
+ <Globe className="w-4 h-4 text-blue-600"/>
  </div>
  <span className="text-sm text-gray-700 font-medium">
  Personal Website
  </span>
  <a
  href={extendedStudent.personal_website}
- target="_blank"rel="noopener noreferrer"className="ml-auto flex items-center gap-1 text-green-600 hover:text-green-700 text-sm font-medium">
+ target="_blank"rel="noopener noreferrer"className="ml-auto flex items-center gap-1 text-blue-600 hover:text-blue-700 text-sm font-medium">
  <ExternalLink className="w-4 h-4"/>
  Visit
  </a>
@@ -1470,14 +1470,14 @@ const hasSocialProfiles = extendedStudent.linkedin_profile ||
  onClick={handleBackdropClick}
  >
  <motion.div
- className="bg-white rounded-none-none shadow-2xl max-w-6xl w-full mx-2 sm:mx-4 max-h-[95vh] h-[95vh] overflow-hidden flex flex-col"initial={{ scale: 0.9, opacity: 0 }}
+ className="bg-white rounded-xl shadow-2xl max-w-6xl w-full mx-2 sm:mx-4 max-h-[95vh] h-[95vh] overflow-hidden flex flex-col"initial={{ scale: 0.9, opacity: 0 }}
  animate={{ scale: 1, opacity: 1 }}
  exit={{ scale: 0.9, opacity: 0 }}
  transition={{ type:"spring", duration: 0.3 }}
  onClick={(e) => e.stopPropagation()}
  >
  {/* Header */}
- <div className="bg-white border-b border-gray-200 p-3 sm:p-4 lg:p-6 rounded-none-none">
+ <div className="bg-white border-b border-gray-200 p-3 sm:p-4 lg:p-6 rounded-xl">
  <div className="flex items-center justify-between">
  <div className="flex items-center gap-4">
  {/* Profile image and name removed from top */}
@@ -1487,35 +1487,35 @@ const hasSocialProfiles = extendedStudent.linkedin_profile ||
  {/* Copy Email */}
  {/* <button
  onClick={() => copyToClipboard(extendedStudent.email)}
- className="p-2 hover:bg-gray-100 rounded-none-none transition-colors duration-200"title="Copy Email">
+ className="p-2 hover:bg-gray-100 rounded-xl transition-colors duration-200"title="Copy Email">
  <Copy className="w-4 h-4 text-gray-500"/>
  </button> */}
 
  {/* Export Data */}
  {/* <button
  onClick={exportProfileData}
- className="p-2 hover:bg-gray-100 rounded-none-none transition-colors duration-200"title="Export Profile Data">
+ className="p-2 hover:bg-gray-100 rounded-xl transition-colors duration-200"title="Export Profile Data">
  <Download className="w-4 h-4 text-gray-500"/>
  </button> */}
 
  {/* Share Profile */}
  {/* <button
  onClick={shareProfile}
- className="p-2 hover:bg-gray-100 rounded-none-none transition-colors duration-200"title="Share Profile">
+ className="p-2 hover:bg-gray-100 rounded-xl transition-colors duration-200"title="Share Profile">
  <Share2 className="w-4 h-4 text-gray-500"/>
  </button> */}
 
  {/* Print Profile */}
  {/* <button
  onClick={printProfile}
- className="p-2 hover:bg-gray-100 rounded-none-none transition-colors duration-200"title="Print Profile">
+ className="p-2 hover:bg-gray-100 rounded-xl transition-colors duration-200"title="Print Profile">
  <Printer className="w-4 h-4 text-gray-500"/>
  </button> */}
 
  {/* Close Button */}
  <button
  onClick={onClose}
- className="p-2 hover:bg-gray-100 rounded-none-none transition-colors duration-200"title="Close">
+ className="p-2 hover:bg-gray-100 rounded-xl transition-colors duration-200"title="Close">
  <X className="w-5 h-5 text-gray-500"/>
  </button>
  </div>
@@ -1565,10 +1565,10 @@ const target = e.target as HTMLImageElement;
  <div className="flex-1 w-full">
  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3 lg:gap-4 mb-2 sm:mb-3 lg:mb-4">
  {/* Email Card - Blue Theme */}
- <div className="flex items-center justify-between p-2 sm:p-3 lg:p-4 rounded-none-none border">
+ <div className="flex items-center justify-between p-2 sm:p-3 lg:p-4 rounded-xl border">
  <span className="text-xs text-blue-700 font-medium">Email</span>
  {extendedStudent.email_verified ? (
- <div className="p-1.5 bg-green-500">
+ <div className="p-1.5 bg-blue-500">
  <CheckCircle className="w-3 h-3 text-white"/>
  </div>
  ) : (
@@ -1579,10 +1579,10 @@ const target = e.target as HTMLImageElement;
  </div>
 
  {/* Phone Card - Purple Theme */}
- <div className="flex items-center justify-between p-2 sm:p-3 lg:p-4 rounded-none-none border">
+ <div className="flex items-center justify-between p-2 sm:p-3 lg:p-4 rounded-xl border">
  <span className="text-xs text-purple-700 font-medium">Phone</span>
  {extendedStudent.phone_verified ? (
- <div className="p-1.5 bg-green-500">
+ <div className="p-1.5 bg-blue-500">
  <CheckCircle className="w-3 h-3 text-white"/>
  </div>
  ) : (
@@ -1593,7 +1593,7 @@ const target = e.target as HTMLImageElement;
  </div>
 
  {/* Status Card - Orange Theme */}
- <div className="flex items-center justify-between p-2 sm:p-3 lg:p-4 rounded-none-none border">
+ <div className="flex items-center justify-between p-2 sm:p-3 lg:p-4 rounded-xl border">
  <span className="text-xs text-orange-700 font-medium">Status</span>
  <div className={`px-2 py-1 text-xs font-medium ${getStatusColor(extendedStudent.placement_status)}`}>
  {extendedStudent.placement_status}
@@ -1601,9 +1601,9 @@ const target = e.target as HTMLImageElement;
  </div>
 
  {/* Profile Card - Green Theme */}
- <div className="flex items-center justify-between p-2 sm:p-3 lg:p-4 rounded-none-none border">
- <span className="text-xs text-green-700 font-medium">Profile</span>
- <span className="text-xs font-medium text-green-600">
+ <div className="flex items-center justify-between p-2 sm:p-3 lg:p-4 rounded-xl border">
+ <span className="text-xs text-blue-700 font-medium">Profile</span>
+ <span className="text-xs font-medium text-blue-600">
  {Math.round(extendedStudent.profile_completion_percentage)}%
  </span>
  </div>

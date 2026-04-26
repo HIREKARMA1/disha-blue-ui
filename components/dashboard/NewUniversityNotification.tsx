@@ -40,7 +40,7 @@ export function NewUniversityNotification({ isOpen, onClose, newUniversities }: 
  animate={{ opacity: 1, scale: 1, y: 0 }}
  exit={{ opacity: 0, scale: 0.95, y: 20 }}
  className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 w-full max-w-md">
- <div className="bg-white rounded-none-none shadow-2xl border border-gray-200 overflow-hidden">
+ <div className="bg-white rounded-xl shadow-2xl border border-gray-200 overflow-hidden">
  {/* Header */}
  <div className="px-6 py-4">
  <div className="flex items-center justify-between">
@@ -73,9 +73,9 @@ export function NewUniversityNotification({ isOpen, onClose, newUniversities }: 
  key={university.id}
  initial={{ opacity: 0, x: -20 }}
  animate={{ opacity: 1, x: 0 }}
- className="flex items-start space-x-3 p-3 bg-gray-50 rounded-none-none hover:bg-gray-100 transition-colors">
+ className="flex items-start space-x-3 p-3 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors">
  <div className="flex-shrink-0">
- <div className="w-10 h-10 rounded-none-none flex items-center justify-center">
+ <div className="w-10 h-10 rounded-xl flex items-center justify-center">
  <Building2 className="w-5 h-5 text-white"/>
  </div>
  </div>
@@ -110,7 +110,7 @@ export function NewUniversityNotification({ isOpen, onClose, newUniversities }: 
  </p>
  <button
  onClick={handleViewUniversities}
- className="flex items-center space-x-2 px-4 py-2 text-white rounded-none-none transition-all duration-200 font-medium text-sm">
+ className="flex items-center space-x-2 px-4 py-2 text-white rounded-xl transition-all duration-200 font-medium text-sm">
  <span>View Universities</span>
  <ArrowRight className="w-4 h-4"/>
  </button>

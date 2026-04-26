@@ -14,17 +14,17 @@ const languages: Array<{ value: SupportedLocale; label: string }> = [
 const triggerBar = cn(
   'border-2 border-white/90 bg-white font-medium text-slate-900 shadow-none',
   'hover:bg-slate-50',
-  'focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-sage-deep',
-  'dark:border-emerald-400/70 dark:bg-emerald-900 dark:text-emerald-100',
-  'dark:hover:bg-emerald-800 dark:hover:text-white',
-  'dark:focus:ring-emerald-400 dark:focus:ring-offset-emerald-950',
-  '[&_svg]:text-slate-600 dark:[&_svg]:text-emerald-200',
+  'focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-blue-600',
+  'dark:border-blue-400/70 dark:bg-blue-900 dark:text-blue-100',
+  'dark:hover:bg-blue-800 dark:hover:text-white',
+  'dark:focus:ring-blue-400 dark:focus:ring-offset-blue-950',
+  '[&_svg]:text-slate-600 dark:[&_svg]:text-blue-200',
 )
 
 const triggerSurface = cn(
   'border border-slate-200 bg-white font-medium text-slate-900 shadow-none',
   'hover:bg-slate-50 hover:border-slate-300',
-  'focus:ring-2 focus:ring-sage-deep/40 focus:ring-offset-2 focus:ring-offset-white',
+  'focus:ring-2 focus:ring-blue-600/40 focus:ring-offset-2 focus:ring-offset-white',
   'dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100',
   'dark:hover:bg-slate-800 dark:hover:border-slate-500',
   'dark:focus:ring-slate-500 dark:focus:ring-offset-slate-900',
@@ -33,7 +33,7 @@ const triggerSurface = cn(
 
 interface LanguageSwitcherProps {
   compact?: boolean
-  /** `bar`: sage / emerald navbar. `surface`: white or neutral headers. */
+  /** `bar`: blue-50 / blue navbar. `surface`: white or neutral headers. */
   variant?: 'bar' | 'surface'
 }
 

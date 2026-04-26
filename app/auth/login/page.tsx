@@ -394,7 +394,7 @@ export default function LoginPage() {
   )}
 
   {selectedUserType === 'admin' && (
-  <div className="mt-8 rounded-none border border-slate-200 bg-sage/20 px-4 py-3 text-center dark:border-emerald-800 dark:bg-emerald-900/50">
+  <div className="mt-8 rounded-none border border-slate-200 bg-sage/20 px-4 py-3 text-center dark:border-blue-900 dark:bg-blue-900/45">
   <p className="text-sm text-muted-foreground">
   <Shield className="mx-auto mb-2 h-5 w-5 text-primary" aria-hidden />
   {t(locale, 'auth.login.adminAccessNotice')}

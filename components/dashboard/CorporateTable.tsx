@@ -81,7 +81,7 @@ const [showProfileModal, setShowProfileModal] = useState(false)
  const getStatusColor = (status: string) => {
  switch (status) {
  case 'active':
- return 'text-green-700'
+ return 'text-blue-700'
  case 'inactive':
  return 'text-amber-700'
  case 'suspended':
@@ -93,7 +93,7 @@ const [showProfileModal, setShowProfileModal] = useState(false)
 
  const getVerifiedColor = (verified: boolean) => {
  return verified
- ?'text-green-700':'text-amber-700'}
+ ?'text-blue-700':'text-amber-700'}
 
  // Sorting function
 const handleSort = (field: SortField) => {
@@ -271,7 +271,7 @@ const basicProfile = {
  // Loading state
  if (isLoading) {
  return (
- <div className="rounded-none-none overflow-hidden border border-slate-200 bg-white shadow-none">
+ <div className="rounded-xl overflow-hidden border border-slate-200 bg-white shadow-none">
  <div className="p-8 text-center">
  <div className="animate-spin h-12 w-12 border-b-2 border-primary-600 mx-auto mb-4"></div>
  <p className="text-muted-foreground">Loading employers...</p>
@@ -283,7 +283,7 @@ const basicProfile = {
  // Error state
  if (error) {
  return (
- <div className="rounded-none-none overflow-hidden border border-slate-200 bg-white shadow-none">
+ <div className="rounded-xl overflow-hidden border border-slate-200 bg-white shadow-none">
  <div className="p-8 text-center">
  <div className="text-red-500 mb-4">
  <svg className="w-12 h-12 mx-auto"fill="none"stroke="currentColor"viewBox="0 0 24 24">
@@ -294,7 +294,7 @@ const basicProfile = {
  <p className="text-muted-foreground mb-4">{error}</p>
  <button
  onClick={onRetry}
- className="px-4 py-2 bg-primary text-primary-foreground rounded-none-none hover:opacity-90 transition-colors duration-200">
+ className="px-4 py-2 bg-primary text-primary-foreground rounded-xl hover:opacity-90 transition-colors duration-200">
  Try Again
  </button>
  </div>
@@ -305,7 +305,7 @@ const basicProfile = {
  // Empty state
  if (corporates.length === 0) {
  return (
- <div className="rounded-none-none overflow-hidden border border-slate-200 bg-white shadow-none">
+ <div className="rounded-xl overflow-hidden border border-slate-200 bg-white shadow-none">
  <div className="p-8 text-center">
  <div className="text-muted-foreground mb-4">
  <Building2 className="w-12 h-12 mx-auto"/>
@@ -319,7 +319,7 @@ const basicProfile = {
 
  return (
  <>
- <div className="rounded-none-none overflow-hidden border border-slate-200 bg-white shadow-none">
+ <div className="rounded-xl overflow-hidden border border-slate-200 bg-white shadow-none">
  {/* Table Header */}
  <div className="overflow-x-auto">
  <table className="w-full">
@@ -399,7 +399,7 @@ const basicProfile = {
  <td className="px-6 py-4 whitespace-nowrap">
  <div className="flex items-center">
  <div className="flex-shrink-0 h-10 w-10">
- <div className="h-10 w-10 rounded-none-none flex items-center justify-center">
+ <div className="h-10 w-10 rounded-xl flex items-center justify-center">
  <Building2 className="h-5 w-5 text-white"/>
  </div>
  </div>
@@ -484,7 +484,7 @@ const basicProfile = {
  e.stopPropagation()
  onEditCorporate(corporate)
  }}
- className="p-2 rounded-none-none transition-colors duration-200 text-primary"title="Edit Corporate">
+ className="p-2 rounded-xl transition-colors duration-200 text-primary"title="Edit Corporate">
  <Edit className="h-4 w-4"/>
  </button>
  <button
@@ -492,8 +492,8 @@ const basicProfile = {
  e.stopPropagation()
  handleArchiveClick(corporate)
  }}
- className={`p-2 rounded-none-none transition-colors duration-200 ${corporate.is_archived
- ?'text-green-600':'text-amber-600'}`}
+ className={`p-2 rounded-xl transition-colors duration-200 ${corporate.is_archived
+ ?'text-blue-600':'text-amber-600'}`}
  title={corporate.is_archived ?'Unarchive Corporate':'Archive Corporate'}
  >
  {corporate.is_archived ? <Eye className="h-4 w-4"/> : <EyeOff className="h-4 w-4"/>}
@@ -503,7 +503,7 @@ const basicProfile = {
  e.stopPropagation()
  handleDeleteClick(corporate)
  }}
- className="p-2 rounded-none-none transition-colors duration-200 text-destructive"title="Delete Corporate">
+ className="p-2 rounded-xl transition-colors duration-200 text-destructive"title="Delete Corporate">
  <Trash2 className="h-4 w-4"/>
  </button>
  </div>
@@ -522,13 +522,13 @@ const basicProfile = {
  <button
  onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
  disabled={currentPage === 1}
- className="relative inline-flex items-center rounded-none-none border border-border bg-background px-4 py-2 text-sm font-medium text-foreground hover:bg-muted disabled:opacity-50 disabled:cursor-not-allowed">
+ className="relative inline-flex items-center rounded-xl border border-border bg-background px-4 py-2 text-sm font-medium text-foreground hover:bg-muted disabled:opacity-50 disabled:cursor-not-allowed">
  Previous
  </button>
  <button
  onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
  disabled={currentPage === totalPages}
- className="ml-3 relative inline-flex items-center rounded-none-none border border-border bg-background px-4 py-2 text-sm font-medium text-foreground hover:bg-muted disabled:opacity-50 disabled:cursor-not-allowed">
+ className="ml-3 relative inline-flex items-center rounded-xl border border-border bg-background px-4 py-2 text-sm font-medium text-foreground hover:bg-muted disabled:opacity-50 disabled:cursor-not-allowed">
  Next
  </button>
  </div>
@@ -549,11 +549,11 @@ const basicProfile = {
  </p>
  </div>
  <div>
- <nav className="relative z-0 inline-flex rounded-none-none -space-x-px">
+ <nav className="relative z-0 inline-flex rounded-xl -space-x-px">
  <button
  onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
  disabled={currentPage === 1}
- className="relative inline-flex items-center rounded-none-none border border-border bg-background px-2 py-2 text-sm font-medium text-muted-foreground hover:bg-muted disabled:opacity-50 disabled:cursor-not-allowed">
+ className="relative inline-flex items-center rounded-xl border border-border bg-background px-2 py-2 text-sm font-medium text-muted-foreground hover:bg-muted disabled:opacity-50 disabled:cursor-not-allowed">
  Previous
  </button>
  {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
@@ -569,7 +569,7 @@ const basicProfile = {
  <button
  onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
  disabled={currentPage === totalPages}
- className="relative inline-flex items-center rounded-none-none border border-border bg-background px-2 py-2 text-sm font-medium text-muted-foreground hover:bg-muted disabled:opacity-50 disabled:cursor-not-allowed">
+ className="relative inline-flex items-center rounded-xl border border-border bg-background px-2 py-2 text-sm font-medium text-muted-foreground hover:bg-muted disabled:opacity-50 disabled:cursor-not-allowed">
  Next
  </button>
  </nav>

@@ -38,17 +38,17 @@ export function UniversityDashboardStats({
  label:'Total Students',
  value: formatNumber(studentStats?.total_students || 0),
  icon: Users,
- accent:'text-emerald-800'},
+ accent:'text-blue-800'},
  {
  label:'Selected Students',
  value: formatNumber(studentStats?.placed_students || 0),
  icon: CheckCircle,
- accent:'text-sage-deep'},
+ accent:'text-blue-600'},
  {
  label:'Active Jobs',
  value: formatNumber(jobStats?.total_jobs_approved || 0),
  icon: Briefcase,
- accent:'text-emerald-800'},
+ accent:'text-blue-800'},
  {
  label:'Total Jobs',
  value: formatNumber((jobStats?.total_jobs_approved || 0) + (jobStats?.pending_approvals || 0)),
@@ -84,7 +84,7 @@ export function UniversityDashboardStats({
  )}
  </p>
  </div>
- <div className="shrink-0 rounded-2xl border border-slate-200 bg-sage p-3 shadow-sm transition-transform duration-200 group-hover:scale-110">
+ <div className="shrink-0 rounded-2xl border border-slate-200 bg-blue-50 p-3 shadow-sm transition-transform duration-200 group-hover:scale-110">
  <stat.icon className={cn('h-6 w-6', stat.accent)} />
  </div>
  </div>

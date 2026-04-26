@@ -193,16 +193,16 @@ function CareerAlignPageContent() {
   return (
     <StudentDashboardLayout>
       <motion.div initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.35 }} className="space-y-6">
-        <div className="dashboard-overview-card !bg-sage/10 p-6 dark:!bg-emerald-900/30">
+        <div className="dashboard-overview-card !bg-blue-50/10 p-6 dark:!bg-blue-900/30">
           <div className="flex items-center gap-3">
-            <div className="rounded-2xl border border-slate-200/90 bg-white p-2 dark:border-emerald-700 dark:bg-emerald-900/40">
-              <MessageSquareText className="h-5 w-5 text-sage-deep dark:text-emerald-300" />
+            <div className="rounded-2xl border border-slate-200/90 bg-white p-2 dark:border-blue-700 dark:bg-blue-900/40">
+              <MessageSquareText className="h-5 w-5 text-blue-600 dark:text-blue-300" />
             </div>
             <div>
-              <h1 className="font-display text-2xl font-semibold text-slate-900 dark:text-emerald-50">AI Interview Session</h1>
-              <p className="text-sm text-slate-600 dark:text-emerald-200/85">Personalized voice + video interview with role-aware questioning and advanced scoring.</p>
+              <h1 className="font-display text-2xl font-semibold text-slate-900 dark:text-blue-50">AI Interview Session</h1>
+              <p className="text-sm text-slate-600 dark:text-blue-200/85">Personalized voice + video interview with role-aware questioning and advanced scoring.</p>
               {resolvedRole && (
-                <p className="mt-1 text-xs text-slate-500 dark:text-emerald-300">
+                <p className="mt-1 text-xs text-slate-500 dark:text-blue-300">
                   Role: {resolvedRole} • Experience: {experienceLevel || "fresher"} • Mode: {interviewMode || "technical"}
                   {" • "}Personality: {personality || "friendly_mentor"}
                 </p>
@@ -271,32 +271,32 @@ function CareerAlignPageContent() {
 
         {pastInterviews.length > 0 && (
           <div className="dashboard-overview-card p-6">
-            <h3 className="mb-1 font-display text-lg font-semibold text-slate-900 dark:text-emerald-50">Past Interviews</h3>
-            <p className="mb-3 text-xs text-slate-600 dark:text-emerald-300">
+            <h3 className="mb-1 font-display text-lg font-semibold text-slate-900 dark:text-blue-50">Past Interviews</h3>
+            <p className="mb-3 text-xs text-slate-600 dark:text-blue-300">
               Score progression: {trendDelta >= 0 ? `+${trendDelta}` : trendDelta} points vs oldest session.
             </p>
             <div className="space-y-2">
               {pastInterviews.map((item, index) => (
-                <div key={`${item.created_at}-${index}`} className="rounded-xl border border-slate-200/90 bg-white p-3 text-sm dark:border-emerald-800 dark:bg-emerald-950/30">
-                  <p className="font-medium text-slate-900 dark:text-emerald-50">{item.role}</p>
-                  <p className="text-slate-600 dark:text-emerald-300">Score: {item.score}/100</p>
-                  <p className="mt-1 line-clamp-2 text-xs text-slate-500 dark:text-emerald-400">Replay transcript: {item.transcript}</p>
-                  <p className="text-xs text-slate-500 dark:text-emerald-400">{new Date(item.created_at).toLocaleString()}</p>
+                <div key={`${item.created_at}-${index}`} className="rounded-xl border border-slate-200/90 bg-white p-3 text-sm dark:border-blue-800 dark:bg-blue-950/30">
+                  <p className="font-medium text-slate-900 dark:text-blue-50">{item.role}</p>
+                  <p className="text-slate-600 dark:text-blue-300">Score: {item.score}/100</p>
+                  <p className="mt-1 line-clamp-2 text-xs text-slate-500 dark:text-blue-400">Replay transcript: {item.transcript}</p>
+                  <p className="text-xs text-slate-500 dark:text-blue-400">{new Date(item.created_at).toLocaleString()}</p>
                 </div>
               ))}
             </div>
-            <div className="mt-4 rounded-xl border border-slate-200/90 bg-sage/10 p-3 dark:border-emerald-800 dark:bg-emerald-900/30">
-              <p className="text-sm font-semibold text-slate-900 dark:text-emerald-50">Progress Milestones</p>
-              <p className="text-xs text-slate-600 dark:text-emerald-300">Current tier: {gamification.milestone} • Practice streak: {gamification.streak} sessions</p>
+            <div className="mt-4 rounded-xl border border-slate-200/90 bg-blue-50/10 p-3 dark:border-blue-800 dark:bg-blue-900/30">
+              <p className="text-sm font-semibold text-slate-900 dark:text-blue-50">Progress Milestones</p>
+              <p className="text-xs text-slate-600 dark:text-blue-300">Current tier: {gamification.milestone} • Practice streak: {gamification.streak} sessions</p>
               <div className="mt-2 flex flex-wrap gap-2">
                 {gamification.badges.length ? (
                   gamification.badges.map((badge) => (
-                    <span key={badge} className="rounded-full border border-sage-deep/30 bg-white px-3 py-1 text-xs font-medium text-sage-deep dark:border-emerald-500/40 dark:bg-emerald-950/40 dark:text-emerald-300">
+                    <span key={badge} className="rounded-full border border-blue-600/30 bg-white px-3 py-1 text-xs font-medium text-blue-600 dark:border-blue-500/40 dark:bg-blue-950/40 dark:text-blue-300">
                       {badge}
                     </span>
                   ))
                 ) : (
-                  <span className="text-xs text-slate-500 dark:text-emerald-400">Complete more rounds to unlock badges.</span>
+                  <span className="text-xs text-slate-500 dark:text-blue-400">Complete more rounds to unlock badges.</span>
                 )}
               </div>
             </div>

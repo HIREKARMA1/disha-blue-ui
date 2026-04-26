@@ -1,20 +1,19 @@
 'use client';
 
 import React, { useEffect, useState, useRef } from 'react';
-import Head from 'next/head';
 import './dishaai.css';
+import { Navbar } from '@/components/ui/navbar';
 
 export default function LakshyaLandingPage() {
   const [mounted, setMounted] = useState(false);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const particlesRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setMounted(true);
-    
+
     // Intersection Observers for entrance animations
     const observerOptions = { threshold: 0.1 };
-    
+
     const animateOnScroll = (selector: string, entranceStyles: any, animationStyles: any, delayFactor = 0.1) => {
       const elements = document.querySelectorAll(selector);
       const observer = new IntersectionObserver((entries) => {
@@ -67,37 +66,9 @@ export default function LakshyaLandingPage() {
 
   return (
     <div className="disha-theme">
-      {/* -- NAV -- */}
-      <nav className="nav">
-        <div className="nl">
-          <div className="nl-ic">
-            <svg viewBox="0 0 18 18" fill="none">
-              <path d="M9 2v7M9 9l-4 5M9 9l4 5" stroke="#fff" strokeWidth="1.8" strokeLinecap="round" />
-              <circle cx="9" cy="2" r="1.5" fill="#fff" fillOpacity=".7" />
-            </svg>
-          </div>
-          <span className="nl-name">Lakshya<b></b></span>
-        </div>
-        <ul className="nlinks" style={{ display: window.innerWidth < 768 ? (mobileMenuOpen ? 'flex' : 'none') : 'flex' }}>
-          <li><a href="#" onClick={() => setMobileMenuOpen(false)}>Platform</a></li>
-          <li><a href="#" onClick={() => setMobileMenuOpen(false)}>Skill Tracks</a></li>
-          <li><a href="#" onClick={() => setMobileMenuOpen(false)}>For Organisations</a></li>
-          <li><a href="#" onClick={() => setMobileMenuOpen(false)}>For Learners</a></li>
-          <li><a href="#" onClick={() => setMobileMenuOpen(false)}>Impact</a></li>
-          <li><a href="#" onClick={() => setMobileMenuOpen(false)}>About</a></li>
-        </ul>
-        <div className="nr" style={{ display: window.innerWidth < 768 && mobileMenuOpen ? 'none' : 'flex' }}>
-          <button className="btn-o">Sign in</button>
-          <button className="btn-f">See Tutorial</button>
-          <button 
-            className="mobile-menu-btn"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            style={{ display: window.innerWidth < 768 ? 'flex' : 'none', background: 'none', border: 'none', color: '#0a0e1a', cursor: 'pointer', fontSize: '1.5rem', padding: 0 }}
-          >
-            {mobileMenuOpen ? '✕' : '☰'}
-          </button>
-        </div>
-      </nav>
+      <Navbar variant="transparent" />
+      <div className="h-20" aria-hidden />
+      <div className="disha-content">
 
       {/* -- HERO -- */}
       <section className="hero">
@@ -175,29 +146,29 @@ export default function LakshyaLandingPage() {
       <div className="ai-strip">
         <div className="ai-strip-inner">
           {[
-            { 
-              title: "AI Resume Builder", 
-              desc: "ATS-optimised resume generated in under 3 minutes from your profile", 
-              icon: <path d="M7 10h6M10 7v6" />, 
-              dots: ["b", "t", "g"] 
+            {
+              title: "AI Resume Builder",
+              desc: "ATS-optimised resume generated in under 3 minutes from your profile",
+              icon: <path d="M7 10h6M10 7v6" />,
+              dots: ["b", "t", "g"]
             },
-            { 
-              title: "Ai - Driven Interviews", 
-              desc: "Voice AI conducts practice rounds with real-time feedback and scoring", 
-              icon: <g><circle cx="10" cy="8" r="3" /><path d="M5 15c0-2 2-3 5-3s5 1 5 3" /></g>, 
-              dots: ["b", "l", "t"] 
+            {
+              title: "Ai - Driven Interviews",
+              desc: "Voice AI conducts practice rounds with real-time feedback and scoring",
+              icon: <g><circle cx="10" cy="8" r="3" /><path d="M5 15c0-2 2-3 5-3s5 1 5 3" /></g>,
+              dots: ["b", "l", "t"]
             },
-            { 
-              title: "Job Matching", 
-              desc: "AI surfaces nearby openings ranked by skill compatibility score", 
-              icon: <path d="M4 14l4-4 4 4 4-10" />, 
-              dots: ["b", "l", "l"] 
+            {
+              title: "Job Matching",
+              desc: "AI surfaces nearby openings ranked by skill compatibility score",
+              icon: <path d="M4 14l4-4 4 4 4-10" />,
+              dots: ["b", "l", "l"]
             },
-            { 
-              title: "Ai-recommended courses", 
-              desc: "Discover courses that match your skills and interests", 
-              icon: <path d="M10 4l1 3h3l-2.5 2 1 3-2.5-2-2.5 2 1-3-2.5-2h3z" />, 
-              dots: ["l", "l", "t"] 
+            {
+              title: "Ai-recommended courses",
+              desc: "Discover courses that match your skills and interests",
+              icon: <path d="M10 4l1 3h3l-2.5 2 1 3-2.5-2-2.5 2 1-3-2.5-2h3z" />,
+              dots: ["l", "l", "t"]
             }
           ].map((item, idx) => (
             <div className="ai-card" key={idx}>
@@ -364,7 +335,7 @@ export default function LakshyaLandingPage() {
                   {["Urban Company", "Zomato", "Tata Projects"].map((co, i) => (
                     <div className="job-item" key={i}>
                       <div><div className="ji-co">{co}</div><div className="ji-role">Sector Partner</div></div>
-                      <span className="ji-pct">9{4-i}%</span>
+                      <span className="ji-pct">9{4 - i}%</span>
                     </div>
                   ))}
                 </div>
@@ -373,7 +344,7 @@ export default function LakshyaLandingPage() {
           </div>
         </div>
       </section>
-      
+
       {/* -- THE LEARNING JOURNEY -- */}
       <section className="journey-sec rv">
         <div className="wrap">
@@ -382,66 +353,76 @@ export default function LakshyaLandingPage() {
             <div className="ey" style={{ color: 'var(--b1)', marginBottom: 0 }}>THE LEARNING JOURNEY</div>
             <div style={{ flex: 1, height: '1px', background: 'var(--line)' }}></div>
           </div>
-          
+
           <div className="journey-wrap">
             {[
-              { t: "Register & Onboard", d: "Voice or text, any language", ic: (
-                <svg width="60" height="60" viewBox="0 0 60 60" fill="none">
-                  {/* Person with waving arm */}
-                  <circle cx="30" cy="22" r="8" fill="var(--b1)" opacity="0.4" />
-                  <path d="M22 45 c0 -8 16 -8 16 0" stroke="var(--b1)" strokeWidth="3" strokeLinecap="round" opacity="0.4" />
-                  <path d="M38 22 l6 -6" stroke="var(--b1)" strokeWidth="3" strokeLinecap="round" />
-                  {/* Form icon overlay */}
-                  <rect x="12" y="32" width="16" height="12" rx="2" fill="white" stroke="var(--b1)" strokeWidth="1.5" />
-                  <path d="M15 35 h10M15 38 h6" stroke="var(--b1)" strokeWidth="1.2" />
-                </svg>
-              )},
-              { t: "AI Skill Training", d: "Personalised learning tracks", ic: (
-                <svg width="60" height="60" viewBox="0 0 60 60" fill="none">
-                  {/* Open Book */}
-                  <path d="M30 42 v-22" stroke="var(--b1)" strokeWidth="1.5" />
-                  <path d="M30 42 c-8-1-14-1-16 0 v-22 c2-1 8-1 16 0 c8-1 14-1 16 0 v22 c-2-1-8-1-16 0" fill="var(--b1)" opacity="0.1" stroke="var(--b1)" strokeWidth="1.5" />
-                  <path d="M18 24 h8M18 28 h6M34 24 h8M34 28 h6" stroke="var(--b1)" strokeWidth="1" opacity="0.5" />
-                  {/* Star */}
-                  <path d="M48 18 l1.5 3 l3 1.5 l-3 1.5 l-1.5 3 l-1.5-3 l-3-1.5 l3-1.5 z" fill="var(--b1)" />
-                </svg>
-              )},
-              { t: "Mock Interviews", d: "AI voice feedback & scoring", ic: (
-                <svg width="60" height="60" viewBox="0 0 60 60" fill="none">
-                  {/* Microphone */}
-                  <rect x="25" cy="18" width="10" height="15" rx="5" fill="#00897b" opacity="0.2" stroke="#00897b" strokeWidth="2" />
-                  <path d="M20 28 a10 10 0 0 0 20 0" stroke="#00897b" strokeWidth="2" strokeLinecap="round" />
-                  <path d="M30 38 v4M25 42 h10" stroke="#00897b" strokeWidth="2" strokeLinecap="round" />
-                  {/* Score Badge */}
-                  <rect x="38" y="12" width="20" height="11" rx="3" fill="#00897b" />
-                  <text x="48" y="20" textAnchor="middle" fill="white" fontSize="5" fontWeight="800">86/100</text>
-                  <text x="48" y="25" textAnchor="middle" fill="#00897b" fontSize="4" fontWeight="600">Interview</text>
-                </svg>
-              )},
-              { t: "Get Certified", d: "Verifiable digital credential", ic: (
-                <svg width="60" height="60" viewBox="0 0 60 60" fill="none">
-                  {/* Certificate Card */}
-                  <rect x="15" y="18" width="30" height="20" rx="3" fill="var(--b1)" opacity="0.1" stroke="var(--b1)" strokeWidth="1.2" />
-                  <text x="30" y="26" textAnchor="middle" fill="var(--b1)" fontSize="4" fontWeight="800">Certificate</text>
-                  <text x="30" y="32" textAnchor="middle" fill="var(--ink3)" fontSize="2.5">Digital Skills - 2025</text>
-                  {/* Seal */}
-                  <circle cx="30" cy="38" r="6" fill="white" stroke="var(--b1)" strokeWidth="1.5" />
-                  <path d="M27 38 l2 2 l4-4" stroke="var(--b1)" strokeWidth="1.2" strokeLinecap="round" />
-                </svg>
-              )},
-              { t: "Get Placed", d: "Matched & hired locally", ic: (
-                <svg width="60" height="60" viewBox="0 0 60 60" fill="none">
-                  {/* Trophy */}
-                  <path d="M22 20 h16 v12 a8 8 0 0 1 -16 0 z" fill="var(--b1)" opacity="0.1" stroke="var(--b1)" strokeWidth="1.5" />
-                  <path d="M22 24 h-4 v4 a4 4 0 0 0 4 0 zM38 24 h4 v4 a4 4 0 0 1 -4 0 z" stroke="var(--b1)" strokeWidth="1.5" />
-                  <path d="M30 32 v6M24 38 h12" stroke="var(--b1)" strokeWidth="1.5" strokeLinecap="round" />
-                  <path d="M30 23 l1 2 l2 1 l-2 1 l-1 2 l-1-2 l-2-1 l2-1 z" fill="var(--b1)" />
-                  {/* Placed Badge */}
-                  <rect x="42" y="10" width="16" height="11" rx="3" fill="white" stroke="var(--b1)" strokeWidth="0.5" />
-                  <text x="50" y="16" textAnchor="middle" fill="var(--b1)" fontSize="4" fontWeight="800">Placed!</text>
-                  <text x="50" y="20" textAnchor="middle" fill="var(--ink3)" fontSize="2.5">Voisys - Pune</text>
-                </svg>
-              )}
+              {
+                t: "Register & Onboard", d: "Voice or text, any language", ic: (
+                  <svg width="60" height="60" viewBox="0 0 60 60" fill="none">
+                    {/* Person with waving arm */}
+                    <circle cx="30" cy="22" r="8" fill="var(--b1)" opacity="0.4" />
+                    <path d="M22 45 c0 -8 16 -8 16 0" stroke="var(--b1)" strokeWidth="3" strokeLinecap="round" opacity="0.4" />
+                    <path d="M38 22 l6 -6" stroke="var(--b1)" strokeWidth="3" strokeLinecap="round" />
+                    {/* Form icon overlay */}
+                    <rect x="12" y="32" width="16" height="12" rx="2" fill="white" stroke="var(--b1)" strokeWidth="1.5" />
+                    <path d="M15 35 h10M15 38 h6" stroke="var(--b1)" strokeWidth="1.2" />
+                  </svg>
+                )
+              },
+              {
+                t: "AI Skill Training", d: "Personalised learning tracks", ic: (
+                  <svg width="60" height="60" viewBox="0 0 60 60" fill="none">
+                    {/* Open Book */}
+                    <path d="M30 42 v-22" stroke="var(--b1)" strokeWidth="1.5" />
+                    <path d="M30 42 c-8-1-14-1-16 0 v-22 c2-1 8-1 16 0 c8-1 14-1 16 0 v22 c-2-1-8-1-16 0" fill="var(--b1)" opacity="0.1" stroke="var(--b1)" strokeWidth="1.5" />
+                    <path d="M18 24 h8M18 28 h6M34 24 h8M34 28 h6" stroke="var(--b1)" strokeWidth="1" opacity="0.5" />
+                    {/* Star */}
+                    <path d="M48 18 l1.5 3 l3 1.5 l-3 1.5 l-1.5 3 l-1.5-3 l-3-1.5 l3-1.5 z" fill="var(--b1)" />
+                  </svg>
+                )
+              },
+              {
+                t: "Mock Interviews", d: "AI voice feedback & scoring", ic: (
+                  <svg width="60" height="60" viewBox="0 0 60 60" fill="none">
+                    {/* Microphone */}
+                    <rect x="25" cy="18" width="10" height="15" rx="5" fill="#00897b" opacity="0.2" stroke="#00897b" strokeWidth="2" />
+                    <path d="M20 28 a10 10 0 0 0 20 0" stroke="#00897b" strokeWidth="2" strokeLinecap="round" />
+                    <path d="M30 38 v4M25 42 h10" stroke="#00897b" strokeWidth="2" strokeLinecap="round" />
+                    {/* Score Badge */}
+                    <rect x="38" y="12" width="20" height="11" rx="3" fill="#00897b" />
+                    <text x="48" y="20" textAnchor="middle" fill="white" fontSize="5" fontWeight="800">86/100</text>
+                    <text x="48" y="25" textAnchor="middle" fill="#00897b" fontSize="4" fontWeight="600">Interview</text>
+                  </svg>
+                )
+              },
+              {
+                t: "Get Certified", d: "Verifiable digital credential", ic: (
+                  <svg width="60" height="60" viewBox="0 0 60 60" fill="none">
+                    {/* Certificate Card */}
+                    <rect x="15" y="18" width="30" height="20" rx="3" fill="var(--b1)" opacity="0.1" stroke="var(--b1)" strokeWidth="1.2" />
+                    <text x="30" y="26" textAnchor="middle" fill="var(--b1)" fontSize="4" fontWeight="800">Certificate</text>
+                    <text x="30" y="32" textAnchor="middle" fill="var(--ink3)" fontSize="2.5">Digital Skills - 2025</text>
+                    {/* Seal */}
+                    <circle cx="30" cy="38" r="6" fill="white" stroke="var(--b1)" strokeWidth="1.5" />
+                    <path d="M27 38 l2 2 l4-4" stroke="var(--b1)" strokeWidth="1.2" strokeLinecap="round" />
+                  </svg>
+                )
+              },
+              {
+                t: "Get Placed", d: "Matched & hired locally", ic: (
+                  <svg width="60" height="60" viewBox="0 0 60 60" fill="none">
+                    {/* Trophy */}
+                    <path d="M22 20 h16 v12 a8 8 0 0 1 -16 0 z" fill="var(--b1)" opacity="0.1" stroke="var(--b1)" strokeWidth="1.5" />
+                    <path d="M22 24 h-4 v4 a4 4 0 0 0 4 0 zM38 24 h4 v4 a4 4 0 0 1 -4 0 z" stroke="var(--b1)" strokeWidth="1.5" />
+                    <path d="M30 32 v6M24 38 h12" stroke="var(--b1)" strokeWidth="1.5" strokeLinecap="round" />
+                    <path d="M30 23 l1 2 l2 1 l-2 1 l-1 2 l-1-2 l-2-1 l2-1 z" fill="var(--b1)" />
+                    {/* Placed Badge */}
+                    <rect x="42" y="10" width="16" height="11" rx="3" fill="white" stroke="var(--b1)" strokeWidth="0.5" />
+                    <text x="50" y="16" textAnchor="middle" fill="var(--b1)" fontSize="4" fontWeight="800">Placed!</text>
+                    <text x="50" y="20" textAnchor="middle" fill="var(--ink3)" fontSize="2.5">Voisys - Pune</text>
+                  </svg>
+                )
+              }
             ].map((step, i) => (
               <div className="j-item" key={i}>
                 <div className="j-icon-w">
@@ -580,12 +561,12 @@ export default function LakshyaLandingPage() {
         <div className="wrap">
           <div className="ey ey-n">Outcomes</div>
           <h2 className="sh" style={{ marginBottom: '3.5rem' }}>What changes when <span style={{ color: 'var(--b2)' }}>skills meet opportunity.</span></h2>
-          
+
           <div className="out-split">
             <div className="out-l">
               {[
-                { 
-                  t: "Employment generation at scale", 
+                {
+                  t: "Employment generation at scale",
                   d: "Organisations using Disha report 78% of their graduates placed within 60 days — compared to 34% through traditional methods alone.",
                   bg: "#eff6ff", ic: (
                     <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
@@ -593,8 +574,8 @@ export default function LakshyaLandingPage() {
                     </svg>
                   )
                 },
-                { 
-                  t: "First-generation earners", 
+                {
+                  t: "First-generation earners",
                   d: "68% of learners placed through Disha are the first formally employed person in their family — creating lasting economic change at the household level.",
                   bg: "#f0fdf4", ic: (
                     <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
@@ -603,8 +584,8 @@ export default function LakshyaLandingPage() {
                     </svg>
                   )
                 },
-                { 
-                  t: "Income uplift of 3.2×", 
+                {
+                  t: "Income uplift of 3.2×",
                   d: "Learners placed through the platform earn on average 3.2× more than their pre-training income — a direct measure of economic empowerment.",
                   bg: "#fff7ed", ic: (
                     <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
@@ -613,8 +594,8 @@ export default function LakshyaLandingPage() {
                     </svg>
                   )
                 },
-                { 
-                  t: "Measurable ROI for funders", 
+                {
+                  t: "Measurable ROI for funders",
                   d: "Every CSR rupee invested is tracked to a tangible outcome. Disha's impact dashboards give funders placement rates and income data automatically.",
                   bg: "#f5f3ff", ic: (
                     <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
@@ -636,7 +617,7 @@ export default function LakshyaLandingPage() {
               <div className="uplift-box rv">
                 <div className="uplift-label" style={{ color: 'var(--b1)', opacity: 0.8 }}>INCOME UPLIFT JOURNEY</div>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem', marginTop: '1.5rem', position: 'relative' }}>
-                  
+
                   {/* -- BEFORE -- */}
                   <div style={{ textAlign: 'center', width: '80px' }} className="up-pop up-stagger-1">
                     <div style={{ fontSize: '.75rem', color: 'var(--ink3)', marginBottom: '1rem', fontWeight: 600 }}>Before</div>
@@ -697,25 +678,25 @@ export default function LakshyaLandingPage() {
 
             <div className="out-r">
               {[
-                { 
-                  tag: "Placed · Electrician · Bhubaneswar", 
-                  q: "\"I was doing small local work before. After training, I got a stable electrician job. Now I earn regularly and support my family.\"", 
-                  n: "Rakesh Kumar · Batch 2024" 
+                {
+                  tag: "Placed · Electrician · Bhubaneswar",
+                  q: "\"I was doing small local work before. After training, I got a stable electrician job. Now I earn regularly and support my family.\"",
+                  n: "Rakesh Kumar · Batch 2024"
                 },
-                { 
-                  tag: "Placed · Delivery Partner · Cuttack", 
-                  q: "\"The training helped me get selected quickly. Now I earn daily and manage my expenses independently.\"", 
-                  n: "Amit Das · Batch 2023" 
+                {
+                  tag: "Placed · Delivery Partner · Cuttack",
+                  q: "\"The training helped me get selected quickly. Now I earn daily and manage my expenses independently.\"",
+                  n: "Amit Das · Batch 2023"
                 },
-                { 
-                  tag: "Placed · Driver · Bhubaneswar", 
-                  q: "\"Earlier I had no proper job. Now I have a stable driver job and my income is consistent every month.\"", 
-                  n: "Sanjay Nayak · Batch 2024" 
+                {
+                  tag: "Placed · Driver · Bhubaneswar",
+                  q: "\"Earlier I had no proper job. Now I have a stable driver job and my income is consistent every month.\"",
+                  n: "Sanjay Nayak · Batch 2024"
                 },
-                { 
-                  tag: "Placed · Construction Worker · Ranchi", 
-                  q: "\"I now work on bigger construction sites and earn better wages than before.\"", 
-                  n: "Rahul Singh · Batch 2023" 
+                {
+                  tag: "Placed · Construction Worker · Ranchi",
+                  q: "\"I now work on bigger construction sites and earn better wages than before.\"",
+                  n: "Rahul Singh · Batch 2023"
                 }
               ].map((tm, i) => (
                 <div className="tm-card" key={i}>
@@ -755,45 +736,45 @@ export default function LakshyaLandingPage() {
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.5rem' }}>
             {[
-              { 
-                name: "Sohan", 
-                role: "Data Entry", 
-                loc: "Bhubaneswar", 
-                tag: "1st Job", 
-                pay: "₹18K/mo", 
-                bg: "#f0f4ff", 
-                badge: "Offer Letter", 
-                badgeCol: "#0052cc" 
+              {
+                name: "Sohan",
+                role: "Data Entry",
+                loc: "Bhubaneswar",
+                tag: "1st Job",
+                pay: "₹18K/mo",
+                bg: "#f0f4ff",
+                badge: "Offer Letter",
+                badgeCol: "#0052cc"
               },
-              { 
-                name: "Priya", 
-                role: "Construction worker", 
-                loc: "Ranchi", 
-                tag: "Cleared!", 
-                pay: "3rd attempt", 
-                bg: "#e0f7f4", 
-                badge: "Cleared!", 
-                badgeCol: "#00897b" 
+              {
+                name: "Priya",
+                role: "Construction worker",
+                loc: "Ranchi",
+                tag: "Cleared!",
+                pay: "3rd attempt",
+                bg: "#e0f7f4",
+                badge: "Cleared!",
+                badgeCol: "#00897b"
               },
-              { 
-                name: "Ravi", 
-                role: "Plumber", 
-                loc: "Cuttack", 
-                tag: "Rapido driver", 
-                pay: "", 
-                bg: "#f0f4ff", 
-                badge: "Worker", 
-                badgeCol: "#0052cc" 
+              {
+                name: "Ravi",
+                role: "Plumber",
+                loc: "Cuttack",
+                tag: "Rapido driver",
+                pay: "",
+                bg: "#f0f4ff",
+                badge: "Worker",
+                badgeCol: "#0052cc"
               },
-              { 
-                name: "Rupa", 
-                role: "Worker", 
-                loc: "Cuttack", 
-                tag: "Hired!", 
-                pay: "", 
-                bg: "#f0f4ff", 
-                badge: "Hire Now", 
-                badgeCol: "#0052cc" 
+              {
+                name: "Rupa",
+                role: "Worker",
+                loc: "Cuttack",
+                tag: "Hired!",
+                pay: "",
+                bg: "#f0f4ff",
+                badge: "Hire Now",
+                badgeCol: "#0052cc"
               }
             ].map((p, i) => (
               <div key={i} style={{ textAlign: 'center' }}>
@@ -890,6 +871,7 @@ export default function LakshyaLandingPage() {
           </div>
         </div>
       </footer>
+      </div>
     </div>
   );
 }

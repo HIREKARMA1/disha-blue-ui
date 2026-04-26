@@ -35,7 +35,7 @@ export function WelcomeMessage({ className ='', studentName ='Student'}: Welcome
  initial={{ opacity: 0, y: 20 }}
  animate={{ opacity: 1, y: 0 }}
  transition={{ duration: 0.6 }}
- className={`dashboard-overview-card p-6 transition-colors hover:border-sage-deep/70 ${className}`}
+ className={`dashboard-overview-card p-6 transition-colors hover:border-blue-600/70 ${className}`}
  >
  <div className="space-y-4">
  <div className="min-w-0 space-y-4">
@@ -46,13 +46,13 @@ export function WelcomeMessage({ className ='', studentName ='Student'}: Welcome
  {message}
  </p>
  <div className="flex flex-wrap gap-2">
- <span className="inline-flex items-center rounded-full border border-slate-200/90 bg-sage px-3 py-1 text-sm text-slate-800 shadow-sm">
+ <span className="inline-flex items-center rounded-full border border-slate-200/90 bg-blue-50 px-3 py-1 text-sm text-slate-800 shadow-sm">
   {new Date().toLocaleDateString('en-US', { weekday:'long', month:'long', day:'numeric'})}
  </span>
- <span className="inline-flex items-center rounded-full border border-slate-200/90 bg-sage px-3 py-1 text-sm text-slate-800 shadow-sm">
+ <span className="inline-flex items-center rounded-full border border-slate-200/90 bg-blue-50 px-3 py-1 text-sm text-slate-800 shadow-sm">
   {tf(locale,'student.welcome.tagLocalOpportunities','Local Opportunities')}
  </span>
- <span className="inline-flex items-center rounded-full border border-slate-200/90 bg-sage px-3 py-1 text-sm text-slate-800 shadow-sm">
+ <span className="inline-flex items-center rounded-full border border-slate-200/90 bg-blue-50 px-3 py-1 text-sm text-slate-800 shadow-sm">
   {tf(locale,'student.welcome.tagNearbyHiring','Nearby Hiring')}
  </span>
  </div>

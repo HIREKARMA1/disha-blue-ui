@@ -96,7 +96,7 @@ const [showStudentsModal, setShowStudentsModal] = useState(false)
  const getStatusColor = (status: string) => {
   switch (status) {
   case 'active':
-  return 'bg-green-100 text-green-800'
+  return 'bg-blue-100 text-blue-800'
   case 'inactive':
   return 'bg-yellow-100 text-yellow-800'
   case 'pending':
@@ -110,7 +110,7 @@ const [showStudentsModal, setShowStudentsModal] = useState(false)
 
  const getVerifiedColor = (verified: boolean) => {
  return verified
- ?'bg-green-100 text-green-800':'bg-yellow-100 text-yellow-800'}
+ ?'bg-blue-100 text-blue-800':'bg-yellow-100 text-yellow-800'}
 
  // Check if university is new (show badge for newly created universities that haven't been modified by admin)
  // Badge disappears when admin updates the university (status change, profile edit, etc.)
@@ -151,7 +151,7 @@ const updatedTime = new Date(university.updated_at).getTime()
 
  // Row color function - alternating transparent cool colors
 const getRowColor = (index: number) => {
- const colors = ['', // Light blue'', // Light green'', // Light purple'', // Light orange
+ const colors = ['', // Light blue'', // Light blue'', // Light purple'', // Light orange
  ]
  return colors[index % colors.length]
  }
@@ -324,7 +324,7 @@ const fullProfile = {
  // Loading state
  if (isLoading) {
  return (
- <div className="overflow-hidden rounded-none-none border border-gray-700 bg-gray-800">
+ <div className="overflow-hidden rounded-xl border border-gray-700 bg-gray-800">
  <div className="p-8 text-center">
  <div className="animate-spin h-12 w-12 border-b-2 border-primary-600 mx-auto mb-4"></div>
  <p className="text-sm text-gray-400">Loading universities...</p>
@@ -336,7 +336,7 @@ const fullProfile = {
  // Error state
  if (error) {
  return (
- <div className="overflow-hidden rounded-none-none border border-gray-700 bg-gray-800">
+ <div className="overflow-hidden rounded-xl border border-gray-700 bg-gray-800">
  <div className="p-8 text-center">
  <div className="text-red-500 mb-4">
  <svg className="w-12 h-12 mx-auto"fill="none"stroke="currentColor"viewBox="0 0 24 24">
@@ -347,7 +347,7 @@ const fullProfile = {
  <p className="mb-4 text-sm text-gray-400">{error}</p>
  <button
  onClick={onRetry}
- className="rounded-none-none bg-green-600 px-4 py-2 text-white transition-colors duration-200 hover:bg-green-500 active:bg-green-700">
+ className="rounded-xl bg-blue-600 px-4 py-2 text-white transition-colors duration-200 hover:bg-blue-500 active:bg-blue-700">
  Try Again
  </button>
  </div>
@@ -358,7 +358,7 @@ const fullProfile = {
  // Empty state
  if (universities.length === 0) {
  return (
- <div className="overflow-hidden rounded-none-none border border-gray-700 bg-gray-800">
+ <div className="overflow-hidden rounded-xl border border-gray-700 bg-gray-800">
  <div className="p-8 text-center">
  <div className="text-gray-400 mb-4">
  <Building2 className="w-12 h-12 mx-auto"/>
@@ -372,7 +372,7 @@ const fullProfile = {
 
  return (
  <>
- <div className="overflow-hidden rounded-none-none border border-gray-700 bg-gray-800">
+ <div className="overflow-hidden rounded-xl border border-gray-700 bg-gray-800">
  {/* Table Header */}
  <div className="overflow-x-auto">
  <table className="w-full">
@@ -453,7 +453,7 @@ const fullProfile = {
  <td className="whitespace-nowrap px-6 py-5">
  <div className="flex items-center">
  <div className="flex-shrink-0 h-10 w-10">
- <div className="h-10 w-10 rounded-none-none flex items-center justify-center">
+ <div className="h-10 w-10 rounded-xl flex items-center justify-center">
  <Building2 className="h-5 w-5 text-white"/>
  </div>
  </div>
@@ -558,7 +558,7 @@ const fullProfile = {
  e.stopPropagation()
  onEditUniversity(university)
  }}
- className="rounded-none-none border border-gray-600 bg-transparent p-2 text-white transition-colors duration-200 hover:bg-gray-700"title="Edit University">
+ className="rounded-xl border border-gray-600 bg-transparent p-2 text-white transition-colors duration-200 hover:bg-gray-700"title="Edit University">
  <Edit className="h-4 w-4"/>
  </button>
  <button
@@ -566,7 +566,7 @@ const fullProfile = {
  e.stopPropagation()
  handleArchiveClick(university)
  }}
- className={`rounded-none-none border border-gray-600 bg-transparent p-2 text-white transition-colors duration-200 ${university.is_archived
+ className={`rounded-xl border border-gray-600 bg-transparent p-2 text-white transition-colors duration-200 ${university.is_archived
  ?'hover:bg-gray-700':'hover:bg-gray-700'}`}
  title={university.is_archived ?'Unarchive University':'Archive University'}
  >
@@ -577,7 +577,7 @@ const fullProfile = {
  e.stopPropagation()
  handleDeleteClick(university)
  }}
- className="rounded-none-none border border-gray-600 bg-transparent p-2 text-white transition-colors duration-200 hover:bg-gray-700"title="Delete University">
+ className="rounded-xl border border-gray-600 bg-transparent p-2 text-white transition-colors duration-200 hover:bg-gray-700"title="Delete University">
  <Trash2 className="h-4 w-4"/>
  </button>
  </div>
@@ -596,13 +596,13 @@ const fullProfile = {
  <button
  onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
  disabled={currentPage === 1}
- className="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-none-none text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
+ className="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-xl text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
  Previous
  </button>
  <button
  onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
  disabled={currentPage === totalPages}
- className="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-none-none text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
+ className="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-xl text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
  Next
  </button>
  </div>
@@ -623,11 +623,11 @@ const fullProfile = {
  </p>
  </div>
  <div>
- <nav className="relative z-0 inline-flex rounded-none-none shadow-sm -space-x-px">
+ <nav className="relative z-0 inline-flex rounded-xl shadow-sm -space-x-px">
  <button
  onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
  disabled={currentPage === 1}
- className="relative inline-flex items-center px-2 py-2 rounded-none-none border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
+ className="relative inline-flex items-center px-2 py-2 rounded-xl border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
  Previous
  </button>
  {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
@@ -643,7 +643,7 @@ const fullProfile = {
  <button
  onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
  disabled={currentPage === totalPages}
- className="relative inline-flex items-center px-2 py-2 rounded-none-none border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
+ className="relative inline-flex items-center px-2 py-2 rounded-xl border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
  Next
  </button>
  </nav>

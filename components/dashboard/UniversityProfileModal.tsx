@@ -147,7 +147,7 @@ const extendedUniversity: ExtendedUniversityProfile = {
  const getStatusColor = (status: string) => {
  switch (status) {
  case 'active':
- return 'bg-green-100 text-green-800'
+ return 'bg-blue-100 text-blue-800'
  case 'inactive':
  return 'bg-yellow-100 text-yellow-800'
  case 'suspended':
@@ -171,9 +171,9 @@ const extendedUniversity: ExtendedUniversityProfile = {
  icon:'text-purple-600'}
  case'placement':
  return {
- active:'border-green-500 text-green-600 bg-green-50',
- indicator:'bg-green-500',
- icon:'text-green-600'}
+ active:'border-blue-500 text-blue-600 bg-blue-50',
+ indicator:'bg-blue-500',
+ icon:'text-blue-600'}
  case'contact':
  return {
  active:'border-orange-500 text-orange-600 bg-orange-50',
@@ -217,7 +217,7 @@ const extendedUniversity: ExtendedUniversityProfile = {
  } catch (error) {
  console.error('Error rendering tab content for tab:', activeTab, error)
  return (
- <div className="bg-white rounded-none-none shadow-sm border border-gray-200 p-6">
+ <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
  <div className="text-center py-8">
  <div className="w-16 h-16 mx-auto mb-4 bg-red-100 flex items-center justify-center">
  <AlertCircle className="w-8 h-8 text-red-600"/>
@@ -241,7 +241,7 @@ const extendedUniversity: ExtendedUniversityProfile = {
  if (!extendedUniversity) {
  console.error('UniversityProfileModal - extendedUniversity is undefined in renderBasicInfo')
  return (
- <div className="bg-white rounded-none-none shadow-sm border border-gray-200 p-6">
+ <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
  <div className="text-center py-8">
  <div className="w-16 h-16 mx-auto mb-4 bg-red-100 flex items-center justify-center">
  <AlertCircle className="w-8 h-8 text-red-600"/>
@@ -260,9 +260,9 @@ const extendedUniversity: ExtendedUniversityProfile = {
  return (
  <div className="space-y-6">
  {/* University Information */}
- <div className="rounded-none-none shadow-sm border border-blue-200 p-6">
+ <div className="rounded-xl shadow-sm border border-blue-200 p-6">
  <div className="flex items-center gap-3 mb-4">
- <div className="p-3 rounded-none-none shadow-lg">
+ <div className="p-3 rounded-xl shadow-lg">
  <Building2 className="w-6 h-6 text-white"/>
  </div>
  <h3 className="text-lg font-semibold text-blue-900">
@@ -271,8 +271,8 @@ const extendedUniversity: ExtendedUniversityProfile = {
  </div>
  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
  <div className="space-y-3">
- <div className="flex items-center gap-3 p-3 rounded-none-none">
- <div className="p-2 bg-blue-100 rounded-none-none">
+ <div className="flex items-center gap-3 p-3 rounded-xl">
+ <div className="p-2 bg-blue-100 rounded-xl">
  <Building2 className="w-4 h-4 text-blue-600"/>
  </div>
  <div>
@@ -282,8 +282,8 @@ const extendedUniversity: ExtendedUniversityProfile = {
  <p className="text-xs text-blue-600">University Name</p>
  </div>
  </div>
- <div className="flex items-center gap-3 p-3 rounded-none-none">
- <div className="p-2 bg-purple-100 rounded-none-none">
+ <div className="flex items-center gap-3 p-3 rounded-xl">
+ <div className="p-2 bg-purple-100 rounded-xl">
  <GraduationCap className="w-4 h-4 text-purple-600"/>
  </div>
  <div>
@@ -294,22 +294,22 @@ const extendedUniversity: ExtendedUniversityProfile = {
  </div>
  </div>
  {extendedUniversity.established_year && (
- <div className="flex items-center gap-3 p-3 rounded-none-none">
- <div className="p-2 bg-green-100 rounded-none-none">
- <Calendar className="w-4 h-4 text-green-600"/>
+ <div className="flex items-center gap-3 p-3 rounded-xl">
+ <div className="p-2 bg-blue-100 rounded-xl">
+ <Calendar className="w-4 h-4 text-blue-600"/>
  </div>
  <div>
  <p className="text-sm font-medium text-gray-900">
  {extendedUniversity.established_year}
  </p>
- <p className="text-xs text-green-600">Established Year</p>
+ <p className="text-xs text-blue-600">Established Year</p>
  </div>
  </div>
  )}
  </div>
  <div className="space-y-3">
- <div className="flex items-center gap-3 p-3 rounded-none-none">
- <div className="p-2 bg-orange-100 rounded-none-none">
+ <div className="flex items-center gap-3 p-3 rounded-xl">
+ <div className="p-2 bg-orange-100 rounded-xl">
  <Calendar className="w-4 h-4 text-orange-600"/>
  </div>
  <div>
@@ -319,8 +319,8 @@ const extendedUniversity: ExtendedUniversityProfile = {
  <p className="text-xs text-orange-600">Joined Platform</p>
  </div>
  </div>
- <div className="flex items-center gap-3 p-3 rounded-none-none">
- <div className="p-2 bg-indigo-100 rounded-none-none">
+ <div className="flex items-center gap-3 p-3 rounded-xl">
+ <div className="p-2 bg-indigo-100 rounded-xl">
  <Users className="w-4 h-4 text-indigo-600"/>
  </div>
  <div>
@@ -330,8 +330,8 @@ const extendedUniversity: ExtendedUniversityProfile = {
  <p className="text-xs text-indigo-600">Total Students</p>
  </div>
  </div>
- <div className="flex items-center gap-3 p-3 rounded-none-none">
- <div className="p-2 bg-red-100 rounded-none-none">
+ <div className="flex items-center gap-3 p-3 rounded-xl">
+ <div className="p-2 bg-red-100 rounded-xl">
  <Shield className="w-4 h-4 text-red-600"/>
  </div>
  <div>
@@ -347,9 +347,9 @@ const extendedUniversity: ExtendedUniversityProfile = {
 
  {/* Additional Information */}
  {extendedUniversity.bio && (
- <div className="rounded-none-none shadow-sm border border-gray-200 p-6">
+ <div className="rounded-xl shadow-sm border border-gray-200 p-6">
  <div className="flex items-center gap-3 mb-4">
- <div className="p-3 rounded-none-none shadow-lg">
+ <div className="p-3 rounded-xl shadow-lg">
  <FileText className="w-6 h-6 text-white"/>
  </div>
  <h3 className="text-lg font-semibold text-gray-900">
@@ -368,7 +368,7 @@ const extendedUniversity: ExtendedUniversityProfile = {
  const renderAcademicInfo = () => {
  if (!extendedUniversity) {
  return (
- <div className="bg-white rounded-none-none shadow-sm border border-gray-200 p-6">
+ <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
  <div className="text-center py-8">
  <div className="w-16 h-16 mx-auto mb-4 bg-red-100 flex items-center justify-center">
  <AlertCircle className="w-8 h-8 text-red-600"/>
@@ -392,7 +392,7 @@ const hasAcademicData = extendedUniversity.courses_offered ||
 
  if (!hasAcademicData) {
  return (
- <div className="bg-white rounded-none-none shadow-sm border border-gray-200 p-6">
+ <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
  <div className="text-center py-8">
  <div className="w-16 h-16 mx-auto mb-4 bg-gray-100 flex items-center justify-center">
  <GraduationCap className="w-8 h-8 text-gray-400"/>
@@ -414,9 +414,9 @@ const hasAcademicData = extendedUniversity.courses_offered ||
  return (
  <div className="space-y-6">
  {/* Academic Programs */}
- <div className="rounded-none-none shadow-sm border border-purple-200 p-6">
+ <div className="rounded-xl shadow-sm border border-purple-200 p-6">
  <div className="flex items-center gap-3 mb-4">
- <div className="p-3 rounded-none-none shadow-lg">
+ <div className="p-3 rounded-xl shadow-lg">
  <GraduationCap className="w-6 h-6 text-white"/>
  </div>
  <h3 className="text-lg font-semibold text-purple-900">
@@ -427,7 +427,7 @@ const hasAcademicData = extendedUniversity.courses_offered ||
  {extendedUniversity.courses_offered && (
  <div className="space-y-3">
  <h4 className="font-medium text-purple-800">Courses Offered</h4>
- <p className="text-sm text-gray-700 p-3 rounded-none-none">
+ <p className="text-sm text-gray-700 p-3 rounded-xl">
  {extendedUniversity.courses_offered}
  </p>
  </div>
@@ -435,7 +435,7 @@ const hasAcademicData = extendedUniversity.courses_offered ||
  {extendedUniversity.departments && (
  <div className="space-y-3">
  <h4 className="font-medium text-purple-800">Departments</h4>
- <p className="text-sm text-gray-700 p-3 rounded-none-none">
+ <p className="text-sm text-gray-700 p-3 rounded-xl">
  {extendedUniversity.departments}
  </p>
  </div>
@@ -443,7 +443,7 @@ const hasAcademicData = extendedUniversity.courses_offered ||
  {extendedUniversity.programs_offered && (
  <div className="space-y-3 md:col-span-2">
  <h4 className="font-medium text-purple-800">Programs Offered</h4>
- <p className="text-sm text-gray-700 p-3 rounded-none-none">
+ <p className="text-sm text-gray-700 p-3 rounded-xl">
  {extendedUniversity.programs_offered}
  </p>
  </div>
@@ -453,17 +453,17 @@ const hasAcademicData = extendedUniversity.courses_offered ||
 
  {/* Faculty Information */}
  {extendedUniversity.total_faculty && (
- <div className="rounded-none-none shadow-sm border border-indigo-200 p-6">
+ <div className="rounded-xl shadow-sm border border-indigo-200 p-6">
  <div className="flex items-center gap-3 mb-4">
- <div className="p-3 rounded-none-none shadow-lg">
+ <div className="p-3 rounded-xl shadow-lg">
  <Users className="w-6 h-6 text-white"/>
  </div>
  <h3 className="text-lg font-semibold text-indigo-900">
  Faculty Information
  </h3>
  </div>
- <div className="flex items-center gap-3 p-3 rounded-none-none">
- <div className="p-2 bg-indigo-100 rounded-none-none">
+ <div className="flex items-center gap-3 p-3 rounded-xl">
+ <div className="p-2 bg-indigo-100 rounded-xl">
  <Users className="w-4 h-4 text-indigo-600"/>
  </div>
  <div>
@@ -482,7 +482,7 @@ const hasAcademicData = extendedUniversity.courses_offered ||
  const renderPlacementInfo = () => {
  if (!extendedUniversity) {
  return (
- <div className="bg-white rounded-none-none shadow-sm border border-gray-200 p-6">
+ <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
  <div className="text-center py-8">
  <div className="w-16 h-16 mx-auto mb-4 bg-red-100 flex items-center justify-center">
  <AlertCircle className="w-8 h-8 text-red-600"/>
@@ -509,7 +509,7 @@ const hasPlacementData = extendedUniversity.placement_rate ||
 
  if (!hasPlacementData) {
  return (
- <div className="bg-white rounded-none-none shadow-sm border border-gray-200 p-6">
+ <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
  <div className="text-center py-8">
  <div className="w-16 h-16 mx-auto mb-4 bg-gray-100 flex items-center justify-center">
  <BarChart3 className="w-8 h-8 text-gray-400"/>
@@ -531,9 +531,9 @@ const hasPlacementData = extendedUniversity.placement_rate ||
  return (
  <div className="space-y-6">
  {/* Student Placement Statistics */}
- <div className="rounded-none-none shadow-sm border border-indigo-200 p-6">
+ <div className="rounded-xl shadow-sm border border-indigo-200 p-6">
  <div className="flex items-center gap-3 mb-4">
- <div className="p-3 rounded-none-none shadow-lg">
+ <div className="p-3 rounded-xl shadow-lg">
  <Users className="w-6 h-6 text-white"/>
  </div>
  <h3 className="text-lg font-semibold text-indigo-900">
@@ -542,14 +542,14 @@ const hasPlacementData = extendedUniversity.placement_rate ||
  </div>
  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
  {/* Placed Students */}
- <div className="rounded-none-none p-4 border border-green-200">
+ <div className="rounded-xl p-4 border border-blue-200">
  <div className="flex items-center gap-3 mb-2">
- <div className="p-2 bg-green-100 rounded-none-none">
- <CheckCircle2 className="w-5 h-5 text-green-600"/>
+ <div className="p-2 bg-blue-100 rounded-xl">
+ <CheckCircle2 className="w-5 h-5 text-blue-600"/>
  </div>
- <h4 className="font-medium text-green-800">Placed Students</h4>
+ <h4 className="font-medium text-blue-800">Placed Students</h4>
  </div>
- <p className="text-3xl font-bold text-green-600">
+ <p className="text-3xl font-bold text-blue-600">
  {extendedUniversity.placed_students || 0}
  </p>
  <p className="text-xs text-gray-500 mt-1">
@@ -558,9 +558,9 @@ const hasPlacementData = extendedUniversity.placement_rate ||
  </div>
 
  {/* Shortlisted Students */}
- <div className="rounded-none-none p-4 border border-blue-200">
+ <div className="rounded-xl p-4 border border-blue-200">
  <div className="flex items-center gap-3 mb-2">
- <div className="p-2 bg-blue-100 rounded-none-none">
+ <div className="p-2 bg-blue-100 rounded-xl">
  <UserCheck className="w-5 h-5 text-blue-600"/>
  </div>
  <h4 className="font-medium text-blue-800">Shortlisted Students</h4>
@@ -574,9 +574,9 @@ const hasPlacementData = extendedUniversity.placement_rate ||
  </div>
 
  {/* Rejected Students */}
- <div className="rounded-none-none p-4 border border-red-200">
+ <div className="rounded-xl p-4 border border-red-200">
  <div className="flex items-center gap-3 mb-2">
- <div className="p-2 bg-red-100 rounded-none-none">
+ <div className="p-2 bg-red-100 rounded-xl">
  <XCircle className="w-5 h-5 text-red-600"/>
  </div>
  <h4 className="font-medium text-red-800">Rejected Students</h4>
@@ -594,22 +594,22 @@ const hasPlacementData = extendedUniversity.placement_rate ||
  {/* Placement Statistics */}
  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
  {extendedUniversity.placement_rate && (
- <div className="rounded-none-none shadow-sm border border-green-200 p-6">
+ <div className="rounded-xl shadow-sm border border-blue-200 p-6">
  <div className="flex items-center gap-3 mb-3">
- <div className="p-2 bg-green-100 rounded-none-none">
- <BarChart3 className="w-5 h-5 text-green-600"/>
+ <div className="p-2 bg-blue-100 rounded-xl">
+ <BarChart3 className="w-5 h-5 text-blue-600"/>
  </div>
- <h4 className="font-medium text-green-800">Placement Rate</h4>
+ <h4 className="font-medium text-blue-800">Placement Rate</h4>
  </div>
- <p className="text-2xl font-bold text-green-600">
+ <p className="text-2xl font-bold text-blue-600">
  {extendedUniversity.placement_rate}%
  </p>
  </div>
  )}
  {extendedUniversity.average_package && (
- <div className="rounded-none-none shadow-sm border border-blue-200 p-6">
+ <div className="rounded-xl shadow-sm border border-blue-200 p-6">
  <div className="flex items-center gap-3 mb-3">
- <div className="p-2 bg-blue-100 rounded-none-none">
+ <div className="p-2 bg-blue-100 rounded-xl">
  <Award className="w-5 h-5 text-blue-600"/>
  </div>
  <h4 className="font-medium text-blue-800">Average Package</h4>
@@ -620,9 +620,9 @@ const hasPlacementData = extendedUniversity.placement_rate ||
  </div>
  )}
  {extendedUniversity.total_students && (
- <div className="rounded-none-none shadow-sm border border-purple-200 p-6">
+ <div className="rounded-xl shadow-sm border border-purple-200 p-6">
  <div className="flex items-center gap-3 mb-3">
- <div className="p-2 bg-purple-100 rounded-none-none">
+ <div className="p-2 bg-purple-100 rounded-xl">
  <Users className="w-5 h-5 text-purple-600"/>
  </div>
  <h4 className="font-medium text-purple-800">Total Students</h4>
@@ -636,16 +636,16 @@ const hasPlacementData = extendedUniversity.placement_rate ||
 
  {/* Top Recruiters */}
  {extendedUniversity.top_recruiters && (
- <div className="rounded-none-none shadow-sm border border-orange-200 p-6">
+ <div className="rounded-xl shadow-sm border border-orange-200 p-6">
  <div className="flex items-center gap-3 mb-4">
- <div className="p-3 rounded-none-none shadow-lg">
+ <div className="p-3 rounded-xl shadow-lg">
  <Trophy className="w-6 h-6 text-white"/>
  </div>
  <h3 className="text-lg font-semibold text-orange-900">
  Top Recruiters
  </h3>
  </div>
- <p className="text-gray-700 p-3 rounded-none-none">
+ <p className="text-gray-700 p-3 rounded-xl">
  {extendedUniversity.top_recruiters}
  </p>
  </div>
@@ -657,7 +657,7 @@ const hasPlacementData = extendedUniversity.placement_rate ||
  const renderContactInfo = () => {
  if (!extendedUniversity) {
  return (
- <div className="bg-white rounded-none-none shadow-sm border border-gray-200 p-6">
+ <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
  <div className="text-center py-8">
  <div className="w-16 h-16 mx-auto mb-4 bg-red-100 flex items-center justify-center">
  <AlertCircle className="w-8 h-8 text-red-600"/>
@@ -676,9 +676,9 @@ const hasPlacementData = extendedUniversity.placement_rate ||
  return (
  <div className="space-y-6">
  {/* Contact Information */}
- <div className="rounded-none-none shadow-sm border border-orange-200 p-6">
+ <div className="rounded-xl shadow-sm border border-orange-200 p-6">
  <div className="flex items-center gap-3 mb-4">
- <div className="p-3 rounded-none-none shadow-lg">
+ <div className="p-3 rounded-xl shadow-lg">
  <Mail className="w-6 h-6 text-white"/>
  </div>
  <h3 className="text-lg font-semibold text-orange-900">
@@ -687,8 +687,8 @@ const hasPlacementData = extendedUniversity.placement_rate ||
  </div>
  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
  <div className="space-y-3">
- <div className="flex items-center gap-3 p-3 rounded-none-none">
- <div className="p-2 bg-blue-100 rounded-none-none">
+ <div className="flex items-center gap-3 p-3 rounded-xl">
+ <div className="p-2 bg-blue-100 rounded-xl">
  <Mail className="w-4 h-4 text-blue-600"/>
  </div>
  <div>
@@ -697,7 +697,7 @@ const hasPlacementData = extendedUniversity.placement_rate ||
  </p>
  <p className="text-xs text-blue-600">Email Address</p>
  {extendedUniversity.email_verified && (
- <span className="inline-flex items-center text-xs text-green-600">
+ <span className="inline-flex items-center text-xs text-blue-600">
  <CheckCircle className="w-3 h-3 mr-1"/>
  Verified
  </span>
@@ -705,17 +705,17 @@ const hasPlacementData = extendedUniversity.placement_rate ||
  </div>
  </div>
  {extendedUniversity.phone && (
- <div className="flex items-center gap-3 p-3 rounded-none-none">
- <div className="p-2 bg-green-100 rounded-none-none">
- <Phone className="w-4 h-4 text-green-600"/>
+ <div className="flex items-center gap-3 p-3 rounded-xl">
+ <div className="p-2 bg-blue-100 rounded-xl">
+ <Phone className="w-4 h-4 text-blue-600"/>
  </div>
  <div>
  <p className="text-sm font-medium text-gray-900">
  {extendedUniversity.phone}
  </p>
- <p className="text-xs text-green-600">Phone Number</p>
+ <p className="text-xs text-blue-600">Phone Number</p>
  {extendedUniversity.phone_verified && (
- <span className="inline-flex items-center text-xs text-green-600">
+ <span className="inline-flex items-center text-xs text-blue-600">
  <CheckCircle className="w-3 h-3 mr-1"/>
  Verified
  </span>
@@ -724,8 +724,8 @@ const hasPlacementData = extendedUniversity.placement_rate ||
  </div>
  )}
  {extendedUniversity.website_url && (
- <div className="flex items-center gap-3 p-3 rounded-none-none">
- <div className="p-2 bg-purple-100 rounded-none-none">
+ <div className="flex items-center gap-3 p-3 rounded-xl">
+ <div className="p-2 bg-purple-100 rounded-xl">
  <Globe className="w-4 h-4 text-purple-600"/>
  </div>
  <div>
@@ -744,8 +744,8 @@ const hasPlacementData = extendedUniversity.placement_rate ||
  </div>
  <div className="space-y-3">
  {extendedUniversity.address && (
- <div className="flex items-start gap-3 p-3 rounded-none-none">
- <div className="p-2 bg-red-100 rounded-none-none">
+ <div className="flex items-start gap-3 p-3 rounded-xl">
+ <div className="p-2 bg-red-100 rounded-xl">
  <MapPin className="w-4 h-4 text-red-600"/>
  </div>
  <div>
@@ -757,8 +757,8 @@ const hasPlacementData = extendedUniversity.placement_rate ||
  </div>
  )}
  {extendedUniversity.contact_person_name && (
- <div className="flex items-center gap-3 p-3 rounded-none-none">
- <div className="p-2 bg-indigo-100 rounded-none-none">
+ <div className="flex items-center gap-3 p-3 rounded-xl">
+ <div className="p-2 bg-indigo-100 rounded-xl">
  <Users className="w-4 h-4 text-indigo-600"/>
  </div>
  <div>
@@ -789,14 +789,14 @@ const hasPlacementData = extendedUniversity.placement_rate ||
  onClick={handleBackdropClick}
  >
  <motion.div
- className="bg-white rounded-none-none shadow-2xl max-w-5xl w-full mx-2 sm:mx-4 h-[90vh] sm:h-[80vh] lg:h-[75vh] overflow-hidden flex flex-col"initial={{ scale: 0.9, opacity: 0 }}
+ className="bg-white rounded-xl shadow-2xl max-w-5xl w-full mx-2 sm:mx-4 h-[90vh] sm:h-[80vh] lg:h-[75vh] overflow-hidden flex flex-col"initial={{ scale: 0.9, opacity: 0 }}
  animate={{ scale: 1, opacity: 1 }}
  exit={{ scale: 0.9, opacity: 0 }}
  transition={{ type:"spring", duration: 0.3 }}
  onClick={(e) => e.stopPropagation()}
  >
  {/* Header */}
- <div className="bg-white border-b border-gray-200 p-3 sm:p-4 lg:p-6 rounded-none-none">
+ <div className="bg-white border-b border-gray-200 p-3 sm:p-4 lg:p-6 rounded-xl">
  <div className="flex items-center justify-between">
  <div className="flex items-center gap-4">
  {/* Profile image and name removed from top */}
@@ -806,7 +806,7 @@ const hasPlacementData = extendedUniversity.placement_rate ||
  {/* Close Button */}
  <button
  onClick={onClose}
- className="p-2 hover:bg-gray-100 rounded-none-none transition-colors duration-200"title="Close">
+ className="p-2 hover:bg-gray-100 rounded-xl transition-colors duration-200"title="Close">
  <X className="w-5 h-5 text-gray-500"/>
  </button>
  </div>
@@ -856,10 +856,10 @@ const target = e.target as HTMLImageElement;
  <div className="flex-1 w-full">
  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3 lg:gap-4 mb-2 sm:mb-3 lg:mb-4">
  {/* Email Card - Blue Theme */}
- <div className="flex items-center justify-between p-2 sm:p-3 lg:p-4 rounded-none-none border">
+ <div className="flex items-center justify-between p-2 sm:p-3 lg:p-4 rounded-xl border">
  <span className="text-xs text-blue-700 font-medium">Email</span>
  {extendedUniversity.email_verified ? (
- <div className="p-1.5 bg-green-500">
+ <div className="p-1.5 bg-blue-500">
  <CheckCircle className="w-3 h-3 text-white"/>
  </div>
  ) : (
@@ -870,10 +870,10 @@ const target = e.target as HTMLImageElement;
  </div>
 
  {/* Phone Card - Purple Theme */}
- <div className="flex items-center justify-between p-2 sm:p-3 lg:p-4 rounded-none-none border">
+ <div className="flex items-center justify-between p-2 sm:p-3 lg:p-4 rounded-xl border">
  <span className="text-xs text-purple-700 font-medium">Phone</span>
  {extendedUniversity.phone_verified ? (
- <div className="p-1.5 bg-green-500">
+ <div className="p-1.5 bg-blue-500">
  <CheckCircle className="w-3 h-3 text-white"/>
  </div>
  ) : (
@@ -884,7 +884,7 @@ const target = e.target as HTMLImageElement;
  </div>
 
  {/* Status Card - Orange Theme */}
- <div className="flex items-center justify-between p-2 sm:p-3 lg:p-4 rounded-none-none border">
+ <div className="flex items-center justify-between p-2 sm:p-3 lg:p-4 rounded-xl border">
  <span className="text-xs text-orange-700 font-medium">Status</span>
  <div className={`px-2 py-1 text-xs font-medium ${getStatusColor(extendedUniversity.status)}`}>
  {extendedUniversity.status}
@@ -892,9 +892,9 @@ const target = e.target as HTMLImageElement;
  </div>
 
  {/* Verification Card - Green Theme */}
- <div className="flex items-center justify-between p-2 sm:p-3 lg:p-4 rounded-none-none border">
- <span className="text-xs text-green-700 font-medium">Verified</span>
- <span className="text-xs font-medium text-green-600">
+ <div className="flex items-center justify-between p-2 sm:p-3 lg:p-4 rounded-xl border">
+ <span className="text-xs text-blue-700 font-medium">Verified</span>
+ <span className="text-xs font-medium text-blue-600">
  {extendedUniversity.verified ?'Yes':'No'}
  </span>
  </div>

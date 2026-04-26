@@ -251,7 +251,7 @@ const today = new Date()
  animate={{ opacity: 1, scale: 1, y: 0 }}
  exit={{ opacity: 0, scale: 0.95, y: 20 }}
  transition={{ type:"spring", damping: 25, stiffness: 300 }}
- className="bg-white rounded-none-none shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden flex flex-col"onClick={(e) => e.stopPropagation()}
+ className="bg-white rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden flex flex-col"onClick={(e) => e.stopPropagation()}
  >
  {/* Header */}
  <div className="p-6 border-b border-primary-200 flex-shrink-0">
@@ -277,7 +277,7 @@ const today = new Date()
  <div className="p-6 overflow-y-auto flex-1">
  <div className="space-y-6">
  {/* Info Banner */}
- <div className="bg-blue-50 p-4 rounded-none-none border border-blue-100 flex items-start gap-3">
+ <div className="bg-blue-50 p-4 rounded-xl border border-blue-100 flex items-start gap-3">
  <Info className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0"/>
  <p className="text-sm text-blue-800">
  {eligibility?.request_type ==='RENEWAL'|| isRenewalFlow
@@ -287,7 +287,7 @@ const today = new Date()
 
  {/* API Warning - When eligibility check fails (non-blocking) */}
  {eligibilityError && (
- <div className="bg-yellow-50 p-4 rounded-none-none border border-yellow-100 flex items-start gap-3">
+ <div className="bg-yellow-50 p-4 rounded-xl border border-yellow-100 flex items-start gap-3">
  <AlertCircle className="w-5 h-5 text-yellow-600 mt-0.5 flex-shrink-0"/>
  <div className="flex-1">
  <p className="text-sm text-yellow-800 font-medium mb-1">
@@ -302,7 +302,7 @@ const today = new Date()
 
  {/* Eligibility Error */}
  {eligibility && !eligibility.eligible && (
- <div className="bg-red-50 p-4 rounded-none-none border border-red-100 flex items-center gap-3">
+ <div className="bg-red-50 p-4 rounded-xl border border-red-100 flex items-center gap-3">
  <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0"/>
  <span className="text-sm text-red-800 font-medium">
  {eligibility.reason}
@@ -312,23 +312,23 @@ const today = new Date()
 
  {/* Batch Status */}
  {eligibility?.usage?.exists && (
- <div className="bg-gray-50 p-4 rounded-none-none border border-gray-200">
+ <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
  <h3 className="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2">
- <CheckCircle className="w-4 h-4 text-green-500"/>
+ <CheckCircle className="w-4 h-4 text-blue-500"/>
  Current Batch Status
  </h3>
  <div className="grid grid-cols-3 gap-4">
- <div className="bg-white p-3 rounded-none-none border border-gray-100 text-center">
+ <div className="bg-white p-3 rounded-xl border border-gray-100 text-center">
  <p className="text-xs text-gray-500 mb-1">Total</p>
  <p className="text-lg font-bold text-gray-900">{eligibility.usage.total}</p>
  </div>
- <div className="bg-white p-3 rounded-none-none border border-gray-100 text-center">
+ <div className="bg-white p-3 rounded-xl border border-gray-100 text-center">
  <p className="text-xs text-gray-500 mb-1">Used</p>
  <p className="text-lg font-bold text-blue-600">{eligibility.usage.used}</p>
  </div>
- <div className="bg-white p-3 rounded-none-none border border-gray-100 text-center">
+ <div className="bg-white p-3 rounded-xl border border-gray-100 text-center">
  <p className="text-xs text-gray-500 mb-1">Remaining</p>
- <p className="text-lg font-bold text-green-600">{eligibility.usage.remaining}</p>
+ <p className="text-lg font-bold text-blue-600">{eligibility.usage.remaining}</p>
  </div>
  </div>
  </div>
@@ -432,7 +432,7 @@ const today = new Date()
  value={formData.message}
  onChange={(e) => setFormData(prev => ({ ...prev, message: e.target.value }))}
  placeholder="Any specific requirements or context..."rows={3}
- className="w-full pl-9 pr-3 py-2 text-sm border border-gray-300 rounded-none-none focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"/>
+ className="w-full pl-9 pr-3 py-2 text-sm border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"/>
  </div>
  </div>
  </div>
@@ -440,7 +440,7 @@ const today = new Date()
  </div>
 
  {/* Footer */}
- <div className="p-6 border-t border-gray-200 bg-gray-50 flex justify-end gap-3 flex-shrink-0 rounded-none-none">
+ <div className="p-6 border-t border-gray-200 bg-gray-50 flex justify-end gap-3 flex-shrink-0 rounded-xl">
  <Button
  variant="outline"onClick={onClose}
  disabled={loading}

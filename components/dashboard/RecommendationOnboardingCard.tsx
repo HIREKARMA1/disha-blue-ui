@@ -68,7 +68,7 @@ export function RecommendationOnboardingCard({ profile, onSaved, onDismiss, show
  </div>
  {onDismiss && (
  <button
- type="button"className="rounded-none-none p-2 text-muted-foreground hover:bg-muted"onClick={onDismiss}
+ type="button"className="rounded-xl p-2 text-muted-foreground hover:bg-muted"onClick={onDismiss}
  aria-label="Close">
  <X className="h-4 w-4"/>
  </button>
@@ -162,12 +162,12 @@ type="checkbox"checked={form.open_to_relocation}
  </div>
 
  <div className="mt-4 flex flex-wrap gap-2">
- <Button onClick={save} variant="gradient"className="rounded-none-none"disabled={saving}>
+ <Button onClick={save} variant="gradient"className="rounded-xl"disabled={saving}>
  <Sparkles className="mr-2 h-4 w-4"/>
  {saving ?'Saving...':'Save preferences'}
  </Button>
  {onDismiss && (
- <Button onClick={onDismiss} variant="outline"className="rounded-none-none">
+ <Button onClick={onDismiss} variant="outline"className="rounded-xl">
  Skip for now
  </Button>
  )}

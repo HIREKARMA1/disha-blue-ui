@@ -163,7 +163,7 @@ const handleImageError = () => {
  'flex h-11 w-11 shrink-0 items-center justify-center transition-all',
  isActive
  ?'rounded-none bg-white text-slate-800 shadow-none dark:bg-white dark:text-slate-900'
- :'text-slate-700 hover:text-slate-900 dark:text-emerald-200 dark:hover:text-white',
+ :'text-slate-700 hover:text-slate-900 dark:text-blue-200 dark:hover:text-white',
  )
 
  const renderMobileRow = (item: NavItem) => {
@@ -179,14 +179,14 @@ const handleImageError = () => {
  className={cn(
  'flex items-center gap-3 rounded-none px-3 py-3 text-sm font-medium transition-colors',
  isActive
- ?'bg-white text-slate-900 shadow-none dark:bg-emerald-900 dark:text-emerald-50'
- :'text-slate-700 hover:bg-slate-100 dark:text-emerald-200 dark:hover:bg-emerald-900',
+ ?'bg-white text-slate-900 shadow-none dark:bg-blue-900 dark:text-blue-50'
+ :'text-slate-700 hover:bg-slate-100 dark:text-blue-200 dark:hover:bg-blue-900',
  )}
  >
  <item.icon className="h-5 w-5 shrink-0" strokeWidth={1.75} />
  <div>
  <div>{item.label}</div>
- <div className="text-xs text-slate-500 dark:text-emerald-400">{item.description}</div>
+ <div className="text-xs text-slate-500 dark:text-blue-400">{item.description}</div>
  </div>
  </Link>
  )
@@ -196,7 +196,7 @@ const handleImageError = () => {
  <>
  <aside
  className={cn(
- 'fixed inset-y-0 left-0 z-40 hidden w-16 flex-col bg-sage dark:bg-emerald-950 lg:flex',
+ 'fixed inset-y-0 left-0 z-40 hidden w-16 flex-col bg-blue-50 dark:bg-blue-950 lg:flex',
  'rounded-none',
  className,
  )}
@@ -224,14 +224,14 @@ const handleImageError = () => {
  type="button"
  title={t(locale,'dashboard.labels.logout')}
  onClick={handleLogout}
- className="mt-3 flex h-11 w-11 shrink-0 items-center justify-center text-slate-700 transition-colors hover:text-slate-900 dark:text-emerald-200 dark:hover:text-white"
+ className="mt-3 flex h-11 w-11 shrink-0 items-center justify-center text-slate-700 transition-colors hover:text-slate-900 dark:text-blue-200 dark:hover:text-white"
  >
  <LogOut className="h-5 w-5" strokeWidth={1.75} />
  </button>
  </nav>
  </aside>
 
- <div className="fixed bottom-0 left-0 right-0 z-50 border-t border-sage-deep bg-sage pb-safe dark:border-emerald-800 dark:bg-emerald-950 lg:hidden">
+ <div className="fixed bottom-0 left-0 right-0 z-50 border-t border-blue-600 bg-blue-50 pb-safe dark:border-blue-800 dark:bg-blue-950 lg:hidden">
  <div className="grid grid-cols-5 gap-1 px-2 py-2">
  {allItems.slice(0, 4).map((item) => {
  const isActive = pathname === item.href
@@ -254,7 +254,7 @@ const handleImageError = () => {
  type="button"
  title={t(locale,'nav.adminNavigation')}
  onClick={toggleMobileMenu}
- className="flex h-11 w-full items-center justify-center text-slate-700 dark:text-emerald-200"
+ className="flex h-11 w-full items-center justify-center text-slate-700 dark:text-blue-200"
  >
  <Menu className="h-5 w-5" strokeWidth={1.75} />
  </button>
@@ -275,23 +275,23 @@ const handleImageError = () => {
  animate={{ x: 0 }}
  exit={{ x:'100%'}}
  transition={{ type:'spring', damping: 28, stiffness: 280 }}
- className="absolute right-0 top-0 flex h-full w-[min(100%,20rem)] flex-col bg-sage-canvas dark:bg-emerald-950"
+ className="absolute right-0 top-0 flex h-full w-[min(100%,20rem)] flex-col bg-blue-50 dark:bg-blue-950"
  onClick={(e) => e.stopPropagation()}
  >
- <div className="flex items-center justify-between border-b border-slate-200 bg-sage px-4 py-4 dark:border-emerald-800 dark:bg-emerald-950">
- <h2 className="text-base font-semibold text-slate-800 dark:text-emerald-50">{t(locale,'nav.adminNavigation')}</h2>
+ <div className="flex items-center justify-between border-b border-slate-200 bg-blue-50 px-4 py-4 dark:border-blue-800 dark:bg-blue-950">
+ <h2 className="text-base font-semibold text-slate-800 dark:text-blue-50">{t(locale,'nav.adminNavigation')}</h2>
  <button
  type="button"
  onClick={closeMobileMenu}
- className="flex h-9 w-9 items-center justify-center rounded-none bg-white text-slate-800 shadow-none dark:bg-emerald-900 dark:text-emerald-100"
+ className="flex h-9 w-9 items-center justify-center rounded-none bg-white text-slate-800 shadow-none dark:bg-blue-900 dark:text-blue-100"
  >
  <X className="h-5 w-5" strokeWidth={1.75} />
  </button>
  </div>
 
- <div className="flex-shrink-0 border-b border-slate-200 px-4 py-3 dark:border-emerald-800">
+ <div className="flex-shrink-0 border-b border-slate-200 px-4 py-3 dark:border-blue-800">
  <div className="flex items-center gap-3">
- <div className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full border border-slate-300 bg-white dark:border-emerald-700 dark:bg-emerald-900">
+ <div className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full border border-slate-300 bg-white dark:border-blue-700 dark:bg-blue-900">
  {getProfilePicture() && !imageError ? (
  <Image
  src={getProfilePicture()}
@@ -302,27 +302,27 @@ const handleImageError = () => {
  onError={handleImageError}
  />
  ) : getDisplayName() !=='Admin'? (
- <span className="text-sm font-semibold text-slate-800 dark:text-emerald-100">
+ <span className="text-sm font-semibold text-slate-800 dark:text-blue-100">
  {getDisplayName().charAt(0).toUpperCase()}
  </span>
  ) : (
- <Shield className="h-5 w-5 text-slate-600 dark:text-emerald-300" strokeWidth={1.75} />
+ <Shield className="h-5 w-5 text-slate-600 dark:text-blue-300" strokeWidth={1.75} />
  )}
  </div>
  <div className="min-w-0 flex-1">
- <p className="truncate text-sm font-medium text-slate-900 dark:text-emerald-50">{getDisplayName()}</p>
- <p className="truncate text-xs text-slate-600 dark:text-emerald-300">{getDisplayEmail()}</p>
+ <p className="truncate text-sm font-medium text-slate-900 dark:text-blue-50">{getDisplayName()}</p>
+ <p className="truncate text-xs text-slate-600 dark:text-blue-300">{getDisplayEmail()}</p>
  </div>
  </div>
  </div>
 
  <nav className="min-h-0 flex-1 space-y-2 overflow-y-auto p-4">{allItems.map((item) => renderMobileRow(item))}</nav>
 
- <div className="border-t border-slate-200 p-4 dark:border-emerald-800">
+ <div className="border-t border-slate-200 p-4 dark:border-blue-800">
  <button
  type="button"
  onClick={handleLogout}
- className="flex w-full items-center justify-center gap-2 rounded-none bg-white py-3 text-sm font-medium text-slate-800 shadow-none dark:bg-emerald-900 dark:text-emerald-50"
+ className="flex w-full items-center justify-center gap-2 rounded-none bg-white py-3 text-sm font-medium text-slate-800 shadow-none dark:bg-blue-900 dark:text-blue-50"
  >
  <LogOut className="h-5 w-5" strokeWidth={1.75} />
  <span>{t(locale,'dashboard.labels.logout')}</span>

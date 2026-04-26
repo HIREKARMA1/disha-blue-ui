@@ -6,17 +6,17 @@ import { useTheme } from "next-themes"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 
-/** Navbar / sage-emerald bar: high-contrast white (light) vs deep emerald (dark). */
+/** Navbar / blue-50-blue bar: high-contrast white (light) vs deep blue (dark). */
 const barClasses =
   "border-2 border-white/90 bg-white text-slate-800 hover:bg-slate-50 hover:text-slate-900 " +
-  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-sage-deep " +
-  "dark:border-emerald-400/70 dark:bg-emerald-900 dark:text-emerald-50 dark:hover:bg-emerald-800 dark:hover:text-white " +
-  "dark:focus-visible:ring-emerald-400 dark:focus-visible:ring-offset-emerald-950"
+  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-blue-600 " +
+  "dark:border-blue-400/70 dark:bg-blue-900 dark:text-blue-50 dark:hover:bg-blue-800 dark:hover:text-white " +
+  "dark:focus-visible:ring-blue-400 dark:focus-visible:ring-offset-blue-950"
 
 /** White or neutral surfaces (e.g. dashboard hub header). */
 const surfaceClasses =
   "border border-slate-200 bg-white text-slate-900 hover:bg-slate-50 hover:border-slate-300 " +
-  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sage-deep/50 focus-visible:ring-offset-2 focus-visible:ring-offset-white " +
+  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600/50 focus-visible:ring-offset-2 focus-visible:ring-offset-white " +
   "dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100 dark:hover:bg-slate-800 dark:hover:border-slate-500 " +
   "dark:focus-visible:ring-slate-500 dark:focus-visible:ring-offset-slate-900"
 

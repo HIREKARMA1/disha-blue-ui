@@ -25,7 +25,7 @@ export function CorporateDashboardStats({
  label:'Active Jobs',
  value: activeJobs.toString(),
  icon: Briefcase,
- accent:'text-emerald-800',
+ accent:'text-blue-800',
  iconBg:'',
  },
  {
@@ -39,7 +39,7 @@ export function CorporateDashboardStats({
  label:'Shortlisted',
  value: shortlistedCandidates.toString(),
  icon: Users,
- accent:'text-emerald-800',
+ accent:'text-blue-800',
  iconBg:'',
  },
  {
@@ -86,7 +86,7 @@ export function CorporateDashboardStats({
  </p>
  </div>
  <div
- className={cn('shrink-0 rounded-2xl border border-slate-200 bg-sage p-3 shadow-sm',
+ className={cn('shrink-0 rounded-2xl border border-slate-200 bg-blue-50 p-3 shadow-sm',
  stat.iconBg,
  )}
  >

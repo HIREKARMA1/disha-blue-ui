@@ -169,14 +169,14 @@ toast.success(`${sectionName} updated successfully!`)
  <CorporateDashboardLayout>
  <div className="w-full">
  <div className="animate-pulse space-y-4 lg:space-y-6">
- <div className="h-6 w-1/3 rounded-xl bg-slate-200/80 dark:bg-emerald-800/60 lg:h-8"></div>
+ <div className="h-6 w-1/3 rounded-xl bg-slate-200/80 dark:bg-blue-800/60 lg:h-8"></div>
  <div className="grid grid-cols-1 xl:grid-cols-4 gap-4 lg:gap-6">
  <div className="xl:col-span-1">
- <div className="h-80 rounded-2xl bg-slate-200/80 dark:bg-emerald-800/50 lg:h-96"></div>
+ <div className="h-80 rounded-2xl bg-slate-200/80 dark:bg-blue-800/50 lg:h-96"></div>
  </div>
  <div className="xl:col-span-3 space-y-4 lg:space-y-6">
  {[...Array(4)].map((_, i) => (
- <div key={i} className="h-24 rounded-2xl bg-slate-200/80 dark:bg-emerald-800/50 lg:h-32"></div>
+ <div key={i} className="h-24 rounded-2xl bg-slate-200/80 dark:bg-blue-800/50 lg:h-32"></div>
  ))}
  </div>
  <aside className="space-y-4 lg:col-span-3">
@@ -218,12 +218,12 @@ toast.success(`${sectionName} updated successfully!`)
  return (
  <CorporateDashboardLayout>
  <div className="w-full text-center">
- <div className="mx-auto max-w-md rounded-2xl border border-slate-200/90 bg-white p-6 shadow-sm dark:border-emerald-800/70 dark:bg-emerald-900/40 lg:p-8">
+ <div className="mx-auto max-w-md rounded-2xl border border-slate-200/90 bg-white p-6 shadow-sm dark:border-blue-800/70 dark:bg-blue-900/40 lg:p-8">
  <AlertCircle className="w-12 h-12 lg:w-16 lg:h-16 text-red-500 mx-auto mb-4"/>
- <h2 className="text-xl lg:text-2xl font-bold text-slate-900 dark:text-emerald-50 mb-2">
+ <h2 className="text-xl lg:text-2xl font-bold text-slate-900 dark:text-blue-50 mb-2">
  Unable to Load Profile
  </h2>
- <p className="text-slate-600 dark:text-emerald-200/85 mb-6">
+ <p className="text-slate-600 dark:text-blue-200/85 mb-6">
  {error}
  </p>
  <Button onClick={loadProfile} variant="default">
@@ -239,12 +239,12 @@ toast.success(`${sectionName} updated successfully!`)
  return (
  <CorporateDashboardLayout>
  <div className="w-full text-center">
- <div className="mx-auto max-w-md rounded-2xl border border-slate-200/90 bg-white p-6 shadow-sm dark:border-emerald-800/70 dark:bg-emerald-900/40 lg:p-8">
+ <div className="mx-auto max-w-md rounded-2xl border border-slate-200/90 bg-white p-6 shadow-sm dark:border-blue-800/70 dark:bg-blue-900/40 lg:p-8">
  <AlertCircle className="w-12 h-12 lg:w-16 lg:h-16 text-yellow-500 mx-auto mb-4"/>
- <h2 className="text-xl lg:text-2xl font-bold text-slate-900 dark:text-emerald-50 mb-2">
+ <h2 className="text-xl lg:text-2xl font-bold text-slate-900 dark:text-blue-50 mb-2">
  Profile Not Found
  </h2>
- <p className="text-slate-600 dark:text-emerald-200/85">
+ <p className="text-slate-600 dark:text-blue-200/85">
  Unable to load your profile. Please try again later.
  </p>
  </div>
@@ -297,18 +297,18 @@ toast.success(`${sectionName} updated successfully!`)
  )}
  </div>
  <button
- className="absolute -bottom-1 -right-1 flex h-5 w-5 items-center justify-center border border-slate-200 bg-white text-sage-deep shadow-md transition-all duration-200 hover:scale-110 hover:bg-sage/20 dark:border-emerald-700 dark:bg-emerald-950 dark:text-emerald-300 dark:hover:bg-emerald-900/60 lg:h-6 lg:w-6"onClick={() => setEditing('basic')}
+ className="absolute -bottom-1 -right-1 flex h-5 w-5 items-center justify-center border border-slate-200 bg-white text-blue-600 shadow-md transition-all duration-200 hover:scale-110 hover:bg-blue-50/20 dark:border-blue-700 dark:bg-blue-950 dark:text-blue-300 dark:hover:bg-blue-900/60 lg:h-6 lg:w-6"onClick={() => setEditing('basic')}
  title="Change profile picture">
  <Camera className="w-2.5 h-2.5 lg:w-3 lg:h-3"/>
  </button>
  </div>
- <h3 className="text-lg lg:text-xl font-semibold text-slate-900 dark:text-emerald-50 mb-1">
+ <h3 className="text-lg lg:text-xl font-semibold text-slate-900 dark:text-blue-50 mb-1">
  {profile.company_name}
  </h3>
- <p className="text-slate-600 dark:text-emerald-200/85 text-sm">
+ <p className="text-slate-600 dark:text-blue-200/85 text-sm">
  {profile.industry ||'Company'}
  </p>
- <p className="text-xs text-slate-500 dark:text-emerald-400">
+ <p className="text-xs text-slate-500 dark:text-blue-400">
  {profile.company_size} • {profile.company_type}
  </p>
  </div>
@@ -317,9 +317,9 @@ toast.success(`${sectionName} updated successfully!`)
  <div className="flex-1">
  <div className="mb-4 grid grid-cols-2 gap-3">
  <div className="flex items-center justify-between p-3 rounded-2xl border">
- <span className="text-xs lg:text-sm text-slate-700 dark:text-emerald-200/90">Email</span>
+ <span className="text-xs lg:text-sm text-slate-700 dark:text-blue-200/90">Email</span>
  {profile.email_verified ? (
- <div className="p-1.5 bg-green-500">
+ <div className="p-1.5 bg-blue-500">
  <CheckCircle className="w-3 h-3 lg:w-4 lg:h-4 text-white"/>
  </div>
  ) : (
@@ -329,9 +329,9 @@ toast.success(`${sectionName} updated successfully!`)
  )}
  </div>
  <div className="flex items-center justify-between p-3 rounded-2xl border">
- <span className="text-xs lg:text-sm text-slate-700 dark:text-emerald-200/90">Phone</span>
+ <span className="text-xs lg:text-sm text-slate-700 dark:text-blue-200/90">Phone</span>
  {profile.phone_verified ? (
- <div className="p-1.5 bg-green-500">
+ <div className="p-1.5 bg-blue-500">
  <CheckCircle className="w-3 h-3 lg:w-4 lg:h-4 text-white"/>
  </div>
  ) : (
@@ -341,9 +341,9 @@ toast.success(`${sectionName} updated successfully!`)
  )}
  </div>
  <div className="flex items-center justify-between p-3 rounded-2xl border">
- <span className="text-xs lg:text-sm text-slate-700 dark:text-emerald-200/90">Logo</span>
+ <span className="text-xs lg:text-sm text-slate-700 dark:text-blue-200/90">Logo</span>
  {profile.company_logo ? (
- <div className="p-1.5 bg-green-500">
+ <div className="p-1.5 bg-blue-500">
  <CheckCircle className="w-3 h-3 lg:w-4 lg:h-4 text-white"/>
  </div>
  ) : (
@@ -353,9 +353,9 @@ toast.success(`${sectionName} updated successfully!`)
  )}
  </div>
  <div className="flex items-center justify-between p-3 rounded-2xl border">
- <span className="text-xs lg:text-sm text-slate-700 dark:text-emerald-200/90">Verified</span>
+ <span className="text-xs lg:text-sm text-slate-700 dark:text-blue-200/90">Verified</span>
  {profile.verified ? (
- <div className="p-1.5 bg-green-500">
+ <div className="p-1.5 bg-blue-500">
  <CheckCircle className="w-3 h-3 lg:w-4 lg:h-4 text-white"/>
  </div>
  ) : (
@@ -398,17 +398,17 @@ toast.success(`${sectionName} updated successfully!`)
  <div className={`${corporateSurfaceClass} p-6 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg`}>
  <div className="flex items-center justify-between mb-6">
  <div className="flex items-center space-x-3">
- <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-sage-deep shadow-sm dark:bg-emerald-600">
+ <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-600 shadow-sm dark:bg-blue-600">
  <Building2 className="w-6 h-6 text-white"/>
  </div>
  <div>
- <h3 className="text-xl font-semibold text-slate-900 dark:text-emerald-50">Basic Information</h3>
- <p className="text-sm text-slate-600 dark:text-emerald-200/85">Company details and contact information</p>
+ <h3 className="text-xl font-semibold text-slate-900 dark:text-blue-50">Basic Information</h3>
+ <p className="text-sm text-slate-600 dark:text-blue-200/85">Company details and contact information</p>
  </div>
  </div>
  <Button
  variant="ghost"size="sm"onClick={() => setEditing('basic')}
- className="text-sage-deep hover:text-sage-deep/90 dark:text-emerald-300 dark:hover:text-emerald-200 text-xs transition-all duration-200">
+ className="text-blue-600 hover:text-blue-600/90 dark:text-blue-300 dark:hover:text-blue-200 text-xs transition-all duration-200">
  <ChevronRight className="w-3 h-3 mr-1"/>
  Edit
  </Button>
@@ -425,37 +425,37 @@ toast.success(`${sectionName} updated successfully!`)
  ) : (
  <div className="space-y-4">
  <div className="p-4 rounded-2xl border">
- <div className="font-medium text-slate-900 dark:text-emerald-50 mb-2">
+ <div className="font-medium text-slate-900 dark:text-blue-50 mb-2">
  Company Name
  </div>
- <div className="text-sm text-slate-600 dark:text-emerald-200/85">
+ <div className="text-sm text-slate-600 dark:text-blue-200/85">
  {profile.company_name ||'Company name not provided'}
  </div>
  </div>
 
  <div className="p-4 rounded-2xl border">
- <div className="font-medium text-slate-900 dark:text-emerald-50 mb-2">
+ <div className="font-medium text-slate-900 dark:text-blue-50 mb-2">
  Contact Information
  </div>
- <div className="text-sm text-slate-600 dark:text-emerald-200/85">
+ <div className="text-sm text-slate-600 dark:text-blue-200/85">
  {profile.email ||'Email not provided'}
  </div>
- <div className="text-sm text-slate-600 dark:text-emerald-200/85 mt-1">
+ <div className="text-sm text-slate-600 dark:text-blue-200/85 mt-1">
  Phone: {profile.phone ||'Not provided'}
  </div>
  </div>
  {(profile.contact_person || profile.contact_designation) && (
  <div className="p-4 rounded-2xl border">
- <div className="font-medium text-slate-900 dark:text-emerald-50 mb-2">
+ <div className="font-medium text-slate-900 dark:text-blue-50 mb-2">
  Contact Person Details
  </div>
  {profile.contact_person && (
- <div className="text-sm text-slate-600 dark:text-emerald-200/85 mb-1">
+ <div className="text-sm text-slate-600 dark:text-blue-200/85 mb-1">
  <span className="font-semibold">Contact Person Name:</span> {profile.contact_person}
  </div>
  )}
  {profile.contact_designation && (
- <div className="text-sm text-slate-600 dark:text-emerald-200/85">
+ <div className="text-sm text-slate-600 dark:text-blue-200/85">
  <span className="font-semibold">Contact Person Designation:</span> {profile.contact_designation}
  </div>
  )}
@@ -464,10 +464,10 @@ toast.success(`${sectionName} updated successfully!`)
 
  {profile.bio && (
  <div className="p-4 rounded-2xl border">
- <div className="font-medium text-slate-900 dark:text-emerald-50 mb-2">
+ <div className="font-medium text-slate-900 dark:text-blue-50 mb-2">
  Bio
  </div>
- <div className="text-sm text-slate-600 dark:text-emerald-200/85">
+ <div className="text-sm text-slate-600 dark:text-blue-200/85">
  {profile.bio}
  </div>
  </div>
@@ -481,17 +481,17 @@ toast.success(`${sectionName} updated successfully!`)
  <div className={`${corporateSurfaceClass} p-6 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg`}>
  <div className="flex items-center justify-between mb-6">
  <div className="flex items-center space-x-3">
- <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-sage-deep shadow-sm dark:bg-emerald-600">
+ <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-600 shadow-sm dark:bg-blue-600">
  <Building2 className="w-6 h-6 text-white"/>
  </div>
  <div>
- <h3 className="text-xl font-semibold text-slate-900 dark:text-emerald-50">Company Information</h3>
- <p className="text-sm text-slate-600 dark:text-emerald-200/85">Business details and company profile</p>
+ <h3 className="text-xl font-semibold text-slate-900 dark:text-blue-50">Company Information</h3>
+ <p className="text-sm text-slate-600 dark:text-blue-200/85">Business details and company profile</p>
  </div>
  </div>
  <Button
  variant="ghost"size="sm"onClick={() => setEditing('company')}
- className="text-xs text-sage-deep transition-all duration-200 hover:text-sage-deep/90 dark:text-emerald-300 dark:hover:text-emerald-200">
+ className="text-xs text-blue-600 transition-all duration-200 hover:text-blue-600/90 dark:text-blue-300 dark:hover:text-blue-200">
  <ChevronRight className="w-3 h-3 mr-1"/>
  Edit
  </Button>
@@ -508,20 +508,20 @@ toast.success(`${sectionName} updated successfully!`)
  ) : (
  <div className="space-y-4">
  <div className="p-4 rounded-2xl border">
- <div className="font-medium text-slate-900 dark:text-emerald-50 mb-2">
+ <div className="font-medium text-slate-900 dark:text-blue-50 mb-2">
  Industry & Size
  </div>
- <div className="text-sm text-slate-600 dark:text-emerald-200/85">
+ <div className="text-sm text-slate-600 dark:text-blue-200/85">
  {profile.industry ||'Industry not specified'} • {profile.company_size ||'Size not specified'}
  </div>
  </div>
 
  {profile.company_type && (
  <div className="p-4 rounded-2xl border">
- <div className="font-medium text-slate-900 dark:text-emerald-50 mb-2">
+ <div className="font-medium text-slate-900 dark:text-blue-50 mb-2">
  Company Type
  </div>
- <div className="text-sm text-slate-600 dark:text-emerald-200/85">
+ <div className="text-sm text-slate-600 dark:text-blue-200/85">
  {profile.company_type}
  </div>
  </div>
@@ -529,10 +529,10 @@ toast.success(`${sectionName} updated successfully!`)
 
  {profile.founded_year && (
  <div className="p-4 rounded-2xl border">
- <div className="font-medium text-slate-900 dark:text-emerald-50 mb-2">
+ <div className="font-medium text-slate-900 dark:text-blue-50 mb-2">
  Founded Year
  </div>
- <div className="text-sm text-slate-600 dark:text-emerald-200/85">
+ <div className="text-sm text-slate-600 dark:text-blue-200/85">
  {profile.founded_year}
  </div>
  </div>
@@ -540,13 +540,13 @@ toast.success(`${sectionName} updated successfully!`)
 
  {profile.website_url && (
  <div className="p-4 rounded-2xl border">
- <div className="font-medium text-slate-900 dark:text-emerald-50 mb-2">
+ <div className="font-medium text-slate-900 dark:text-blue-50 mb-2">
  Website
  </div>
- <div className="text-sm text-slate-600 dark:text-emerald-200/85">
+ <div className="text-sm text-slate-600 dark:text-blue-200/85">
  <a
  href={profile.website_url}
- target="_blank"rel="noopener noreferrer"className="flex items-center space-x-1 hover:text-sage-deep dark:hover:text-emerald-300">
+ target="_blank"rel="noopener noreferrer"className="flex items-center space-x-1 hover:text-blue-600 dark:hover:text-blue-300">
  <span>{profile.website_url}</span>
  <ExternalLink className="w-3 h-3"/>
  </a>
@@ -556,10 +556,10 @@ toast.success(`${sectionName} updated successfully!`)
 
  {profile.description && (
  <div className="p-4 rounded-2xl border">
- <div className="font-medium text-slate-900 dark:text-emerald-50 mb-2">
+ <div className="font-medium text-slate-900 dark:text-blue-50 mb-2">
  Description
  </div>
- <div className="text-sm text-slate-600 dark:text-emerald-200/85">
+ <div className="text-sm text-slate-600 dark:text-blue-200/85">
  {profile.description}
  </div>
  </div>
@@ -784,8 +784,8 @@ const fieldName = field.replace('_','').replace(/\b\w/g, l => l.toUpperCase())
  disabled={uploading === field}
  />
  {uploading === field && (
- <div className="flex items-center space-x-2 text-sm text-sage-deep dark:text-emerald-300">
- <div className="w-4 h-4 border-2 border-sage-deep dark:border-emerald-400 border-t-transparent animate-spin"></div>
+ <div className="flex items-center space-x-2 text-sm text-blue-600 dark:text-blue-300">
+ <div className="w-4 h-4 border-2 border-blue-600 dark:border-blue-400 border-t-transparent animate-spin"></div>
  <span>Uploading...</span>
  </div>
  )}
@@ -803,8 +803,8 @@ const fieldName = field.replace('_','').replace(/\b\w/g, l => l.toUpperCase())
  placeholder="Upload MCA/GST certificate (PDF only)"disabled={uploading === field}
  />
  {uploading === field && (
- <div className="flex items-center space-x-2 text-sm text-sage-deep dark:text-emerald-300">
- <div className="w-4 h-4 border-2 border-sage-deep dark:border-emerald-400 border-t-transparent animate-spin"></div>
+ <div className="flex items-center space-x-2 text-sm text-blue-600 dark:text-blue-300">
+ <div className="w-4 h-4 border-2 border-blue-600 dark:border-blue-400 border-t-transparent animate-spin"></div>
  <span>Uploading...</span>
  </div>
  )}
@@ -818,7 +818,7 @@ const fieldName = field.replace('_','').replace(/\b\w/g, l => l.toUpperCase())
  value={value}
  onChange={(e) => setFormData({ ...formData, [field]: e.target.value })}
  rows={4}
- className="w-full px-3 py-2 border border-slate-300 dark:border-emerald-700 rounded-2xl focus:ring-2 focus:ring-sage-deep dark:focus:ring-emerald-500 focus:border-transparent"placeholder={`Enter your ${field.replace(/_/g,'')}`}
+ className="w-full px-3 py-2 border border-slate-300 dark:border-blue-700 rounded-2xl focus:ring-2 focus:ring-blue-600 dark:focus:ring-blue-500 focus:border-transparent"placeholder={`Enter your ${field.replace(/_/g,'')}`}
  />
  )
  }
@@ -828,7 +828,7 @@ const fieldName = field.replace('_','').replace(/\b\w/g, l => l.toUpperCase())
  <input
  type="url"value={value}
  onChange={(e) => setFormData({ ...formData, [field]: e.target.value })}
- className="w-full px-3 py-2 border border-slate-300 dark:border-emerald-700 rounded-2xl focus:ring-2 focus:ring-sage-deep dark:focus:ring-emerald-500 focus:border-transparent"placeholder="Enter your website URL"/>
+ className="w-full px-3 py-2 border border-slate-300 dark:border-blue-700 rounded-2xl focus:ring-2 focus:ring-blue-600 dark:focus:ring-blue-500 focus:border-transparent"placeholder="Enter your website URL"/>
  )
  }
 
@@ -837,7 +837,7 @@ const fieldName = field.replace('_','').replace(/\b\w/g, l => l.toUpperCase())
  <input
  type="number"min="1800"max="2024"value={value}
  onChange={(e) => setFormData({ ...formData, [field]: e.target.value ===''? null : parseInt(e.target.value) || null })}
- className="w-full px-3 py-2 border border-slate-300 dark:border-emerald-700 rounded-2xl focus:ring-2 focus:ring-sage-deep dark:focus:ring-emerald-500 focus:border-transparent"placeholder="Enter founded year"/>
+ className="w-full px-3 py-2 border border-slate-300 dark:border-blue-700 rounded-2xl focus:ring-2 focus:ring-blue-600 dark:focus:ring-blue-500 focus:border-transparent"placeholder="Enter founded year"/>
  )
  }
 
@@ -846,7 +846,7 @@ const fieldName = field.replace('_','').replace(/\b\w/g, l => l.toUpperCase())
  <select
  value={value}
  onChange={(e) => setFormData({ ...formData, [field]: e.target.value })}
- className="w-full px-3 py-2 border border-slate-300 dark:border-emerald-700 rounded-2xl focus:ring-2 focus:ring-sage-deep dark:focus:ring-emerald-500 focus:border-transparent">
+ className="w-full px-3 py-2 border border-slate-300 dark:border-blue-700 rounded-2xl focus:ring-2 focus:ring-blue-600 dark:focus:ring-blue-500 focus:border-transparent">
  <option value="">Select company size</option>
  <option value="1-10">1-10 employees</option>
  <option value="11-50">11-50 employees</option>
@@ -863,7 +863,7 @@ const fieldName = field.replace('_','').replace(/\b\w/g, l => l.toUpperCase())
  <select
  value={value}
  onChange={(e) => setFormData({ ...formData, [field]: e.target.value })}
- className="w-full px-3 py-2 border border-slate-300 dark:border-emerald-700 rounded-2xl focus:ring-2 focus:ring-sage-deep dark:focus:ring-emerald-500 focus:border-transparent">
+ className="w-full px-3 py-2 border border-slate-300 dark:border-blue-700 rounded-2xl focus:ring-2 focus:ring-blue-600 dark:focus:ring-blue-500 focus:border-transparent">
  <option value="">Select company type</option>
  <option value="startup">Startup</option>
  <option value="mnc">MNC</option>
@@ -887,7 +887,7 @@ const fieldName = field.replace('_','').replace(/\b\w/g, l => l.toUpperCase())
 const sanitizedValue = inputValue.replace(/[^a-zA-Z\s.-]/g,'')
  setFormData({ ...formData, [field]: sanitizedValue })
  }}
- className="w-full px-3 py-2 border border-slate-300 dark:border-emerald-700 rounded-2xl focus:ring-2 focus:ring-sage-deep dark:focus:ring-emerald-500 focus:border-transparent"placeholder="Enter your name (alphabets only)"maxLength={50}
+ className="w-full px-3 py-2 border border-slate-300 dark:border-blue-700 rounded-2xl focus:ring-2 focus:ring-blue-600 dark:focus:ring-blue-500 focus:border-transparent"placeholder="Enter your name (alphabets only)"maxLength={50}
  />
  )
  }
@@ -903,7 +903,7 @@ const sanitizedValue = inputValue.replace(/[^a-zA-Z\s.-]/g,'')
 const sanitizedValue = inputValue.replace(/[^a-zA-Z\s.-]/g,'')
  setFormData({ ...formData, [field]: sanitizedValue })
  }}
- className="w-full px-3 py-2 border border-slate-300 dark:border-emerald-700 rounded-2xl focus:ring-2 focus:ring-sage-deep dark:focus:ring-emerald-500 focus:border-transparent"placeholder="Enter contact person name (alphabets only)"maxLength={50}
+ className="w-full px-3 py-2 border border-slate-300 dark:border-blue-700 rounded-2xl focus:ring-2 focus:ring-blue-600 dark:focus:ring-blue-500 focus:border-transparent"placeholder="Enter contact person name (alphabets only)"maxLength={50}
  />
  )
  }
@@ -919,7 +919,7 @@ const sanitizedValue = inputValue.replace(/[^a-zA-Z\s.-]/g,'')
 const sanitizedValue = inputValue.replace(/[^a-zA-Z\s.-]/g,'')
  setFormData({ ...formData, [field]: sanitizedValue })
  }}
- className="w-full px-3 py-2 border border-slate-300 dark:border-emerald-700 rounded-2xl focus:ring-2 focus:ring-sage-deep dark:focus:ring-emerald-500 focus:border-transparent"placeholder="Enter contact person designation (alphabets only)"maxLength={50}
+ className="w-full px-3 py-2 border border-slate-300 dark:border-blue-700 rounded-2xl focus:ring-2 focus:ring-blue-600 dark:focus:ring-blue-500 focus:border-transparent"placeholder="Enter contact person designation (alphabets only)"maxLength={50}
  />
  )
  }
@@ -932,8 +932,8 @@ const sanitizedValue = inputValue.replace(/[^a-zA-Z\s.-]/g,'')
  type="email"value={value}
  readOnly
  disabled
- className="w-full cursor-not-allowed rounded-2xl border border-slate-300 bg-slate-100 px-3 py-2 text-slate-500 dark:border-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-400"placeholder="Email cannot be edited"/>
- <p className="text-xs text-slate-500 dark:text-emerald-400">
+ className="w-full cursor-not-allowed rounded-2xl border border-slate-300 bg-slate-100 px-3 py-2 text-slate-500 dark:border-blue-700 dark:bg-blue-950/50 dark:text-blue-400"placeholder="Email cannot be edited"/>
+ <p className="text-xs text-slate-500 dark:text-blue-400">
  Email cannot be changed for security reasons
  </p>
  </div>
@@ -951,7 +951,7 @@ const sanitizedValue = inputValue.replace(/[^a-zA-Z\s.-]/g,'')
 const numericValue = inputValue.replace(/[^0-9]/g,'').slice(0, 10)
  setFormData({ ...formData, [field]: numericValue })
  }}
- className="w-full px-3 py-2 border border-slate-300 dark:border-emerald-700 rounded-2xl focus:ring-2 focus:ring-sage-deep dark:focus:ring-emerald-500 focus:border-transparent"placeholder="Enter 10-digit phone number"maxLength={10}
+ className="w-full px-3 py-2 border border-slate-300 dark:border-blue-700 rounded-2xl focus:ring-2 focus:ring-blue-600 dark:focus:ring-blue-500 focus:border-transparent"placeholder="Enter 10-digit phone number"maxLength={10}
  />
  )
  }
@@ -961,7 +961,7 @@ const numericValue = inputValue.replace(/[^0-9]/g,'').slice(0, 10)
  <select
  value={value}
  onChange={(e) => setFormData({ ...formData, [field]: e.target.value })}
- className="w-full px-3 py-2 border border-slate-300 dark:border-emerald-700 rounded-2xl focus:ring-2 focus:ring-sage-deep dark:focus:ring-emerald-500 focus:border-transparent">
+ className="w-full px-3 py-2 border border-slate-300 dark:border-blue-700 rounded-2xl focus:ring-2 focus:ring-blue-600 dark:focus:ring-blue-500 focus:border-transparent">
  <option value="">Select industry</option>
  {industryOptions.map((option) => (
  <option key={option.value} value={option.value}>
@@ -994,7 +994,7 @@ const numericValue = inputValue.replace(/[^0-9]/g,'').slice(0, 10)
  <input
  type="text"value={value}
  onChange={(e) => setFormData({ ...formData, [field]: e.target.value })}
- className="w-full px-3 py-2 border border-slate-300 dark:border-emerald-700 rounded-2xl focus:ring-2 focus:ring-sage-deep dark:focus:ring-emerald-500 focus:border-transparent"placeholder={placeholder}
+ className="w-full px-3 py-2 border border-slate-300 dark:border-blue-700 rounded-2xl focus:ring-2 focus:ring-blue-600 dark:focus:ring-blue-500 focus:border-transparent"placeholder={placeholder}
  />
  )
  }
@@ -1013,8 +1013,8 @@ const numericValue = inputValue.replace(/[^0-9]/g,'').slice(0, 10)
 
  {/* Display upload success */}
  {uploadSuccess && (
- <div className="p-4 bg-green-50 border border-green-200 rounded-2xl">
- <div className="flex items-center space-x-2 text-sm text-green-600">
+ <div className="p-4 bg-blue-50 border border-blue-200 rounded-2xl">
+ <div className="flex items-center space-x-2 text-sm text-blue-600">
  <CheckCircle className="w-4 h-4"/>
  <span>File uploaded successfully!</span>
  </div>
@@ -1034,7 +1034,7 @@ const numericValue = inputValue.replace(/[^0-9]/g,'').slice(0, 10)
  
  return (
  <div key={field} className={field.includes('bio') || field.includes('description') ?'md:col-span-2':''}>
- <label className="block text-sm font-medium text-slate-700 dark:text-emerald-200/90 mb-2">
+ <label className="block text-sm font-medium text-slate-700 dark:text-blue-200/90 mb-2">
  {fieldLabel}
  </label>
  {renderField(field)}
@@ -1043,7 +1043,7 @@ const numericValue = inputValue.replace(/[^0-9]/g,'').slice(0, 10)
  })}
  </div>
 
- <div className="flex justify-end space-x-3 pt-6 border-t border-slate-200/90 dark:border-emerald-800/70">
+ <div className="flex justify-end space-x-3 pt-6 border-t border-slate-200/90 dark:border-blue-800/70">
  <Button
  type="button"variant="outline"onClick={onCancel}
  disabled={saving}
@@ -1052,7 +1052,7 @@ const numericValue = inputValue.replace(/[^0-9]/g,'').slice(0, 10)
  </Button>
  <Button
  type="submit"disabled={saving}
- className="bg-sage-deep text-white hover:bg-sage-deep/90 dark:bg-emerald-600 dark:hover:bg-emerald-500">
+ className="bg-blue-600 text-white hover:bg-blue-600/90 dark:bg-blue-600 dark:hover:bg-blue-500">
  {saving ? (
  <div className="flex items-center space-x-2">
  <div className="w-4 h-4 border-2 border-white border-t-transparent animate-spin"></div>

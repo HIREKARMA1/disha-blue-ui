@@ -844,7 +844,7 @@ const previewUrl = URL.createObjectURL(file)
  </div>
  <button
  type="button"onClick={onClose}
- className="shrink-0 rounded-none-none p-2 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground">
+ className="shrink-0 rounded-xl p-2 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground">
  <X className="w-6 h-6"/>
  </button>
  </div>
@@ -854,7 +854,7 @@ const previewUrl = URL.createObjectURL(file)
  <form onSubmit={handleSubmit} className="p-6 overflow-y-auto max-h-[calc(90vh-140px)]">
  <div className="space-y-8">
  {/* Basic Information */}
- <div className="space-y-4 rounded-none-none border p-5 shadow-sm">
+ <div className="space-y-4 rounded-xl border p-5 shadow-sm">
  <h3 className="text-base font-semibold text-foreground flex items-center gap-2">
  <Briefcase className="w-5 h-5"/>
  Basic Information
