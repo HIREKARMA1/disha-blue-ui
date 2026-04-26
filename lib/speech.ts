@@ -15,6 +15,7 @@ const hindiPrompts: Record<string, string> = {
 
 let voiceCache: { hi: SpeechSynthesisVoice | null; en: SpeechSynthesisVoice | null } | null = null
 let voicesListenerAttached = false
+let replacingUtterance = false
 
 function attachVoicesListener(synth: SpeechSynthesis) {
   if (voicesListenerAttached) return
@@ -69,12 +70,24 @@ async function translateForSpeech(text: string, targetLang: "en" | "hi"): Promis
   return translateToHindiForSpeech(source)
 }
 
-export async function speakText(text: string, lang?: "en" | "hi") {
+export interface SpeakTextOptions {
+  lang?: "en" | "hi"
+  onStart?: () => void
+  onEnd?: () => void
+  onError?: (error: unknown) => void
+}
+
+export async function speakText(text: string, langOrOptions?: "en" | "hi" | SpeakTextOptions) {
+  const options: SpeakTextOptions =
+    typeof langOrOptions === "string" || typeof langOrOptions === "undefined"
+      ? { lang: langOrOptions }
+      : langOrOptions
   if (typeof window === "undefined" || !("speechSynthesis" in window)) {
     console.error("TTS: speechSynthesis is not available in this environment.")
+    options.onError?.("speechSynthesis_not_available")
     return
   }
-  const selectedLang = lang || getSignupLanguage()
+  const selectedLang = options.lang || getSignupLanguage()
   const synth = window.speechSynthesis
   attachVoicesListener(synth)
 
@@ -124,9 +137,27 @@ export async function speakText(text: string, lang?: "en" | "hi") {
   const utterance = new SpeechSynthesisUtterance(textForUtterance || text)
   utterance.lang = selectedLang === "hi" ? "hi-IN" : "en-IN"
   utterance.voice = voice || null
-  utterance.onerror = (ev) => {
-    console.error("TTS: SpeechSynthesisUtterance error:", ev?.error || ev)
+  utterance.rate = 1
+  utterance.pitch = 1
+  utterance.volume = 1
+  utterance.onstart = () => {
+    options.onStart?.()
   }
-  synth.cancel()
+  utterance.onend = () => {
+    options.onEnd?.()
+  }
+  utterance.onerror = (ev) => {
+    const err = String((ev as any)?.error || "")
+    if (err === "canceled" && replacingUtterance) return
+    console.error("TTS: SpeechSynthesisUtterance error:", ev?.error || ev)
+    options.onError?.(ev?.error || ev)
+    options.onEnd?.()
+  }
+  replacingUtterance = synth.speaking || synth.pending
+  if (replacingUtterance) synth.cancel()
+  if (typeof synth.resume === "function") synth.resume()
   synth.speak(utterance)
+  window.setTimeout(() => {
+    replacingUtterance = false
+  }, 200)
 }

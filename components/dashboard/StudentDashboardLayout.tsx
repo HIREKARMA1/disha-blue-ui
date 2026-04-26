@@ -124,7 +124,7 @@ function StudentDashboardContent({ children }: StudentDashboardLayoutProps) {
  <ul className="mt-4 space-y-2.5 text-sm text-slate-600">
  <li>Complete profile and upload latest resume</li>
  <li>Prioritize saved roles before deadline</li>
- <li>Practice mock tests for shortlisted roles</li>
+ <li>Practice AI interview and communication rounds</li>
  <li>Review application feedback weekly</li>
  </ul>
  </div>
@@ -144,8 +144,8 @@ function StudentDashboardContent({ children }: StudentDashboardLayoutProps) {
  <div className="dashboard-overview-card p-5">
  <p className="text-xs font-semibold uppercase tracking-[0.14em] text-sage-deep">Quick tools</p>
  <div className="mt-3 space-y-2">
- <Link href="/dashboard/student/career-align"className="block rounded-xl border border-slate-200/90 bg-white px-3 py-2 text-sm text-slate-800 shadow-sm transition hover:border-sage-deep hover:bg-sage/50 dark:bg-emerald-950/40 dark:hover:bg-emerald-900/60">Career Align</Link>
- <Link href="/dashboard/student/practice"className="block rounded-xl border border-slate-200/90 bg-white px-3 py-2 text-sm text-slate-800 shadow-sm transition hover:border-sage-deep hover:bg-sage/50 dark:bg-emerald-950/40 dark:hover:bg-emerald-900/60">Practice Arena</Link>
+ <Link href="/dashboard/student/career-align"className="block rounded-xl border border-slate-200/90 bg-white px-3 py-2 text-sm text-slate-800 shadow-sm transition hover:border-sage-deep hover:bg-sage/50 dark:bg-emerald-950/40 dark:hover:bg-emerald-900/60">AI Interview Session</Link>
+ <Link href="/ai-communication"className="block rounded-xl border border-slate-200/90 bg-white px-3 py-2 text-sm text-slate-800 shadow-sm transition hover:border-sage-deep hover:bg-sage/50 dark:bg-emerald-950/40 dark:hover:bg-emerald-900/60">AI Communication Assessments</Link>
  <Link href="/dashboard/student/library"className="block rounded-xl border border-slate-200/90 bg-white px-3 py-2 text-sm text-slate-800 shadow-sm transition hover:border-sage-deep hover:bg-sage/50 dark:bg-emerald-950/40 dark:hover:bg-emerald-900/60">Learning Library</Link>
  <Link href="/dashboard/student/video-search"className="block rounded-xl border border-slate-200/90 bg-white px-3 py-2 text-sm text-slate-800 shadow-sm transition hover:border-sage-deep hover:bg-sage/50 dark:bg-emerald-950/40 dark:hover:bg-emerald-900/60">Video Search</Link>
  </div>

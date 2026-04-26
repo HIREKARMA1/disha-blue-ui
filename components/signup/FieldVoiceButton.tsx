@@ -16,9 +16,9 @@ interface FieldVoiceButtonProps {
 
 export function FieldVoiceButton({ fieldType, onParsed, ariaLabel }: FieldVoiceButtonProps) {
   const [selectedLanguage, setSelectedLanguage] = useState<"en" | "hi">("en")
-  const [error, setError] = useState<string | null>(null)
+  const [localError, setLocalError] = useState<string | null>(null)
   const [isParsing, setIsParsing] = useState(false)
-  const { isListening, interimText, startListening, stopListening, isFallbackToTyping } = useSpeechToText(
+  const { isListening, transcript, error, startListening, stopListening, resetTranscript, isFallbackToTyping } = useSpeechToText(
     selectedLanguage === "hi" ? "hi-IN" : "en-IN"
   )
 
@@ -35,12 +35,14 @@ export function FieldVoiceButton({ fieldType, onParsed, ariaLabel }: FieldVoiceB
 
   const onClick = async () => {
     if (!isListening) {
-      setError(null)
-      startListening()
+      setLocalError(null)
+      resetTranscript()
+      await startListening()
       return
     }
     stopListening()
-    const text = interimText.trim()
+    await new Promise((resolve) => window.setTimeout(resolve, 220))
+    const text = transcript.trim()
     if (!text) return
     setIsParsing(true)
     try {
@@ -51,7 +53,7 @@ export function FieldVoiceButton({ fieldType, onParsed, ariaLabel }: FieldVoiceB
         parsed: response.parsed || {},
       })
     } catch {
-      setError("Could not parse voice input. Please try again.")
+      setLocalError("Could not parse voice input. Please try again.")
     } finally {
       setIsParsing(false)
     }
@@ -68,9 +70,9 @@ export function FieldVoiceButton({ fieldType, onParsed, ariaLabel }: FieldVoiceB
       >
         {isListening ? <Square className="h-3.5 w-3.5" /> : <Mic className="h-3.5 w-3.5" />}
       </button>
-      {(isParsing || error || isFallbackToTyping) && (
+      {(isParsing || localError || error || isFallbackToTyping) && (
         <p className="text-[11px] text-muted-foreground">
-          {isParsing ? "Parsing voice..." : error || (isFallbackToTyping ? "Voice unavailable, please type." : "")}
+          {isParsing ? "Parsing voice..." : localError || error || (isFallbackToTyping ? "Voice unavailable, please type." : "")}
         </p>
       )}
     </div>
