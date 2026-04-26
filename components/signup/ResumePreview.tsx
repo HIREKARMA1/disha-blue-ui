@@ -29,10 +29,16 @@ export function ResumePreview({
   const merged = useMemo(() => local || resume, [local, resume])
 
   const update = (path: string, value: any) => {
+    if (!merged) return
     const next = JSON.parse(JSON.stringify(merged))
     const keys = path.split(".")
     let current = next
-    for (let i = 0; i < keys.length - 1; i += 1) current = current[keys[i]]
+    for (let i = 0; i < keys.length - 1; i += 1) {
+      if (current[keys[i]] === undefined || current[keys[i]] === null) {
+        current[keys[i]] = {}
+      }
+      current = current[keys[i]]
+    }
     current[keys[keys.length - 1]] = value
     setLocal(next)
     onChange?.(next)

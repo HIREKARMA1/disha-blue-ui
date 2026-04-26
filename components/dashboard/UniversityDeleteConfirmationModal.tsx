@@ -49,7 +49,7 @@ export function UniversityDeleteConfirmationModal({
  
  {/* Modal Content */}
  <motion.div
- className="relative bg-white rounded-none-none shadow-2xl max-w-md w-full mx-4"initial={{ scale: 0.9, opacity: 0 }}
+ className="relative bg-white rounded-xl shadow-2xl max-w-md w-full mx-4"initial={{ scale: 0.9, opacity: 0 }}
  animate={{ scale: 1, opacity: 1 }}
  exit={{ scale: 0.9, opacity: 0 }}
  transition={{ type:"spring", duration: 0.3 }}
@@ -72,7 +72,7 @@ export function UniversityDeleteConfirmationModal({
  </div>
  <button
  onClick={onClose}
- className="p-2 hover:bg-gray-100 rounded-none-none transition-colors duration-200"disabled={isDeleting}
+ className="p-2 hover:bg-gray-100 rounded-xl transition-colors duration-200"disabled={isDeleting}
  >
  <X className="w-5 h-5 text-gray-500"/>
  </button>
@@ -100,13 +100,13 @@ export function UniversityDeleteConfirmationModal({
  <button
  onClick={onClose}
  disabled={isDeleting}
- className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-none-none transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
+ className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-xl transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
  Cancel
  </button>
  <button
  onClick={handleConfirm}
  disabled={isDeleting}
- className="px-4 py-2 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-none-none transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2">
+ className="px-4 py-2 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-xl transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2">
  {isDeleting ? (
  <>
  <div className="animate-spin h-4 w-4 border-b-2 border-white"></div>

@@ -171,7 +171,7 @@ export default function AdminCorporates() {
   <span className="inline-flex items-center border px-3 py-1 text-xs font-medium text-primary">
   {corporates.length} total employers
   </span>
-  <span className="inline-flex items-center border px-3 py-1 text-xs font-medium text-green-700">
+  <span className="inline-flex items-center border px-3 py-1 text-xs font-medium text-blue-700">
   {corporates.filter((c) => c.verified).length} verified
   </span>
   <span className="inline-flex items-center border px-3 py-1 text-xs font-medium text-secondary-700">

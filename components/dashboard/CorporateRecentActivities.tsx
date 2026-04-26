@@ -27,8 +27,8 @@ const mockActivities = [
  description:'Technical interview with Mike Chen for Data Scientist role',
  time:'1 hour ago',
  icon: Calendar,
- color:'text-green-600',
- bgColor:'bg-green-100'},
+ color:'text-blue-600',
+ bgColor:'bg-blue-100'},
  {
  id: 3,
  type:'job',
@@ -67,7 +67,7 @@ const mockActivities = [
  >
  <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between mb-6">
  <div className="flex items-center space-x-3">
- <div className="rounded-xl bg-sage/40 p-2.5 dark:bg-emerald-900/50">
+ <div className="rounded-xl bg-blue-50/40 p-2.5 dark:bg-blue-900/50">
  <Clock className="w-6 h-6 text-primary"/>
  </div>
  <div>
@@ -92,8 +92,8 @@ const mockActivities = [
  initial={{ opacity: 0, x: -20 }}
  animate={{ opacity: 1, x: 0 }}
  transition={{ duration: 0.6, delay: index * 0.1 }}
- className="flex items-start space-x-3 p-3 rounded-none-none border border-transparent transition-all cursor-default group">
- <div className={`p-2 rounded-none-none ${activity.bgColor} group-hover:scale-105 transition-transform duration-200`}>
+ className="flex items-start space-x-3 p-3 rounded-xl border border-transparent transition-all cursor-default group">
+ <div className={`p-2 rounded-xl ${activity.bgColor} group-hover:scale-105 transition-transform duration-200`}>
  <activity.icon className={`w-4 h-4 ${activity.color}`} />
  </div>
  <div className="flex-1 min-w-0">
@@ -115,7 +115,7 @@ const mockActivities = [
  </div>
 
  {/* Coming Soon Overlay */}
- <div className="absolute inset-0 flex items-center justify-center rounded-none-none">
+ <div className="absolute inset-0 flex items-center justify-center rounded-xl">
  <div className="text-center px-4">
  <div className="inline-flex items-center justify-center w-16 h-16 mb-4">
  <Clock className="w-8 h-8 text-primary"/>

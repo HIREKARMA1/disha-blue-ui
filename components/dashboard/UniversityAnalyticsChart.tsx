@@ -94,8 +94,8 @@ const hasPlacementData = (studentStats?.placed_students || 0) > 0
  const hasSalaryData = (studentStats?.average_salary || 0) > 0
 
  const chartTabs = [
- { id:'placement', label:'Placement Overview', icon: PieChartIcon, color:'text-green-600'},
- { id:'salary', label:'Salary Distribution', icon: DollarSign, color:'text-green-600'},
+ { id:'placement', label:'Placement Overview', icon: PieChartIcon, color:'text-blue-600'},
+ { id:'salary', label:'Salary Distribution', icon: DollarSign, color:'text-blue-600'},
  { id:'trends', label:'Historical Trends', icon: TrendingUp, color:'text-gray-600'}
  ]
 
@@ -199,7 +199,7 @@ const hasPlacementData = (studentStats?.placed_students || 0) > 0
  </div>
  <div className="mt-4 text-center">
  <p className="text-sm text-gray-500">Placement Rate</p>
- <p className="text-2xl font-bold text-green-600">{studentStats?.placement_percentage || 0}%</p>
+ <p className="text-2xl font-bold text-blue-600">{studentStats?.placement_percentage || 0}%</p>
  </div>
  </div>
  </div>
@@ -208,7 +208,7 @@ const hasPlacementData = (studentStats?.placed_students || 0) > 0
  const renderSalaryChart = () => (
  <div className="bg-white rounded-2xl p-6 border border-gray-200 shadow-[0_4px_24px_-6px_rgba(15,23,42,0.08)] dark:shadow-none transition-colors">
  <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
- <DollarSign className="w-5 h-5 mr-2 text-green-600"/>
+ <DollarSign className="w-5 h-5 mr-2 text-blue-600"/>
  Salary Distribution
  </h3>
  <div className="h-96">
@@ -246,9 +246,9 @@ const hasPlacementData = (studentStats?.placed_students || 0) > 0
  </ResponsiveContainer>
  </div>
  <div className="mt-6 grid grid-cols-2 gap-4">
- <div className="p-4 rounded-2xl border border-green-200">
- <p className="text-green-600 text-sm font-medium mb-1">Average Salary</p>
- <p className="text-2xl font-bold text-green-700">
+ <div className="p-4 rounded-2xl border border-blue-200">
+ <p className="text-blue-600 text-sm font-medium mb-1">Average Salary</p>
+ <p className="text-2xl font-bold text-blue-700">
  ${(studentStats?.average_salary || 0).toLocaleString()}
  </p>
  </div>
@@ -317,9 +317,9 @@ const hasPlacementData = (studentStats?.placed_students || 0) > 0
  <p className="text-gray-600 text-sm font-medium mb-1">Current Year</p>
  <p className="text-xl font-bold text-gray-700">2024</p>
  </div>
- <div className="p-4 rounded-2xl border border-green-200 text-center">
- <p className="text-green-600 text-sm font-medium mb-1">Total Companies</p>
- <p className="text-xl font-bold text-green-700">
+ <div className="p-4 rounded-2xl border border-blue-200 text-center">
+ <p className="text-blue-600 text-sm font-medium mb-1">Total Companies</p>
+ <p className="text-xl font-bold text-blue-700">
  {jobStats?.total_companies_visited || 0}
  </p>
  </div>

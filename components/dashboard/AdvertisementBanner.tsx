@@ -51,7 +51,7 @@ export function AdvertisementBanner({ className =''}: AdvertisementBannerProps) 
  description:"Test your technical skills",
  icon: Target,
  href:"/dashboard/student/skills",
- color:"bg-green-100 text-green-700"},
+ color:"bg-blue-100 text-blue-700"},
  {
  title:"Interview Prep",
  description:"Practice common questions",
@@ -74,11 +74,11 @@ export function AdvertisementBanner({ className =''}: AdvertisementBannerProps) 
  transition={{ duration: 0.6, delay: index * 0.1 }}
  >
  <Link href={ad.href} className="block group">
- <div className={`rounded-2xl border border-slate-200/90 bg-white p-6 text-slate-900 shadow-[0_4px_24px_-6px_rgba(15,23,42,0.08)] transition-colors duration-200 hover:border-sage-deep/70 dark:border-emerald-800/65 dark:bg-emerald-900/35 dark:shadow-none`}>
+ <div className={`rounded-2xl border border-slate-200/90 bg-white p-6 text-slate-900 shadow-[0_4px_24px_-6px_rgba(15,23,42,0.08)] transition-colors duration-200 hover:border-blue-600/70 dark:border-blue-800/65 dark:bg-blue-900/35 dark:shadow-none`}>
  <div className="flex items-start justify-between mb-4">
  <div className="flex items-center space-x-2">
- <Star className="h-4 w-4 text-sage-deep"/>
- <span className="text-sm font-medium text-sage-deep">Featured</span>
+ <Star className="h-4 w-4 text-blue-600"/>
+ <span className="text-sm font-medium text-blue-600">Featured</span>
  </div>
  <div className="text-right text-xs text-slate-600">
  <div className="flex items-center space-x-1">
@@ -102,7 +102,7 @@ export function AdvertisementBanner({ className =''}: AdvertisementBannerProps) 
  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-200"/>
  </div>
  <div className="w-16 h-16 flex items-center justify-center">
- <ad.icon className="h-8 w-8 text-sage-deep"/>
+ <ad.icon className="h-8 w-8 text-blue-600"/>
  </div>
  </div>
  </div>
@@ -142,9 +142,9 @@ export function AdvertisementBanner({ className =''}: AdvertisementBannerProps) 
  <div
  onClick={() => handleComingSoon(action.title)}
  className="block group cursor-pointer">
- <div className="p-4 rounded-none-none border border-gray-200 hover:border-gray-300 transition-all duration-200 hover:shadow-md bg-white">
+ <div className="p-4 rounded-xl border border-gray-200 hover:border-gray-300 transition-all duration-200 hover:shadow-md bg-white">
  <div className="flex items-center space-x-3">
- <div className={`p-2 rounded-none-none ${action.color}`}>
+ <div className={`p-2 rounded-xl ${action.color}`}>
  <action.icon className="w-5 h-5"/>
  </div>
  <div className="flex-1">
@@ -161,9 +161,9 @@ export function AdvertisementBanner({ className =''}: AdvertisementBannerProps) 
  </div>
  ) : (
  <Link href={action.href} className="block group">
- <div className="p-4 rounded-none-none border border-gray-200 hover:border-gray-300 transition-all duration-200 hover:shadow-md bg-white">
+ <div className="p-4 rounded-xl border border-gray-200 hover:border-gray-300 transition-all duration-200 hover:shadow-md bg-white">
  <div className="flex items-center space-x-3">
- <div className={`p-2 rounded-none-none ${action.color}`}>
+ <div className={`p-2 rounded-xl ${action.color}`}>
  <action.icon className="w-5 h-5"/>
  </div>
  <div className="flex-1">
@@ -188,13 +188,13 @@ export function AdvertisementBanner({ className =''}: AdvertisementBannerProps) 
  {/* <div className="space-y-4">
  <h3 className="text-lg font-semibold text-gray-900 mb-4">Your Progress</h3>
  <div className="grid grid-cols-2 gap-3">
- <div className="rounded-none-none p-4 text-center">
+ <div className="rounded-xl p-4 text-center">
  <div className="text-2xl font-bold text-blue-600">85%</div>
  <div className="text-xs text-blue-700">Profile Complete</div>
  </div>
- <div className="rounded-none-none p-4 text-center">
- <div className="text-2xl font-bold text-green-600">12</div>
- <div className="text-xs text-green-700">Active Applications</div>
+ <div className="rounded-xl p-4 text-center">
+ <div className="text-2xl font-bold text-blue-600">12</div>
+ <div className="text-xs text-blue-700">Active Applications</div>
  </div>
  </div>
  </div> */}

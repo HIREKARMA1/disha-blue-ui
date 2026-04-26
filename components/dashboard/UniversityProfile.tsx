@@ -337,29 +337,29 @@ const allowedTypes = ['image/jpeg','image/jpg','image/png','image/gif','image/we
  switch (tabId) {
  case'basic':
  return {
- active:'border-sage-deep text-sage-deep bg-sage/15 dark:border-emerald-400 dark:text-emerald-200 dark:bg-emerald-900/40',
- indicator:'bg-sage-deep dark:bg-emerald-400',
- icon:'text-sage-deep dark:text-emerald-300'}
+ active:'border-blue-600 text-blue-600 bg-blue-50/15 dark:border-blue-400 dark:text-blue-200 dark:bg-blue-900/40',
+ indicator:'bg-blue-600 dark:bg-blue-400',
+ icon:'text-blue-600 dark:text-blue-300'}
  case'institution':
  return {
- active:'border-sage-deep text-sage-deep bg-sage/15 dark:border-emerald-400 dark:text-emerald-200 dark:bg-emerald-900/40',
- indicator:'bg-sage-deep dark:bg-emerald-400',
- icon:'text-sage-deep dark:text-emerald-300'}
+ active:'border-blue-600 text-blue-600 bg-blue-50/15 dark:border-blue-400 dark:text-blue-200 dark:bg-blue-900/40',
+ indicator:'bg-blue-600 dark:bg-blue-400',
+ icon:'text-blue-600 dark:text-blue-300'}
  case'academic':
  return {
- active:'border-sage-deep text-sage-deep bg-sage/15 dark:border-emerald-400 dark:text-emerald-200 dark:bg-emerald-900/40',
- indicator:'bg-sage-deep dark:bg-emerald-400',
- icon:'text-sage-deep dark:text-emerald-300'}
+ active:'border-blue-600 text-blue-600 bg-blue-50/15 dark:border-blue-400 dark:text-blue-200 dark:bg-blue-900/40',
+ indicator:'bg-blue-600 dark:bg-blue-400',
+ icon:'text-blue-600 dark:text-blue-300'}
  case'placement':
  return {
- active:'border-sage-deep text-sage-deep bg-sage/15 dark:border-emerald-400 dark:text-emerald-200 dark:bg-emerald-900/40',
- indicator:'bg-sage-deep dark:bg-emerald-400',
- icon:'text-sage-deep dark:text-emerald-300'}
+ active:'border-blue-600 text-blue-600 bg-blue-50/15 dark:border-blue-400 dark:text-blue-200 dark:bg-blue-900/40',
+ indicator:'bg-blue-600 dark:bg-blue-400',
+ icon:'text-blue-600 dark:text-blue-300'}
  default:
  return {
- active:'border-slate-400 text-slate-700 bg-slate-100 dark:border-emerald-700 dark:text-emerald-200 dark:bg-emerald-900/35',
- indicator:'bg-slate-500 dark:bg-emerald-500',
- icon:'text-slate-600 dark:text-emerald-300'}
+ active:'border-slate-400 text-slate-700 bg-slate-100 dark:border-blue-700 dark:text-blue-200 dark:bg-blue-900/35',
+ indicator:'bg-slate-500 dark:bg-blue-500',
+ icon:'text-slate-600 dark:text-blue-300'}
  }
  }
 
@@ -368,14 +368,14 @@ const allowedTypes = ['image/jpeg','image/jpg','image/png','image/gif','image/we
  <UniversityDashboardLayout>
  <div className="space-y-6">
  <div className="animate-pulse space-y-4">
- <div className="h-8 w-1/3 rounded-xl bg-slate-200/80 dark:bg-emerald-800/60"></div>
+ <div className="h-8 w-1/3 rounded-xl bg-slate-200/80 dark:bg-blue-800/60"></div>
  <div className="grid grid-cols-1 xl:grid-cols-4 gap-6">
  <div className="xl:col-span-1">
- <div className="h-96 rounded-2xl bg-slate-200/80 dark:bg-emerald-800/50"></div>
+ <div className="h-96 rounded-2xl bg-slate-200/80 dark:bg-blue-800/50"></div>
  </div>
  <div className="xl:col-span-3 space-y-6">
  {[...Array(4)].map((_, i) => (
- <div key={i} className="h-32 rounded-2xl bg-slate-200/80 dark:bg-emerald-800/50"></div>
+ <div key={i} className="h-32 rounded-2xl bg-slate-200/80 dark:bg-blue-800/50"></div>
  ))}
  </div>
  </div>
@@ -390,12 +390,12 @@ const allowedTypes = ['image/jpeg','image/jpg','image/png','image/gif','image/we
  <UniversityDashboardLayout>
  <div className="space-y-6">
  <div className="text-center">
- <div className="mx-auto max-w-md rounded-2xl border border-slate-200/90 bg-white p-8 shadow-sm dark:border-emerald-800/70 dark:bg-emerald-900/40">
+ <div className="mx-auto max-w-md rounded-2xl border border-slate-200/90 bg-white p-8 shadow-sm dark:border-blue-800/70 dark:bg-blue-900/40">
  <AlertCircle className="w-16 h-16 text-red-500 mx-auto mb-4"/>
- <h2 className="text-2xl font-bold text-slate-900 dark:text-emerald-50 mb-2">
+ <h2 className="text-2xl font-bold text-slate-900 dark:text-blue-50 mb-2">
  Unable to Load Profile
  </h2>
- <p className="text-slate-600 dark:text-emerald-200/85 mb-6">
+ <p className="text-slate-600 dark:text-blue-200/85 mb-6">
  {error}
  </p>
  <Button onClick={loadProfile} variant="default">
@@ -413,12 +413,12 @@ const allowedTypes = ['image/jpeg','image/jpg','image/png','image/gif','image/we
  <UniversityDashboardLayout>
  <div className="space-y-6">
  <div className="text-center">
- <div className="mx-auto max-w-md rounded-2xl border border-slate-200/90 bg-white p-8 shadow-sm dark:border-emerald-800/70 dark:bg-emerald-900/40">
+ <div className="mx-auto max-w-md rounded-2xl border border-slate-200/90 bg-white p-8 shadow-sm dark:border-blue-800/70 dark:bg-blue-900/40">
  <AlertCircle className="w-16 h-16 text-yellow-500 mx-auto mb-4"/>
- <h2 className="text-2xl font-bold text-slate-900 dark:text-emerald-50 mb-2">
+ <h2 className="text-2xl font-bold text-slate-900 dark:text-blue-50 mb-2">
  Profile Not Found
  </h2>
- <p className="text-slate-600 dark:text-emerald-200/85">
+ <p className="text-slate-600 dark:text-blue-200/85">
  Unable to load your profile. Please try again later.
  </p>
  </div>
@@ -435,20 +435,20 @@ const allowedTypes = ['image/jpeg','image/jpg','image/png','image/gif','image/we
  <div className="rounded-2xl p-6 border border-primary-200">
  <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 lg:gap-6">
  <div className="flex-1 min-w-0">
- <h1 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-emerald-50 mb-2">
+ <h1 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-blue-50 mb-2">
  University Profile 
  </h1>
- <p className="text-slate-600 dark:text-emerald-200/85 text-lg mb-3">
+ <p className="text-slate-600 dark:text-blue-200/85 text-lg mb-3">
  Manage your university information and institutional details 
  </p>
  <div className="flex flex-wrap gap-2">
  <span className="inline-flex items-center px-3 py-1 text-sm font-medium bg-primary-100 text-primary-800">
   {new Date().toLocaleDateString('en-US', { weekday:'long', month:'long', day:'numeric'})}
  </span>
- <span className="inline-flex items-center rounded-full border border-sage/40 bg-sage/15 px-3 py-1 text-sm font-medium text-sage-deep dark:border-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-200">
+ <span className="inline-flex items-center rounded-full border border-blue-50/40 bg-blue-50/15 px-3 py-1 text-sm font-medium text-blue-600 dark:border-blue-700 dark:bg-blue-900/50 dark:text-blue-200">
   Institutional Growth
  </span>
- <span className="inline-flex items-center rounded-full border border-sage/40 bg-sage/15 px-3 py-1 text-sm font-medium text-sage-deep dark:border-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-200">
+ <span className="inline-flex items-center rounded-full border border-blue-50/40 bg-blue-50/15 px-3 py-1 text-sm font-medium text-blue-600 dark:border-blue-700 dark:bg-blue-900/50 dark:text-blue-200">
   Excellence in Education
  </span>
  </div>
@@ -460,7 +460,7 @@ const allowedTypes = ['image/jpeg','image/jpg','image/png','image/gif','image/we
  <div className="grid grid-cols-1 xl:grid-cols-4 gap-6">
  {/* Left Column - Profile Overview */}
  <div className="xl:col-span-1">
- <div className="rounded-2xl border border-slate-200/90 bg-white p-6 shadow-sm dark:border-emerald-800/70 dark:bg-emerald-900/25">
+ <div className="rounded-2xl border border-slate-200/90 bg-white p-6 shadow-sm dark:border-blue-800/70 dark:bg-blue-900/25">
  <div className="text-center mb-6">
  <div className="w-24 h-24 mx-auto mb-4 relative">
  <div className="w-24 h-24 flex items-center justify-center shadow-lg overflow-hidden">
@@ -476,23 +476,23 @@ const allowedTypes = ['image/jpeg','image/jpg','image/png','image/gif','image/we
  )}
  </div>
  <button
- className="absolute -bottom-1 -right-1 flex h-6 w-6 items-center justify-center border border-slate-200 bg-white text-sage-deep shadow-md transition-all duration-200 hover:scale-110 hover:bg-sage/20 dark:border-emerald-700 dark:bg-emerald-950 dark:text-emerald-300 dark:hover:bg-emerald-900/60"onClick={() => setEditing('basic')}
+ className="absolute -bottom-1 -right-1 flex h-6 w-6 items-center justify-center border border-slate-200 bg-white text-blue-600 shadow-md transition-all duration-200 hover:scale-110 hover:bg-blue-50/20 dark:border-blue-700 dark:bg-blue-950 dark:text-blue-300 dark:hover:bg-blue-900/60"onClick={() => setEditing('basic')}
  title="Change profile picture"disabled={uploadingImage}
  >
  {uploadingImage ? (
- <div className="h-3 w-3 animate-spin rounded-full border-2 border-sage-deep border-t-transparent dark:border-emerald-400"/>
+ <div className="h-3 w-3 animate-spin rounded-full border-2 border-blue-600 border-t-transparent dark:border-blue-400"/>
  ) : (
  <Camera className="w-3 h-3"/>
  )}
  </button>
  </div>
- <h3 className="text-xl font-semibold text-slate-900 dark:text-emerald-50 mb-1">
+ <h3 className="text-xl font-semibold text-slate-900 dark:text-blue-50 mb-1">
  {profile.name}
  </h3>
- <p className="text-slate-600 dark:text-emerald-200/85 text-sm">
+ <p className="text-slate-600 dark:text-blue-200/85 text-sm">
  {profile?.institute_type ||'Educational Institution'}
  </p>
- <p className="text-xs text-slate-500 dark:text-emerald-400">
+ <p className="text-xs text-slate-500 dark:text-blue-400">
  Est. {profile.established_year}
  </p>
  </div>
@@ -500,32 +500,32 @@ const allowedTypes = ['image/jpeg','image/jpg','image/png','image/gif','image/we
  {/* Quick Stats */}
  <div className="space-y-3">
  <div className="flex items-center justify-between p-3 rounded-2xl border">
- <span className="text-sm text-slate-700 dark:text-emerald-200/90">Email</span>
- <div className="bg-sage-deep p-1.5 dark:bg-emerald-500">
+ <span className="text-sm text-slate-700 dark:text-blue-200/90">Email</span>
+ <div className="bg-blue-600 p-1.5 dark:bg-blue-500">
  <CheckCircle className="w-4 h-4 text-white"/>
  </div>
  </div>
  <div className="flex items-center justify-between p-3 rounded-2xl border">
- <span className="text-sm text-slate-700 dark:text-emerald-200/90">Phone</span>
- <div className="bg-sage-deep p-1.5 dark:bg-emerald-500">
+ <span className="text-sm text-slate-700 dark:text-blue-200/90">Phone</span>
+ <div className="bg-blue-600 p-1.5 dark:bg-blue-500">
  <CheckCircle className="w-4 h-4 text-white"/>
  </div>
  </div>
  <div className="flex items-center justify-between p-3 rounded-2xl border">
- <span className="text-sm text-slate-700 dark:text-emerald-200/90">Total Students</span>
- <span className="text-sm font-medium text-sage-deep dark:text-emerald-300">
+ <span className="text-sm text-slate-700 dark:text-blue-200/90">Total Students</span>
+ <span className="text-sm font-medium text-blue-600 dark:text-blue-300">
  {profile?.total_students?.toLocaleString() ||'N/A'}
  </span>
  </div>
  <div className="flex items-center justify-between p-3 rounded-2xl border">
- <span className="text-sm text-slate-700 dark:text-emerald-200/90">Total Jobs</span>
- <span className="text-sm font-medium text-sage-deep dark:text-emerald-300">
+ <span className="text-sm text-slate-700 dark:text-blue-200/90">Total Jobs</span>
+ <span className="text-sm font-medium text-blue-600 dark:text-blue-300">
  {profile?.total_jobs?.toLocaleString() ||'N/A'}
  </span>
  </div>
  <div className="flex items-center justify-between p-3 rounded-2xl border">
- <span className="text-sm text-slate-700 dark:text-emerald-200/90">Jobs Approved</span>
- <span className="text-sm font-medium text-sage-deep dark:text-emerald-300">
+ <span className="text-sm text-slate-700 dark:text-blue-200/90">Jobs Approved</span>
+ <span className="text-sm font-medium text-blue-600 dark:text-blue-300">
  {profile?.total_jobs_approved?.toLocaleString() ||'N/A'}
  </span>
  </div>
@@ -536,8 +536,8 @@ const allowedTypes = ['image/jpeg','image/jpg','image/png','image/gif','image/we
  {/* Right Column - Profile Details */}
  <div className="xl:col-span-3">
  {/* Tabs */}
- <div className="mb-6 rounded-2xl border border-slate-200/90 bg-white shadow-sm dark:border-emerald-800/70 dark:bg-emerald-900/25">
- <div className="flex overflow-x-auto border-b border-slate-200 scrollbar-hide dark:border-emerald-800">
+ <div className="mb-6 rounded-2xl border border-slate-200/90 bg-white shadow-sm dark:border-blue-800/70 dark:bg-blue-900/25">
+ <div className="flex overflow-x-auto border-b border-slate-200 scrollbar-hide dark:border-blue-800">
  {tabs.map((tab) => {
  const Icon = tab.icon
  const colors = getTabColors(tab.id)
@@ -547,7 +547,7 @@ const allowedTypes = ['image/jpeg','image/jpg','image/png','image/gif','image/we
  onClick={() => setActiveTab(tab.id)}
  className={`flex items-center gap-2 px-6 py-4 text-sm font-medium whitespace-nowrap border-b-2 transition-all duration-200 relative ${activeTab === tab.id
  ? colors.active
- :'border-transparent text-slate-500 hover:border-slate-300 hover:text-slate-800 dark:text-emerald-400 dark:hover:border-emerald-600 dark:hover:text-emerald-200'}`}
+ :'border-transparent text-slate-500 hover:border-slate-300 hover:text-slate-800 dark:text-blue-400 dark:hover:border-blue-600 dark:hover:text-blue-200'}`}
  whileHover={{ scale: 1.02 }}
  whileTap={{ scale: 0.98 }}
  >
@@ -603,7 +603,7 @@ const allowedTypes = ['image/jpeg','image/jpg','image/png','image/gif','image/we
  return (
  <div className="space-y-6">
  <div className="flex items-center justify-between mb-4">
- <h3 className="text-lg font-semibold text-slate-900 dark:text-emerald-50 flex items-center gap-2">
+ <h3 className="text-lg font-semibold text-slate-900 dark:text-blue-50 flex items-center gap-2">
  <User className="w-5 h-5"/>
  Basic Information
  </h3>
@@ -630,48 +630,48 @@ const allowedTypes = ['image/jpeg','image/jpg','image/png','image/gif','image/we
  ) : (
  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
  <div className="space-y-4">
- <div className="flex items-center gap-3 p-3 rounded-2xl bg-slate-50 dark:bg-emerald-950/35">
- <div className="rounded-2xl bg-sage/20 p-2 dark:bg-emerald-900/45">
- <Mail className="h-4 w-4 text-sage-deep dark:text-emerald-300"/>
+ <div className="flex items-center gap-3 p-3 rounded-2xl bg-slate-50 dark:bg-blue-950/35">
+ <div className="rounded-2xl bg-blue-50/20 p-2 dark:bg-blue-900/45">
+ <Mail className="h-4 w-4 text-blue-600 dark:text-blue-300"/>
  </div>
  <div>
- <p className="text-sm font-medium text-slate-900 dark:text-emerald-50">
+ <p className="text-sm font-medium text-slate-900 dark:text-blue-50">
  {profile?.email}
  </p>
- <p className="text-xs text-sage-deep dark:text-emerald-300">Email Address</p>
+ <p className="text-xs text-blue-600 dark:text-blue-300">Email Address</p>
  </div>
  </div>
 
- <div className="flex items-center gap-3 p-3 rounded-2xl bg-slate-50 dark:bg-emerald-950/35">
- <div className="rounded-2xl bg-sage/20 p-2 dark:bg-emerald-900/45">
- <Phone className="h-4 w-4 text-sage-deep dark:text-emerald-300"/>
+ <div className="flex items-center gap-3 p-3 rounded-2xl bg-slate-50 dark:bg-blue-950/35">
+ <div className="rounded-2xl bg-blue-50/20 p-2 dark:bg-blue-900/45">
+ <Phone className="h-4 w-4 text-blue-600 dark:text-blue-300"/>
  </div>
  <div>
- <p className="text-sm font-medium text-slate-900 dark:text-emerald-50">
+ <p className="text-sm font-medium text-slate-900 dark:text-blue-50">
  {profile?.phone ||'Not provided'}
  </p>
- <p className="text-xs text-sage-deep dark:text-emerald-300">Phone Number</p>
+ <p className="text-xs text-blue-600 dark:text-blue-300">Phone Number</p>
  </div>
  </div>
 
- <div className="flex items-center gap-3 p-3 rounded-2xl bg-slate-50 dark:bg-emerald-950/35">
- <div className="rounded-2xl bg-sage/20 p-2 dark:bg-emerald-900/45">
- <Globe className="h-4 w-4 text-sage-deep dark:text-emerald-300"/>
+ <div className="flex items-center gap-3 p-3 rounded-2xl bg-slate-50 dark:bg-blue-950/35">
+ <div className="rounded-2xl bg-blue-50/20 p-2 dark:bg-blue-900/45">
+ <Globe className="h-4 w-4 text-blue-600 dark:text-blue-300"/>
  </div>
  <div>
- <p className="text-sm font-medium text-slate-900 dark:text-emerald-50">
+ <p className="text-sm font-medium text-slate-900 dark:text-blue-50">
  {profile?.website_url ||'Not provided'}
  </p>
- <p className="text-xs text-sage-deep dark:text-emerald-300">Website</p>
+ <p className="text-xs text-blue-600 dark:text-blue-300">Website</p>
  </div>
  </div>
  </div>
 
  <div className="space-y-4">
  {profile?.bio && (
- <div className="p-4 rounded-2xl bg-slate-50 dark:bg-emerald-950/35">
- <h4 className="text-sm font-medium text-slate-900 dark:text-emerald-50 mb-2">Description</h4>
- <p className="text-sm text-slate-600 dark:text-emerald-200/85 leading-relaxed">
+ <div className="p-4 rounded-2xl bg-slate-50 dark:bg-blue-950/35">
+ <h4 className="text-sm font-medium text-slate-900 dark:text-blue-50 mb-2">Description</h4>
+ <p className="text-sm text-slate-600 dark:text-blue-200/85 leading-relaxed">
  {profile.bio}
  </p>
  </div>
@@ -687,7 +687,7 @@ const allowedTypes = ['image/jpeg','image/jpg','image/png','image/gif','image/we
  return (
  <div className="space-y-6">
  <div className="flex items-center justify-between mb-4">
- <h3 className="text-lg font-semibold text-slate-900 dark:text-emerald-50 flex items-center gap-2">
+ <h3 className="text-lg font-semibold text-slate-900 dark:text-blue-50 flex items-center gap-2">
  <Building2 className="w-5 h-5"/>
  Institution Details
  </h3>
@@ -716,41 +716,41 @@ const allowedTypes = ['image/jpeg','image/jpg','image/png','image/gif','image/we
  {/* Left Column */}
  <div className="space-y-4">
  {/* University Name */}
- <div className="flex items-center gap-3 p-3 rounded-2xl bg-slate-50 dark:bg-emerald-950/35">
- <div className="rounded-2xl bg-sage/20 p-2 dark:bg-emerald-900/45">
- <Building2 className="h-4 w-4 text-sage-deep dark:text-emerald-300"/>
+ <div className="flex items-center gap-3 p-3 rounded-2xl bg-slate-50 dark:bg-blue-950/35">
+ <div className="rounded-2xl bg-blue-50/20 p-2 dark:bg-blue-900/45">
+ <Building2 className="h-4 w-4 text-blue-600 dark:text-blue-300"/>
  </div>
  <div>
- <p className="text-sm font-medium text-slate-900 dark:text-emerald-50">
+ <p className="text-sm font-medium text-slate-900 dark:text-blue-50">
  {profile?.name ||'Not specified'}
  </p>
- <p className="text-xs text-sage-deep dark:text-emerald-300">University Name</p>
+ <p className="text-xs text-blue-600 dark:text-blue-300">University Name</p>
  </div>
  </div>
 
  {/* Institute Type */}
- <div className="flex items-center gap-3 p-3 rounded-2xl bg-slate-50 dark:bg-emerald-950/35">
- <div className="rounded-2xl bg-sage/20 p-2 dark:bg-emerald-900/45">
- <Building2 className="h-4 w-4 text-sage-deep dark:text-emerald-300"/>
+ <div className="flex items-center gap-3 p-3 rounded-2xl bg-slate-50 dark:bg-blue-950/35">
+ <div className="rounded-2xl bg-blue-50/20 p-2 dark:bg-blue-900/45">
+ <Building2 className="h-4 w-4 text-blue-600 dark:text-blue-300"/>
  </div>
  <div>
- <p className="text-sm font-medium text-slate-900 dark:text-emerald-50">
+ <p className="text-sm font-medium text-slate-900 dark:text-blue-50">
  {profile?.institute_type ||'Not specified'}
  </p>
- <p className="text-xs text-sage-deep dark:text-emerald-300">Institute Type</p>
+ <p className="text-xs text-blue-600 dark:text-blue-300">Institute Type</p>
  </div>
  </div>
 
  {/* Established Year */}
- <div className="flex items-center gap-3 p-3 rounded-2xl bg-slate-50 dark:bg-emerald-950/35">
- <div className="rounded-2xl bg-sage/20 p-2 dark:bg-emerald-900/45">
- <Calendar className="h-4 w-4 text-sage-deep dark:text-emerald-300"/>
+ <div className="flex items-center gap-3 p-3 rounded-2xl bg-slate-50 dark:bg-blue-950/35">
+ <div className="rounded-2xl bg-blue-50/20 p-2 dark:bg-blue-900/45">
+ <Calendar className="h-4 w-4 text-blue-600 dark:text-blue-300"/>
  </div>
  <div>
- <p className="text-sm font-medium text-slate-900 dark:text-emerald-50">
+ <p className="text-sm font-medium text-slate-900 dark:text-blue-50">
  {profile?.established_year ||'Not specified'}
  </p>
- <p className="text-xs text-sage-deep dark:text-emerald-300">Established Year</p>
+ <p className="text-xs text-blue-600 dark:text-blue-300">Established Year</p>
  </div>
  </div>
  </div>
@@ -758,38 +758,38 @@ const allowedTypes = ['image/jpeg','image/jpg','image/png','image/gif','image/we
  {/* Right Column */}
  <div className="space-y-4">
  {/* Contact Person Name */}
- <div className="flex items-center gap-3 p-3 rounded-2xl bg-slate-50 dark:bg-emerald-950/35">
- <div className="rounded-2xl bg-sage/20 p-2 dark:bg-emerald-900/45">
- <User className="h-4 w-4 text-sage-deep dark:text-emerald-300"/>
+ <div className="flex items-center gap-3 p-3 rounded-2xl bg-slate-50 dark:bg-blue-950/35">
+ <div className="rounded-2xl bg-blue-50/20 p-2 dark:bg-blue-900/45">
+ <User className="h-4 w-4 text-blue-600 dark:text-blue-300"/>
  </div>
  <div>
- <p className="text-sm font-medium text-slate-900 dark:text-emerald-50">
+ <p className="text-sm font-medium text-slate-900 dark:text-blue-50">
  {profile?.contact_person_name ||'Not specified'}
  </p>
- <p className="text-xs text-sage-deep dark:text-emerald-300">Contact Person</p>
+ <p className="text-xs text-blue-600 dark:text-blue-300">Contact Person</p>
  </div>
  </div>
 
  {/* Contact Designation */}
- <div className="flex items-center gap-3 p-3 rounded-2xl bg-slate-50 dark:bg-emerald-950/35">
- <div className="rounded-2xl bg-sage/20 p-2 dark:bg-emerald-900/45">
- <Briefcase className="h-4 w-4 text-sage-deep dark:text-emerald-300"/>
+ <div className="flex items-center gap-3 p-3 rounded-2xl bg-slate-50 dark:bg-blue-950/35">
+ <div className="rounded-2xl bg-blue-50/20 p-2 dark:bg-blue-900/45">
+ <Briefcase className="h-4 w-4 text-blue-600 dark:text-blue-300"/>
  </div>
  <div>
- <p className="text-sm font-medium text-slate-900 dark:text-emerald-50">
+ <p className="text-sm font-medium text-slate-900 dark:text-blue-50">
  {profile?.contact_designation ||'Not specified'}
  </p>
- <p className="text-xs text-sage-deep dark:text-emerald-300">Designation</p>
+ <p className="text-xs text-blue-600 dark:text-blue-300">Designation</p>
  </div>
  </div>
 
  {/* Address */}
- <div className="p-4 rounded-2xl bg-slate-50 dark:bg-emerald-950/35">
- <h4 className="text-sm font-medium text-slate-900 dark:text-emerald-50 mb-2 flex items-center gap-2">
+ <div className="p-4 rounded-2xl bg-slate-50 dark:bg-blue-950/35">
+ <h4 className="text-sm font-medium text-slate-900 dark:text-blue-50 mb-2 flex items-center gap-2">
  <MapPin className="w-4 h-4"/>
  Address
  </h4>
- <p className="text-sm text-slate-600 dark:text-emerald-200/85">
+ <p className="text-sm text-slate-600 dark:text-blue-200/85">
  {profile?.address ||'Not provided'}
  </p>
  </div>
@@ -805,7 +805,7 @@ const allowedTypes = ['image/jpeg','image/jpg','image/png','image/gif','image/we
  return (
  <div className="space-y-6">
  <div className="flex items-center justify-between mb-4">
- <h3 className="text-lg font-semibold text-slate-900 dark:text-emerald-50 flex items-center gap-2">
+ <h3 className="text-lg font-semibold text-slate-900 dark:text-blue-50 flex items-center gap-2">
  <GraduationCap className="w-5 h-5"/>
  Academic Information
  </h3>
@@ -832,24 +832,24 @@ const allowedTypes = ['image/jpeg','image/jpg','image/png','image/gif','image/we
  ) : (
  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
  <div className="space-y-4">
- <div className="flex items-center gap-3 p-3 rounded-2xl bg-slate-50 dark:bg-emerald-950/35">
- <div className="rounded-2xl bg-sage/20 p-2 dark:bg-emerald-900/45">
- <GraduationCap className="h-4 w-4 text-sage-deep dark:text-emerald-300"/>
+ <div className="flex items-center gap-3 p-3 rounded-2xl bg-slate-50 dark:bg-blue-950/35">
+ <div className="rounded-2xl bg-blue-50/20 p-2 dark:bg-blue-900/45">
+ <GraduationCap className="h-4 w-4 text-blue-600 dark:text-blue-300"/>
  </div>
  <div>
- <p className="text-sm font-medium text-slate-900 dark:text-emerald-50">
+ <p className="text-sm font-medium text-slate-900 dark:text-blue-50">
  {profile?.courses_offered ||'Not specified'}
  </p>
- <p className="text-xs text-sage-deep dark:text-emerald-300">Courses Offered</p>
+ <p className="text-xs text-blue-600 dark:text-blue-300">Courses Offered</p>
  </div>
  </div>
  </div>
 
  <div className="space-y-4">
  {profile?.branch && (
- <div className="p-4 rounded-2xl bg-slate-50 dark:bg-emerald-950/35">
- <h4 className="text-sm font-medium text-slate-900 dark:text-emerald-50 mb-2">Branch</h4>
- <p className="text-sm text-slate-600 dark:text-emerald-200/85">
+ <div className="p-4 rounded-2xl bg-slate-50 dark:bg-blue-950/35">
+ <h4 className="text-sm font-medium text-slate-900 dark:text-blue-50 mb-2">Branch</h4>
+ <p className="text-sm text-slate-600 dark:text-blue-200/85">
  {profile.branch}
  </p>
  </div>
@@ -1023,8 +1023,8 @@ const {
  placeholder="Upload your profile picture"disabled={uploadingImage}
  />
  {uploadingImage && (
- <div className="flex items-center space-x-2 text-sm text-sage-deep dark:text-emerald-300">
- <div className="h-4 w-4 animate-spin rounded-full border-2 border-sage-deep border-t-transparent dark:border-emerald-400"></div>
+ <div className="flex items-center space-x-2 text-sm text-blue-600 dark:text-blue-300">
+ <div className="h-4 w-4 animate-spin rounded-full border-2 border-blue-600 border-t-transparent dark:border-blue-400"></div>
  <span>Uploading...</span>
  </div>
  )}
@@ -1040,8 +1040,8 @@ const {
  type="email"value={value as string}
  readOnly
  disabled
- className="w-full cursor-not-allowed bg-slate-100 text-slate-500 dark:bg-emerald-950/50 dark:text-emerald-400"placeholder="Email cannot be edited"/>
- <p className="text-xs text-slate-500 dark:text-emerald-400">
+ className="w-full cursor-not-allowed bg-slate-100 text-slate-500 dark:bg-blue-950/50 dark:text-blue-400"placeholder="Email cannot be edited"/>
+ <p className="text-xs text-slate-500 dark:text-blue-400">
  Email cannot be changed for security reasons
  </p>
  </div>
@@ -1245,7 +1245,7 @@ const numericValue = inputValue.replace(/[^0-9]/g,'').slice(0, 10)
  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
  {section.fields.map((field) => (
  <div key={field} className={field.includes('bio') || field.includes('address') || field.includes('courses_offered') ?'md:col-span-2':''}>
- <label className="block text-sm font-medium text-slate-700 dark:text-emerald-200/90 mb-2 capitalize">
+ <label className="block text-sm font-medium text-slate-700 dark:text-blue-200/90 mb-2 capitalize">
  {field.replace(/_/g,'')}
  </label>
  {renderField(field)}
@@ -1253,7 +1253,7 @@ const numericValue = inputValue.replace(/[^0-9]/g,'').slice(0, 10)
  ))}
  </div>
 
- <div className="flex justify-end gap-3 border-t border-slate-200 pt-4 dark:border-emerald-800">
+ <div className="flex justify-end gap-3 border-t border-slate-200 pt-4 dark:border-blue-800">
  <Button
  type="button"variant="outline"onClick={onCancel}
  >

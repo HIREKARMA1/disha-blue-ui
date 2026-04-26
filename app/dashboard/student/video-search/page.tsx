@@ -191,23 +191,23 @@ const now = new Date()
  transition={{ duration: 0.6 }}
  className="space-y-6">
  {/* Header */}
- <div className="dashboard-overview-card mb-6 !bg-sage/10 p-6 dark:!bg-emerald-900/30">
+ <div className="dashboard-overview-card mb-6 !bg-blue-50/10 p-6 dark:!bg-blue-900/30">
  <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between lg:gap-6">
  <div className="min-w-0 flex-1">
- <h1 className="mb-2 font-display text-2xl font-semibold tracking-tight text-slate-900 md:text-3xl dark:text-emerald-50">
+ <h1 className="mb-2 font-display text-2xl font-semibold tracking-tight text-slate-900 md:text-3xl dark:text-blue-50">
  Video Search
  </h1>
- <p className="mb-3 text-lg text-slate-600 dark:text-emerald-200/85">
+ <p className="mb-3 text-lg text-slate-600 dark:text-blue-200/85">
  Discover career-related videos, tutorials, and educational content
  </p>
  <div className="flex flex-wrap gap-2">
- <span className="inline-flex items-center border border-sage/40 bg-white px-3 py-1 text-sm font-medium text-sage-deep dark:border-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-200">
+ <span className="inline-flex items-center border border-blue-50/40 bg-white px-3 py-1 text-sm font-medium text-blue-600 dark:border-blue-700 dark:bg-blue-900/40 dark:text-blue-200">
   {new Date().toLocaleDateString('en-US', { weekday:'long', month:'long', day:'numeric'})}
  </span>
- <span className="inline-flex items-center border border-sage/40 bg-sage/15 px-3 py-1 text-sm font-medium text-sage-deep dark:border-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-200">
+ <span className="inline-flex items-center border border-blue-50/40 bg-blue-50/15 px-3 py-1 text-sm font-medium text-blue-600 dark:border-blue-700 dark:bg-blue-900/50 dark:text-blue-200">
   Career Growth
  </span>
- <span className="inline-flex items-center border border-sage/40 bg-sage/15 px-3 py-1 text-sm font-medium text-sage-deep dark:border-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-200">
+ <span className="inline-flex items-center border border-blue-50/40 bg-blue-50/15 px-3 py-1 text-sm font-medium text-blue-600 dark:border-blue-700 dark:bg-blue-900/50 dark:text-blue-200">
   New Opportunities
  </span>
  </div>
@@ -220,7 +220,7 @@ const now = new Date()
  {/* Search Bar */}
  <div className="flex flex-col gap-3 sm:flex-row sm:items-end">
  <div className="relative flex-1">
- <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400 dark:text-emerald-500/80"/>
+ <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400 dark:text-blue-500/80"/>
  <input
  type="text"placeholder="Search videos by title, skills, or category..."value={searchQuery}
  onChange={(e) => setSearchQuery(e.target.value)}
@@ -230,27 +230,27 @@ const now = new Date()
  if (searchQuery.trim()) searchVideos(searchQuery.trim(), 1)
  }
  }}
- className="w-full rounded-2xl border border-slate-200/90 bg-white py-2 pl-10 pr-4 text-slate-900 placeholder:text-slate-500 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-sage-deep dark:border-emerald-800/70 dark:bg-emerald-950/50 dark:text-emerald-50 dark:placeholder:text-emerald-400/70 dark:focus:ring-emerald-500"/>
+ className="w-full rounded-2xl border border-slate-200/90 bg-white py-2 pl-10 pr-4 text-slate-900 placeholder:text-slate-500 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-600 dark:border-blue-800/70 dark:bg-blue-950/50 dark:text-blue-50 dark:placeholder:text-blue-400/70 dark:focus:ring-blue-500"/>
  </div>
 
  {/* Items per page selector */}
  <div className="flex items-center gap-3">
- <label className="whitespace-nowrap text-sm text-slate-600 dark:text-emerald-200/85">
+ <label className="whitespace-nowrap text-sm text-slate-600 dark:text-blue-200/85">
  Videos per page:
  </label>
  <div className="relative">
  <button
  type="button"onClick={() => setIsDropdownOpen(!isDropdownOpen)}
- className="flex min-w-[80px] w-full items-center justify-between rounded-2xl border border-slate-200/90 bg-white px-4 py-2 text-sm text-slate-900 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-sage-deep dark:border-emerald-800/70 dark:bg-emerald-950/50 dark:text-emerald-50 dark:focus:ring-emerald-500">
+ className="flex min-w-[80px] w-full items-center justify-between rounded-2xl border border-slate-200/90 bg-white px-4 py-2 text-sm text-slate-900 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-600 dark:border-blue-800/70 dark:bg-blue-950/50 dark:text-blue-50 dark:focus:ring-blue-500">
  <span>{itemsPerPage}</span>
- <svg className="ml-2 h-4 w-4 text-slate-400 dark:text-emerald-500/80"fill="none"stroke="currentColor"viewBox="0 0 24 24">
+ <svg className="ml-2 h-4 w-4 text-slate-400 dark:text-blue-500/80"fill="none"stroke="currentColor"viewBox="0 0 24 24">
  <path strokeLinecap="round"strokeLinejoin="round"strokeWidth={2} d="M19 9l-7 7-7-7"/>
  </svg>
  </button>
 
  {/* Dropdown menu */}
  {isDropdownOpen && (
- <div className="absolute left-0 right-0 top-full z-10 mt-1 rounded-2xl border border-slate-200/90 bg-white shadow-lg dark:border-emerald-800 dark:bg-emerald-950">
+ <div className="absolute left-0 right-0 top-full z-10 mt-1 rounded-2xl border border-slate-200/90 bg-white shadow-lg dark:border-blue-800 dark:bg-blue-950">
  {[6, 12, 24, 48].map((value) => (
  <button
  key={value}
@@ -259,9 +259,9 @@ const now = new Date()
  setIsDropdownOpen(false);
  }}
  className={cn(
- 'w-full px-4 py-2 text-left text-sm transition-colors hover:bg-sage/15 dark:hover:bg-emerald-900/50',
+ 'w-full px-4 py-2 text-left text-sm transition-colors hover:bg-blue-50/15 dark:hover:bg-blue-900/50',
  itemsPerPage === value
- ?'bg-sage/20 font-medium text-sage-deep dark:bg-emerald-900/40 dark:text-emerald-200':'text-slate-900 dark:text-emerald-100',
+ ?'bg-blue-50/20 font-medium text-blue-600 dark:bg-blue-900/40 dark:text-blue-200':'text-slate-900 dark:text-blue-100',
  )}
  >
  {value}
@@ -275,7 +275,7 @@ const now = new Date()
  <Button
  onClick={handleSearch}
  disabled={loading || !searchQuery.trim()}
- className="h-10 w-full bg-sage-deep px-6 font-semibold text-white shadow-sm transition-all duration-200 hover:bg-sage-deep/90 hover:shadow-md disabled:opacity-60 dark:bg-emerald-600 dark:hover:bg-emerald-500 sm:w-auto">
+ className="h-10 w-full bg-blue-600 px-6 font-semibold text-white shadow-sm transition-all duration-200 hover:bg-blue-600/90 hover:shadow-md disabled:opacity-60 dark:bg-blue-600 dark:hover:bg-blue-500 sm:w-auto">
  {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin"/> : <Search className="mr-2 h-4 w-4"/>}
  Search
  </Button>
@@ -290,22 +290,22 @@ const now = new Date()
  {(loading || videos.length > 0) && (
  <div className="dashboard-overview-card mb-6 p-4">
  <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
- <div className="text-sm text-slate-600 dark:text-emerald-200/85">
+ <div className="text-sm text-slate-600 dark:text-blue-200/85">
  {loading ? (
  <span className="flex items-center gap-2">
- <div className="h-4 w-4 animate-spin rounded-full border-2 border-sage-deep border-t-transparent dark:border-emerald-400"></div>
+ <div className="h-4 w-4 animate-spin rounded-full border-2 border-blue-600 border-t-transparent dark:border-blue-400"></div>
  Loading videos...
  </span>
  ) : videos.length > 0 ? (
  <span className="flex items-center gap-2">
-  <span className="font-semibold text-sage-deep dark:text-emerald-300">
+  <span className="font-semibold text-blue-600 dark:text-blue-300">
  Showing {((currentPage - 1) * itemsPerPage) + 1} to {Math.min(currentPage * itemsPerPage, totalCount)} of {totalCount} videos
  </span>
  </span>
  ) : null}
  </div>
  {totalCount > 0 && (
- <div className="text-xs font-medium text-sage-deep dark:text-emerald-400">
+ <div className="text-xs font-medium text-blue-600 dark:text-blue-400">
   Page {currentPage} of {totalPages} • {itemsPerPage} videos per page
  </div>
  )}
@@ -319,13 +319,13 @@ const now = new Date()
  {[...Array(12)].map((_, i) => (
  <div key={i} className="dashboard-overview-card overflow-hidden animate-pulse p-0">
  {/* Thumbnail skeleton */}
- <div className="aspect-video bg-slate-200/90 dark:bg-emerald-900/50"></div>
+ <div className="aspect-video bg-slate-200/90 dark:bg-blue-900/50"></div>
  {/* Content skeleton */}
  <div className="space-y-2 p-3">
- <div className="h-3 w-full rounded-lg bg-slate-200/80 dark:bg-emerald-800/50"></div>
- <div className="h-3 w-3/4 rounded-lg bg-slate-200/80 dark:bg-emerald-800/50"></div>
- <div className="h-2 w-1/2 rounded bg-slate-200/70 dark:bg-emerald-800/40"></div>
- <div className="h-2 w-2/3 rounded bg-slate-200/70 dark:bg-emerald-800/40"></div>
+ <div className="h-3 w-full rounded-lg bg-slate-200/80 dark:bg-blue-800/50"></div>
+ <div className="h-3 w-3/4 rounded-lg bg-slate-200/80 dark:bg-blue-800/50"></div>
+ <div className="h-2 w-1/2 rounded bg-slate-200/70 dark:bg-blue-800/40"></div>
+ <div className="h-2 w-2/3 rounded bg-slate-200/70 dark:bg-blue-800/40"></div>
  </div>
  </div>
  ))}
@@ -342,7 +342,7 @@ const now = new Date()
  className="group dashboard-overview-card-interactive cursor-pointer overflow-hidden p-0 transition-transform duration-200 hover:scale-[1.02]"onClick={() => handleVideoClick(video)}
  >
  {/* Thumbnail - YouTube style */}
- <div className="relative aspect-video bg-slate-200 dark:bg-emerald-900/50">
+ <div className="relative aspect-video bg-slate-200 dark:bg-blue-900/50">
  <img
  src={video.thumbnail}
  alt={video.title}
@@ -365,24 +365,24 @@ const now = new Date()
  {/* Content - YouTube style compact */}
  <div className="p-3">
  {/* Title */}
- <h3 className="mb-2 line-clamp-2 text-sm font-medium leading-tight text-slate-900 group-hover:text-sage-deep dark:text-emerald-50 dark:group-hover:text-emerald-300">
+ <h3 className="mb-2 line-clamp-2 text-sm font-medium leading-tight text-slate-900 group-hover:text-blue-600 dark:text-blue-50 dark:group-hover:text-blue-300">
  {video.title}
  </h3>
 
  {/* Channel name */}
- <div className="mb-1 flex items-center text-xs text-slate-600 dark:text-emerald-200/80">
+ <div className="mb-1 flex items-center text-xs text-slate-600 dark:text-blue-200/80">
  <span className="truncate">{video.channel}</span>
  </div>
 
  {/* Views and date */}
- <div className="flex items-center text-xs text-slate-500 dark:text-emerald-400/90">
+ <div className="flex items-center text-xs text-slate-500 dark:text-blue-400/90">
  <span>{formatViews(video.views)} views</span>
  <span className="mx-1">•</span>
  <span>{formatDate(video.published_at)}</span>
  </div>
 
  {/* Likes count */}
- <div className="mt-1 flex items-center text-xs text-slate-500 dark:text-emerald-400/90">
+ <div className="mt-1 flex items-center text-xs text-slate-500 dark:text-blue-400/90">
  <span className="mr-1"></span>
  <span>{formatViews(video.likes)} likes</span>
  </div>
@@ -400,7 +400,7 @@ const now = new Date()
  <Button
  variant="outline"size="sm"onClick={() => handlePageChange(currentPage - 1)}
  disabled={currentPage <= 1 || loading}
- className="border-slate-200/90 px-3 py-2 transition-all duration-200 hover:border-sage-deep/40 hover:shadow-md disabled:cursor-not-allowed disabled:opacity-50 dark:border-emerald-800 dark:hover:border-emerald-600">
+ className="border-slate-200/90 px-3 py-2 transition-all duration-200 hover:border-blue-600/40 hover:shadow-md disabled:cursor-not-allowed disabled:opacity-50 dark:border-blue-800 dark:hover:border-blue-600">
  ←
  </Button>
 
@@ -422,14 +422,14 @@ const now = new Date()
  className={cn(
  'h-8 min-w-[32px]',
  isCurrentPage
- ?'bg-sage-deep text-white shadow-md hover:bg-sage-deep/90 dark:bg-emerald-600 dark:hover:bg-emerald-500':'border-slate-200/90 transition-all duration-200 hover:border-sage-deep/40 hover:shadow-md dark:border-emerald-800 dark:hover:border-emerald-600',
+ ?'bg-blue-600 text-white shadow-md hover:bg-blue-600/90 dark:bg-blue-600 dark:hover:bg-blue-500':'border-slate-200/90 transition-all duration-200 hover:border-blue-600/40 hover:shadow-md dark:border-blue-800 dark:hover:border-blue-600',
  )}
  >
  {pageNum}
  </Button>
  )
  } else if (pageNum === currentPage - 2 || pageNum === currentPage + 2) {
- return <span key={pageNum} className="px-2 text-sage-deep/50 dark:text-emerald-500/70">...</span>
+ return <span key={pageNum} className="px-2 text-blue-600/50 dark:text-blue-500/70">...</span>
  }
  return null
  })}
@@ -439,7 +439,7 @@ const now = new Date()
  <Button
  variant="outline"size="sm"onClick={() => handlePageChange(currentPage + 1)}
  disabled={!hasMore || loading}
- className="border-slate-200/90 px-3 py-2 transition-all duration-200 hover:border-sage-deep/40 hover:shadow-md disabled:cursor-not-allowed disabled:opacity-50 dark:border-emerald-800 dark:hover:border-emerald-600">
+ className="border-slate-200/90 px-3 py-2 transition-all duration-200 hover:border-blue-600/40 hover:shadow-md disabled:cursor-not-allowed disabled:opacity-50 dark:border-blue-800 dark:hover:border-blue-600">
  →
  </Button>
  </div>
@@ -449,13 +449,13 @@ const now = new Date()
  </>
  ) : (
  <div className="py-12 text-center">
- <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-sage/20 dark:bg-emerald-900/45">
- <Search className="h-8 w-8 text-sage-deep dark:text-emerald-300"/>
+ <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-blue-50/20 dark:bg-blue-900/45">
+ <Search className="h-8 w-8 text-blue-600 dark:text-blue-300"/>
  </div>
- <h3 className="mb-2 text-xl font-semibold text-slate-900 dark:text-emerald-50">
+ <h3 className="mb-2 text-xl font-semibold text-slate-900 dark:text-blue-50">
  {hasSearched ?'No videos found':'Try searching to get started'}
  </h3>
- <p className="mb-4 text-slate-600 dark:text-emerald-200/85">
+ <p className="mb-4 text-slate-600 dark:text-blue-200/85">
  {hasSearched
  ?'Try adjusting your search criteria':'Start watching videos to learn and grow'}
  </p>
@@ -465,7 +465,7 @@ const now = new Date()
  setSearchQuery('')
  setHasSearched(false)
  }}
- variant="outline"className="border-slate-200/90 px-6 py-2 transition-all duration-200 hover:bg-sage/10 hover:shadow-md dark:border-emerald-800 dark:text-emerald-100 dark:hover:bg-emerald-900/40">
+ variant="outline"className="border-slate-200/90 px-6 py-2 transition-all duration-200 hover:bg-blue-50/10 hover:shadow-md dark:border-blue-800 dark:text-blue-100 dark:hover:bg-blue-900/40">
   Clear Search
  </Button>
  )}
@@ -482,17 +482,17 @@ const now = new Date()
  initial={{ opacity: 0, scale: 0.9 }}
  animate={{ opacity: 1, scale: 1 }}
  exit={{ opacity: 0, scale: 0.9 }}
- className="dashboard-overview-card max-h-[95vh] w-full max-w-6xl overflow-hidden !p-0 dark:!bg-emerald-950/95"onClick={(e) => e.stopPropagation()}
+ className="dashboard-overview-card max-h-[95vh] w-full max-w-6xl overflow-hidden !p-0 dark:!bg-blue-950/95"onClick={(e) => e.stopPropagation()}
  >
  {/* Modal Header */}
- <div className="flex items-center justify-between border-b border-slate-200/90 p-4 dark:border-emerald-800">
- <h2 className="truncate pr-4 text-lg font-semibold text-slate-900 dark:text-emerald-50">
+ <div className="flex items-center justify-between border-b border-slate-200/90 p-4 dark:border-blue-800">
+ <h2 className="truncate pr-4 text-lg font-semibold text-slate-900 dark:text-blue-50">
  {selectedVideo.title}
  </h2>
  <button
  type="button"onClick={closeModal}
- className="flex-shrink-0 rounded-xl p-2 transition-colors hover:bg-sage/15 dark:hover:bg-emerald-900/60">
- <X className="h-5 w-5 text-slate-500 dark:text-emerald-400"/>
+ className="flex-shrink-0 rounded-xl p-2 transition-colors hover:bg-blue-50/15 dark:hover:bg-blue-900/60">
+ <X className="h-5 w-5 text-slate-500 dark:text-blue-400"/>
  </button>
  </div>
 
@@ -511,10 +511,10 @@ const now = new Date()
  <div className="space-y-4">
  {/* Title and Channel */}
  <div>
- <h1 className="mb-2 text-xl font-bold text-slate-900 dark:text-emerald-50">
+ <h1 className="mb-2 text-xl font-bold text-slate-900 dark:text-blue-50">
  {selectedVideo.title}
  </h1>
- <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-slate-600 dark:text-emerald-200/85">
+ <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-slate-600 dark:text-blue-200/85">
  <span className="font-medium">{selectedVideo.channel}</span>
  <span className="hidden sm:inline">•</span>
  <span>{formatViews(selectedVideo.views)} views</span>
@@ -526,12 +526,12 @@ const now = new Date()
  {/* Action Buttons */}
  <div className="flex flex-wrap items-center gap-3">
  <Button
- variant="outline"size="sm"className="flex items-center gap-2 border-slate-200/90 dark:border-emerald-800 dark:text-emerald-100 dark:hover:bg-emerald-900/40">
+ variant="outline"size="sm"className="flex items-center gap-2 border-slate-200/90 dark:border-blue-800 dark:text-blue-100 dark:hover:bg-blue-900/40">
  <ThumbsUp className="h-4 w-4"/>
  {formatViews(selectedVideo.likes)} Likes
  </Button>
  <Button
- variant="outline"size="sm"className="flex items-center gap-2 border-slate-200/90 dark:border-emerald-800 dark:text-emerald-100 dark:hover:bg-emerald-900/40"onClick={() => {
+ variant="outline"size="sm"className="flex items-center gap-2 border-slate-200/90 dark:border-blue-800 dark:text-blue-100 dark:hover:bg-blue-900/40"onClick={() => {
  navigator.clipboard.writeText(selectedVideo.url)
  // You could add a toast notification here
  }}
@@ -540,61 +540,61 @@ const now = new Date()
  Share
  </Button>
  <Button
- variant="outline"size="sm"className="flex items-center gap-2 border-slate-200/90 dark:border-emerald-800 dark:text-emerald-100 dark:hover:bg-emerald-900/40">
+ variant="outline"size="sm"className="flex items-center gap-2 border-slate-200/90 dark:border-blue-800 dark:text-blue-100 dark:hover:bg-blue-900/40">
  <Bookmark className="h-4 w-4"/>
  Save
  </Button>
  <Button
- variant="outline"size="sm"className="flex items-center gap-2 border-slate-200/90 bg-sage-deep text-white hover:bg-sage-deep/90 dark:border-emerald-700 dark:bg-emerald-600 dark:hover:bg-emerald-500"onClick={() => window.open(selectedVideo.url,'_blank')}
+ variant="outline"size="sm"className="flex items-center gap-2 border-slate-200/90 bg-blue-600 text-white hover:bg-blue-600/90 dark:border-blue-700 dark:bg-blue-600 dark:hover:bg-blue-500"onClick={() => window.open(selectedVideo.url,'_blank')}
  >
  <Play className="h-4 w-4"/>
  Watch on YouTube
  </Button>
  <Button
- variant="outline"size="sm"className="flex items-center gap-2 border-slate-200/90 dark:border-emerald-800 dark:text-emerald-100 dark:hover:bg-emerald-900/40">
+ variant="outline"size="sm"className="flex items-center gap-2 border-slate-200/90 dark:border-blue-800 dark:text-blue-100 dark:hover:bg-blue-900/40">
  <MoreVertical className="h-4 w-4"/>
  </Button>
  </div>
 
  {/* Description */}
- <div className="rounded-2xl bg-slate-50 p-4 dark:bg-emerald-900/35">
- <h3 className="mb-2 font-semibold text-slate-900 dark:text-emerald-50">
+ <div className="rounded-2xl bg-slate-50 p-4 dark:bg-blue-900/35">
+ <h3 className="mb-2 font-semibold text-slate-900 dark:text-blue-50">
  Description
  </h3>
- <p className="text-sm leading-relaxed text-slate-600 dark:text-emerald-200/85">
+ <p className="text-sm leading-relaxed text-slate-600 dark:text-blue-200/85">
  {selectedVideo.description ||'No description available for this video.'}
  </p>
  </div>
 
  {/* Video Stats */}
  <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
- <div className="rounded-2xl bg-slate-50 p-3 text-center dark:bg-emerald-900/35">
- <Eye className="mx-auto mb-1 h-5 w-5 text-slate-500 dark:text-emerald-400"/>
- <div className="text-sm font-medium text-slate-900 dark:text-emerald-50">
+ <div className="rounded-2xl bg-slate-50 p-3 text-center dark:bg-blue-900/35">
+ <Eye className="mx-auto mb-1 h-5 w-5 text-slate-500 dark:text-blue-400"/>
+ <div className="text-sm font-medium text-slate-900 dark:text-blue-50">
  {formatViews(selectedVideo.views)}
  </div>
- <div className="text-xs text-slate-500 dark:text-emerald-400/90">Views</div>
+ <div className="text-xs text-slate-500 dark:text-blue-400/90">Views</div>
  </div>
- <div className="rounded-2xl bg-slate-50 p-3 text-center dark:bg-emerald-900/35">
- <ThumbsUp className="mx-auto mb-1 h-5 w-5 text-slate-500 dark:text-emerald-400"/>
- <div className="text-sm font-medium text-slate-900 dark:text-emerald-50">
+ <div className="rounded-2xl bg-slate-50 p-3 text-center dark:bg-blue-900/35">
+ <ThumbsUp className="mx-auto mb-1 h-5 w-5 text-slate-500 dark:text-blue-400"/>
+ <div className="text-sm font-medium text-slate-900 dark:text-blue-50">
  {formatViews(selectedVideo.likes)}
  </div>
- <div className="text-xs text-slate-500 dark:text-emerald-400/90">Likes</div>
+ <div className="text-xs text-slate-500 dark:text-blue-400/90">Likes</div>
  </div>
- <div className="rounded-2xl bg-slate-50 p-3 text-center dark:bg-emerald-900/35">
- <Clock className="mx-auto mb-1 h-5 w-5 text-slate-500 dark:text-emerald-400"/>
- <div className="text-sm font-medium text-slate-900 dark:text-emerald-50">
+ <div className="rounded-2xl bg-slate-50 p-3 text-center dark:bg-blue-900/35">
+ <Clock className="mx-auto mb-1 h-5 w-5 text-slate-500 dark:text-blue-400"/>
+ <div className="text-sm font-medium text-slate-900 dark:text-blue-50">
  {selectedVideo.duration}
  </div>
- <div className="text-xs text-slate-500 dark:text-emerald-400/90">Duration</div>
+ <div className="text-xs text-slate-500 dark:text-blue-400/90">Duration</div>
  </div>
- <div className="rounded-2xl bg-slate-50 p-3 text-center dark:bg-emerald-900/35">
- <Heart className="mx-auto mb-1 h-5 w-5 text-slate-500 dark:text-emerald-400"/>
- <div className="truncate text-sm font-medium text-slate-900 dark:text-emerald-50">
+ <div className="rounded-2xl bg-slate-50 p-3 text-center dark:bg-blue-900/35">
+ <Heart className="mx-auto mb-1 h-5 w-5 text-slate-500 dark:text-blue-400"/>
+ <div className="truncate text-sm font-medium text-slate-900 dark:text-blue-50">
  {selectedVideo.channel}
  </div>
- <div className="text-xs text-slate-500 dark:text-emerald-400/90">Channel</div>
+ <div className="text-xs text-slate-500 dark:text-blue-400/90">Channel</div>
  </div>
  </div>
  </div>

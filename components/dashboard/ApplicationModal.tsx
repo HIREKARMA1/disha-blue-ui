@@ -102,7 +102,7 @@ const numericValue = parseFloat(salary.replace(/[,\s]/g,''))
  initial={{ opacity: 0, scale: 0.96 }}
  animate={{ opacity: 1, scale: 1 }}
  exit={{ opacity: 0, scale: 0.96 }}
- className="max-h-[90vh] w-full max-w-4xl overflow-hidden rounded-none-none border bg-card">
+ className="max-h-[90vh] w-full max-w-4xl overflow-hidden rounded-xl border bg-card">
  <div className="border-b px-6 py-5">
  <div className="flex items-start justify-between gap-4">
  <div className="min-w-0">
@@ -129,7 +129,7 @@ const numericValue = parseFloat(salary.replace(/[,\s]/g,''))
  </div>
  <Button
  variant="ghost"size="sm"onClick={onClose}
- className="shrink-0 rounded-none-none text-muted-foreground hover:bg-muted hover:text-foreground">
+ className="shrink-0 rounded-xl text-muted-foreground hover:bg-muted hover:text-foreground">
  <X className="h-5 w-5"/>
  </Button>
  </div>
@@ -147,7 +147,7 @@ const numericValue = parseFloat(salary.replace(/[,\s]/g,''))
  <textarea
  value={formData.cover_letter}
  onChange={(e) => handleInputChange('cover_letter', e.target.value)}
- className="min-h-[8rem] w-full resize-none rounded-none-none border border-input bg-background px-3 py-2 text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"placeholder="Write your cover letter..."required
+ className="min-h-[8rem] w-full resize-none rounded-xl border border-input bg-background px-3 py-2 text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"placeholder="Write your cover letter..."required
  />
  </div>
 
@@ -161,7 +161,7 @@ const numericValue = parseFloat(salary.replace(/[,\s]/g,''))
  <Input
  type="text"value={formData.expected_salary}
  onChange={(e) => handleInputChange('expected_salary', e.target.value)}
- placeholder="e.g. 30000"className={cn('rounded-none-none', salaryError &&'border-destructive')}
+ placeholder="e.g. 30000"className={cn('rounded-xl', salaryError &&'border-destructive')}
  />
  {salaryError && (
  <p className="mt-1 text-sm text-red-600">
@@ -177,7 +177,7 @@ const numericValue = parseFloat(salary.replace(/[,\s]/g,''))
  <Input
  type="date"value={formData.availability_date}
  onChange={(e) => handleInputChange('availability_date', e.target.value)}
- className="rounded-none-none"required
+ className="rounded-xl"required
  />
  </div>
  </div>
@@ -188,12 +188,12 @@ const numericValue = parseFloat(salary.replace(/[,\s]/g,''))
  <div className="flex flex-col gap-3 border-t pt-6 sm:flex-row">
  <Button
  type="button"variant="outline"onClick={onClose}
- className="h-11 flex-1 rounded-none-none font-semibold">
+ className="h-11 flex-1 rounded-xl font-semibold">
  Cancel
  </Button>
  <Button
  type="submit"variant="gradient"disabled={isApplying || !!salaryError}
- className="h-11 flex-1 rounded-none-none font-semibold shadow-lg shadow-primary/20 disabled:opacity-50">
+ className="h-11 flex-1 rounded-xl font-semibold shadow-lg shadow-primary/20 disabled:opacity-50">
  {isApplying ? (
  <>
  <div className="animate-spin h-4 w-4 border-b-2 border-white mr-2"></div>

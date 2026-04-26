@@ -206,7 +206,7 @@ const stats = {
  <span className="inline-flex items-center px-3 py-1 text-sm font-medium bg-yellow-100 text-yellow-800">
  <Clock className="w-3 h-3 mr-1"/> {stats.pending_requests} Pending
  </span>
- <span className="inline-flex items-center px-3 py-1 text-sm font-medium bg-green-100 text-green-800">
+ <span className="inline-flex items-center px-3 py-1 text-sm font-medium bg-blue-100 text-blue-800">
  <Award className="w-3 h-3 mr-1"/> {stats.total_active_licenses} Active Licenses
  </span>
  </div>

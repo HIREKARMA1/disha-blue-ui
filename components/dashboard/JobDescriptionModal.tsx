@@ -390,7 +390,7 @@ const jobData = {
  animate={{ opacity: 1, scale: 1, y: 0 }}
  exit={{ opacity: 0, scale: 0.96, y: 16 }}
  transition={{ type:"spring", damping: 26, stiffness: 320 }}
- className="max-h-[92vh] w-full max-w-5xl overflow-hidden rounded-none-none border bg-card"onClick={(e) => e.stopPropagation()}
+ className="max-h-[92vh] w-full max-w-5xl overflow-hidden rounded-xl border bg-card"onClick={(e) => e.stopPropagation()}
  >
  <div className="flex max-h-[92vh] flex-col lg:max-h-[90vh] lg:flex-row">
  <div className="flex min-h-0 min-w-0 flex-1 flex-col">
@@ -412,7 +412,7 @@ const jobData = {
  </div>
  <button
  type="button"onClick={onClose}
- className="rounded-none-none p-2 text-muted-foreground transition-colors hover:bg-muted">
+ className="rounded-xl p-2 text-muted-foreground transition-colors hover:bg-muted">
  <X className="h-5 w-5"/>
  </button>
  </div>
@@ -420,9 +420,9 @@ const jobData = {
 
  <div className="min-h-0 flex-1 overflow-y-auto p-5 sm:p-7">
  <div className="mb-6 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
- <div className="bg-white rounded-none-none border border-gray-200 p-4">
+ <div className="bg-white rounded-xl border border-gray-200 p-4">
  <div className="flex items-center gap-3">
- <div className="p-2 rounded-none-none bg-primary-100">
+ <div className="p-2 rounded-xl bg-primary-100">
  <MapPin className="w-5 h-5 text-primary-600"/>
  </div>
  <div>
@@ -449,10 +449,10 @@ const jobData = {
  </div>
  </div>
 
- <div className="bg-white rounded-none-none border border-gray-200 p-4">
+ <div className="bg-white rounded-xl border border-gray-200 p-4">
  <div className="flex items-center gap-3">
- <div className="p-2 rounded-none-none bg-green-50">
- <DollarSign className="w-5 h-5 text-green-600"/>
+ <div className="p-2 rounded-xl bg-blue-50">
+ <DollarSign className="w-5 h-5 text-blue-600"/>
  </div>
  <div>
  <p className="text-sm text-gray-600">Salary Range</p>
@@ -463,9 +463,9 @@ const jobData = {
  </div>
  </div>
 
- <div className="bg-white rounded-none-none border border-gray-200 p-4">
+ <div className="bg-white rounded-xl border border-gray-200 p-4">
  <div className="flex items-center gap-3">
- <div className="p-2 rounded-none-none bg-blue-50">
+ <div className="p-2 rounded-xl bg-blue-50">
  <Briefcase className="w-5 h-5 text-blue-600"/>
  </div>
  <div>
@@ -477,9 +477,9 @@ const jobData = {
  </div>
  </div>
 
- <div className="bg-white rounded-none-none border border-gray-200 p-4">
+ <div className="bg-white rounded-xl border border-gray-200 p-4">
  <div className="flex items-center gap-3">
- <div className="p-2 rounded-none-none bg-orange-50">
+ <div className="p-2 rounded-xl bg-orange-50">
  <Clock className="w-5 h-5 text-orange-600"/>
  </div>
  <div>
@@ -491,9 +491,9 @@ const jobData = {
  </div>
  </div>
 
- <div className="bg-white rounded-none-none border border-gray-200 p-4">
+ <div className="bg-white rounded-xl border border-gray-200 p-4">
  <div className="flex items-center gap-3">
- <div className="p-2 rounded-none-none bg-red-50">
+ <div className="p-2 rounded-xl bg-red-50">
  <Calendar className="w-5 h-5 text-red-600"/>
  </div>
  <div>
@@ -506,9 +506,9 @@ const jobData = {
  </div>
 
  {/* Work Mode */}
- <div className="bg-white rounded-none-none border border-gray-200 p-4">
+ <div className="bg-white rounded-xl border border-gray-200 p-4">
  <div className="flex items-center gap-3">
- <div className="p-2 rounded-none-none bg-purple-50">
+ <div className="p-2 rounded-xl bg-purple-50">
  <Building className="w-5 h-5 text-purple-600"/>
  </div>
  <div>
@@ -522,10 +522,10 @@ const jobData = {
  </div>
 
  {/* Job Status */}
- <div className="bg-white rounded-none-none border border-gray-200 p-4">
+ <div className="bg-white rounded-xl border border-gray-200 p-4">
  <div className="flex items-center gap-3">
- <div className={`p-2 rounded-none-none ${job.status ==='active'?'bg-green-50':'bg-gray-50'}`}>
- <CheckCircle className={`w-5 h-5 ${job.status ==='active'?'text-green-600':'text-gray-600'}`} />
+ <div className={`p-2 rounded-xl ${job.status ==='active'?'bg-blue-50':'bg-gray-50'}`}>
+ <CheckCircle className={`w-5 h-5 ${job.status ==='active'?'text-blue-600':'text-gray-600'}`} />
  </div>
  <div>
  <p className="text-sm text-gray-600">Status</p>
@@ -537,9 +537,9 @@ const jobData = {
  </div>
 
  {/* Number of Openings */}
- <div className="bg-white rounded-none-none border border-gray-200 p-4">
+ <div className="bg-white rounded-xl border border-gray-200 p-4">
  <div className="flex items-center gap-3">
- <div className="p-2 rounded-none-none bg-indigo-50">
+ <div className="p-2 rounded-xl bg-indigo-50">
  <Users className="w-5 h-5 text-indigo-600"/>
  </div>
  <div>
@@ -554,9 +554,9 @@ const jobData = {
 
  {/* Expiration Date */}
  {job.expiration_date && (
- <div className="bg-white rounded-none-none border border-gray-200 p-4">
+ <div className="bg-white rounded-xl border border-gray-200 p-4">
  <div className="flex items-center gap-3">
- <div className={`p-2 rounded-none-none ${new Date(job.expiration_date) < new Date() ?'bg-red-50':'bg-yellow-50'}`}>
+ <div className={`p-2 rounded-xl ${new Date(job.expiration_date) < new Date() ?'bg-red-50':'bg-yellow-50'}`}>
  <Calendar className={`w-5 h-5 ${new Date(job.expiration_date) < new Date() ?'text-red-600':'text-yellow-600'}`} />
  </div>
  <div>
@@ -577,7 +577,7 @@ const jobData = {
  <Building className="w-5 h-5 text-primary-500"/>
  Company Information
  {corporateProfile?.verified && (
- <span className="ml-2 px-2 py-1 bg-green-100 text-green-800 text-xs flex items-center gap-1">
+ <span className="ml-2 px-2 py-1 bg-blue-100 text-blue-800 text-xs flex items-center gap-1">
  <Shield className="w-3 h-3"/>
  Verified
  </span>
@@ -585,7 +585,7 @@ const jobData = {
  </h3>
 
  {loadingCorporate ? (
- <div className="bg-white rounded-none-none border border-gray-200 p-4">
+ <div className="bg-white rounded-xl border border-gray-200 p-4">
  <div className="animate-pulse space-y-3">
  <div className="h-4 bg-gray-200 rounded-none w-3/4"></div>
  <div className="h-4 bg-gray-200 rounded-none w-1/2"></div>
@@ -593,17 +593,17 @@ const jobData = {
  </div>
  </div>
  ) : corporateError ? (
- <div className="bg-red-50 border border-red-200 rounded-none-none p-4">
+ <div className="bg-red-50 border border-red-200 rounded-xl p-4">
  <p className="text-red-800">{corporateError}</p>
  </div>
  ) : corporateProfile ? (
- <div className="bg-white rounded-none-none border border-gray-200 p-4">
+ <div className="bg-white rounded-xl border border-gray-200 p-4">
  <div className="flex items-start gap-4">
  {corporateProfile.company_logo && (
  <img
  src={corporateProfile.company_logo}
  alt={corporateProfile.company_name}
- className="w-16 h-16 rounded-none-none object-cover border border-gray-200"/>
+ className="w-16 h-16 rounded-xl object-cover border border-gray-200"/>
  )}
  <div className="flex-1">
  <h4 className="text-lg font-semibold text-gray-900 mb-2">
@@ -695,7 +695,7 @@ const jobData = {
  </div>
  </div>
  ) : (
- <div className="bg-gray-50 rounded-none-none border border-gray-200 p-4">
+ <div className="bg-gray-50 rounded-xl border border-gray-200 p-4">
  <p className="text-gray-500">Company information not available</p>
  </div>
  )}
@@ -707,7 +707,7 @@ const jobData = {
  <Briefcase className="w-5 h-5 text-primary-500"/>
  Job Description
  </h3>
- <div className="bg-white rounded-none-none border border-gray-200 p-4">
+ <div className="bg-white rounded-xl border border-gray-200 p-4">
  <p className="text-gray-700 leading-relaxed">
  {job.description}
  </p>
@@ -721,7 +721,7 @@ const jobData = {
  <Award className="w-5 h-5 text-primary-500"/>
  Requirements
  </h3>
- <div className="bg-white rounded-none-none border border-gray-200 p-4">
+ <div className="bg-white rounded-xl border border-gray-200 p-4">
  <p className="text-gray-700 leading-relaxed">
  {job.requirements}
  </p>
@@ -736,7 +736,7 @@ const jobData = {
  <Briefcase className="w-5 h-5 text-primary-500"/>
  Responsibilities
  </h3>
- <div className="bg-white rounded-none-none border border-gray-200 p-4">
+ <div className="bg-white rounded-xl border border-gray-200 p-4">
  <p className="text-gray-700 leading-relaxed">
  {job.responsibilities}
  </p>
@@ -755,7 +755,7 @@ const jobData = {
  {job.skills_required.map((skill, index) => (
  <span
  key={index}
- className="px-3 py-2 bg-primary-50 text-primary-800 rounded-none-none font-medium border border-primary-200">
+ className="px-3 py-2 bg-primary-50 text-primary-800 rounded-xl font-medium border border-primary-200">
  {skill}
  </span>
  ))}
@@ -774,7 +774,7 @@ const jobData = {
  {parseEducationData(job.education_level).map((level, index) => (
  <span
  key={index}
- className="px-3 py-2 bg-blue-50 text-blue-800 rounded-none-none font-medium border border-blue-200">
+ className="px-3 py-2 bg-blue-50 text-blue-800 rounded-xl font-medium border border-blue-200">
  {formatEducationLabel(level)}
  </span>
  ))}
@@ -793,7 +793,7 @@ const jobData = {
  {parseEducationData(job.education_degree).map((degree, index) => (
  <span
  key={index}
- className="px-3 py-2 bg-green-50 text-green-800 rounded-none-none font-medium border border-green-200">
+ className="px-3 py-2 bg-blue-50 text-blue-800 rounded-xl font-medium border border-blue-200">
  {degree}
  </span>
  ))}
@@ -812,7 +812,7 @@ const jobData = {
  {parseEducationData(job.education_branch).map((branch, index) => (
  <span
  key={index}
- className="px-3 py-2 bg-purple-50 text-purple-800 rounded-none-none font-medium border border-purple-200">
+ className="px-3 py-2 bg-purple-50 text-purple-800 rounded-xl font-medium border border-purple-200">
  {branch}
  </span>
  ))}
@@ -827,7 +827,7 @@ const jobData = {
  <Building className="w-5 h-5 text-primary-500"/>
  Industry
  </h3>
- <div className="bg-white rounded-none-none border border-gray-200 p-4">
+ <div className="bg-white rounded-xl border border-gray-200 p-4">
  <p className="text-gray-700 font-medium text-lg">
  {job.industry}
  </p>
@@ -841,7 +841,7 @@ const jobData = {
  <Users className="w-5 h-5 text-primary-500"/>
  Number of Openings
  </h3>
- <div className="bg-white rounded-none-none border border-gray-200 p-4">
+ <div className="bg-white rounded-xl border border-gray-200 p-4">
  <p className="text-gray-700 font-medium text-lg">
  {job.number_of_openings ?
  `${job.number_of_openings} position${job.number_of_openings > 1 ?'s':''} available` :'Not specified'}
@@ -856,7 +856,7 @@ const jobData = {
  <Award className="w-5 h-5 text-primary-500"/>
  Perks and Benefits
  </h3>
- <div className="bg-white rounded-none-none border border-gray-200 p-4">
+ <div className="bg-white rounded-xl border border-gray-200 p-4">
  <p className="text-gray-700 leading-relaxed">
  {job.perks_and_benefits}
  </p>
@@ -871,7 +871,7 @@ const jobData = {
  <CheckCircle className="w-5 h-5 text-primary-500"/>
  Eligibility Criteria
  </h3>
- <div className="bg-white rounded-none-none border border-gray-200 p-4">
+ <div className="bg-white rounded-xl border border-gray-200 p-4">
  <p className="text-gray-700 leading-relaxed">
  {job.eligibility_criteria}
  </p>
@@ -886,7 +886,7 @@ const jobData = {
  <Shield className="w-5 h-5 text-primary-500"/>
  Service Agreement Details
  </h3>
- <div className="bg-white rounded-none-none border border-gray-200 p-4">
+ <div className="bg-white rounded-xl border border-gray-200 p-4">
  <p className="text-gray-700 leading-relaxed">
  {job.service_agreement_details}
  </p>
@@ -901,7 +901,7 @@ const jobData = {
  <DollarSign className="w-5 h-5 text-primary-500"/>
  CTC Details
  </h3>
- <div className="bg-white rounded-none-none border border-gray-200 p-4">
+ <div className="bg-white rounded-xl border border-gray-200 p-4">
  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
  {job.ctc_with_probation && (
  <div>
@@ -926,7 +926,7 @@ const jobData = {
  <Briefcase className="w-5 h-5 text-primary-500"/>
  Additional Job Details
  </h3>
- <div className="bg-white rounded-none-none border border-gray-200 p-4">
+ <div className="bg-white rounded-xl border border-gray-200 p-4">
  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
  {/* Left Column */}
  <div className="space-y-4">
@@ -1016,7 +1016,7 @@ const jobData = {
  <Award className="w-5 h-5 text-primary-500"/>
  Selection Process
  </h3>
- <div className="bg-white rounded-none-none border border-gray-200 p-4">
+ <div className="bg-white rounded-xl border border-gray-200 p-4">
  <p className="text-gray-700 leading-relaxed">
  {job.selection_process}
  </p>
@@ -1031,7 +1031,7 @@ const jobData = {
  <Calendar className="w-5 h-5 text-primary-500"/>
  Application Deadline
  </h3>
- <div className={cn("rounded-none-none p-4 border",
+ <div className={cn("rounded-xl p-4 border",
  isDeadlineExpired()
  ?"bg-red-50 border-red-200":"bg-white border-gray-200")}>
  <p className={cn("font-medium",
@@ -1055,7 +1055,7 @@ const jobData = {
  <Users className="w-5 h-5 text-primary-500"/>
  Campus Drive
  </h3>
- <div className="bg-blue-50 border border-blue-200 rounded-none-none p-4">
+ <div className="bg-blue-50 border border-blue-200 rounded-xl p-4">
  <p className="text-blue-800 font-medium">
  Campus Drive Date: {formatDate(job.campus_drive_date)}
  </p>
@@ -1070,7 +1070,7 @@ const jobData = {
  <Calendar className="w-5 h-5 text-primary-500"/>
  Job Expiration
  </h3>
- <div className={cn("rounded-none-none p-4 border",
+ <div className={cn("rounded-xl p-4 border",
  new Date(job.expiration_date) < new Date()
  ?"bg-red-50 border-red-200":"bg-yellow-50 border-yellow-200")}>
  <p className={cn("font-medium",
@@ -1116,7 +1116,7 @@ const jobData = {
  </p>
  </div>
  </div>
- <div className="rounded-none-none border border-dashed bg-primary/[0.05] p-4">
+ <div className="rounded-xl border border-dashed bg-primary/[0.05] p-4">
  <p className="text-xs font-semibold text-foreground">Presentation tip</p>
  <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
  Tie your strongest bullets to the skills and responsibilities below—clear overlap
@@ -1125,7 +1125,7 @@ const jobData = {
  </div>
  {showApplyButton && (
  <Button
- type="button"variant="gradient"className="mt-auto hidden h-12 w-full rounded-none-none font-semibold shadow-lg shadow-primary/20 lg:flex"onClick={onApply}
+ type="button"variant="gradient"className="mt-auto hidden h-12 w-full rounded-xl font-semibold shadow-lg shadow-primary/20 lg:flex"onClick={onApply}
  disabled={!canApply() || isApplying}
  >
  {isApplying ? (
@@ -1150,7 +1150,7 @@ const jobData = {
  <Button
  type="button"variant="outline"onClick={handleDownloadPDF}
  disabled={isDownloadingPDF}
- className="h-11 rounded-none-none border-border font-semibold">
+ className="h-11 rounded-xl border-border font-semibold">
  {isDownloadingPDF ? (
  <>
  <span className="mr-2 inline-block h-4 w-4 animate-spin border-2 border-primary border-t-transparent"/>
@@ -1167,7 +1167,7 @@ const jobData = {
  <Button
  type="button"variant="gradient"onClick={onApply}
  disabled={!canApply() || isApplying}
- className={cn('h-11 rounded-none-none font-semibold shadow-md shadow-primary/15 lg:hidden',
+ className={cn('h-11 rounded-xl font-semibold shadow-md shadow-primary/15 lg:hidden',
  !canApply() &&'opacity-50',
  )}
  >

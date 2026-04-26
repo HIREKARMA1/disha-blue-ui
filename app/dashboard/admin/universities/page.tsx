@@ -189,7 +189,7 @@ const url = window.URL.createObjectURL(blob)
  <span className="inline-flex items-center border px-3 py-1 text-xs font-medium text-primary">
  {universities.length} total universities
  </span>
- <span className="inline-flex items-center border px-3 py-1 text-xs font-medium text-green-700">
+ <span className="inline-flex items-center border px-3 py-1 text-xs font-medium text-blue-700">
  {universities.filter(u => u.verified).length} verified
  </span>
  <span className="inline-flex items-center border px-3 py-1 text-xs font-medium text-secondary-700">

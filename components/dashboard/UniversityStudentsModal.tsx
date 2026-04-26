@@ -81,13 +81,13 @@ const studentsList = Array.isArray(response) ? response : (response.students || 
  animate={{ opacity: 1, scale: 1, y: 0 }}
  exit={{ opacity: 0, scale: 0.95, y: 20 }}
  transition={{ duration: 0.2 }}
- className="relative w-full max-w-6xl mx-4 bg-white rounded-none-none text-left overflow-hidden transform transition-all border-2 border-gray-300 max-h-[90vh] flex flex-col"onClick={(e) => e.stopPropagation()}
+ className="relative w-full max-w-6xl mx-4 bg-white rounded-xl text-left overflow-hidden transform transition-all border-2 border-gray-300 max-h-[90vh] flex flex-col"onClick={(e) => e.stopPropagation()}
  >
  {/* Header */}
  <div className="px-6 py-4 border-b-2 border-gray-200">
  <div className="flex items-center justify-between">
  <div className="flex items-center space-x-3">
- <div className="p-2 bg-blue-100 rounded-none-none">
+ <div className="p-2 bg-blue-100 rounded-xl">
  <Users className="w-5 h-5 text-blue-600"/>
  </div>
  <div>
@@ -103,7 +103,7 @@ const studentsList = Array.isArray(response) ? response : (response.students || 
  {students.length > 0 && (
  <button
  onClick={handleExportCSV}
- className="flex items-center space-x-2 px-4 py-2 text-sm font-medium text-white bg-green-600 hover:bg-green-700 rounded-none-none transition-colors duration-200">
+ className="flex items-center space-x-2 px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-xl transition-colors duration-200">
  <Download className="w-4 h-4"/>
  <span>Export CSV</span>
  </button>
@@ -134,7 +134,7 @@ const studentsList = Array.isArray(response) ? response : (response.students || 
  <p className="text-sm text-gray-600 mb-4">{error}</p>
  <button
  onClick={fetchStudents}
- className="px-4 py-2 text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 rounded-none-none transition-colors duration-200">
+ className="px-4 py-2 text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 rounded-xl transition-colors duration-200">
  Try Again
  </button>
  </div>
@@ -203,7 +203,7 @@ const studentsList = Array.isArray(response) ? response : (response.students || 
  </td>
  <td className="py-3 px-4">
  <span className={`inline-flex items-center px-2.5 py-0.5 text-xs font-medium ${
- student.placement_status ==='placed'?'bg-green-100 text-green-800':'bg-yellow-100 text-yellow-800'}`}>
+ student.placement_status ==='placed'?'bg-blue-100 text-blue-800':'bg-yellow-100 text-yellow-800'}`}>
  {student.placement_status ||'unplaced'}
  </span>
  </td>

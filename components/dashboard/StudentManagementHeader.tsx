@@ -66,7 +66,7 @@ export function StudentManagementHeader({
  return (
  <div className="space-y-6">
  {/* Search and Filters */}
- <div className="bg-white rounded-none-none border border-gray-200 p-6">
+ <div className="bg-white rounded-xl border border-gray-200 p-6">
  {/* Top Row: Search and Action Buttons */}
  <div className="flex flex-col sm:flex-row gap-3 mb-4">
  <div className="flex-1 relative">
@@ -86,7 +86,7 @@ export function StudentManagementHeader({
  </Button>
  <Button
  onClick={onBulkUpload}
- className="bg-green-600 hover:bg-green-700 text-white shadow-sm transition-all duration-200">
+ className="bg-blue-600 hover:bg-blue-700 text-white shadow-sm transition-all duration-200">
  <Upload className="w-4 h-4 mr-2"/>
  Bulk Upload
  </Button>
@@ -116,7 +116,7 @@ export function StudentManagementHeader({
  <select
  value={filterStatus}
  onChange={(e) => onFilterChange(e.target.value)}
- className="w-full px-3 py-2 border border-gray-200 focus:border-primary-500 focus:ring-primary-500/20 text-gray-900 rounded-none-none bg-white appearance-none">
+ className="w-full px-3 py-2 border border-gray-200 focus:border-primary-500 focus:ring-primary-500/20 text-gray-900 rounded-xl bg-white appearance-none">
  <option value="all">All Statuses</option>
  <option value="placed">Placed</option>
  <option value="unplaced">Unplaced</option>
@@ -139,7 +139,7 @@ export function StudentManagementHeader({
  <select
  value={selectedDegree}
  onChange={(e) => onDegreeChange(e.target.value)}
- className="w-full pl-10 pr-8 py-2 border border-gray-200 rounded-none-none bg-white text-gray-900 focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-200 appearance-none">
+ className="w-full pl-10 pr-8 py-2 border border-gray-200 rounded-xl bg-white text-gray-900 focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-200 appearance-none">
  <option value="all">All Degrees</option>
  {degrees.map(degree => (
  <option key={degree} value={degree}>{degree}</option>
@@ -161,7 +161,7 @@ export function StudentManagementHeader({
  <select
  value={selectedBranch}
  onChange={(e) => onBranchChange(e.target.value)}
- className="w-full pl-10 pr-8 py-2 border border-gray-200 rounded-none-none bg-white text-gray-900 focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-200 appearance-none">
+ className="w-full pl-10 pr-8 py-2 border border-gray-200 rounded-xl bg-white text-gray-900 focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-200 appearance-none">
  <option value="all">All Branches</option>
  {branches.map(branch => (
  <option key={branch} value={branch}>{branch}</option>
@@ -183,7 +183,7 @@ export function StudentManagementHeader({
  <select
  value={selectedYear}
  onChange={(e) => onYearChange(e.target.value)}
- className="w-full pl-10 pr-8 py-2 border border-gray-200 rounded-none-none bg-white text-gray-900 focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-200 appearance-none">
+ className="w-full pl-10 pr-8 py-2 border border-gray-200 rounded-xl bg-white text-gray-900 focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-200 appearance-none">
  <option value="all">All Years</option>
  {years.map(year => (
  <option key={year} value={year}>{year}</option>
@@ -205,7 +205,7 @@ export function StudentManagementHeader({
  <select
  value={includeArchived ?'archived':'active'}
  onChange={(e) => onIncludeArchivedChange(e.target.value ==='archived')}
- className="w-full pl-10 pr-8 py-2 border border-gray-200 rounded-none-none bg-white text-gray-900 focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-200 appearance-none">
+ className="w-full pl-10 pr-8 py-2 border border-gray-200 rounded-xl bg-white text-gray-900 focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-200 appearance-none">
  <option value="active">Active Students</option>
  <option value="archived">Archived Students</option>
  </select>

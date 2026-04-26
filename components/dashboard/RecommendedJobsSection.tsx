@@ -106,7 +106,7 @@ export function RecommendedJobsSection() {
  <p className="text-sm text-muted-foreground">Based on your profile, resume, and location preferences</p>
  </div>
  <Button
- type="button"variant="outline"className="rounded-none-none"onClick={() => loadRecommendations(true)}
+ type="button"variant="outline"className="rounded-xl"onClick={() => loadRecommendations(true)}
  disabled={refreshing}
  >
  <RefreshCw className={cn("mr-2 h-4 w-4", refreshing &&"animate-spin")} />
@@ -143,7 +143,7 @@ export function RecommendedJobsSection() {
  </label>
  </div>
  <div className="mt-3">
- <Button type="button"variant="gradient"className="rounded-none-none"onClick={saveLocationPreference} disabled={savingLocation}>
+ <Button type="button"variant="gradient"className="rounded-xl"onClick={saveLocationPreference} disabled={savingLocation}>
  Save Location Preference
  </Button>
  </div>
@@ -181,12 +181,12 @@ export function RecommendedJobsSection() {
  </div>
  <div className="mt-3 flex gap-2">
  <Link href="/dashboard/student/jobs"className="inline-flex">
- <Button variant="outline"size="sm"className="rounded-none-none">
+ <Button variant="outline"size="sm"className="rounded-xl">
  View
  </Button>
  </Link>
  <Link href="/dashboard/student/jobs"className="inline-flex">
- <Button variant="gradient"size="sm"className="rounded-none-none">
+ <Button variant="gradient"size="sm"className="rounded-xl">
  Apply
  </Button>
  </Link>

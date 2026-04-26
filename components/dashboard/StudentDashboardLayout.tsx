@@ -88,25 +88,25 @@ function StudentDashboardContent({ children }: StudentDashboardLayoutProps) {
  <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
  <Link
  href="/dashboard/discover-jobs"className="dashboard-overview-card-interactive p-5">
- <p className="text-xs font-semibold uppercase tracking-wide text-sage-deep">Discover</p>
+ <p className="text-xs font-semibold uppercase tracking-wide text-blue-600">Discover</p>
  <p className="mt-2 font-display text-lg font-semibold text-slate-900">Jobs near you</p>
  <p className="mt-1 text-sm text-slate-600">AI-ranked local openings</p>
  </Link>
  <Link
  href="/dashboard/discover-jobs?saved=1"className="dashboard-overview-card-interactive p-5">
- <p className="text-xs font-semibold uppercase tracking-wide text-sage-deep">Saved</p>
+ <p className="text-xs font-semibold uppercase tracking-wide text-blue-600">Saved</p>
  <p className="mt-2 font-display text-lg font-semibold text-slate-900">Shortlisted jobs</p>
  <p className="mt-1 text-sm text-slate-600">Keep priority roles together</p>
  </Link>
  <Link
  href="/dashboard/student/applications"className="dashboard-overview-card-interactive p-5">
- <p className="text-xs font-semibold uppercase tracking-wide text-sage-deep">Pipeline</p>
+ <p className="text-xs font-semibold uppercase tracking-wide text-blue-600">Pipeline</p>
  <p className="mt-2 font-display text-lg font-semibold text-slate-900">Applications</p>
  <p className="mt-1 text-sm text-slate-600">Track every stage clearly</p>
  </Link>
  <Link
  href="/dashboard/student/resume-builder"className="dashboard-overview-card-interactive p-5">
- <p className="text-xs font-semibold uppercase tracking-wide text-sage-deep">Assets</p>
+ <p className="text-xs font-semibold uppercase tracking-wide text-blue-600">Assets</p>
  <p className="mt-2 font-display text-lg font-semibold text-slate-900">Resume builder</p>
  <p className="mt-1 text-sm text-slate-600">Stay interview-ready</p>
  </Link>
@@ -119,7 +119,7 @@ function StudentDashboardContent({ children }: StudentDashboardLayoutProps) {
  </div>
  <div className="space-y-6 lg:col-span-2">
  <div className="dashboard-overview-card p-5">
- <p className="text-xs font-semibold uppercase tracking-[0.14em] text-sage-deep">Career command center</p>
+ <p className="text-xs font-semibold uppercase tracking-[0.14em] text-blue-600">Career command center</p>
  <h3 className="mt-2 font-display text-lg font-semibold text-slate-900">Next best actions</h3>
  <ul className="mt-4 space-y-2.5 text-sm text-slate-600">
  <li>Complete profile and upload latest resume</li>
@@ -134,20 +134,20 @@ function StudentDashboardContent({ children }: StudentDashboardLayoutProps) {
  </div>
  <aside className="space-y-4 xl:col-span-3">
  <div className="dashboard-overview-card p-5">
- <p className="text-xs font-semibold uppercase tracking-[0.14em] text-sage-deep">Profile strength</p>
+ <p className="text-xs font-semibold uppercase tracking-[0.14em] text-blue-600">Profile strength</p>
  <p className="mt-2 font-display text-2xl font-semibold text-slate-900">Build momentum</p>
  <p className="mt-2 text-sm text-slate-600">Keep your profile and resume polished to improve role match quality.</p>
- <Link href="/dashboard/student/profile"className="mt-4 inline-flex text-sm font-semibold text-emerald-800 hover:text-emerald-950 hover:underline">
+ <Link href="/dashboard/student/profile"className="mt-4 inline-flex text-sm font-semibold text-blue-800 hover:text-blue-950 hover:underline">
  Update profile
  </Link>
  </div>
  <div className="dashboard-overview-card p-5">
- <p className="text-xs font-semibold uppercase tracking-[0.14em] text-sage-deep">Quick tools</p>
+ <p className="text-xs font-semibold uppercase tracking-[0.14em] text-blue-600">Quick tools</p>
  <div className="mt-3 space-y-2">
- <Link href="/dashboard/student/career-align"className="block rounded-xl border border-slate-200/90 bg-white px-3 py-2 text-sm text-slate-800 shadow-sm transition hover:border-sage-deep hover:bg-sage/50 dark:bg-emerald-950/40 dark:hover:bg-emerald-900/60">AI Interview Session</Link>
- <Link href="/ai-communication"className="block rounded-xl border border-slate-200/90 bg-white px-3 py-2 text-sm text-slate-800 shadow-sm transition hover:border-sage-deep hover:bg-sage/50 dark:bg-emerald-950/40 dark:hover:bg-emerald-900/60">AI Communication Assessments</Link>
- <Link href="/dashboard/student/courses"className="block rounded-xl border border-slate-200/90 bg-white px-3 py-2 text-sm text-slate-800 shadow-sm transition hover:border-sage-deep hover:bg-sage/50 dark:bg-emerald-950/40 dark:hover:bg-emerald-900/60">Courses</Link>
- <Link href="/dashboard/student/video-search"className="block rounded-xl border border-slate-200/90 bg-white px-3 py-2 text-sm text-slate-800 shadow-sm transition hover:border-sage-deep hover:bg-sage/50 dark:bg-emerald-950/40 dark:hover:bg-emerald-900/60">Video Search</Link>
+ <Link href="/dashboard/student/career-align"className="block rounded-xl border border-slate-200/90 bg-white px-3 py-2 text-sm text-slate-800 shadow-sm transition hover:border-blue-600 hover:bg-blue-50/50 dark:bg-blue-950/40 dark:hover:bg-blue-900/60">AI Interview Session</Link>
+ <Link href="/ai-communication"className="block rounded-xl border border-slate-200/90 bg-white px-3 py-2 text-sm text-slate-800 shadow-sm transition hover:border-blue-600 hover:bg-blue-50/50 dark:bg-blue-950/40 dark:hover:bg-blue-900/60">AI Communication Assessments</Link>
+ <Link href="/dashboard/student/courses"className="block rounded-xl border border-slate-200/90 bg-white px-3 py-2 text-sm text-slate-800 shadow-sm transition hover:border-blue-600 hover:bg-blue-50/50 dark:bg-blue-950/40 dark:hover:bg-blue-900/60">Courses</Link>
+ <Link href="/dashboard/student/video-search"className="block rounded-xl border border-slate-200/90 bg-white px-3 py-2 text-sm text-slate-800 shadow-sm transition hover:border-blue-600 hover:bg-blue-50/50 dark:bg-blue-950/40 dark:hover:bg-blue-900/60">Video Search</Link>
  </div>
  </div>
  </aside>

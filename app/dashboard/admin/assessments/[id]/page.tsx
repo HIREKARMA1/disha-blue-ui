@@ -175,7 +175,7 @@ const copyToClipboard = () => {
  <Button
  onClick={handlePublish}
  disabled={isPublishing || assessment.status !=='DRAFT'}
- className="bg-green-600 hover:bg-green-700">
+ className="bg-blue-600 hover:bg-blue-700">
  {isPublishing ?'Publishing...':'Publish to SOLVIQ'}
  </Button>
  )}
@@ -218,7 +218,7 @@ const copyToClipboard = () => {
  </div>
  <div>
  <p className="text-gray-600 text-sm">Completed</p>
- <p className="text-3xl font-bold text-green-600 mt-1">{stats.completed_attempts}</p>
+ <p className="text-3xl font-bold text-blue-600 mt-1">{stats.completed_attempts}</p>
  </div>
  <div>
  <p className="text-gray-600 text-sm">Average Score</p>
@@ -276,7 +276,7 @@ const copyToClipboard = () => {
  {generatedToken && (
  <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-none-none">
  <div className="flex items-center gap-2 mb-3">
- <CheckCircle className="text-green-600"size={20} />
+ <CheckCircle className="text-blue-600"size={20} />
  <p className="font-medium text-gray-900">Token Generated Successfully</p>
  </div>
  <div className="space-y-3">

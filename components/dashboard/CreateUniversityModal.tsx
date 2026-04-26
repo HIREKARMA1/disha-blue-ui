@@ -143,11 +143,11 @@ export function CreateUniversityModal({
  initial={{ opacity: 0, scale: 0.95, y: 20 }}
  animate={{ opacity: 1, scale: 1, y: 0 }}
  exit={{ opacity: 0, scale: 0.95, y: 20 }}
- className="relative bg-white rounded-none-none shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-hidden mx-4">
+ className="relative bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-hidden mx-4">
  {/* Header */}
  <div className="flex items-center justify-between p-6 border-b border-gray-200">
  <div className="flex items-center gap-3">
- <div className="p-2 bg-blue-100 rounded-none-none">
+ <div className="p-2 bg-blue-100 rounded-xl">
  <Building2 className="w-5 h-5 text-blue-600"/>
  </div>
  <div>
@@ -161,7 +161,7 @@ export function CreateUniversityModal({
  </div>
  <button
  onClick={onClose}
- className="p-2 hover:bg-gray-100 rounded-none-none transition-colors">
+ className="p-2 hover:bg-gray-100 rounded-xl transition-colors">
  <X className="w-5 h-5 text-gray-500"/>
  </button>
  </div>
@@ -173,8 +173,8 @@ export function CreateUniversityModal({
  initial={{ opacity: 0, y: 20 }}
  animate={{ opacity: 1, y: 0 }}
  className="text-center py-8">
- <div className="w-16 h-16 bg-green-100 flex items-center justify-center mx-auto mb-4">
- <Building2 className="w-8 h-8 text-green-600"/>
+ <div className="w-16 h-16 bg-blue-100 flex items-center justify-center mx-auto mb-4">
+ <Building2 className="w-8 h-8 text-blue-600"/>
  </div>
  <h3 className="text-lg font-semibold text-gray-900 mb-2">
  University Created Successfully!
@@ -183,7 +183,7 @@ export function CreateUniversityModal({
  <strong>{createdUniversity?.university_name}</strong> has been added to the system and a welcome email has been sent.
  </p>
 
- <div className="bg-gray-50 rounded-none-none p-4 mb-6">
+ <div className="bg-gray-50 rounded-xl p-4 mb-6">
  <h4 className="text-sm font-medium text-gray-900 mb-3">
  Login Credentials:
  </h4>
@@ -206,7 +206,7 @@ export function CreateUniversityModal({
  setCreatedUniversity(null)
  onClose()
  }}
- className="flex-1 px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-none-none hover:bg-gray-200 transition-colors duration-200">
+ className="flex-1 px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-xl hover:bg-gray-200 transition-colors duration-200">
  Close
  </button>
  <button
@@ -214,7 +214,7 @@ export function CreateUniversityModal({
  setShowSuccess(false)
  setCreatedUniversity(null)
  }}
- className="flex-1 px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-none-none transition-colors duration-200">
+ className="flex-1 px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-xl transition-colors duration-200">
  Add Another University
  </button>
  </div>
@@ -226,7 +226,7 @@ export function CreateUniversityModal({
  <motion.div
  initial={{ opacity: 0, y: -10 }}
  animate={{ opacity: 1, y: 0 }}
- className="flex items-center gap-3 p-4 bg-red-50 border border-red-200 rounded-none-none">
+ className="flex items-center gap-3 p-4 bg-red-50 border border-red-200 rounded-xl">
  <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0"/>
  <p className="text-sm text-red-700">{error}</p>
  </motion.div>
@@ -270,7 +270,7 @@ export function CreateUniversityModal({
  <input
  type="email"value={formData.email}
  onChange={(e) => handleInputChange('email', e.target.value)}
- className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-none-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"placeholder="Enter email address"required
+ className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"placeholder="Enter email address"required
  />
  </div>
  </div>
@@ -285,7 +285,7 @@ export function CreateUniversityModal({
  <input
  type="tel"value={formData.phone ||''}
  onChange={(e) => handleInputChange('phone', e.target.value)}
- className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-none-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"placeholder="Enter phone number"/>
+ className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"placeholder="Enter phone number"/>
  </div>
  </div>
 
@@ -297,7 +297,7 @@ export function CreateUniversityModal({
  <select
  value={formData.institute_type}
  onChange={(e) => handleInputChange('institute_type', e.target.value)}
- className="w-full px-4 py-2 border border-gray-300 rounded-none-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"required
+ className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"required
  >
  <option value="">Select institute type</option>
  {instituteTypes.map((type) => (
@@ -326,7 +326,7 @@ export function CreateUniversityModal({
  <input
  type="text"value={formData.contact_person_name ||''}
  onChange={(e) => handleInputChange('contact_person_name', e.target.value)}
- className="w-full px-4 py-2 border border-gray-300 rounded-none-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"placeholder="Enter contact person name"/>
+ className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"placeholder="Enter contact person name"/>
  </div>
 
  {/* Contact Designation */}
@@ -337,7 +337,7 @@ export function CreateUniversityModal({
  <input
  type="text"value={formData.contact_designation ||''}
  onChange={(e) => handleInputChange('contact_designation', e.target.value)}
- className="w-full px-4 py-2 border border-gray-300 rounded-none-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"placeholder="Enter designation"/>
+ className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"placeholder="Enter designation"/>
  </div>
  </div>
  </div>
@@ -358,7 +358,7 @@ export function CreateUniversityModal({
  <textarea
  value={formData.address ||''}
  onChange={(e) => handleInputChange('address', e.target.value)}
- className="w-full px-4 py-2 border border-gray-300 rounded-none-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"placeholder="Enter university address"rows={3}
+ className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"placeholder="Enter university address"rows={3}
  />
  </div>
 
@@ -372,7 +372,7 @@ export function CreateUniversityModal({
  <input
  type="url"value={formData.website_url ||''}
  onChange={(e) => handleInputChange('website_url', e.target.value)}
- className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-none-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"placeholder="https://university.edu"/>
+ className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"placeholder="https://university.edu"/>
  </div>
  </div>
  </div>
@@ -396,7 +396,7 @@ export function CreateUniversityModal({
  <input
  type="number"value={formData.established_year ||''}
  onChange={(e) => handleInputChange('established_year', parseInt(e.target.value) || undefined)}
- className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-none-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"placeholder="e.g., 1950"min="1800"max={new Date().getFullYear()}
+ className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"placeholder="e.g., 1950"min="1800"max={new Date().getFullYear()}
  />
  </div>
  </div>
@@ -411,7 +411,7 @@ export function CreateUniversityModal({
  <textarea
  value={formData.courses_offered ||''}
  onChange={(e) => handleInputChange('courses_offered', e.target.value)}
- className="w-full px-4 py-2 border border-gray-300 rounded-none-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"placeholder="List the courses offered (comma-separated)"rows={3}
+ className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"placeholder="List the courses offered (comma-separated)"rows={3}
  />
  </div>
  </div>
@@ -421,13 +421,13 @@ export function CreateUniversityModal({
  <div className="flex items-center justify-end gap-3 pt-6 border-t border-gray-200">
  <button
  type="button"onClick={onClose}
- className="px-4 py-2 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-none-none transition-colors"disabled={isSubmitting}
+ className="px-4 py-2 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-xl transition-colors"disabled={isSubmitting}
  >
  Cancel
  </button>
  <button
  type="submit"disabled={isSubmitting}
- className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-none-none transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2">
+ className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2">
  {isSubmitting ? (
  <>
  <div className="w-4 h-4 border-2 border-white border-t-transparent animate-spin"/>

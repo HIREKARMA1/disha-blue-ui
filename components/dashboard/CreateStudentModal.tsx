@@ -266,7 +266,7 @@ const requestData: CreateStudentRequest = {
  animate={{ opacity: 1, scale: 1, y: 0 }}
  exit={{ opacity: 0, scale: 0.95, y: 20 }}
  transition={{ duration: 0.2 }}
- className="relative w-full mx-auto max-w-sm sm:max-w-lg bg-white rounded-none-none text-left overflow-hidden transform transition-all border-2 border-gray-300"onClick={(e) => e.stopPropagation()}
+ className="relative w-full mx-auto max-w-sm sm:max-w-lg bg-white rounded-xl text-left overflow-hidden transform transition-all border-2 border-gray-300"onClick={(e) => e.stopPropagation()}
  >
  {/* Header */}
  <div className="px-4 py-3 sm:px-6 sm:py-4 border-b-2 border-gray-200">
@@ -287,8 +287,8 @@ const requestData: CreateStudentRequest = {
  <div className="px-4 py-4 sm:px-6 sm:py-6 bg-white max-h-[calc(100vh-200px)] overflow-y-auto">
  <div className="text-center py-6 sm:py-8">
  <div className="mb-4 sm:mb-6">
- <div className="mx-auto flex items-center justify-center h-12 w-12 bg-green-100">
- <svg className="h-6 w-6 text-green-600"fill="none"viewBox="0 0 24 24"stroke="currentColor">
+ <div className="mx-auto flex items-center justify-center h-12 w-12 bg-blue-100">
+ <svg className="h-6 w-6 text-blue-600"fill="none"viewBox="0 0 24 24"stroke="currentColor">
  <path strokeLinecap="round"strokeLinejoin="round"strokeWidth={2} d="M5 13l4 4L19 7"/>
  </svg>
  </div>
@@ -300,7 +300,7 @@ const requestData: CreateStudentRequest = {
  </p>
  </div>
 
- <div className="bg-gray-50 rounded-none-none p-3 sm:p-4 mb-4 sm:mb-6">
+ <div className="bg-gray-50 rounded-xl p-3 sm:p-4 mb-4 sm:mb-6">
  <h4 className="text-xs sm:text-sm font-medium text-gray-900 mb-2 sm:mb-3">
  Login Credentials:
  </h4>
@@ -323,7 +323,7 @@ const requestData: CreateStudentRequest = {
  setCreatedStudent(null)
  onClose()
  }}
- className="w-full sm:flex-1 px-4 py-2 text-xs sm:text-sm font-medium text-gray-700 bg-gray-100 rounded-none-none hover:bg-gray-200 transition-colors duration-200">
+ className="w-full sm:flex-1 px-4 py-2 text-xs sm:text-sm font-medium text-gray-700 bg-gray-100 rounded-xl hover:bg-gray-200 transition-colors duration-200">
  Close
  </button>
  <button
@@ -331,7 +331,7 @@ const requestData: CreateStudentRequest = {
  setShowSuccess(false)
  setCreatedStudent(null)
  }}
- className="w-full sm:flex-1 px-4 py-2 text-xs sm:text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 rounded-none-none transition-colors duration-200">
+ className="w-full sm:flex-1 px-4 py-2 text-xs sm:text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 rounded-xl transition-colors duration-200">
  Add Another Student
  </button>
  </div>
@@ -341,7 +341,7 @@ const requestData: CreateStudentRequest = {
  <form onSubmit={handleSubmit} className="px-4 py-4 sm:px-6 sm:py-6 bg-white max-h-[calc(100vh-200px)] overflow-y-auto">
  {/* Error Display */}
  {error && (
- <div className="mb-4 bg-red-50 border border-red-200 rounded-none-none p-3 sm:p-4">
+ <div className="mb-4 bg-red-50 border border-red-200 rounded-xl p-3 sm:p-4">
  <div className="flex gap-2 sm:gap-3">
  <AlertCircle className="w-4 h-4 sm:w-5 sm:h-5 text-red-600 mt-0.5 flex-shrink-0"/>
  <div className="text-left min-w-0">
@@ -358,7 +358,7 @@ const requestData: CreateStudentRequest = {
 
  {/* License Warning */}
  {!isLoadingLicenses && !hasActiveLicenses && !fetchError && (
- <div className="mb-4 sm:mb-6 bg-amber-50 border border-amber-200 rounded-none-none p-3 sm:p-4">
+ <div className="mb-4 sm:mb-6 bg-amber-50 border border-amber-200 rounded-xl p-3 sm:p-4">
  <div className="flex gap-2 sm:gap-3">
  <ShieldAlert className="w-4 h-4 sm:w-5 sm:h-5 text-amber-600 mt-0.5 flex-shrink-0"/>
  <div className="text-left min-w-0">
@@ -386,7 +386,7 @@ const requestData: CreateStudentRequest = {
  disabled={!hasActiveLicenses}
  value={formData.name}
  onChange={(e) => handleInputChange('name', e.target.value)}
- className="w-full pl-10 pr-4 py-2 text-sm border border-gray-300 rounded-none-none bg-white text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"placeholder="Enter student's full name"/>
+ className="w-full pl-10 pr-4 py-2 text-sm border border-gray-300 rounded-xl bg-white text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"placeholder="Enter student's full name"/>
  </div>
  </div>
 
@@ -402,7 +402,7 @@ const requestData: CreateStudentRequest = {
  disabled={!hasActiveLicenses}
  value={formData.email}
  onChange={(e) => handleInputChange('email', e.target.value)}
- className="w-full pl-10 pr-4 py-2 text-sm border border-gray-300 rounded-none-none bg-white text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"placeholder="Enter student's email address"/>
+ className="w-full pl-10 pr-4 py-2 text-sm border border-gray-300 rounded-xl bg-white text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"placeholder="Enter student's email address"/>
  </div>
  </div>
 
@@ -418,7 +418,7 @@ const requestData: CreateStudentRequest = {
  disabled={!hasActiveLicenses}
  value={formData.phone}
  onChange={(e) => handleInputChange('phone', e.target.value)}
- className="w-full pl-10 pr-4 py-2 text-sm border border-gray-300 rounded-none-none bg-white text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"placeholder="Enter student's phone number"/>
+ className="w-full pl-10 pr-4 py-2 text-sm border border-gray-300 rounded-xl bg-white text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"placeholder="Enter student's phone number"/>
  </div>
  </div>
 
@@ -434,7 +434,7 @@ const requestData: CreateStudentRequest = {
  disabled={!hasActiveLicenses}
  value={formData.graduation_year ||''}
  onChange={(e) => handleInputChange('graduation_year', e.target.value)}
- placeholder="e.g. 2025"className="w-full pl-10 pr-4 py-2 text-sm border border-gray-300 rounded-none-none bg-white text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"/>
+ placeholder="e.g. 2025"className="w-full pl-10 pr-4 py-2 text-sm border border-gray-300 rounded-xl bg-white text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"/>
  </div>
  </div>
 
@@ -450,7 +450,7 @@ const requestData: CreateStudentRequest = {
  onValueChange={(value) => handleInputChange('degree', value)}
  disabled={!hasActiveLicenses}
  >
- <SelectTrigger className="w-full pl-10 pr-4 py-2 text-sm border border-gray-300 rounded-none-none bg-white text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-200 disabled:opacity-50">
+ <SelectTrigger className="w-full pl-10 pr-4 py-2 text-sm border border-gray-300 rounded-xl bg-white text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-200 disabled:opacity-50">
  <SelectValue placeholder="Select Degree"/>
  </SelectTrigger>
  <SelectContent className="max-h-48 sm:max-h-60">
@@ -476,7 +476,7 @@ const requestData: CreateStudentRequest = {
  onValueChange={(value) => handleInputChange('branch', value)}
  disabled={!hasActiveLicenses}
  >
- <SelectTrigger className="w-full pl-10 pr-4 py-2 text-sm border border-gray-300 rounded-none-none bg-white text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-200 disabled:opacity-50">
+ <SelectTrigger className="w-full pl-10 pr-4 py-2 text-sm border border-gray-300 rounded-xl bg-white text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-200 disabled:opacity-50">
  <SelectValue placeholder="Select Branch"/>
  </SelectTrigger>
  <SelectContent className="max-h-48 sm:max-h-60">
@@ -497,12 +497,12 @@ const requestData: CreateStudentRequest = {
  <div className="flex flex-col sm:flex-row items-center justify-end gap-2 sm:gap-3 mt-4 sm:mt-6 pt-4 sm:pt-4 border-t border-gray-200">
  <button
  type="button"onClick={onClose}
- className="w-full sm:w-auto px-4 py-2 text-xs sm:text-sm font-medium text-gray-700 bg-gray-100 rounded-none-none hover:bg-gray-200 transition-colors duration-200">
+ className="w-full sm:w-auto px-4 py-2 text-xs sm:text-sm font-medium text-gray-700 bg-gray-100 rounded-xl hover:bg-gray-200 transition-colors duration-200">
  Cancel
  </button>
  <button
  type="submit"disabled={isSubmitting || !hasActiveLicenses}
- className="w-full sm:w-auto px-4 py-2 text-xs sm:text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 rounded-none-none disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200">
+ className="w-full sm:w-auto px-4 py-2 text-xs sm:text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 rounded-xl disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200">
  {isSubmitting ?'Creating...':'Create Student'}
  </button>
  </div>
