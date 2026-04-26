@@ -134,7 +134,7 @@ export function useVoiceInterview(defaultLanguage: "en-US" | "hi-IN" = "en-US") 
     setError(null)
     const firstQuestion = defaultLanguage === "hi-IN" ? "कृपया अपने बारे में बताइए।" : "Tell me about yourself."
     setCurrentQuestion(firstQuestion)
-    setConversationHistory([{ role: "assistant", content: firstQuestion }].slice(-MAX_HISTORY))
+    setConversationHistory([{ role: "assistant" as const, content: firstQuestion }].slice(-MAX_HISTORY))
     await speakAndWait(firstQuestion)
     if (!isLoopRunningRef.current) startUserListening()
   }, [MAX_HISTORY, defaultLanguage, isInterviewActive, speakAndWait, startUserListening])
