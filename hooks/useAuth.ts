@@ -107,10 +107,6 @@ export function useAuth() {
 
   const redirectIfAuthenticated = (redirectPath: string = '/dashboard') => {
   if (isAuthenticated && user) {
-  if (user.user_type === 'student' && localStorage.getItem('hk_onboarding_status') !== 'completed') {
-  router.push('/signup/step-1')
-  return true
-  }
   // Redirect to appropriate dashboard based on user type
   const dashboardPath = `/dashboard/${user.user_type}`
   router.push(dashboardPath)

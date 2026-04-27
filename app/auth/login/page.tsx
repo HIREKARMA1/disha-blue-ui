@@ -17,7 +17,6 @@ import { Modal, TermsModalContent } from '@/components/ui/modal'
 import { apiClient } from '@/lib/api'
 import { UserType } from '@/types/auth'
 import { useAuth } from '@/hooks/useAuth'
-import { isOnboardingCompleted } from '@/lib/onboarding'
 import { getClientLocale, t, type SupportedLocale } from '@/lib/i18n'
 import { AuthShell } from '@/components/auth/AuthShell'
 import {
@@ -169,10 +168,6 @@ export default function LoginPage() {
 
   // Redirect based on user type if no redirect URL
   const resolvedUserType = response.user?.user_type || data.user_type
-  if (resolvedUserType === "student" && !isOnboardingCompleted()) {
-  router.push("/signup/step-1")
-  return
-  }
   switch (resolvedUserType) {
   case 'student':
   router.push('/dashboard/student')
