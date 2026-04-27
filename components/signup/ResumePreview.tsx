@@ -14,6 +14,7 @@ interface ResumePreviewProps {
   onChange?: (next: any) => void
   onTemplateChange?: (template: OnboardingResumeTemplate) => void
   template?: OnboardingResumeTemplate
+  onBeforeDownloadPdf?: () => boolean | Promise<boolean>
 }
 
 export function ResumePreview({
@@ -23,6 +24,7 @@ export function ResumePreview({
   template = "blue_collar_basic",
   onChange,
   onTemplateChange,
+  onBeforeDownloadPdf,
 }: ResumePreviewProps) {
   const [local, setLocal] = useState<any>(resume)
   const [pdfBusy, setPdfBusy] = useState(false)
@@ -49,6 +51,10 @@ export function ResumePreview({
 
   const downloadPdf = async () => {
     if (!resumeHtml?.trim()) return
+    if (onBeforeDownloadPdf) {
+      const allowed = await onBeforeDownloadPdf()
+      if (!allowed) return
+    }
     setPdfBusy(true)
     try {
       const safeName = String(displayName || "resume").replace(/[^\w\s-]/g, "").trim() || "resume"

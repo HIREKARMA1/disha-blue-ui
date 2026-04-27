@@ -39,6 +39,7 @@ export default function SignupReviewPage() {
   const [showOtpModal, setShowOtpModal] = useState(false)
   const [otp, setOtp] = useState("")
   const [otpError, setOtpError] = useState("")
+  const [registrationCompleted, setRegistrationCompleted] = useState(false)
   const [profileStrength, setProfileStrength] = useState(0)
   const [resumeUpdatedAt, setResumeUpdatedAt] = useState<number | undefined>(() => getSignupData().resumeUpdatedAt)
   const lastRegenerateAtRef = useRef(0)
@@ -221,10 +222,16 @@ export default function SignupReviewPage() {
           <button
             type="button"
             className="h-12 w-1/2 rounded-xl bg-primary text-white"
-            onClick={() => void startOtpFlow()}
-            disabled={isSendingOtp}
+            onClick={() => {
+              if (registrationCompleted) {
+                window.location.href = "/dashboard/student"
+                return
+              }
+              void startOtpFlow()
+            }}
+            disabled={registrationCompleted ? false : isSendingOtp}
           >
-            {isSendingOtp ? "Sending..." : "Verify & Complete Registration"}
+            {registrationCompleted ? "Go to Dashboard" : isSendingOtp ? "Sending..." : "Verify & Complete Registration"}
           </button>
         </div>
       </div>
@@ -312,8 +319,11 @@ export default function SignupReviewPage() {
                     )
                     console.log("REGISTRATION SUCCESS")
                     completeOnboardingSession()
-                    console.log("REDIRECTING TO DASHBOARD")
-                    window.location.href = "/dashboard/student"
+                    setRegistrationCompleted(true)
+                    setShowOtpModal(false)
+                    setOtp("")
+                    setToast("Registration complete. You can now download your resume and then go to dashboard.")
+                    setTimeout(() => setToast(""), 3000)
                   } catch (err: any) {
                     setOtpError(String(err?.response?.data?.detail || "OTP verification failed"))
                   } finally {
@@ -411,6 +421,14 @@ export default function SignupReviewPage() {
           resumeHtml={resumeHtml}
           template={template}
           regenerating={resumeRegenerating}
+          onBeforeDownloadPdf={async () => {
+            if (registrationCompleted) return true
+            window.alert("For downloading the resume, you have to verify your email first.")
+            setToast("Please verify your email using Verify & Complete Registration.")
+            setTimeout(() => setToast(""), 2500)
+            await startOtpFlow()
+            return false
+          }}
           onTemplateChange={(next) => {
             setTemplate(next)
             const d = getSignupData()
