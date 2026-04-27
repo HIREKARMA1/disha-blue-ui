@@ -100,7 +100,7 @@ function CareerAlignPageContent() {
   }, [pastInterviews])
 
   const handleContinueLanguage = () => {
-    if (!language || !resolvedRole || !experienceLevel || !interviewMode || !personality) return
+    if (!language || !resolvedRole || !experienceLevel || !interviewMode) return
     setStep("permissions")
   }
 
