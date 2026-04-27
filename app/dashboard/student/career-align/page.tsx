@@ -19,7 +19,6 @@ function CareerAlignPageContent() {
   const [step, setStep] = useState<InterviewStep>("language")
   const [language, setLanguage] = useState<InterviewLanguage | null>(null)
   const [selectedRole, setSelectedRole] = useState("")
-  const [customRole, setCustomRole] = useState("")
   const [experienceLevel, setExperienceLevel] = useState<ExperienceLevel | null>(null)
   const [interviewMode, setInterviewMode] = useState<InterviewMode | null>(null)
   const [personality, setPersonality] = useState<InterviewPersonality | null>(null)
@@ -28,7 +27,7 @@ function CareerAlignPageContent() {
   const [timerSeconds, setTimerSeconds] = useState(0)
   const [pastInterviews, setPastInterviews] = useState<InterviewHistoryItem[]>([])
 
-  const resolvedRole = selectedRole === "Custom" ? customRole.trim() : selectedRole
+  const resolvedRole = selectedRole.trim()
   const session = useInterviewSession({
     language: language || "en",
     role: resolvedRole || "General Professional",
@@ -39,7 +38,7 @@ function CareerAlignPageContent() {
 
   useEffect(() => {
     const savedLanguage = sessionStorage.getItem("interview_language") as InterviewLanguage | null
-    if (savedLanguage === "en" || savedLanguage === "hi") {
+    if (savedLanguage && ["en", "hi", "or", "bn", "ta", "te"].includes(savedLanguage)) {
       setLanguage(savedLanguage)
     }
   }, [])
@@ -215,13 +214,11 @@ function CareerAlignPageContent() {
           <LanguageSelector
             selectedLanguage={language}
             selectedRole={selectedRole}
-            customRole={customRole}
             selectedExperience={experienceLevel}
             selectedMode={interviewMode}
             selectedPersonality={personality}
             onSelect={setLanguage}
             onRoleSelect={setSelectedRole}
-            onCustomRoleChange={setCustomRole}
             onExperienceSelect={setExperienceLevel}
             onModeSelect={setInterviewMode}
             onPersonalitySelect={setPersonality}

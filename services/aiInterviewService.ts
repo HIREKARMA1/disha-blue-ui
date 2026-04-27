@@ -1,6 +1,6 @@
 import { apiClient } from "@/lib/api"
 
-export type InterviewLanguage = "en" | "hi"
+export type InterviewLanguage = "en" | "hi" | "or" | "bn" | "ta" | "te"
 export type ExperienceLevel = "fresher" | "1-3" | "3+"
 export type InterviewMode = "hr" | "technical" | "rapid_fire"
 export type InterviewPersonality = "friendly_mentor" | "strict_hr" | "technical_expert"
