@@ -411,7 +411,7 @@ export function Navbar({
                     </Link>
                   )}
 
-                  {!isStudentDashboardRoute &&
+                  {!isDashboardRoute &&
                     user?.user_type !== 'corporate' &&
                     user?.user_type !== 'admin' && (
                       <Button
@@ -526,7 +526,7 @@ export function Navbar({
                       </Button>
                     </Link>
                   </div>
-                  {user?.user_type !== 'corporate' && user?.user_type !== 'admin' && (
+                  {!isDashboardRoute && user?.user_type !== 'corporate' && user?.user_type !== 'admin' && (
                     <Button
                       variant="ghost"
                       onClick={handleLogout}
