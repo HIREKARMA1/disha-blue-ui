@@ -7,7 +7,6 @@ import { LoadingProvider } from '@/contexts/LoadingContext'
 import { LocaleProvider } from '@/contexts/LocaleContext'
 import { Toaster } from 'react-hot-toast'
 import { BRANDING } from '@/config/branding'
-import { ChatBotMount } from '@/components/chat/ChatBotMount'
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
 const poppins = Poppins({
@@ -70,7 +69,6 @@ export default function RootLayout({
   <LocaleProvider>
   <LoadingProvider>
   {children}
-  <ChatBotMount />
   <Toaster
   position="top-right"
   toastOptions={{
