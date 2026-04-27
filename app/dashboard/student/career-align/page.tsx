@@ -203,7 +203,6 @@ function CareerAlignPageContent() {
               {resolvedRole && (
                 <p className="mt-1 text-xs text-slate-500 dark:text-blue-300">
                   Role: {resolvedRole} • Experience: {experienceLevel || "fresher"} • Mode: {interviewMode || "technical"}
-                  {" • "}Personality: {personality || "friendly_mentor"}
                 </p>
               )}
             </div>
@@ -216,12 +215,10 @@ function CareerAlignPageContent() {
             selectedRole={selectedRole}
             selectedExperience={experienceLevel}
             selectedMode={interviewMode}
-            selectedPersonality={personality}
             onSelect={setLanguage}
             onRoleSelect={setSelectedRole}
             onExperienceSelect={setExperienceLevel}
             onModeSelect={setInterviewMode}
-            onPersonalitySelect={setPersonality}
             onContinue={handleContinueLanguage}
           />
         )}
