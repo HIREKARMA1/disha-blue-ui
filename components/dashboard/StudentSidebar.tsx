@@ -57,6 +57,11 @@ export function StudentSidebar({ className =''}: StudentSidebarProps) {
 title: 'Overview',
 items: [
 { label: 'Dashboard', href:'/dashboard/student', icon: LayoutDashboard, description:'Your career control center'},
+{ label:'AI Interview Session', href:'/dashboard/student/career-align', icon: MessagesSquare, description:'Mock interview with live AI coach'},
+{ label:'AI Communication Assessments', href:'/ai-communication', icon: Mic, description:'Voice-based communication coaching'},
+{ label:'Build with AI', href:'/dashboard/student/resume/ai', icon: Bot, description:'Generate resume using AI'},
+{ label:'Resume Builder', href:'/dashboard/student/resume-builder', icon: FileText, description:'Craft and iterate quickly'},
+{ label:'Courses', href:'/dashboard/student/courses', aliases: ['/courses', '/dashboard/student/library'], icon: GraduationCap, description:'Voice-first skill learning paths'},
 {
 label:'Local Jobs',
 href:'/dashboard/discover-jobs',
@@ -64,30 +69,10 @@ aliases: ['/dashboard/student/jobs'],
 icon: Compass,
 description:'Local and personalized roles',
 },
+{ label:'Applications', href:'/dashboard/student/applications', icon: ClipboardList, description:'Track your pipeline status'},
+{ label:'Video Search', href:'/dashboard/student/video-search', icon: Film, description:'Learn from short explainers'},
+{ label:'Profile', href:'/dashboard/student/profile', icon: UserCircle2, description:'Personal details and identity'},
 ],
- },
- {
- title: t(locale,'dashboard.groups.jobs'),
- items: [
- { label:'Applications', href:'/dashboard/student/applications', icon: ClipboardList, description:'Track your pipeline status'},
- ],
- },
- {
- title: t(locale,'dashboard.groups.careerTools'),
- items: [
- { label:'Resume Builder', href:'/dashboard/student/resume-builder', icon: FileText, description:'Craft and iterate quickly'},
- { label:'Build with AI', href:'/dashboard/student/resume/ai', icon: Bot, description:'Generate resume using AI'},
- { label:'AI Interview Session', href:'/dashboard/student/career-align', icon: MessagesSquare, description:'Mock interview with live AI coach'},
- { label:'AI Communication Assessments', href:'/ai-communication', icon: Mic, description:'Voice-based communication coaching'},
- { label:'Video Search', href:'/dashboard/student/video-search', icon: Film, description:'Learn from short explainers'},
- { label:'Courses', href:'/dashboard/student/courses', aliases: ['/courses', '/dashboard/student/library'], icon: GraduationCap, description:'Voice-first skill learning paths'},
- ],
- },
- {
- title: t(locale,'dashboard.groups.account'),
- items: [
- { label:'Profile', href:'/dashboard/student/profile', icon: UserCircle2, description:'Personal details and identity'},
- ],
  },
  ]
  const allItems = navGroups.flatMap((group) => group.items)
