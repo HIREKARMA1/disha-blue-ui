@@ -696,30 +696,6 @@ export function InterviewRoom({
             Resume Mic
           </button>
         )}
-        {(!isSpeechSupported || isMicBlocked || isStarted) && (
-          <div className="flex items-center gap-2">
-            <input
-              value={manualResponse}
-              onChange={(event) => setManualResponse(event.target.value)}
-              placeholder={
-                !isSpeechSupported
-                  ? "Speech API not supported. Enter response."
-                  : isMicBlocked
-                    ? "Microphone blocked. Type your response."
-                    : "Type your answer and send it to interviewer."
-              }
-              className="h-12 min-w-[280px] rounded-2xl border border-slate-200 bg-white px-3 text-sm dark:border-emerald-800 dark:bg-emerald-950/40 dark:text-emerald-100"
-            />
-            <button
-              type="button"
-              onClick={() => void fallbackManualSend()}
-              disabled={isBusy || !(manualResponse || finalTranscript).trim()}
-              className="h-12 rounded-2xl bg-slate-900 px-4 text-sm font-semibold text-white hover:bg-slate-800 dark:bg-emerald-700 dark:hover:bg-emerald-600"
-            >
-              Send
-            </button>
-          </div>
-        )}
         {isStarted && currentQuestion?.trim() && (
           <button
             type="button"
