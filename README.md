@@ -71,8 +71,16 @@ Based on centralized brand/theme configuration:
   Create a `.env.local` file in the root directory:
 
   ```env
-  NEXT_PUBLIC_API_URL=http://localhost:8000
-  NEXT_PUBLIC_APP_NAME=Hyper Local Opportunity Platform
+  NEXT_PUBLIC_API_BASE_URL=http://localhost:8000
+  NEXT_PUBLIC_API_VERSION=v1
+  NEXT_PUBLIC_APP_URL=http://localhost:3000
+  NEXT_PUBLIC_APP_NAME=HireKarma
+  NEXT_PUBLIC_VAPI_ENABLED=false
+  # NEXT_PUBLIC_VAPI_PUBLIC_KEY=your_vapi_public_key
+  # NEXT_PUBLIC_VAPI_ASSISTANT_ID=your_shared_assistant_id
+  # Optional per-feature assistants (override shared assistant)
+  # NEXT_PUBLIC_VAPI_INTERVIEW_ASSISTANT_ID=your_interview_assistant_id
+  # NEXT_PUBLIC_VAPI_COMMUNICATION_ASSISTANT_ID=your_communication_assistant_id
   ```
 
 4. **Start the development server**
@@ -195,8 +203,29 @@ npm run start
 
 Ensure all required environment variables are set in production:
 
-- `NEXT_PUBLIC_API_URL` - Backend API URL
+- `NEXT_PUBLIC_API_BASE_URL` - Backend API base URL
+- `NEXT_PUBLIC_API_VERSION` - Backend API version path segment
+- `NEXT_PUBLIC_APP_URL` - Frontend app URL
 - `NEXT_PUBLIC_APP_NAME` - Application name
+- `NEXT_PUBLIC_VAPI_ENABLED` - Enables Vapi web voice mode when `true`
+- `NEXT_PUBLIC_VAPI_PUBLIC_KEY` - Vapi public key for `@vapi-ai/web`
+- `NEXT_PUBLIC_VAPI_ASSISTANT_ID` - Shared assistant id used by both voice features
+- `NEXT_PUBLIC_VAPI_INTERVIEW_ASSISTANT_ID` - Optional assistant override for AI Interview
+- `NEXT_PUBLIC_VAPI_COMMUNICATION_ASSISTANT_ID` - Optional assistant override for AI Communication
+
+### Vapi Voice Integration
+
+Vapi voice-to-voice support is integrated in:
+- AI Interview Session (`components/interview/InterviewRoom.tsx`)
+- AI Communication Assessment (`components/communication/AICommunicationRoom.tsx`)
+
+Behavior notes:
+- Vapi is only used when env config is present and enabled.
+- No Vapi key or assistant id is hardcoded in source code.
+- If Vapi fails to connect or returns runtime errors, the app falls back to built-in browser/legacy voice flow so sessions can continue.
+- Assistant selection priority is:
+  1. feature-specific assistant id
+  2. shared `NEXT_PUBLIC_VAPI_ASSISTANT_ID`
 
 ### Performance Optimization
 

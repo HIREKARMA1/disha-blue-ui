@@ -5,6 +5,7 @@ import { Clock3, Mic, MicOff, Play, Square } from "lucide-react"
 import { AIAvatar } from "./AIAvatar"
 import { VideoFeed } from "./VideoFeed"
 import { aiInterviewService, InterviewFeedback, InterviewLanguage, InterviewPersonality } from "@/services/aiInterviewService"
+import { useVapiCall } from "@/hooks/useVapiCall"
 
 type ConversationState = "idle" | "ai-speaking" | "user-listening" | "processing"
 
@@ -71,6 +72,9 @@ export function InterviewRoom({
   const totalWordsRef = useRef(0)
   const noInputStreakRef = useRef(0)
   const currentQuestionRef = useRef("")
+  const firstQuestionRef = useRef("")
+  const didFallbackToBuiltinRef = useRef(false)
+  const lastVapiMessageRef = useRef("")
 
   const [isListening, setIsListening] = useState(false)
   const [isMicEnabled, setIsMicEnabled] = useState(true)
@@ -94,6 +98,34 @@ export function InterviewRoom({
     responseLength: 0,
   })
   const [conversationState, setConversationState] = useState<ConversationState>("idle")
+  const [vapiUserLine, setVapiUserLine] = useState("")
+  const [vapiAiLine, setVapiAiLine] = useState("")
+  const [vapiError, setVapiError] = useState<string | null>(null)
+  const {
+    isConfigured: isVapiConfigured,
+    isConnected: isVapiConnected,
+    isAiSpeaking: isVapiAiSpeaking,
+    start: startVapiCall,
+    stop: stopVapiCall,
+  } = useVapiCall({
+    feature: "interview",
+    onTranscript: ({ role, text }) => {
+      const key = `${role}:${text}`
+      if (lastVapiMessageRef.current === key) return
+      lastVapiMessageRef.current = key
+      if (role === "assistant") {
+        setVapiAiLine(text)
+        setAiSubtitle(text)
+      } else {
+        setVapiUserLine(text)
+        setLiveTranscript(text)
+      }
+    },
+    onError: (message) => {
+      setVapiError(message)
+      onError?.(message)
+    },
+  })
 
   const recognitionLang = useMemo(() => (language === "hi" ? "hi-IN" : "en-US"), [language])
   const phaseLabelMap = useMemo(
@@ -405,6 +437,26 @@ export function InterviewRoom({
     runLoopRef.current = false
   }, [delay, listenOnce, onSubmitTranscript, speakAndWait])
 
+  // If Vapi fails after the call has already started, ensure interview still works
+  // by falling back to the existing browser voice loop.
+  useEffect(() => {
+    if (!isVapiConfigured) return
+    if (!vapiError) return
+    if (didFallbackToBuiltinRef.current) return
+    if (!firstQuestionRef.current) return
+    if (runLoopRef.current) return
+
+    didFallbackToBuiltinRef.current = true
+    void (async () => {
+      try {
+        await stopVapiCall()
+      } catch {
+        // no-op
+      }
+      await runVoiceLoop(firstQuestionRef.current)
+    })()
+  }, [isVapiConfigured, vapiError, runVoiceLoop, stopVapiCall])
+
   const handleStart = useCallback(async () => {
     playCue(720)
     console.log("Starting voice interview...")
@@ -437,8 +489,23 @@ export function InterviewRoom({
       console.error("Invalid first question, aborting loop")
       return
     }
+    firstQuestionRef.current = firstQuestion
+    didFallbackToBuiltinRef.current = false
+    setVapiError(null)
+    if (isVapiConfigured) {
+      const started = await startVapiCall()
+      if (!started) {
+        onError?.("Vapi connection failed, switched to built-in interview voice mode.")
+        didFallbackToBuiltinRef.current = true
+        await runVoiceLoop(firstQuestion)
+        return
+      }
+      setConversationState("idle")
+      setAiSubtitle(firstQuestion)
+      return
+    }
     await runVoiceLoop(firstQuestion)
-  }, [onStartInterview, runVoiceLoop])
+  }, [isVapiConfigured, onStartInterview, runVoiceLoop, startVapiCall])
 
   useEffect(() => {
     const SpeechCtor = typeof window !== "undefined" ? (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition : null
@@ -555,8 +622,8 @@ export function InterviewRoom({
       </div>
 
       <div className="grid gap-4 lg:grid-cols-2">
-        <div className={`rounded-2xl transition ${isAISpeaking ? "ring-2 ring-emerald-400/70" : "ring-1 ring-transparent"}`}>
-          <AIAvatar isSpeaking={isAISpeaking} latestPrompt={currentQuestion} personality={personality} />
+        <div className={`rounded-2xl transition ${isAISpeaking || isVapiAiSpeaking ? "ring-2 ring-emerald-400/70" : "ring-1 ring-transparent"}`}>
+          <AIAvatar isSpeaking={isAISpeaking || isVapiAiSpeaking} latestPrompt={currentQuestion} personality={personality} />
         </div>
         <div className={`rounded-2xl transition ${isUserSpeaking ? "ring-2 ring-blue-400/70" : "ring-1 ring-transparent"}`}>
           <VideoFeed stream={stream} />
@@ -572,8 +639,13 @@ export function InterviewRoom({
         </p>
         <div className="mt-3 flex flex-wrap items-center gap-2 text-xs">
           <span className={`rounded-full px-3 py-1 ${isAISpeaking ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300" : "bg-slate-200 text-slate-600 dark:bg-emerald-950/40 dark:text-emerald-300"}`}>
-            {isAISpeaking ? "AI is speaking..." : "AI idle"}
+            {isAISpeaking || isVapiAiSpeaking ? "AI is speaking..." : "AI idle"}
           </span>
+          {isVapiConfigured && (
+            <span className={`rounded-full px-3 py-1 ${isVapiConnected ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300" : "bg-slate-200 text-slate-600 dark:bg-emerald-950/40 dark:text-emerald-300"}`}>
+              {isVapiConnected ? "Vapi connected" : "Vapi disconnected"}
+            </span>
+          )}
           <span className={`rounded-full px-3 py-1 ${isBusy || isProcessing ? "bg-violet-100 text-violet-700 dark:bg-violet-900/40 dark:text-violet-300" : "bg-slate-200 text-slate-600 dark:bg-emerald-950/40 dark:text-emerald-300"}`}>
             {isBusy || isProcessing ? "AI is thinking..." : "AI ready"}
           </span>
@@ -586,8 +658,8 @@ export function InterviewRoom({
           <span className="rounded-full bg-slate-200 px-3 py-1 text-slate-600 dark:bg-emerald-950/40 dark:text-emerald-300">
             Turn: {conversationState}
           </span>
-          {isAISpeaking && <span className="h-2 w-8 animate-pulse rounded-full bg-emerald-400/80" />}
-          {isAISpeaking && (
+          {(isAISpeaking || isVapiAiSpeaking) && <span className="h-2 w-8 animate-pulse rounded-full bg-emerald-400/80" />}
+          {(isAISpeaking || isVapiAiSpeaking) && (
             <span className="flex items-end gap-0.5">
               <span className="h-2 w-1 animate-pulse rounded bg-emerald-500 [animation-delay:0ms]" />
               <span className="h-3 w-1 animate-pulse rounded bg-emerald-500 [animation-delay:120ms]" />
@@ -626,8 +698,11 @@ export function InterviewRoom({
         )}
         <div className="mt-4 grid gap-2 rounded-xl border border-slate-200/80 bg-white p-3 text-sm dark:border-emerald-800 dark:bg-emerald-950/30">
           <p><span className="font-semibold text-slate-900 dark:text-emerald-50">Last AI question:</span> <span className="text-slate-700 dark:text-emerald-100">{lastAIQuestion || "Waiting..."}</span></p>
-          <p><span className="font-semibold text-slate-900 dark:text-emerald-50">Your answer:</span> <span className="text-slate-700 dark:text-emerald-100">{lastUserAnswer || "Start speaking after AI prompt."}</span></p>
+          <p><span className="font-semibold text-slate-900 dark:text-emerald-50">Your answer:</span> <span className="text-slate-700 dark:text-emerald-100">{vapiUserLine || lastUserAnswer || "Start speaking after AI prompt."}</span></p>
           <p><span className="font-semibold text-slate-900 dark:text-emerald-50">Next question:</span> <span className="text-slate-700 dark:text-emerald-100">{currentQuestion || "Generating..."}</span></p>
+          {isVapiConfigured && (
+            <p><span className="font-semibold text-slate-900 dark:text-emerald-50">Live Vapi AI line:</span> <span className="text-slate-700 dark:text-emerald-100">{vapiAiLine || "Waiting..."}</span></p>
+          )}
         </div>
         <div className="mt-4 grid gap-3 rounded-xl border border-slate-200/80 bg-white p-3 text-sm dark:border-emerald-800 dark:bg-emerald-950/30">
           <p className="font-semibold text-slate-900 dark:text-emerald-50">Live Performance Panel</p>
@@ -658,6 +733,7 @@ export function InterviewRoom({
           type="button"
           onClick={() => {
             if (!isStarted) return
+            if (isVapiConfigured) return
             setIsMicEnabled((prev) => {
               const next = !prev
               if (!next) {
@@ -671,12 +747,13 @@ export function InterviewRoom({
           className="flex h-12 min-w-[120px] items-center justify-center gap-2 rounded-2xl border border-slate-300 bg-white px-4 text-sm font-semibold text-slate-700 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-50 dark:border-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-200"
         >
           {isMicEnabled ? <Mic className="h-4 w-4" /> : <MicOff className="h-4 w-4" />}
-          {isMicEnabled ? "Mic On" : "Mic Off"}
+          {isVapiConfigured ? "Mic via Vapi" : isMicEnabled ? "Mic On" : "Mic Off"}
         </button>
         <button
           type="button"
           onClick={() => {
             playCue(420)
+            void stopVapiCall()
             onEndInterview()
           }}
           disabled={!isStarted || isBusy}
@@ -703,6 +780,18 @@ export function InterviewRoom({
             className="h-12 rounded-2xl border border-emerald-300 bg-emerald-50 px-4 text-sm font-semibold text-emerald-700 hover:bg-emerald-100 dark:border-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-200 dark:hover:bg-emerald-900/50"
           >
             Repeat AI Question
+          </button>
+        )}
+        {isVapiConfigured && isStarted && (
+          <button
+            type="button"
+            onClick={() => {
+              if (isVapiConnected) void stopVapiCall()
+              else void startVapiCall()
+            }}
+            className="h-12 rounded-2xl border border-sky-300 bg-sky-50 px-4 text-sm font-semibold text-sky-700 hover:bg-sky-100 dark:border-sky-700 dark:bg-sky-900/30 dark:text-sky-200 dark:hover:bg-sky-900/50"
+          >
+            {isVapiConnected ? "Disconnect Vapi Voice" : "Connect Vapi Voice"}
           </button>
         )}
       </div>

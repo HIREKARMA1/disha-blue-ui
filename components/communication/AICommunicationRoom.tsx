@@ -7,6 +7,7 @@ import { apiClient } from "@/lib/api"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { useVapiCall } from "@/hooks/useVapiCall"
 
 type Mode = "hr_interview" | "casual_conversation" | "group_discussion"
 type Lang = "en" | "hi" | "or" | "bn" | "ta" | "te"
@@ -49,9 +50,31 @@ export function AICommunicationRoom() {
   const [isEndingSession, setIsEndingSession] = useState(false)
   const [lastAudioUrl, setLastAudioUrl] = useState<string | null>(null)
   const preferBrowserTts = true
+  const [isVapiWorking, setIsVapiWorking] = useState(true)
 
   const recognitionRef = useRef<any>(null)
   const audioRef = useRef<HTMLAudioElement | null>(null)
+  const lastVapiMessageRef = useRef<string>("")
+  const {
+    isConfigured: isVapiConfigured,
+    isConnected: isVapiConnected,
+    isAiSpeaking: isVapiAiSpeaking,
+    start: startVapiCall,
+    stop: stopVapiCall,
+  } = useVapiCall({
+    feature: "communication",
+    onTranscript: ({ role, text }) => {
+      if (!sessionId) return
+      const dedupeKey = `${role}:${text}`
+      if (lastVapiMessageRef.current === dedupeKey) return
+      lastVapiMessageRef.current = dedupeKey
+      setTranscript((prev) => [...prev, { role: role === "assistant" ? "ai" : "user", text, language }])
+    },
+    onError: (message) => {
+      setIsVapiWorking(false)
+      toast.error(message)
+    },
+  })
 
   const buildLocalEvaluation = (): Evaluation => ({
     fluency: Math.min(100, Math.max(45, 50 + Math.min(30, transcript.length * 5))),
@@ -90,6 +113,15 @@ export function AICommunicationRoom() {
       setTranscript([])
       setSeconds(0)
       setEvaluation(null)
+      lastVapiMessageRef.current = ""
+      setIsVapiWorking(true)
+      if (isVapiConfigured) {
+        const started = await startVapiCall()
+        if (!started) {
+          setIsVapiWorking(false)
+          toast("Vapi connection failed, switched to built-in communication mode.")
+        }
+      }
       toast.success("Communication assessment started")
     } catch (error: any) {
       toast.error(error?.response?.data?.detail || "Failed to start session")
@@ -218,6 +250,7 @@ export function AICommunicationRoom() {
     setIsBusy(false)
     setIsAiSpeaking(false)
     audioRef.current?.pause()
+    await stopVapiCall()
     if ("speechSynthesis" in window) {
       window.speechSynthesis.cancel()
     }
@@ -280,6 +313,7 @@ export function AICommunicationRoom() {
                 setIsBusy(false)
                 setIsAiSpeaking(false)
                 setIsEndingSession(false)
+                lastVapiMessageRef.current = ""
               }}
             >
               Start New Session
@@ -334,6 +368,11 @@ export function AICommunicationRoom() {
             {formattedTime}
           </div>
         </div>
+        {isVapiConfigured && isVapiWorking && (
+          <p className="mt-3 text-xs text-muted-foreground">
+            Voice provider: Vapi ({isVapiConnected ? "connected" : "not connected"})
+          </p>
+        )}
       </Card>
 
       <Card className="space-y-4 p-5">
@@ -372,7 +411,17 @@ export function AICommunicationRoom() {
         </div>
 
         <div className="flex items-center gap-3">
-          {!isListening ? (
+          {isVapiConfigured && isVapiWorking ? (
+            isVapiConnected ? (
+              <Button variant="secondary" onClick={() => void stopVapiCall()} disabled={!sessionId}>
+                <MicOff className="mr-2 h-4 w-4" /> Disconnect Voice
+              </Button>
+            ) : (
+              <Button onClick={() => void startVapiCall()} disabled={!sessionId}>
+                <Mic className="mr-2 h-4 w-4" /> Connect Voice
+              </Button>
+            )
+          ) : !isListening ? (
             <Button onClick={startListening} disabled={!sessionId || isBusy || isAiSpeaking}>
               <Mic className="mr-2 h-4 w-4" /> Speak
             </Button>
@@ -384,10 +433,10 @@ export function AICommunicationRoom() {
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
             <span
               className={`inline-block h-2 w-2 rounded-full ${
-                isAiSpeaking ? "animate-pulse bg-emerald-500" : "bg-muted-foreground/40"
+                isAiSpeaking || isVapiAiSpeaking ? "animate-pulse bg-emerald-500" : "bg-muted-foreground/40"
               }`}
             />
-            {isAiSpeaking ? "AI is speaking..." : "AI waiting"}
+            {isAiSpeaking || isVapiAiSpeaking ? "AI is speaking..." : "AI waiting"}
           </div>
         </div>
       </Card>
