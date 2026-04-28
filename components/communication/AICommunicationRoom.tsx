@@ -48,7 +48,6 @@ export function AICommunicationRoom() {
   const [isBusy, setIsBusy] = useState(false)
   const [isEndingSession, setIsEndingSession] = useState(false)
   const [lastAudioUrl, setLastAudioUrl] = useState<string | null>(null)
-  const preferBrowserTts = true
 
   const recognitionRef = useRef<any>(null)
   const audioRef = useRef<HTMLAudioElement | null>(null)
@@ -97,22 +96,6 @@ export function AICommunicationRoom() {
   }
 
   const speakAIResponse = async (text: string) => {
-    if (preferBrowserTts && "speechSynthesis" in window) {
-      try {
-        setIsAiSpeaking(true)
-        window.speechSynthesis.cancel()
-        const utterance = new SpeechSynthesisUtterance(text)
-        utterance.lang = language
-        await new Promise<void>((resolve) => {
-          utterance.onend = () => resolve()
-          utterance.onerror = () => resolve()
-          window.speechSynthesis.speak(utterance)
-        })
-        return
-      } finally {
-        setIsAiSpeaking(false)
-      }
-    }
     try {
       setIsAiSpeaking(true)
       const audioBlob = await apiClient.getAICommunicationTTS(text, language)
@@ -127,14 +110,7 @@ export function AICommunicationRoom() {
         audio.onerror = () => resolve()
       })
     } catch {
-      // Browser fallback keeps voice UX working even if backend TTS fails.
-      if ("speechSynthesis" in window) {
-        const utterance = new SpeechSynthesisUtterance(text)
-        utterance.lang = language
-        window.speechSynthesis.speak(utterance)
-      } else {
-        toast.error("AI voice playback failed")
-      }
+      toast.error("Sarvam voice playback failed")
     } finally {
       setIsAiSpeaking(false)
     }

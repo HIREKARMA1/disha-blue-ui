@@ -120,26 +120,6 @@ export function InterviewRoom({
   const progressPercent = Math.round((Math.max(0, Math.min(questionIndex, maxQuestions)) / Math.max(1, maxQuestions)) * 100)
   const delay = useCallback((ms: number) => new Promise<void>((resolve) => window.setTimeout(resolve, ms)), [])
 
-  const getVoicesAsync = useCallback(() => {
-    return new Promise<SpeechSynthesisVoice[]>((resolve) => {
-      if (typeof window === "undefined" || !("speechSynthesis" in window)) {
-        resolve([])
-        return
-      }
-      const synth = window.speechSynthesis
-      const voices = synth.getVoices()
-      if (voices.length) {
-        resolve(voices)
-        return
-      }
-      const onVoicesChanged = () => {
-        synth.onvoiceschanged = null
-        resolve(synth.getVoices())
-      }
-      synth.onvoiceschanged = onVoicesChanged
-    })
-  }, [])
-
   const playApiTTS = useCallback(
     async (text: string) => {
       const blob = await aiInterviewService.synthesizeSpeech({
@@ -167,51 +147,17 @@ export function InterviewRoom({
       new Promise<void>((resolve) => {
         if (!text?.trim() || typeof window === "undefined") return resolve()
         void (async () => {
-          const canUseBrowserTts = "speechSynthesis" in window
-          if (!canUseBrowserTts) {
-            try {
-              await playApiTTS(text)
-            } catch (err) {
-              console.error("API TTS fallback failed", err)
-            }
-            return resolve()
-          }
-
-          const synth = window.speechSynthesis
-          const voices = await getVoicesAsync()
-          const isHindi = /[\u0900-\u097F]/.test(text)
-          synth.cancel()
-          const utterance = new SpeechSynthesisUtterance(text)
-          let selectedVoice: SpeechSynthesisVoice | null =
-            (isHindi ? voices.find((v) => v.lang === "hi-IN") : null) ||
-            voices.find((v) => v.lang.startsWith(isHindi ? "hi" : "en")) ||
-            voices[0] ||
-            null
-
-          if (selectedVoice) utterance.voice = selectedVoice
-          utterance.lang = isHindi ? "hi-IN" : "en-US"
-          utterance.rate = 1
-          utterance.pitch = 1
-          utterance.volume = 1
-          utterance.onend = () => resolve()
-          utterance.onerror = async (e) => {
-            const ttsError = String((e as any)?.error || "")
-            // "interrupted" happens when synthesis is intentionally cancelled between turns.
-            if (ttsError === "interrupted" || ttsError === "canceled") {
-              return resolve()
-            }
-            console.error("Browser TTS error, trying API fallback", e)
-            try {
-              await playApiTTS(text)
-            } catch (err) {
-              console.error("API TTS fallback failed", err)
-            }
+          try {
+            await playApiTTS(text)
+          } catch (err) {
+            console.error("Sarvam TTS failed", err)
+            onError?.("Sarvam voice is unavailable. Please try again.")
+          } finally {
             resolve()
           }
-          window.setTimeout(() => synth.speak(utterance), 150)
         })()
       }),
-    [getVoicesAsync, playApiTTS],
+    [onError, playApiTTS],
   )
 
   const listenOnce = useCallback(
