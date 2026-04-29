@@ -8,7 +8,6 @@ import { DashboardStats } from './DashboardStats'
 import { AnalyticsChart } from './AnalyticsChart'
 import { AdvertisementBanner } from './AdvertisementBanner'
 import { RecentActivities } from './RecentActivities'
-import { RecommendedJobsSection } from './RecommendedJobsSection'
 import { useAuth } from '@/hooks/useAuth'
 import { apiClient } from '@/lib/api'
 import { LoadingOverlay } from './LoadingOverlay'
@@ -113,7 +112,6 @@ function StudentDashboardContent({ children }: StudentDashboardLayoutProps) {
  </div>
  <div className="grid grid-cols-1 gap-6 lg:grid-cols-7">
  <div className="space-y-6 lg:col-span-5">
- <RecommendedJobsSection />
  <AnalyticsChart />
  <RecentActivities />
  </div>
