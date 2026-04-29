@@ -231,7 +231,7 @@ export default function SignupReviewPage() {
             }}
             disabled={registrationCompleted ? false : isSendingOtp}
           >
-            {registrationCompleted ? "Go to Dashboard" : isSendingOtp ? "Sending..." : "Verify & Complete Registration"}
+            {registrationCompleted ? "Go to Home" : isSendingOtp ? "Sending..." : "Verify & Complete Registration"}
           </button>
         </div>
       </div>
@@ -322,7 +322,7 @@ export default function SignupReviewPage() {
                     setRegistrationCompleted(true)
                     setShowOtpModal(false)
                     setOtp("")
-                    setToast("Registration complete. You can now download your resume and then go to dashboard.")
+                    setToast("Registration complete. You can now download your resume and then go to Home.")
                     setTimeout(() => setToast(""), 3000)
                   } catch (err: any) {
                     setOtpError(String(err?.response?.data?.detail || "OTP verification failed"))

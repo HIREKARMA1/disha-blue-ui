@@ -309,7 +309,7 @@ export default function LakshyaLandingPage() {
               <div className="hw-phone">
                 <div className="hwp-top">
                   <span className="hwp-logo">Lakshya<b></b></span>
-                  <span className="hwp-tag">Student Dashboard</span>
+                  <span className="hwp-tag">Student Home</span>
                 </div>
                 <div className="hw-widget">
                   <div className="hww-l">Profile completion</div>
