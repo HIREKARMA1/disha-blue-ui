@@ -81,7 +81,7 @@ export function LanguageSelector({
           <SelectTrigger className={selectTriggerClassName}>
             <SelectValue placeholder="Select language" />
           </SelectTrigger>
-          <SelectContent position="item-aligned" sideOffset={6} className="max-h-72 w-[var(--radix-select-trigger-width)]">
+          <SelectContent side="bottom" align="start" sideOffset={6} className="max-h-72 w-[var(--radix-select-trigger-width)]">
             {languageOptions.map((item) => (
               <SelectItem key={item.code} value={item.code} className="min-h-10">
                 {item.label}
@@ -97,7 +97,7 @@ export function LanguageSelector({
           <SelectTrigger className={selectTriggerClassName}>
             <SelectValue placeholder="Select blue-collar job role" />
           </SelectTrigger>
-          <SelectContent position="item-aligned" sideOffset={6} className="max-h-72 w-[var(--radix-select-trigger-width)]">
+          <SelectContent side="bottom" align="start" sideOffset={6} className="max-h-72 w-[var(--radix-select-trigger-width)]">
             {roleOptions.map((role) => (
               <SelectItem key={role} value={role} className="min-h-10">
                 {role}
@@ -115,7 +115,7 @@ export function LanguageSelector({
             <SelectTrigger className={selectTriggerClassName}>
               <SelectValue placeholder="Select experience level" />
             </SelectTrigger>
-            <SelectContent position="item-aligned" sideOffset={6} className="max-h-72 w-[var(--radix-select-trigger-width)]">
+            <SelectContent side="bottom" align="start" sideOffset={6} className="max-h-72 w-[var(--radix-select-trigger-width)]">
               {experienceOptions.map((item) => (
                 <SelectItem key={item.id} value={item.id} className="min-h-10">
                   {item.label}
@@ -130,7 +130,7 @@ export function LanguageSelector({
             <SelectTrigger className={selectTriggerClassName}>
               <SelectValue placeholder="Select interview mode" />
             </SelectTrigger>
-            <SelectContent position="item-aligned" sideOffset={6} className="max-h-72 w-[var(--radix-select-trigger-width)]">
+            <SelectContent side="bottom" align="start" sideOffset={6} className="max-h-72 w-[var(--radix-select-trigger-width)]">
               {modeOptions.map((item) => (
                 <SelectItem key={item.id} value={item.id} className="min-h-10">
                   {item.label}

@@ -5,7 +5,36 @@ import * as SelectPrimitive from "@radix-ui/react-select"
 import { Check, ChevronDown, ChevronUp } from "lucide-react"
 import { cn } from "@/lib/utils"
 
-const Select = SelectPrimitive.Root
+const Select = ({
+  children,
+  onOpenChange,
+  ...props
+}: React.ComponentPropsWithoutRef<typeof SelectPrimitive.Root>) => {
+  const mobileOpenScrollRef = React.useRef<number | null>(null)
+
+  return (
+    <SelectPrimitive.Root
+      modal={false}
+      {...props}
+      onOpenChange={(open) => {
+        if (typeof window !== "undefined" && window.matchMedia("(max-width: 1023px)").matches) {
+          if (open) {
+            mobileOpenScrollRef.current = window.scrollY
+          } else if (mobileOpenScrollRef.current !== null) {
+            const top = mobileOpenScrollRef.current
+            mobileOpenScrollRef.current = null
+            window.requestAnimationFrame(() => {
+              window.scrollTo({ top, behavior: "auto" })
+            })
+          }
+        }
+        onOpenChange?.(open)
+      }}
+    >
+      {children}
+    </SelectPrimitive.Root>
+  )
+}
 
 const SelectGroup = SelectPrimitive.Group
 
@@ -83,6 +112,12 @@ const SelectContent = React.forwardRef<
   className
   )}
   position={position}
+  onOpenAutoFocus={(event) => {
+    event.preventDefault()
+  }}
+  onCloseAutoFocus={(event) => {
+    event.preventDefault()
+  }}
   {...props}
   style={{ ...style, zIndex: SELECT_CONTENT_Z }}
   >

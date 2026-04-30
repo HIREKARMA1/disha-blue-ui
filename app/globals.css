@@ -378,6 +378,29 @@ html, body {
   }
 }
 
+/* Keep dashboard surfaces usable on narrow screens */
+@media (max-width: 767px) {
+  .dashboard-overview-shell {
+    border-radius: 1rem;
+    padding: 0.875rem;
+  }
+
+  .dashboard-overview-card,
+  .dashboard-overview-card-interactive {
+    border-radius: 0.875rem;
+  }
+
+  /* Preserve table readability by enabling horizontal pan on mobile */
+  .overflow-x-auto > table {
+    min-width: 640px;
+  }
+
+  /* Keep dialogs/sheets within viewport width */
+  [role='dialog'] {
+    max-width: calc(100vw - 1rem) !important;
+  }
+}
+
 /* Prevent touch scrolling issues on mobile */
 @media (max-width: 1023px) {
   body {

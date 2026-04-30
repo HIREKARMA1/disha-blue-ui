@@ -79,12 +79,12 @@ const isAllowedPage = pathname ==='/dashboard/university/profile'|| pathname ===
 const shouldLock = isLocked && !isAllowedPage
 
  const main = (
- <main className={`relative min-h-screen dashboard-overview-page px-4 py-6 pb-safe text-slate-900 sm:px-6 lg:px-8 lg:py-8 ${shouldLock ?'pointer-events-none':''}`}>
- <div className="mx-auto w-full max-w-[1320px]">
- <div className="dashboard-overview-shell space-y-6">
+ <main className={`relative min-h-screen dashboard-overview-page px-3 py-4 pb-24 text-slate-900 sm:px-6 sm:py-6 lg:px-8 lg:py-8 lg:pb-safe ${shouldLock ?'pointer-events-none':''}`}>
+ <div className="mx-auto w-full min-w-0 max-w-[1320px]">
+ <div className="dashboard-overview-shell min-w-0 space-y-6">
  {children ? (
  <>
- <div className={shouldLock ?'opacity-40':''}>
+ <div className={`min-w-0 ${shouldLock ?'opacity-40':''}`}>
  {children}
  </div>
  {shouldLock && (

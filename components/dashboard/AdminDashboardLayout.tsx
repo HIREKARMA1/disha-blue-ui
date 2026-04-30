@@ -74,12 +74,12 @@ const data = await (apiClient as any).getAdminDashboard?.()
  }, [user?.id, user?.user_type, user?.name])
 
  const main = (
- <main className="min-h-screen dashboard-overview-page px-4 py-6 pb-safe text-slate-900 sm:px-6 lg:px-8 lg:py-8">
- <div className="mx-auto w-full max-w-[1320px]">
- <div className="dashboard-overview-shell space-y-6">
+ <main className="min-h-screen dashboard-overview-page px-3 py-4 pb-24 text-slate-900 sm:px-6 sm:py-6 lg:px-8 lg:py-8 lg:pb-safe">
+ <div className="mx-auto w-full min-w-0 max-w-[1320px]">
+ <div className="dashboard-overview-shell min-w-0 space-y-6">
  <DashboardTopbar role="admin"/>
  {children ? (
- children
+ <div className="min-w-0">{children}</div>
  ) : (
  <div className="space-y-6">
  {/* Loading State */}
