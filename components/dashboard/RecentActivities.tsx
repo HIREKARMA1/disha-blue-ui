@@ -70,7 +70,7 @@ const activities: Activity[] = [
 const getStatusIcon = (status: Activity['status']) => {
  switch (status) {
  case'accepted':
- return <CheckCircle className="w-4 h-4 text-green-500"/>
+ return <CheckCircle className="w-4 h-4 text-blue-500"/>
  case'rejected':
  return <AlertCircle className="w-4 h-4 text-red-500"/>
  case'scheduled':
@@ -84,7 +84,7 @@ const getStatusIcon = (status: Activity['status']) => {
 const getStatusColor = (status: Activity['status']) => {
  switch (status) {
  case 'accepted':
- return 'text-green-600 bg-green-50'
+ return 'text-blue-600 bg-blue-50'
  case 'rejected':
  return 'text-red-600 bg-red-50'
  case 'scheduled':
@@ -97,7 +97,7 @@ const getStatusColor = (status: Activity['status']) => {
 
 export function RecentActivities({ className =''}: RecentActivitiesProps) {
  return (
- <div className={`dashboard-overview-card relative p-6 dark:border-emerald-800/65 dark:bg-emerald-900/35 ${className}`}>
+ <div className={`dashboard-overview-card relative p-6 dark:border-blue-800/65 dark:bg-blue-900/35 ${className}`}>
  <div className="flex items-center justify-between mb-6">
  <h2 className="text-xl font-semibold text-gray-900">
  Recent Activities

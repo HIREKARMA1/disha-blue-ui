@@ -33,7 +33,7 @@ export function DeleteConfirmationModal({
  animate={{ opacity: 1, scale: 1, y: 0 }}
  exit={{ opacity: 0, scale: 0.95, y: 20 }}
  transition={{ type:"spring", damping: 25, stiffness: 300 }}
- className="bg-white rounded-none-none shadow-2xl max-w-md w-full"onClick={(e) => e.stopPropagation()}
+ className="bg-white rounded-xl shadow-2xl max-w-md w-full"onClick={(e) => e.stopPropagation()}
  >
  {/* Header */}
  <div className="p-6 border-b border-gray-200">
@@ -66,12 +66,12 @@ export function DeleteConfirmationModal({
  <p className="text-gray-700 mb-4">
  Are you sure you want to delete the job posting:
  </p>
- <div className="bg-gray-50 rounded-none-none p-4 border border-gray-200">
+ <div className="bg-gray-50 rounded-xl p-4 border border-gray-200">
  <p className="font-semibold text-gray-900 text-lg">"{jobTitle}"</p>
  </div>
  </div>
 
- <div className="bg-red-50 border border-red-200 rounded-none-none p-4 mb-6">
+ <div className="bg-red-50 border border-red-200 rounded-xl p-4 mb-6">
  <div className="flex items-start gap-3">
  <AlertTriangle className="w-5 h-5 text-red-600 mt-0.5 flex-shrink-0"/>
  <div>

@@ -54,21 +54,21 @@ export function DashboardTopbar({ role }: DashboardTopbarProps) {
  const meta = roleMeta[role]
 
  return (
- <section className="mb-2 border-b border-slate-100 pb-5 dark:border-emerald-800/45">
+ <section className="mb-2 border-b border-slate-100 pb-5 dark:border-blue-800/45">
  <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
  <div className="min-w-0">
-<p className="text-xs font-semibold uppercase tracking-[0.16em] text-sage-deep dark:text-emerald-300">
+<p className="text-xs font-semibold uppercase tracking-[0.16em] text-blue-600 dark:text-blue-300">
  {role ==="student"? t(locale,"dashboard.labels.studentWorkspace")
  : role ==="corporate"? t(locale,"dashboard.labels.recruiterWorkspace")
  : t(locale,"dashboard.labels.adminWorkspace")}
  </p>
-<h1 className="mt-2 font-display text-2xl font-semibold tracking-tight text-slate-900 dark:text-emerald-50 sm:text-[1.7rem]">
+<h1 className="mt-2 font-display text-2xl font-semibold tracking-tight text-slate-900 dark:text-blue-50 sm:text-[1.7rem]">
  {title}
  </h1>
-<p className="mt-1.5 max-w-2xl text-sm text-slate-600 dark:text-emerald-200/90">{meta.description}</p>
+<p className="mt-1.5 max-w-2xl text-sm text-slate-600 dark:text-blue-200/90">{meta.description}</p>
  </div>
- <div className="inline-flex items-center rounded-full border border-slate-200/90 bg-sage px-3 py-1.5 text-xs font-medium text-slate-900 shadow-sm dark:border-emerald-700 dark:bg-emerald-900/70 dark:text-emerald-100">
- <CalendarDays className="mr-1.5 h-3.5 w-3.5 text-sage-deep"/>
+ <div className="inline-flex items-center rounded-full border border-slate-200/90 bg-blue-50 px-3 py-1.5 text-xs font-medium text-slate-900 shadow-sm dark:border-blue-700 dark:bg-blue-900/70 dark:text-blue-100">
+ <CalendarDays className="mr-1.5 h-3.5 w-3.5 text-blue-600"/>
  {today}
  </div>
  </div>

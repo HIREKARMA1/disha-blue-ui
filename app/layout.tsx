@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next'
-import { Inter, Noto_Sans_Devanagari, Noto_Sans_Oriya, Poppins, Plus_Jakarta_Sans } from 'next/font/google'
+import { Inter, Noto_Sans_Devanagari, Noto_Sans_Oriya, Poppins, Plus_Jakarta_Sans, Sora } from 'next/font/google'
 import './globals.css'
 import { ThemeProvider } from '@/components/providers/theme-provider'
 import { AppQueryProvider } from '@/components/providers/query-provider'
@@ -7,7 +7,6 @@ import { LoadingProvider } from '@/contexts/LoadingContext'
 import { LocaleProvider } from '@/contexts/LocaleContext'
 import { Toaster } from 'react-hot-toast'
 import { BRANDING } from '@/config/branding'
-import { ChatBotMount } from '@/components/chat/ChatBotMount'
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
 const poppins = Poppins({
@@ -19,6 +18,11 @@ const display = Plus_Jakarta_Sans({
   subsets: ['latin'],
   variable: '--font-display',
   weight: ['400', '500', '600', '700', '800'],
+})
+const sora = Sora({
+  subsets: ['latin'],
+  variable: '--font-sora',
+  weight: ['300', '400', '600', '700', '800'],
 })
 const devanagari = Noto_Sans_Devanagari({
   subsets: ['devanagari'],
@@ -53,7 +57,7 @@ export default function RootLayout({
   return (
   <html lang="en" suppressHydrationWarning>
   <body
-  className={`${inter.variable} ${poppins.variable} ${display.variable} ${devanagari.variable} ${odia.variable} font-sans antialiased`}
+  className={`${inter.variable} ${poppins.variable} ${display.variable} ${sora.variable} ${devanagari.variable} ${odia.variable} font-sans antialiased`}
   >
   <ThemeProvider
   attribute="class"
@@ -65,7 +69,6 @@ export default function RootLayout({
   <LocaleProvider>
   <LoadingProvider>
   {children}
-  <ChatBotMount />
   <Toaster
   position="top-right"
   toastOptions={{

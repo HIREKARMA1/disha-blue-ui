@@ -881,6 +881,58 @@ class ApiClient {
   const response: AxiosResponse = await this.client.delete(`/admin/licenses/${licenseId}`);
   return response.data;
   }
+
+  // AI Communication Assessments
+  async startAICommunicationSession(data: {
+    language: string;
+    mode: 'hr_interview' | 'casual_conversation' | 'group_discussion';
+  }): Promise<{ sessionId: string; startedAt: string }> {
+    const response: AxiosResponse = await this.client.post('/ai-communication/start', data);
+    return response.data;
+  }
+
+  async sendAICommunicationMessage(data: {
+    sessionId: string;
+    userText: string;
+    language: string;
+  }): Promise<{ sessionId: string; detectedLanguage: string; aiText: string; fallbackUsed?: boolean }> {
+    const response: AxiosResponse = await this.client.post('/ai-communication/message', data);
+    return response.data;
+  }
+
+  async getAICommunicationTTS(text: string, language: string): Promise<Blob> {
+    const response: AxiosResponse = await this.client.post(
+      '/ai-communication/tts',
+      { text, language },
+      { responseType: 'blob' }
+    );
+    return response.data;
+  }
+
+  async transcribeAICommunicationAudio(audioFile: File, language: string): Promise<{ text: string }> {
+    const formData = new FormData();
+    formData.append('audio', audioFile);
+    formData.append('language', language);
+    const response: AxiosResponse = await this.client.post('/ai-communication/transcribe', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    });
+    return response.data;
+  }
+
+  async evaluateAICommunication(data: {
+    sessionId: string;
+    transcript: Array<{ role: 'user' | 'ai'; text: string; language?: string }>;
+    language?: string;
+  }): Promise<{
+    fluency: number;
+    confidence: number;
+    grammar: number;
+    suggestions: string[];
+    summary: string;
+  }> {
+    const response: AxiosResponse = await this.client.post('/ai-communication/evaluate', data);
+    return response.data;
+  }
 }
 
 export const apiClient = new ApiClient();

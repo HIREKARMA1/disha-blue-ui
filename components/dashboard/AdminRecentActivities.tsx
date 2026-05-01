@@ -75,7 +75,7 @@ const mockActivities: AdminActivity[] = [
  case 'user_registration':
  return 'text-blue-600 bg-blue-50'
  case 'job_posted':
- return 'text-green-600 bg-green-50'
+ return 'text-blue-600 bg-blue-50'
  case 'application_submitted':
  return 'text-purple-600 bg-purple-50'
  case 'system_alert':
@@ -130,7 +130,7 @@ const mockActivities: AdminActivity[] = [
  initial={{ opacity: 0, x: -20 }}
  animate={{ opacity: 1, x: 0 }}
  transition={{ duration: 0.4, delay: index * 0.1 }}
- className="flex items-start space-x-4 p-4 rounded-none-none hover:bg-gray-50 transition-colors">
+ className="flex items-start space-x-4 p-4 rounded-xl hover:bg-gray-50 transition-colors">
  <div className={`flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl ${colorClasses.split('')[1]}`}>
  <IconComponent className={`w-5 h-5 ${colorClasses.split('')[0]}`} />
  </div>

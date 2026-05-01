@@ -15,7 +15,7 @@ export function AdminDashboardStats({ userStats, jobStats, isLoading }: AdminDas
  title:'Total Users',
  value: userStats.total_users,
  icon: Users,
- iconColor:'text-emerald-800',
+ iconColor:'text-blue-800',
  change:'+12%',
  changeType:'positive'as const
  },
@@ -23,7 +23,7 @@ export function AdminDashboardStats({ userStats, jobStats, isLoading }: AdminDas
  title:'Students',
  value: userStats.total_students,
  icon: GraduationCap,
- iconColor:'text-emerald-800',
+ iconColor:'text-blue-800',
  change:'+8%',
  changeType:'positive'as const
  },
@@ -31,7 +31,7 @@ export function AdminDashboardStats({ userStats, jobStats, isLoading }: AdminDas
  title:'Universities',
  value: userStats.total_universities,
  icon: Building2,
- iconColor:'text-sage-deep',
+ iconColor:'text-blue-600',
  change:'+5%',
  changeType:'positive'as const
  },
@@ -39,7 +39,7 @@ export function AdminDashboardStats({ userStats, jobStats, isLoading }: AdminDas
  title:'Corporates',
  value: userStats.total_corporates,
  icon: Briefcase,
- iconColor:'text-sage-deep',
+ iconColor:'text-blue-600',
  change:'+15%',
  changeType:'positive'as const
  },
@@ -47,7 +47,7 @@ export function AdminDashboardStats({ userStats, jobStats, isLoading }: AdminDas
  title:'Active Jobs',
  value: jobStats.active_jobs,
  icon: CheckCircle,
- iconColor:'text-emerald-800',
+ iconColor:'text-blue-800',
  change:'+22%',
  changeType:'positive'as const
  },
@@ -55,7 +55,7 @@ export function AdminDashboardStats({ userStats, jobStats, isLoading }: AdminDas
  title:'Applications',
  value: jobStats.total_applications,
  icon: FileText,
- iconColor:'text-sage-deep',
+ iconColor:'text-blue-600',
  change:'+18%',
  changeType:'positive'as const
  },
@@ -63,7 +63,7 @@ export function AdminDashboardStats({ userStats, jobStats, isLoading }: AdminDas
  title:'Pending Approvals',
  value: jobStats.pending_approvals,
  icon: Clock,
- iconColor:'text-sage-deep',
+ iconColor:'text-blue-600',
  change:'-3%',
  changeType:'negative'as const
  },
@@ -106,10 +106,10 @@ export function AdminDashboardStats({ userStats, jobStats, isLoading }: AdminDas
  transition={{ duration: 0.6, delay: index * 0.1 }}
  className="dashboard-overview-card-interactive p-6">
  <div className="mb-4 flex items-center justify-between">
- <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-slate-200 bg-sage shadow-sm">
+ <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-slate-200 bg-blue-50 shadow-sm">
  <stat.icon className={`h-6 w-6 ${stat.iconColor}`} />
  </div>
- <div className="rounded-full border border-slate-200 bg-sage px-2 py-1 text-xs text-slate-800 shadow-sm">
+ <div className="rounded-full border border-slate-200 bg-blue-50 px-2 py-1 text-xs text-slate-800 shadow-sm">
  {stat.change}
  </div>
  </div>

@@ -86,13 +86,13 @@ const [showProfileModal, setShowProfileModal] = useState(false)
  const getStatusColor = (status: string) => {
  switch (status) {
  case 'placed':
- return 'bg-green-100 text-green-800'
+ return 'bg-blue-100 text-blue-800'
  case 'unplaced':
  return 'bg-yellow-100 text-yellow-800'
  case 'shortlisted':
  return 'bg-blue-100 text-blue-800'
  case 'selected':
- return 'bg-green-100 text-green-800'
+ return 'bg-blue-100 text-blue-800'
  case 'rejected':
  return 'bg-red-100 text-red-800'
  case 'applied':
@@ -108,7 +108,7 @@ const [showProfileModal, setShowProfileModal] = useState(false)
 
  // Row color function - alternating transparent cool colors
 const getRowColor = (index: number) => {
- const colors = ['', // Light blue'', // Light green'', // Light purple'', // Light orange
+ const colors = ['', // Light blue'', // Light blue'', // Light purple'', // Light orange
  ]
  return colors[index % colors.length]
  }
@@ -301,7 +301,7 @@ const fullProfile = {
 
  if (isLoading) {
  return (
- <div className="rounded-none-none border border-gray-700 bg-gray-800 p-6">
+ <div className="rounded-xl border border-gray-700 bg-gray-800 p-6">
  <div className="flex items-center justify-center py-12">
  <div className="animate-spin h-8 w-8 border-b-2 border-primary-500"></div>
  </div>
@@ -311,12 +311,12 @@ const fullProfile = {
 
  if (error) {
  return (
- <div className="rounded-none-none border border-gray-700 bg-gray-800 p-6">
+ <div className="rounded-xl border border-gray-700 bg-gray-800 p-6">
  <div className="text-center py-12">
  <p className="mb-4 text-sm text-gray-400">{error}</p>
  <button
  onClick={onRetry}
- className="rounded-none-none bg-green-600 px-4 py-2 font-medium text-white transition-colors duration-200 hover:bg-green-500 active:bg-green-700">
+ className="rounded-xl bg-blue-600 px-4 py-2 font-medium text-white transition-colors duration-200 hover:bg-blue-500 active:bg-blue-700">
  Retry
  </button>
  </div>
@@ -326,7 +326,7 @@ const fullProfile = {
 
  if (students.length === 0) {
  return (
- <div className="rounded-none-none border border-gray-700 bg-gray-800 p-6">
+ <div className="rounded-xl border border-gray-700 bg-gray-800 p-6">
  <div className="text-center py-12">
  <User className="w-12 h-12 text-gray-400 mx-auto mb-4"/>
  <h3 className="mb-2 text-lg font-medium text-white">
@@ -341,7 +341,7 @@ const fullProfile = {
  }
 
  return (
- <div className="overflow-hidden rounded-none-none border border-gray-700 bg-gray-800">
+ <div className="overflow-hidden rounded-xl border border-gray-700 bg-gray-800">
  <div className="overflow-x-auto">
  <table className="w-full">
  <thead className="bg-gray-800">
@@ -521,7 +521,7 @@ const fullProfile = {
  Pending
  </span>
  ) : (
- <span className="inline-flex items-center gap-1 px-2 py-1 text-xs font-semibold bg-green-100 text-green-800">
+ <span className="inline-flex items-center gap-1 px-2 py-1 text-xs font-semibold bg-blue-100 text-blue-800">
  <Eye className="w-3 h-3"/>
  Active
  </span>
@@ -551,7 +551,7 @@ const fullProfile = {
  e.stopPropagation()
  handleArchiveClick(student)
  }}
- className={`inline-flex items-center gap-1 rounded-none-none px-3 py-1 text-xs font-medium transition-colors duration-200 ${student.is_archived
+ className={`inline-flex items-center gap-1 rounded-xl px-3 py-1 text-xs font-medium transition-colors duration-200 ${student.is_archived
  ?'border border-gray-600 bg-transparent text-white hover:bg-gray-700':'border border-gray-600 bg-transparent text-white hover:bg-gray-700'}`}
  >
  {student.is_archived ? (
@@ -572,7 +572,7 @@ const fullProfile = {
  setStudentToDelete({ id: student.id, name: student.name })
  setShowDeleteModal(true)
  }}
- className="inline-flex items-center gap-1 rounded-none-none border border-gray-600 bg-transparent px-3 py-1 text-xs font-medium text-white transition-colors duration-200 hover:bg-gray-700">
+ className="inline-flex items-center gap-1 rounded-xl border border-gray-600 bg-transparent px-3 py-1 text-xs font-medium text-white transition-colors duration-200 hover:bg-gray-700">
  <Trash2 className="w-3 h-3"/>
  Delete
  </button>
@@ -591,13 +591,13 @@ const fullProfile = {
  <button
  onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
  disabled={currentPage === 1}
- className="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-none-none text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
+ className="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-xl text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
  Previous
  </button>
  <button
  onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
  disabled={currentPage === totalPages}
- className="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-none-none text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
+ className="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-xl text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
  Next
  </button>
  </div>
@@ -616,11 +616,11 @@ const fullProfile = {
  </p>
  </div>
  <div>
- <nav className="relative z-0 inline-flex rounded-none-none shadow-sm -space-x-px"aria-label="Pagination">
+ <nav className="relative z-0 inline-flex rounded-xl shadow-sm -space-x-px"aria-label="Pagination">
  <button
  onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
  disabled={currentPage === 1}
- className="relative inline-flex items-center px-2 py-2 rounded-none-none border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
+ className="relative inline-flex items-center px-2 py-2 rounded-xl border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
  <span className="sr-only">Previous</span>
  <ChevronDown className="h-5 w-5 rotate-90"aria-hidden="true"/>
  </button>
@@ -661,7 +661,7 @@ const fullProfile = {
  <button
  onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
  disabled={currentPage === totalPages}
- className="relative inline-flex items-center px-2 py-2 rounded-none-none border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
+ className="relative inline-flex items-center px-2 py-2 rounded-xl border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
  <span className="sr-only">Next</span>
  <ChevronDown className="h-5 w-5 -rotate-90"aria-hidden="true"/>
  </button>
@@ -687,7 +687,7 @@ const fullProfile = {
  <motion.div
  initial={{ scale: 0.95, opacity: 0 }}
  animate={{ scale: 1, opacity: 1 }}
- className="bg-white rounded-none-none shadow-2xl max-w-md w-full p-6">
+ className="bg-white rounded-xl shadow-2xl max-w-md w-full p-6">
  <h2 className="text-xl font-semibold text-gray-900 mb-4">
  Delete Student
  </h2>
@@ -699,13 +699,13 @@ const fullProfile = {
  <button
  onClick={handleDeleteCancel}
  disabled={isDeleteLoading}
- className="px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-none-none font-medium disabled:opacity-50 transition-colors duration-200">
+ className="px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-xl font-medium disabled:opacity-50 transition-colors duration-200">
  Cancel
  </button>
  <button
  onClick={handleDeleteConfirm}
  disabled={isDeleteLoading}
- className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-none-none font-medium disabled:opacity-50 transition-colors duration-200 flex items-center gap-2">
+ className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-xl font-medium disabled:opacity-50 transition-colors duration-200 flex items-center gap-2">
  {isDeleteLoading ? (
  <>
  <div className="animate-spin h-4 w-4 border-b-2 border-white"></div>
@@ -741,7 +741,7 @@ const fullProfile = {
  console.error('Error rendering StudentProfileModal:', error)
  return (
  <div className="fixed inset-0 bg-black flex items-center justify-center z-50 p-4">
- <div className="bg-white rounded-none-none shadow-2xl max-w-md w-full p-6">
+ <div className="bg-white rounded-xl shadow-2xl max-w-md w-full p-6">
  <h2 className="text-xl font-semibold text-gray-900 mb-4">
  Error Loading Profile
  </h2>
@@ -750,7 +750,7 @@ const fullProfile = {
  </p>
  <button
  onClick={handleProfileModalClose}
- className="w-full px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-none-none font-medium transition-colors duration-200">
+ className="w-full px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-xl font-medium transition-colors duration-200">
  Close
  </button>
  </div>

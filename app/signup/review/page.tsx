@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation"
 import { apiClient } from "@/lib/api"
 import { completeOnboardingSession, getOnboardingStep, getSignupData, saveSignupData, setOnboardingStep } from "@/lib/onboarding"
 import { ResumePreview, type OnboardingResumeTemplate } from "@/components/signup/ResumePreview"
-import { CourseCard } from "@/components/dashboard/CourseCard"
 import { speakText } from "@/lib/speech"
 import { useAuth } from "@/hooks/useAuth"
 
@@ -30,12 +29,8 @@ export default function SignupReviewPage() {
     if (t === "compact" || t === "compact_professional") return "compact_professional"
     return "blue_collar_basic"
   })
-  const [courses, setCourses] = useState<any[]>([])
-  const [jobs, setJobs] = useState<any[]>([])
-  const [suggestedRoles, setSuggestedRoles] = useState<string[]>([])
   const [error, setError] = useState<string>("")
   const [retrying, setRetrying] = useState(false)
-  const [applyingJobId, setApplyingJobId] = useState<string | null>(null)
   const [resumeScore, setResumeScore] = useState<number>(0)
   const [toast, setToast] = useState<string>("")
   const [loadingSpeech, setLoadingSpeech] = useState(false)
@@ -44,6 +39,7 @@ export default function SignupReviewPage() {
   const [showOtpModal, setShowOtpModal] = useState(false)
   const [otp, setOtp] = useState("")
   const [otpError, setOtpError] = useState("")
+  const [registrationCompleted, setRegistrationCompleted] = useState(false)
   const [profileStrength, setProfileStrength] = useState(0)
   const [resumeUpdatedAt, setResumeUpdatedAt] = useState<number | undefined>(() => getSignupData().resumeUpdatedAt)
   const lastRegenerateAtRef = useRef(0)
@@ -67,14 +63,9 @@ export default function SignupReviewPage() {
     }
     setError("")
     try {
-      const [courseResponse, jobsResponse] = await Promise.all([
-        apiClient.client.get("/onboarding/courses/recommend", {
-          params: { user_id: data.userId, location: data.basicInfo.location, category: "all" },
-        }),
-        apiClient.client.get("/jobs/match", {
-          params: { user_id: data.userId, limit: 6 },
-        }),
-      ])
+      const jobsResponse = await apiClient.client.get("/jobs/match", {
+        params: { user_id: data.userId, limit: 6 },
+      })
       const d = getSignupData()
       setProfileStrength(computeProfileStrength(d))
       if (d.resume) {
@@ -91,13 +82,10 @@ export default function SignupReviewPage() {
         }
       }
       setResumeUpdatedAt(d.resumeUpdatedAt)
-      setCourses(courseResponse.data.courses || [])
-      setJobs(jobsResponse.data.jobs || [])
-      setSuggestedRoles(jobsResponse.data.suggested_roles || [])
       setResumeScore(Number(jobsResponse.data.resume_score || 0))
     } catch (err) {
       console.error("Onboarding review: load failed:", err)
-      setError("Could not load courses or job matches. Check your connection and try again.")
+      setError("Could not load review data. Check your connection and try again.")
     } finally {
       setPageLoading(false)
       setRetrying(false)
@@ -124,14 +112,9 @@ export default function SignupReviewPage() {
         force_regenerate: true,
         template: tpl,
       })
-      const [courseResponse, jobsResponse] = await Promise.all([
-        apiClient.client.get("/onboarding/courses/recommend", {
-          params: { user_id: data.userId, location: data.basicInfo.location, category: "all" },
-        }),
-        apiClient.client.get("/jobs/match", {
-          params: { user_id: data.userId, limit: 6 },
-        }),
-      ])
+      const jobsResponse = await apiClient.client.get("/jobs/match", {
+        params: { user_id: data.userId, limit: 6 },
+      })
       setResume(resumeResponse.data.resume_json)
       setResumeHtml(resumeResponse.data.resume_html || "")
       const nextTpl = resumeResponse.data.resume_json?.template as OnboardingResumeTemplate | undefined
@@ -139,9 +122,6 @@ export default function SignupReviewPage() {
         setTemplate(nextTpl)
       }
       setAtsScore(Number(resumeResponse.data.ats_score ?? 0))
-      setCourses(courseResponse.data.courses || [])
-      setJobs(jobsResponse.data.jobs || [])
-      setSuggestedRoles(jobsResponse.data.suggested_roles || [])
       setResumeScore(Number(jobsResponse.data.resume_score || 0))
       const fresh = getSignupData()
       const updatedAt = Date.now()
@@ -154,10 +134,6 @@ export default function SignupReviewPage() {
         template: nextTpl === "compact_professional" || nextTpl === "blue_collar_basic" ? nextTpl : tpl,
         resumeUpdatedAt: updatedAt,
       })
-      window.setTimeout(() => {
-        const section = document.getElementById("instant-job-list")
-        if (section) section.scrollIntoView({ behavior: "smooth", block: "start" })
-      }, 250)
     } catch (err) {
       console.error("Onboarding review: regenerate failed:", err)
       setError("Resume generation failed. Check your connection and try again.")
@@ -246,10 +222,16 @@ export default function SignupReviewPage() {
           <button
             type="button"
             className="h-12 w-1/2 rounded-xl bg-primary text-white"
-            onClick={() => void startOtpFlow()}
-            disabled={isSendingOtp}
+            onClick={() => {
+              if (registrationCompleted) {
+                window.location.href = "/dashboard/student"
+                return
+              }
+              void startOtpFlow()
+            }}
+            disabled={registrationCompleted ? false : isSendingOtp}
           >
-            {isSendingOtp ? "Sending..." : "Verify & Complete Registration"}
+            {registrationCompleted ? "Go to Home" : isSendingOtp ? "Sending..." : "Verify & Complete Registration"}
           </button>
         </div>
       </div>
@@ -337,8 +319,11 @@ export default function SignupReviewPage() {
                     )
                     console.log("REGISTRATION SUCCESS")
                     completeOnboardingSession()
-                    console.log("REDIRECTING TO DASHBOARD")
-                    window.location.href = "/dashboard/student"
+                    setRegistrationCompleted(true)
+                    setShowOtpModal(false)
+                    setOtp("")
+                    setToast("Registration complete. You can now download your resume and then go to Home.")
+                    setTimeout(() => setToast(""), 3000)
                   } catch (err: any) {
                     setOtpError(String(err?.response?.data?.detail || "OTP verification failed"))
                   } finally {
@@ -436,6 +421,14 @@ export default function SignupReviewPage() {
           resumeHtml={resumeHtml}
           template={template}
           regenerating={resumeRegenerating}
+          onBeforeDownloadPdf={async () => {
+            if (registrationCompleted) return true
+            window.alert("For downloading the resume, you have to verify your email first.")
+            setToast("Please verify your email using Verify & Complete Registration.")
+            setTimeout(() => setToast(""), 2500)
+            await startOtpFlow()
+            return false
+          }}
           onTemplateChange={(next) => {
             setTemplate(next)
             const d = getSignupData()
@@ -473,95 +466,6 @@ export default function SignupReviewPage() {
           <iframe title="resume-html" className="h-80 w-full rounded border" srcDoc={resumeHtml} />
         </section>
       )}
-      <section className="space-y-3">
-        <h2 className="text-xl font-semibold">Recommended Courses</h2>
-        <div className="grid gap-3 sm:grid-cols-2">
-          {courses.map((course) => (
-            <CourseCard key={`${course.title}-${course.location}`} course={course} />
-          ))}
-        </div>
-      </section>
-      <section id="instant-job-list" className="space-y-3">
-        <h2 className="text-xl font-semibold">Jobs You Can Apply Now</h2>
-        {suggestedRoles.length > 0 && (
-          <p className="text-sm text-muted-foreground">
-            Suggested roles: {suggestedRoles.join(", ")}
-          </p>
-        )}
-        <div className="grid gap-3 sm:grid-cols-2">
-          {jobs.map((job) => (
-            <article key={job.job_id} className="rounded-xl border bg-card p-4 space-y-2">
-              <h3 className="text-base font-semibold">{job.title}</h3>
-              <p className="text-sm text-muted-foreground">Salary: {job.salary}</p>
-              <p className="text-sm text-muted-foreground">Location: {job.location}</p>
-              {job.distance_km != null && <p className="text-xs text-muted-foreground">Distance: {job.distance_km} km</p>}
-              <p className="text-sm font-medium">Match score: {job.match_score}%</p>
-              {Array.isArray(job.match_reasons) && job.match_reasons.length > 0 && (
-                <div className="rounded-md bg-muted/30 p-2 text-xs">
-                  <p className="font-semibold">Match Reasons:</p>
-                  <ul className="mt-1 space-y-1">
-                    {job.match_reasons.map((reason: string) => (
-                      <li key={reason}>✔ {reason}</li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-              {job.application_status === "applied" ? (
-                <span className="inline-flex rounded-md bg-emerald-100 px-3 py-2 text-sm font-medium text-emerald-700">
-                  Applied ✅
-                </span>
-              ) : (
-                <button
-                  type="button"
-                  className="rounded-md bg-primary px-3 py-2 text-sm font-medium text-primary-foreground disabled:opacity-60"
-                  disabled={applyingJobId === job.job_id}
-                  onClick={async () => {
-                    const data = getSignupData()
-                    if (!data.userId || !resume) return
-                    setApplyingJobId(job.job_id)
-                    try {
-                      const response = await apiClient.client.post("/jobs/match/apply", {
-                        user_id: data.userId,
-                        job_id: job.job_id,
-                        resume_json: resume,
-                      })
-                      if (response.data?.already_applied) {
-                        setJobs((prev) =>
-                          prev.map((item) =>
-                            item.job_id === job.job_id ? { ...item, application_status: "applied" } : item
-                          )
-                        )
-                        setToast("Application sent successfully! Employer will contact you soon.")
-                        setTimeout(() => setToast(""), 2600)
-                        return
-                      }
-                      setJobs((prev) =>
-                        prev.map((item) =>
-                          item.job_id === job.job_id ? { ...item, application_status: "applied" } : item
-                        )
-                      )
-                      setToast("Application sent successfully! Employer will contact you soon.")
-                      setTimeout(() => setToast(""), 2600)
-                    } finally {
-                      setApplyingJobId(null)
-                    }
-                  }}
-                >
-                  {applyingJobId === job.job_id ? "Applying..." : "Apply with this Resume"}
-                </button>
-              )}
-            </article>
-          ))}
-        </div>
-        {jobs.length === 0 && (
-          <div className="rounded-xl border border-dashed p-4 text-sm text-muted-foreground">
-            No jobs found nearby. Try expanding your skills.
-            {suggestedRoles.length > 0 && (
-              <p className="mt-2">Try alternative roles: {suggestedRoles.join(", ")}</p>
-            )}
-          </div>
-        )}
-      </section>
     </div>
   )
 }

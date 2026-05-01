@@ -17,7 +17,6 @@ import { Modal, TermsModalContent } from '@/components/ui/modal'
 import { apiClient } from '@/lib/api'
 import { UserType } from '@/types/auth'
 import { useAuth } from '@/hooks/useAuth'
-import { isOnboardingCompleted } from '@/lib/onboarding'
 import { getClientLocale, t, type SupportedLocale } from '@/lib/i18n'
 import { AuthShell } from '@/components/auth/AuthShell'
 import {
@@ -169,10 +168,6 @@ export default function LoginPage() {
 
   // Redirect based on user type if no redirect URL
   const resolvedUserType = response.user?.user_type || data.user_type
-  if (resolvedUserType === "student" && !isOnboardingCompleted()) {
-  router.push("/signup/step-1")
-  return
-  }
   switch (resolvedUserType) {
   case 'student':
   router.push('/dashboard/student')
@@ -394,7 +389,7 @@ export default function LoginPage() {
   )}
 
   {selectedUserType === 'admin' && (
-  <div className="mt-8 rounded-none border border-slate-200 bg-sage/20 px-4 py-3 text-center dark:border-emerald-800 dark:bg-emerald-900/50">
+  <div className="mt-8 rounded-none border border-slate-200 bg-sage/20 px-4 py-3 text-center dark:border-blue-900 dark:bg-blue-900/45">
   <p className="text-sm text-muted-foreground">
   <Shield className="mx-auto mb-2 h-5 w-5 text-primary" aria-hidden />
   {t(locale, 'auth.login.adminAccessNotice')}

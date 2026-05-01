@@ -4,18 +4,18 @@ import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
  Compass,
- LayoutDashboard,
+ Home,
  UserCircle2,
  FileText,
- Target,
- Library,
+MessagesSquare,
+ GraduationCap,
  X,
  Menu,
  LogOut,
- Brain,
+ Mic,
  ClipboardList,
 Bot,
- Sparkles,
+ Film,
  type LucideIcon,
 } from 'lucide-react'
 import Link from 'next/link'
@@ -56,7 +56,12 @@ export function StudentSidebar({ className =''}: StudentSidebarProps) {
  {
 title: 'Overview',
 items: [
-{ label: 'Dashboard', href:'/dashboard/student', icon: LayoutDashboard, description:'Your career control center'},
+{ label: 'Home', href:'/dashboard/student', icon: Home, description:'Your career control center'},
+{ label:'AI Interview Session', href:'/dashboard/student/career-align', icon: MessagesSquare, description:'Mock interview with live AI coach'},
+{ label:'AI Communication Assessments', href:'/ai-communication', icon: Mic, description:'Voice-based communication coaching'},
+{ label:'Build with AI', href:'/dashboard/student/resume/ai', icon: Bot, description:'Generate resume using AI'},
+{ label:'Resume Builder', href:'/dashboard/student/resume-builder', icon: FileText, description:'Craft and iterate quickly'},
+{ label:'Courses', href:'/dashboard/student/courses', aliases: ['/courses', '/dashboard/student/library'], icon: GraduationCap, description:'Voice-first skill learning paths'},
 {
 label:'Local Jobs',
 href:'/dashboard/discover-jobs',
@@ -64,30 +69,10 @@ aliases: ['/dashboard/student/jobs'],
 icon: Compass,
 description:'Local and personalized roles',
 },
+{ label:'Applications', href:'/dashboard/student/applications', icon: ClipboardList, description:'Track your pipeline status'},
+{ label:'Video Search', href:'/dashboard/student/video-search', icon: Film, description:'Learn from short explainers'},
+{ label:'Profile', href:'/dashboard/student/profile', icon: UserCircle2, description:'Personal details and identity'},
 ],
- },
- {
- title: t(locale,'dashboard.groups.jobs'),
- items: [
- { label:'Applications', href:'/dashboard/student/applications', icon: ClipboardList, description:'Track your pipeline status'},
- ],
- },
- {
- title: t(locale,'dashboard.groups.careerTools'),
- items: [
- { label:'Resume Builder', href:'/dashboard/student/resume-builder', icon: FileText, description:'Craft and iterate quickly'},
- { label:'Build with AI', href:'/dashboard/student/resume/ai', icon: Bot, description:'Generate resume using AI'},
- { label:'Career Align', href:'/dashboard/student/career-align', icon: Target, description:'Get role-fit guidance'},
- { label:'Practice', href:'/dashboard/student/practice', icon: Brain, description:'Mock tests and assessments'},
- { label:'Video Search', href:'/dashboard/student/video-search', icon: Sparkles, description:'Learn from short explainers'},
- { label:'Library', href:'/dashboard/student/library', icon: Library, description:'Career resources and docs'},
- ],
- },
- {
- title: t(locale,'dashboard.groups.account'),
- items: [
- { label:'Profile', href:'/dashboard/student/profile', icon: UserCircle2, description:'Personal details and identity'},
- ],
  },
  ]
  const allItems = navGroups.flatMap((group) => group.items)
@@ -114,7 +99,7 @@ description:'Local and personalized roles',
  'flex h-11 w-11 shrink-0 items-center justify-center transition-all hover:-translate-y-0.5',
  isActive
  ?'rounded-none bg-white text-slate-800 shadow-none dark:bg-white dark:text-slate-900'
- :'text-slate-700 hover:text-slate-900 dark:text-emerald-200 dark:hover:text-white',
+ :'text-slate-700 hover:text-slate-900 dark:text-blue-200 dark:hover:text-white',
  )
 
  const isItemActive = (item: NavItem) => {
@@ -136,8 +121,8 @@ const isActive = isItemActive(item)
  className={cn(
  'flex items-center gap-3 rounded-none px-3 py-3 text-sm font-medium transition-colors',
  isActive
- ?'bg-white text-slate-900 shadow-none dark:bg-emerald-900 dark:text-emerald-50'
- :'text-slate-700 hover:bg-slate-100 dark:text-emerald-200 dark:hover:bg-emerald-900',
+ ?'bg-white text-slate-900 shadow-none dark:bg-blue-900 dark:text-blue-50'
+ :'text-slate-700 hover:bg-slate-100 dark:text-blue-200 dark:hover:bg-blue-900',
  )}
  >
  <item.icon className="h-5 w-5 shrink-0" strokeWidth={1.75} />
@@ -153,10 +138,10 @@ const isActive = isItemActive(item)
 
  return (
  <>
- {/* Desktop: slim sage icon rail (reference UI) */}
+ {/* Desktop: slim blue-50 icon rail (reference UI) */}
  <aside
  className={cn(
-'student-sidebar fixed inset-y-0 left-0 z-40 hidden w-16 flex-col bg-sage pt-16 dark:bg-emerald-950 lg:flex',
+'student-sidebar fixed inset-y-0 left-0 z-40 hidden w-16 flex-col bg-blue-50 pt-16 dark:bg-blue-950 lg:flex',
  'rounded-none',
  className,
  )}
@@ -181,7 +166,7 @@ const isActive = isItemActive(item)
  type="button"
  title={t(locale,'dashboard.labels.logout')}
  onClick={handleLogout}
- className="mt-3 flex h-11 w-11 shrink-0 items-center justify-center text-slate-700 transition-colors hover:text-slate-900 dark:text-emerald-200 dark:hover:text-white"
+ className="mt-3 flex h-11 w-11 shrink-0 items-center justify-center text-slate-700 transition-colors hover:text-slate-900 dark:text-blue-200 dark:hover:text-white"
  >
  <LogOut className="h-5 w-5" strokeWidth={1.75} />
  </button>
@@ -189,7 +174,7 @@ const isActive = isItemActive(item)
  </aside>
 
  {/* Mobile bottom bar */}
- <div className="student-mobile-nav fixed bottom-0 left-0 right-0 z-50 border-t border-sage-deep bg-sage pb-safe dark:border-emerald-800 dark:bg-emerald-950 lg:hidden">
+ <div className="student-mobile-nav fixed bottom-0 left-0 right-0 z-50 border-t border-blue-600 bg-blue-50 pb-safe dark:border-blue-800 dark:bg-blue-950 lg:hidden">
  <div className="grid grid-cols-5 gap-1 px-2 py-2">
  {allItems.slice(0, 4).map((item) => {
 const isActive = isItemActive(item)
@@ -209,7 +194,7 @@ const isActive = isItemActive(item)
  type="button"
  title={t(locale,'nav.studentNavigation')}
  onClick={() => setIsMobileMenuOpen(true)}
- className="flex h-11 w-full items-center justify-center text-slate-700 dark:text-emerald-200"
+ className="flex h-11 w-full items-center justify-center text-slate-700 dark:text-blue-200"
  >
  <Menu className="h-5 w-5" strokeWidth={1.75} />
  </button>
@@ -230,32 +215,32 @@ const isActive = isItemActive(item)
  animate={{ x: 0 }}
  exit={{ x:'100%'}}
  transition={{ type:'spring', damping: 28, stiffness: 280 }}
- className="absolute right-0 top-0 flex h-full w-[min(100%,20rem)] flex-col bg-sage-canvas dark:bg-emerald-950"
+ className="absolute right-0 top-0 flex h-full w-[min(100%,20rem)] flex-col bg-blue-50 dark:bg-blue-950"
  onClick={(e) => e.stopPropagation()}
  >
- <div className="flex items-center justify-between border-b border-slate-200 bg-sage px-4 py-4 dark:border-emerald-800 dark:bg-emerald-950">
- <h2 className="text-base font-semibold text-slate-800 dark:text-emerald-50">{t(locale,'nav.studentNavigation')}</h2>
+ <div className="flex items-center justify-between border-b border-slate-200 bg-blue-50 px-4 py-4 dark:border-blue-800 dark:bg-blue-950">
+ <h2 className="text-base font-semibold text-slate-800 dark:text-blue-50">{t(locale,'nav.studentNavigation')}</h2>
  <button
  type="button"
  onClick={() => setIsMobileMenuOpen(false)}
- className="flex h-9 w-9 items-center justify-center rounded-none bg-white text-slate-800 shadow-none dark:bg-emerald-900 dark:text-emerald-100"
+ className="flex h-9 w-9 items-center justify-center rounded-none bg-white text-slate-800 shadow-none dark:bg-blue-900 dark:text-blue-100"
  >
  <X className="h-5 w-5" strokeWidth={1.75} />
  </button>
  </div>
 
- <div className="border-b border-slate-200 px-4 py-3 dark:border-emerald-800">
- <p className="truncate text-sm font-semibold text-slate-900 dark:text-emerald-50">{getDisplayName()}</p>
- <p className="truncate text-xs text-slate-600 dark:text-emerald-300">{getDisplayEmail()}</p>
+ <div className="border-b border-slate-200 px-4 py-3 dark:border-blue-800">
+ <p className="truncate text-sm font-semibold text-slate-900 dark:text-blue-50">{getDisplayName()}</p>
+ <p className="truncate text-xs text-slate-600 dark:text-blue-300">{getDisplayEmail()}</p>
  </div>
 
  <nav className="min-h-0 flex-1 space-y-2 overflow-y-auto p-4">{allItems.map((item) => renderMobileRow(item))}</nav>
 
- <div className="border-t border-slate-200 p-4 dark:border-emerald-800">
+ <div className="border-t border-slate-200 p-4 dark:border-blue-800">
  <button
  type="button"
  onClick={handleLogout}
- className="flex w-full items-center justify-center gap-2 rounded-none bg-white py-3 text-sm font-medium text-slate-800 shadow-none dark:bg-emerald-900 dark:text-emerald-50"
+ className="flex w-full items-center justify-center gap-2 rounded-none bg-white py-3 text-sm font-medium text-slate-800 shadow-none dark:bg-blue-900 dark:text-blue-50"
  >
  <LogOut className="h-5 w-5" strokeWidth={1.75} />
  {t(locale,'dashboard.labels.logout')}

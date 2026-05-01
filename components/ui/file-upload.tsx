@@ -136,7 +136,7 @@ export function FileUpload({
 
   const getFileIcon = () => {
   if (type === 'image') return <Image className="w-8 h-8 text-blue-500" />
-  if (type === 'document') return <FileText className="w-8 h-8 text-green-500" />
+  if (type === 'document') return <FileText className="w-8 h-8 text-blue-500" />
   return <Upload className="w-8 h-8 text-gray-400" />
   }
 
@@ -160,14 +160,14 @@ export function FileUpload({
   {currentFile ? (
   // Show current file with upload option
   <div className="space-y-3">
-  <div className="relative p-4 border-2 border-green-200 dark:border-green-700 rounded-lg bg-green-50 dark:bg-green-900/20">
+  <div className="relative p-4 border-2 border-blue-200 dark:border-blue-700 rounded-lg bg-blue-50 dark:bg-blue-900/20">
   <div className="flex items-center space-x-3">
-  <CheckCircle className="w-5 h-5 text-green-500" />
+  <CheckCircle className="w-5 h-5 text-blue-500" />
   <div className="flex-1 min-w-0">
-  <p className="text-sm font-medium text-green-800 dark:text-green-200">
+  <p className="text-sm font-medium text-blue-800 dark:text-blue-200">
   File uploaded successfully
   </p>
-  <p className="text-xs text-green-600 dark:text-green-400 truncate">
+  <p className="text-xs text-blue-600 dark:text-blue-400 truncate">
   {currentFile}
   </p>
   </div>
@@ -177,7 +177,7 @@ export function FileUpload({
   variant="ghost"
   size="sm"
   onClick={handleRemove}
-  className="text-green-600 hover:text-green-700 hover:bg-green-100 dark:text-green-400 dark:hover:bg-green-800"
+  className="text-blue-600 hover:text-blue-700 hover:bg-blue-100 dark:text-blue-400 dark:hover:bg-blue-800"
   >
   <X className="w-4 h-4" />
   </Button>

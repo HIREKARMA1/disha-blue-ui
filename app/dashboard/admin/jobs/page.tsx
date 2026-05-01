@@ -281,7 +281,7 @@ const paginatedJobs = filteredJobs.slice(
  <span className="inline-flex items-center border px-3 py-1 text-xs font-medium text-primary">
  {new Date().toLocaleDateString('en-US', { weekday:'long', month:'long', day:'numeric'})}
  </span>
- <span className="inline-flex items-center border px-3 py-1 text-xs font-medium text-green-700">
+ <span className="inline-flex items-center border px-3 py-1 text-xs font-medium text-blue-700">
  Employer activity
  </span>
  <span className="inline-flex items-center border px-3 py-1 text-xs font-medium text-secondary-700">
@@ -613,7 +613,7 @@ const paginatedJobs = filteredJobs.slice(
  }}
  className="rounded-none p-2 transition-colors hover:bg-muted">
  {copied ? (
- <Check className="w-4 h-4 text-green-600"/>
+ <Check className="w-4 h-4 text-blue-600"/>
  ) : (
  <Copy className="w-4 h-4 text-muted-foreground"/>
  )}

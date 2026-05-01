@@ -69,19 +69,19 @@ export function DashboardStats({ className =''}: DashboardStatsProps) {
  label:'Total Jobs',
  value: stats.totalJobs.toString(),
  icon: Briefcase,
- color:'text-emerald-800',
+ color:'text-blue-800',
  bgColor:'bg-white'},
  {
  label:'Applied Jobs',
  value: stats.appliedJobs.toString(),
  icon: FileText,
- color:'text-emerald-800',
+ color:'text-blue-800',
  bgColor:'bg-white'},
  {
  label:'Selected',
  value: stats.selected.toString(),
  icon: CheckCircle,
- color:'text-emerald-800',
+ color:'text-blue-800',
  bgColor:'bg-white'},
  {
  label:'Rejected',
@@ -95,9 +95,9 @@ export function DashboardStats({ className =''}: DashboardStatsProps) {
  return (
  <div className={`grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4 w-full ${className}`}>
  {[...Array(4)].map((_, index) => (
- <div key={index} className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm animate-pulse dark:border-emerald-800 dark:bg-emerald-900/40">
- <div className="mb-3 h-8 rounded-lg bg-slate-200 dark:bg-emerald-800"></div>
- <div className="h-4 rounded-lg bg-slate-200 dark:bg-emerald-800"></div>
+ <div key={index} className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm animate-pulse dark:border-blue-800 dark:bg-blue-900/40">
+ <div className="mb-3 h-8 rounded-lg bg-slate-200 dark:bg-blue-800"></div>
+ <div className="h-4 rounded-lg bg-slate-200 dark:bg-blue-800"></div>
  </div>
  ))}
  </div>
@@ -109,7 +109,7 @@ export function DashboardStats({ className =''}: DashboardStatsProps) {
  <div className={`w-full ${className}`}>
  <div className="dashboard-overview-card p-6">
  <div className="text-center">
- <AlertCircle className="mx-auto mb-3 h-8 w-8 text-sage-deep"/>
+ <AlertCircle className="mx-auto mb-3 h-8 w-8 text-blue-600"/>
  <h3 className="mb-2 text-lg font-medium text-slate-900">
  Unable to Load Dashboard Data
  </h3>
@@ -141,7 +141,7 @@ export function DashboardStats({ className =''}: DashboardStatsProps) {
  {stat.value}
  </p>
  </div>
- <div className="rounded-2xl border border-slate-200 bg-sage p-3 shadow-sm">
+ <div className="rounded-2xl border border-slate-200 bg-blue-50 p-3 shadow-sm">
  <stat.icon className={`h-6 w-6 ${stat.color}`} />
  </div>
  </div>

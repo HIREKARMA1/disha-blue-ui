@@ -13,7 +13,7 @@ interface StatusDropdownProps {
 }
 
 const statusOptions = [
- { value:'active', label:'Active', color:'bg-green-100 text-green-800'},
+ { value:'active', label:'Active', color:'bg-blue-100 text-blue-800'},
  { value:'inactive', label:'Inactive', color:'bg-yellow-100 text-yellow-800'},
  { value:'pending', label:'Pending', color:'bg-blue-100 text-blue-800'},
 ]
@@ -97,7 +97,7 @@ export function StatusDropdown({ universityId, currentStatus, onStatusChange }: 
  const dropdownContent = isOpen && !isUpdating && (
  <div 
  ref={dropdownRef}
- className="fixed z-[9999] w-40 bg-white rounded-none-none shadow-lg border border-gray-200 overflow-hidden"style={{
+ className="fixed z-[9999] w-40 bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden"style={{
  top: `${dropdownPosition.top}px`,
  left: `${dropdownPosition.left}px`
  }}
@@ -116,7 +116,7 @@ export function StatusDropdown({ universityId, currentStatus, onStatusChange }: 
  >
  <div className="flex items-center">
  <div className={`w-2 h-2 mr-2 ${
- option.value ==='active'?'bg-green-500':
+ option.value ==='active'?'bg-blue-500':
  option.value ==='inactive'?'bg-yellow-500':'bg-blue-500'}`} />
  {option.label}
  </div>

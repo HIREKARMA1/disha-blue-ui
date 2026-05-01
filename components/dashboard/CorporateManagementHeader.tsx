@@ -32,15 +32,15 @@ export function CorporateManagementHeader({
  <div className="space-y-4">
  <div className="rounded-none border border-slate-200 bg-white p-5 shadow-none">
  <div className="mb-4 grid gap-3 sm:grid-cols-3">
- <div className="rounded-none-none border px-3 py-2">
+ <div className="rounded-xl border px-3 py-2">
  <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">Total</p>
  <p className="mt-1 text-lg font-semibold text-foreground">{totalCorporates}</p>
  </div>
- <div className="rounded-none-none border px-3 py-2">
+ <div className="rounded-xl border px-3 py-2">
  <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">Active</p>
  <p className="mt-1 text-lg font-semibold text-foreground">{activeCorporates}</p>
  </div>
- <div className="rounded-none-none border px-3 py-2">
+ <div className="rounded-xl border px-3 py-2">
  <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">Archived</p>
  <p className="mt-1 text-lg font-semibold text-foreground">{archivedCorporates}</p>
  </div>
@@ -51,14 +51,14 @@ export function CorporateManagementHeader({
  <input
  type="text"placeholder="Search employers by company, email, or location..."value={searchTerm}
  onChange={(e) => onSearchChange(e.target.value)}
- className="h-11 w-full rounded-none-none border border-border bg-background pl-10 pr-4 text-sm text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30"/>
+ className="h-11 w-full rounded-xl border border-border bg-background pl-10 pr-4 text-sm text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30"/>
  </div>
  <div className="relative sm:w-[210px]">
  <Filter className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"/>
  <select
  value={filterStatus}
  onChange={(e) => onFilterChange(e.target.value)}
- className="h-11 w-full appearance-none rounded-none-none border border-border bg-background pl-10 pr-8 text-sm text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30">
+ className="h-11 w-full appearance-none rounded-xl border border-border bg-background pl-10 pr-8 text-sm text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30">
  <option value="all">All Statuses</option>
  <option value="verified">Verified</option>
  <option value="unverified">Unverified</option>
@@ -74,7 +74,7 @@ export function CorporateManagementHeader({
  <select
  value={includeArchived ?'archived':'active'}
  onChange={(e) => onIncludeArchivedChange(e.target.value ==='archived')}
- className="h-11 w-full appearance-none rounded-none-none border border-border bg-background pl-10 pr-8 text-sm text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30">
+ className="h-11 w-full appearance-none rounded-xl border border-border bg-background pl-10 pr-8 text-sm text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30">
  <option value="active">Active Employers</option>
  <option value="archived">Archived Employers</option>
  </select>

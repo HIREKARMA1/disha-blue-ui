@@ -59,7 +59,7 @@ const licenseList = Array.isArray(data) ? data : (data.licenses || data.items ||
  const getStatusColor = (status: string) => {
  switch (status.toLowerCase()) {
  case 'active':
- return 'bg-green-100 text-green-800'
+ return 'bg-blue-100 text-blue-800'
  case 'expired':
  return 'bg-red-100 text-red-800'
  case 'pending':
@@ -97,7 +97,7 @@ const filteredLicenses = licenses.filter(license =>
  <span className="inline-flex items-center px-3 py-1 text-sm font-medium bg-blue-100 text-blue-800">
  <Award className="w-3 h-3 mr-1"/> {totalLicenses} Total Licenses
  </span>
- <span className="inline-flex items-center px-3 py-1 text-sm font-medium bg-green-100 text-green-800">
+ <span className="inline-flex items-center px-3 py-1 text-sm font-medium bg-blue-100 text-blue-800">
  <CheckCircle className="w-3 h-3 mr-1"/> {activeBatches} Active Batches
  </span>
  <span className="inline-flex items-center px-3 py-1 text-sm font-medium bg-purple-100 text-purple-800">
@@ -191,7 +191,7 @@ const filteredLicenses = licenses.filter(license =>
  </div>
  </div>
 
- {/* Usage Stats */}
+ {/* Ublue-50 Stats */}
  <div className="flex items-center gap-8 bg-gray-50 px-6 py-3 rounded-none-none">
  <div className="text-center">
  <p className="text-xs text-gray-500 uppercase tracking-wider font-medium mb-1">Total</p>
@@ -205,7 +205,7 @@ const filteredLicenses = licenses.filter(license =>
  <div className="w-px h-8 bg-gray-200"></div>
  <div className="text-center">
  <p className="text-xs text-gray-500 uppercase tracking-wider font-medium mb-1">Remaining</p>
- <p className={`text-xl font-bold ${isExhausted ?'text-red-600':'text-green-600'}`}>
+ <p className={`text-xl font-bold ${isExhausted ?'text-red-600':'text-blue-600'}`}>
  {license.remaining_licenses}
  </p>
  </div>
@@ -287,7 +287,7 @@ const filteredLicenses = licenses.filter(license =>
 
  <div>
  <div className="flex justify-between text-sm mb-2">
- <span className="text-gray-600 font-medium">License Usage</span>
+ <span className="text-gray-600 font-medium">License Ublue-50</span>
  <span className="font-bold text-gray-900">
  {usagePercent}%
  </span>

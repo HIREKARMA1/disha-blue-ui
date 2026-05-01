@@ -87,7 +87,7 @@ export function CorporateJobCard({ job, onViewDescription, onEdit, onDelete, onS
  if (!job || typeof job !=='object') {
  console.error('Invalid job object:', job)
  return (
- <div className="bg-red-50 border border-red-200 rounded-none-none p-6">
+ <div className="bg-red-50 border border-red-200 rounded-xl p-6">
  <p className="text-red-600 text-center">Invalid job data</p>
  </div>
  )
@@ -160,7 +160,7 @@ export function CorporateJobCard({ job, onViewDescription, onEdit, onDelete, onS
 
  const getStatusColor = (status: string) => {
  const colors = {
- active:'text-emerald-700',
+ active:'text-blue-700',
  inactive:'text-amber-800',
  closed:'text-destructive',
  paused:'bg-muted text-muted-foreground border-border',
@@ -182,7 +182,7 @@ export function CorporateJobCard({ job, onViewDescription, onEdit, onDelete, onS
  initial={{ opacity: 0, y: 20 }}
  animate={{ opacity: 1, y: 0 }}
  transition={{ duration: 0.3 }}
- className={cn('group flex h-full flex-col overflow-hidden rounded-none-none border','transition-all duration-300','',
+ className={cn('group flex h-full flex-col overflow-hidden rounded-xl border','transition-all duration-300','',
  )}
  >
  {/* Header */}
@@ -217,12 +217,12 @@ export function CorporateJobCard({ job, onViewDescription, onEdit, onDelete, onS
  <div className="relative"ref={dropdownRef}>
  <Button
  variant="ghost"size="sm"onClick={() => setShowDropdown(!showDropdown)}
- className="h-9 w-9 shrink-0 rounded-none-none p-0 hover:bg-muted">
+ className="h-9 w-9 shrink-0 rounded-xl p-0 hover:bg-muted">
  <MoreVertical className="w-4 h-4"/>
  </Button>
 
  {showDropdown && (
- <div className="absolute right-0 top-10 z-50 w-52 overflow-hidden rounded-none-none border border-border bg-popover shadow-xl">
+ <div className="absolute right-0 top-10 z-50 w-52 overflow-hidden rounded-xl border border-border bg-popover shadow-xl">
  <div className="py-1">
  <button
  onClick={() => {
@@ -406,7 +406,7 @@ const skillText = typeof skill ==='string'? skill : String(skill ||'')
  <div className="mt-auto border-t pt-4">
  <Button
  onClick={onViewDescription}
- variant="outline"size="sm"className="w-full gap-2 rounded-none-none transition-all duration-200 hover:shadow-sm">
+ variant="outline"size="sm"className="w-full gap-2 rounded-xl transition-all duration-200 hover:shadow-sm">
  <FileText className="w-4 h-4"/>
  View Job Details
  </Button>

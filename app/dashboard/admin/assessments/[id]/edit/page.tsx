@@ -123,7 +123,7 @@ const formattedData = {
  </div>
 
  <div className="flex items-center gap-3">
- <span className={`px-3 py-1 text-xs font-semibold ${initialData?.status ==='ACTIVE'?'bg-green-100 text-green-700':
+ <span className={`px-3 py-1 text-xs font-semibold ${initialData?.status ==='ACTIVE'?'bg-blue-100 text-blue-700':
  initialData?.status ==='DRAFT'?'bg-gray-100 text-gray-700':'bg-blue-100 text-blue-700'}`}>
  {initialData?.status}
  </span>

@@ -58,7 +58,7 @@ const filteredAttempts = attempts.filter(attempt => {
 
  const getStatusColor = (status: string) => {
  switch (status) {
- case 'PASSED': return 'bg-green-100 text-green-800 border-green-200'
+ case 'PASSED': return 'bg-blue-100 text-blue-800 border-blue-200'
  case 'FAILED': return 'bg-red-100 text-red-800 border-red-200'
  case 'COMPLETED': return 'bg-blue-100 text-blue-800 border-blue-200'
  default: return 'bg-gray-100 text-gray-800 border-gray-200'
@@ -165,7 +165,7 @@ const maxScore = attempt.percentage > 0
  </div>
  </div>
 
- <div className="p-4 rounded-none-none border border-gray-200 hover:border-gray-300 transition-all duration-200 hover:shadow-md bg-green-50">
+ <div className="p-4 rounded-none-none border border-gray-200 hover:border-gray-300 transition-all duration-200 hover:shadow-md bg-blue-50">
  <div className="flex items-center justify-between">
  <div className="flex-1">
  <p className="text-sm font-medium text-gray-600 mb-1">
@@ -176,7 +176,7 @@ const maxScore = attempt.percentage > 0
  </div>
  </div>
  <div className="p-3 rounded-none-none bg-white shadow-sm">
- <Target className="w-6 h-6 text-green-600"/>
+ <Target className="w-6 h-6 text-blue-600"/>
  </div>
  </div>
  </div>
@@ -297,7 +297,7 @@ const maxScore = attempt.percentage > 0
 
  {/* Percentage */}
  <td className="px-6 py-4 whitespace-nowrap">
- <span className={`text-sm font-semibold ${attempt.percentage >= 60 ?'text-green-600':
+ <span className={`text-sm font-semibold ${attempt.percentage >= 60 ?'text-blue-600':
  attempt.percentage >= 40 ?'text-yellow-600':'text-red-600'}`}>
  {attempt.percentage?.toFixed(1)}%
  </span>

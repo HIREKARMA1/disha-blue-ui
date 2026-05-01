@@ -14,6 +14,7 @@ interface ResumePreviewProps {
   onChange?: (next: any) => void
   onTemplateChange?: (template: OnboardingResumeTemplate) => void
   template?: OnboardingResumeTemplate
+  onBeforeDownloadPdf?: () => boolean | Promise<boolean>
 }
 
 export function ResumePreview({
@@ -23,16 +24,23 @@ export function ResumePreview({
   template = "blue_collar_basic",
   onChange,
   onTemplateChange,
+  onBeforeDownloadPdf,
 }: ResumePreviewProps) {
   const [local, setLocal] = useState<any>(resume)
   const [pdfBusy, setPdfBusy] = useState(false)
   const merged = useMemo(() => local || resume, [local, resume])
 
   const update = (path: string, value: any) => {
+    if (!merged) return
     const next = JSON.parse(JSON.stringify(merged))
     const keys = path.split(".")
     let current = next
-    for (let i = 0; i < keys.length - 1; i += 1) current = current[keys[i]]
+    for (let i = 0; i < keys.length - 1; i += 1) {
+      if (current[keys[i]] === undefined || current[keys[i]] === null) {
+        current[keys[i]] = {}
+      }
+      current = current[keys[i]]
+    }
     current[keys[keys.length - 1]] = value
     setLocal(next)
     onChange?.(next)
@@ -43,6 +51,10 @@ export function ResumePreview({
 
   const downloadPdf = async () => {
     if (!resumeHtml?.trim()) return
+    if (onBeforeDownloadPdf) {
+      const allowed = await onBeforeDownloadPdf()
+      if (!allowed) return
+    }
     setPdfBusy(true)
     try {
       const safeName = String(displayName || "resume").replace(/[^\w\s-]/g, "").trim() || "resume"

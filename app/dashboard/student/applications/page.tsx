@@ -164,7 +164,7 @@ const statusCounts = applications.reduce((acc, app) => {
 
  {/* Applications Table */}
  {!loading && (
- <div className="dashboard-overview-card px-4 py-2.5 text-xs font-medium text-slate-600 dark:text-emerald-200/85">
+ <div className="dashboard-overview-card px-4 py-2.5 text-xs font-medium text-slate-600 dark:text-blue-200/85">
  Showing {applications.length} applications on this page
  </div>
  )}

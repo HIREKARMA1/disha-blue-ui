@@ -38,7 +38,7 @@ const mockData = {
  >
  <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between mb-6">
  <div className="flex items-center space-x-3">
- <div className="rounded-xl bg-sage/40 p-2.5 dark:bg-emerald-900/50">
+ <div className="rounded-xl bg-blue-50/40 p-2.5 dark:bg-blue-900/50">
  <BarChart3 className="w-6 h-6 text-primary"/>
  </div>
  <div>
@@ -100,9 +100,9 @@ const mockData = {
  initial={{ opacity: 0, x: 20 }}
  animate={{ opacity: 1, x: 0 }}
  transition={{ duration: 0.6, delay: index * 0.1 }}
- className="flex items-center justify-between rounded-none-none border p-3 transition-colors">
+ className="flex items-center justify-between rounded-xl border p-3 transition-colors">
  <div className="flex items-center space-x-3 min-w-0">
- <div className="rounded-none-none p-1.5 shrink-0">
+ <div className="rounded-xl p-1.5 shrink-0">
  <Briefcase className="w-4 h-4 text-secondary"/>
  </div>
  <span className="text-sm font-medium text-foreground truncate">
@@ -122,7 +122,7 @@ const mockData = {
  </div>
 
  {/* Coming Soon Overlay */}
- <div className="absolute inset-0 flex items-center justify-center rounded-none-none">
+ <div className="absolute inset-0 flex items-center justify-center rounded-xl">
  <div className="text-center px-4">
  <div className="inline-flex items-center justify-center w-16 h-16 mb-4">
  <Clock className="w-8 h-8 text-primary"/>

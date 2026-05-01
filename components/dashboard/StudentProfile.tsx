@@ -187,19 +187,19 @@ const showSuccessToast = options?.showSuccessToast ?? true
  <div className="w-full">
  <div className="dashboard-overview-shell">
  <div className="animate-pulse space-y-4 lg:space-y-6">
- <div className="h-6 w-1/3 rounded-xl bg-slate-200/80 dark:bg-emerald-800/60"></div>
+ <div className="h-6 w-1/3 rounded-xl bg-slate-200/80 dark:bg-blue-800/60"></div>
  <div className="grid grid-cols-1 gap-4 lg:grid-cols-12 lg:gap-6">
  <div className="lg:col-span-3">
- <div className="h-80 rounded-2xl bg-slate-200/80 dark:bg-emerald-800/50"></div>
+ <div className="h-80 rounded-2xl bg-slate-200/80 dark:bg-blue-800/50"></div>
  </div>
  <div className="space-y-4 lg:col-span-6">
  {[...Array(3)].map((_, i) => (
- <div key={i} className="h-32 rounded-2xl bg-slate-200/80 dark:bg-emerald-800/50"></div>
+ <div key={i} className="h-32 rounded-2xl bg-slate-200/80 dark:bg-blue-800/50"></div>
  ))}
  </div>
  <div className="space-y-4 lg:col-span-3">
  {[...Array(3)].map((_, i) => (
- <div key={i} className="h-24 rounded-2xl bg-slate-200/80 dark:bg-emerald-800/50"></div>
+ <div key={i} className="h-24 rounded-2xl bg-slate-200/80 dark:bg-blue-800/50"></div>
  ))}
  </div>
  </div>
@@ -215,7 +215,7 @@ const showSuccessToast = options?.showSuccessToast ?? true
  <StudentDashboardLayout>
  <div className="w-full">
  <div className="dashboard-overview-shell flex justify-center py-8">
- <div className="mx-auto max-w-md rounded-2xl border border-slate-200/90 bg-white p-6 shadow-[0_4px_24px_-6px_rgba(15,23,42,0.09)] dark:border-emerald-800/70 dark:bg-emerald-900/40 dark:shadow-none lg:p-8">
+ <div className="mx-auto max-w-md rounded-2xl border border-slate-200/90 bg-white p-6 shadow-[0_4px_24px_-6px_rgba(15,23,42,0.09)] dark:border-blue-800/70 dark:bg-blue-900/40 dark:shadow-none lg:p-8">
  <AlertCircle className="mx-auto mb-4 h-12 w-12 text-destructive lg:h-16 lg:w-16"/>
  <h2 className="mb-2 text-xl font-bold text-foreground lg:text-2xl">Unable to Load Profile</h2>
  <p className="mb-6 text-muted-foreground">{error}</p>
@@ -232,7 +232,7 @@ const showSuccessToast = options?.showSuccessToast ?? true
  <StudentDashboardLayout>
  <div className="w-full">
  <div className="dashboard-overview-shell flex justify-center py-8">
- <div className="mx-auto max-w-md rounded-2xl border border-slate-200/90 bg-white p-6 shadow-[0_4px_24px_-6px_rgba(15,23,42,0.09)] dark:border-emerald-800/70 dark:bg-emerald-900/40 dark:shadow-none lg:p-8">
+ <div className="mx-auto max-w-md rounded-2xl border border-slate-200/90 bg-white p-6 shadow-[0_4px_24px_-6px_rgba(15,23,42,0.09)] dark:border-blue-800/70 dark:bg-blue-900/40 dark:shadow-none lg:p-8">
  <AlertCircle className="mx-auto mb-4 h-12 w-12 text-warning lg:h-16 lg:w-16"/>
  <h2 className="mb-2 text-xl font-bold text-foreground lg:text-2xl">Profile Not Found</h2>
  <p className="text-muted-foreground">Unable to load your profile. Please try again later.</p>
@@ -248,7 +248,7 @@ const showSuccessToast = options?.showSuccessToast ?? true
  <div className="w-full">
  <div className="dashboard-overview-shell space-y-6">
  {/* Header - Consistent with other sections */}
- <div className="rounded-2xl border border-slate-200/90 bg-sage/10 p-6 shadow-[0_4px_24px_-6px_rgba(15,23,42,0.08)] dark:border-emerald-800/60 dark:bg-emerald-900/25 dark:shadow-none">
+ <div className="rounded-2xl border border-slate-200/90 bg-blue-50/10 p-6 shadow-[0_4px_24px_-6px_rgba(15,23,42,0.08)] dark:border-blue-800/60 dark:bg-blue-900/25 dark:shadow-none">
  <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 lg:gap-6">
  <div className="flex-1 min-w-0">
  <h1 className="font-display text-2xl md:text-3xl font-semibold tracking-tight text-foreground mb-2">
@@ -270,7 +270,7 @@ const showSuccessToast = options?.showSuccessToast ?? true
  {profile.resume && (
  <Link
  href={profile.resume}
- target="_blank"rel="noopener noreferrer"className="inline-flex items-center border border-slate-200/90 bg-white px-3 py-1 text-xs font-medium text-slate-800 dark:border-emerald-800/70 dark:bg-emerald-900/40 dark:text-emerald-50">
+ target="_blank"rel="noopener noreferrer"className="inline-flex items-center border border-slate-200/90 bg-white px-3 py-1 text-xs font-medium text-slate-800 dark:border-blue-800/70 dark:bg-blue-900/40 dark:text-blue-50">
  Preview Resume
  </Link>
  )}
@@ -284,12 +284,12 @@ const showSuccessToast = options?.showSuccessToast ?? true
  <div className="grid grid-cols-1 gap-4 lg:grid-cols-12 lg:gap-6">
  {/* Top Horizontal Section - Profile Overview */}
  <div className="lg:col-span-3">
- <div className="rounded-2xl border border-slate-200/90 bg-white p-4 shadow-[0_4px_24px_-6px_rgba(15,23,42,0.09)] dark:border-emerald-800/70 dark:bg-emerald-900/25 dark:shadow-none">
+ <div className="rounded-2xl border border-slate-200/90 bg-white p-4 shadow-[0_4px_24px_-6px_rgba(15,23,42,0.09)] dark:border-blue-800/70 dark:bg-blue-900/25 dark:shadow-none">
  <div className="flex flex-col lg:flex-row items-center lg:items-start gap-6">
  {/* Profile Avatar & Info */}
  <div className="text-center lg:text-left">
  <div className="w-20 h-20 lg:w-24 lg:h-24 mx-auto lg:mx-0 mb-4 relative">
- <div className="flex h-20 w-20 items-center justify-center overflow-hidden bg-sage-deep shadow-lg dark:bg-emerald-700 lg:h-24 lg:w-24">
+ <div className="flex h-20 w-20 items-center justify-center overflow-hidden bg-blue-600 shadow-lg dark:bg-blue-700 lg:h-24 lg:w-24">
  {profile.profile_picture ? (
  <img
  src={profile.profile_picture}
@@ -302,7 +302,7 @@ const showSuccessToast = options?.showSuccessToast ?? true
  )}
  </div>
  <button
- className="absolute -bottom-1 -right-1 flex h-5 w-5 items-center justify-center border border-slate-200 bg-white text-sage-deep shadow-md transition-all duration-200 hover:scale-110 hover:bg-sage/30 dark:border-emerald-700 dark:bg-emerald-950 dark:text-emerald-300 dark:hover:bg-emerald-900/60 lg:h-6 lg:w-6"
+ className="absolute -bottom-1 -right-1 flex h-5 w-5 items-center justify-center border border-slate-200 bg-white text-blue-600 shadow-md transition-all duration-200 hover:scale-110 hover:bg-blue-50/30 dark:border-blue-700 dark:bg-blue-950 dark:text-blue-300 dark:hover:bg-blue-900/60 lg:h-6 lg:w-6"
  onClick={() => {
  setEditing('basic');
  setTimeout(() => {
@@ -316,19 +316,19 @@ const showSuccessToast = options?.showSuccessToast ?? true
  </button>
 
  </div>
- <h3 className="text-lg lg:text-xl font-semibold text-slate-900 dark:text-emerald-50 mb-1">
+ <h3 className="text-lg lg:text-xl font-semibold text-slate-900 dark:text-blue-50 mb-1">
  {profile.name}
  </h3>
- <p className="text-slate-600 dark:text-emerald-200/85 text-sm">
+ <p className="text-slate-600 dark:text-blue-200/85 text-sm">
  {profile.institution ||'University Student'}
  </p>
- <p className="text-xs text-slate-500 dark:text-emerald-400">
+ <p className="text-xs text-slate-500 dark:text-blue-400">
  {profile.degree} • {profile.branch}
  </p>
  </div>
 
  </div>
- <div className="mt-4 rounded-2xl border border-slate-200/90 bg-sage/5 p-3 dark:border-emerald-800/60 dark:bg-emerald-900/20">
+ <div className="mt-4 rounded-2xl border border-slate-200/90 bg-blue-50/5 p-3 dark:border-blue-800/60 dark:bg-blue-900/20">
  <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">Quick profile stats</p>
  <div className="mt-2 space-y-1.5 text-sm text-foreground">
  <p>Degree: {profile.degree ||'Not set'}</p>
@@ -343,7 +343,7 @@ const showSuccessToast = options?.showSuccessToast ?? true
  <div className="lg:col-span-6">
  {/* Tab Navigation */}
  <div className="mb-6">
- <div className="border-b border-slate-200 dark:border-emerald-800">
+ <div className="border-b border-slate-200 dark:border-blue-800">
  <nav className="-mb-px flex space-x-8 overflow-x-auto">
  {tabs.map((tab) => (
  <button
@@ -352,8 +352,8 @@ const showSuccessToast = options?.showSuccessToast ?? true
  className={cn(
  "flex items-center space-x-2 border-b-2 px-1 py-3 text-base font-bold transition-colors duration-200",
  activeTab === tab.id
- ? "border-sage-deep text-sage-deep dark:border-emerald-400 dark:text-emerald-300"
- : "border-transparent text-slate-500 hover:border-slate-300 hover:text-slate-800 dark:text-emerald-400 dark:hover:border-emerald-600 dark:hover:text-emerald-200",
+ ? "border-blue-600 text-blue-600 dark:border-blue-400 dark:text-blue-300"
+ : "border-transparent text-slate-500 hover:border-slate-300 hover:text-slate-800 dark:text-blue-400 dark:hover:border-blue-600 dark:hover:text-blue-200",
  )}
  >
  <tab.icon className="w-4 h-4"/>
@@ -367,20 +367,20 @@ const showSuccessToast = options?.showSuccessToast ?? true
  {/* Tab Content */}
  <div className="min-h-[600px]">
  {activeTab ==='basic'&& (
- <div ref={basicFormRef} className="rounded-2xl border border-slate-200/90 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md dark:border-emerald-800/70 dark:bg-emerald-900/25">
+ <div ref={basicFormRef} className="rounded-2xl border border-slate-200/90 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md dark:border-blue-800/70 dark:bg-blue-900/25">
  <div className="flex items-center justify-between mb-6">
  <div className="flex items-center space-x-3">
- <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-sage-deep shadow-sm dark:bg-emerald-600">
+ <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-600 shadow-sm dark:bg-blue-600">
  <User className="h-6 w-6 text-white"/>
  </div>
  <div>
- <h3 className="text-xl font-semibold text-slate-900 dark:text-emerald-50">Basic Information</h3>
- <p className="text-sm text-slate-600 dark:text-emerald-200/85">Personal details and contact information</p>
+ <h3 className="text-xl font-semibold text-slate-900 dark:text-blue-50">Basic Information</h3>
+ <p className="text-sm text-slate-600 dark:text-blue-200/85">Personal details and contact information</p>
  </div>
  </div>
  <Button
  variant="ghost"size="sm"onClick={() => setEditing('basic')}
- className="text-sage-deep dark:text-emerald-300 hover:text-slate-700 dark:text-emerald-300 text-xs transition-all duration-200">
+ className="text-blue-600 dark:text-blue-300 hover:text-slate-700 dark:text-blue-300 text-xs transition-all duration-200">
  <ChevronRight className="w-3 h-3 mr-1"/>
  Edit
  </Button>
@@ -396,61 +396,61 @@ const showSuccessToast = options?.showSuccessToast ?? true
  />
  ) : (
  <div className="space-y-4">
- <div className="rounded-2xl border border-slate-200/90 bg-white/90 p-4 dark:border-emerald-800/70 dark:bg-emerald-900/20">
- <div className="font-medium text-slate-900 dark:text-emerald-50 mb-2">
+ <div className="rounded-2xl border border-slate-200/90 bg-white/90 p-4 dark:border-blue-800/70 dark:bg-blue-900/20">
+ <div className="font-medium text-slate-900 dark:text-blue-50 mb-2">
  Personal Details
  </div>
- <div className="text-sm text-slate-600 dark:text-emerald-200/85">
+ <div className="text-sm text-slate-600 dark:text-blue-200/85">
  {profile.name ||'Name not provided'}
  </div>
  {profile.dob && (
- <div className="text-sm text-slate-600 dark:text-emerald-200/85 mt-1">
+ <div className="text-sm text-slate-600 dark:text-blue-200/85 mt-1">
  Date of Birth: {new Date(profile.dob).toLocaleDateString()}
  </div>
  )}
  {profile.gender && (
- <div className="text-sm text-slate-600 dark:text-emerald-200/85 mt-1">
+ <div className="text-sm text-slate-600 dark:text-blue-200/85 mt-1">
  Gender: {profile.gender.charAt(0).toUpperCase() + profile.gender.slice(1)}
  </div>
  )}
  </div>
 
- <div className="rounded-2xl border border-slate-200/90 bg-white/90 p-4 dark:border-emerald-800/70 dark:bg-emerald-900/20">
- <div className="font-medium text-slate-900 dark:text-emerald-50 mb-2">
+ <div className="rounded-2xl border border-slate-200/90 bg-white/90 p-4 dark:border-blue-800/70 dark:bg-blue-900/20">
+ <div className="font-medium text-slate-900 dark:text-blue-50 mb-2">
  Contact Information
  </div>
- <div className="text-sm text-slate-600 dark:text-emerald-200/85">
+ <div className="text-sm text-slate-600 dark:text-blue-200/85">
  {profile.email ||'Email not provided'}
  </div>
- <div className="text-sm text-slate-600 dark:text-emerald-200/85 mt-1">
+ <div className="text-sm text-slate-600 dark:text-blue-200/85 mt-1">
  Phone: {profile.phone ||'Not provided'}
  </div>
  </div>
 
  {(profile.country || profile.state || profile.city) && (
- <div className="rounded-2xl border border-slate-200/90 bg-white/90 p-4 dark:border-emerald-800/70 dark:bg-emerald-900/20">
- <div className="font-medium text-slate-900 dark:text-emerald-50 mb-2">
+ <div className="rounded-2xl border border-slate-200/90 bg-white/90 p-4 dark:border-blue-800/70 dark:bg-blue-900/20">
+ <div className="font-medium text-slate-900 dark:text-blue-50 mb-2">
  Location
  </div>
- <div className="text-sm text-slate-600 dark:text-emerald-200/85">
+ <div className="text-sm text-slate-600 dark:text-blue-200/85">
  {[profile.city, profile.state, profile.country].filter(Boolean).join(',') ||'Location not provided'}
  </div>
  </div>
  )}
 
  {profile.bio && (
- <div className="rounded-2xl border border-slate-200/90 bg-white/90 p-4 dark:border-emerald-800/70 dark:bg-emerald-900/20">
- <div className="font-medium text-slate-900 dark:text-emerald-50 mb-2">
+ <div className="rounded-2xl border border-slate-200/90 bg-white/90 p-4 dark:border-blue-800/70 dark:bg-blue-900/20">
+ <div className="font-medium text-slate-900 dark:text-blue-50 mb-2">
  Bio
  </div>
- <div className="text-sm text-slate-600 dark:text-emerald-200/85">
+ <div className="text-sm text-slate-600 dark:text-blue-200/85">
  {profile.bio}
  </div>
  </div>
  )}
 
- <div className="rounded-2xl border border-slate-200/90 bg-white/90 p-4 dark:border-emerald-800/70 dark:bg-emerald-900/20">
- <div className="font-medium text-slate-900 dark:text-emerald-50 mb-2">
+ <div className="rounded-2xl border border-slate-200/90 bg-white/90 p-4 dark:border-blue-800/70 dark:bg-blue-900/20">
+ <div className="font-medium text-slate-900 dark:text-blue-50 mb-2">
  Profile Picture
  </div>
  <div className="flex items-center justify-between">
@@ -459,11 +459,11 @@ const showSuccessToast = options?.showSuccessToast ?? true
  <>
  <img
  src={profile.profile_picture}
- alt="Profile"className="w-12 h-12 object-cover border-2 border-slate-200 dark:border-emerald-800"/>
- <span className="text-sm text-emerald-800 dark:text-emerald-300"> Uploaded</span>
+ alt="Profile"className="w-12 h-12 object-cover border-2 border-slate-200 dark:border-blue-800"/>
+ <span className="text-sm text-blue-800 dark:text-blue-300"> Uploaded</span>
  </>
  ) : (
- <span className="text-sm text-slate-500 dark:text-emerald-400"> Not uploaded</span>
+ <span className="text-sm text-slate-500 dark:text-blue-400"> Not uploaded</span>
  )}
  </div>
  {profile.profile_picture && (
@@ -472,7 +472,7 @@ const showSuccessToast = options?.showSuccessToast ?? true
  isOpen: true,
  imageUrl: profile.profile_picture,
  altText:'Profile Picture'})}
- className="text-sage-deep dark:text-emerald-300 hover:text-slate-700 dark:text-emerald-300 hover:bg-sage/30 dark:hover:bg-emerald-900/50">
+ className="text-blue-600 dark:text-blue-300 hover:text-slate-700 dark:text-blue-300 hover:bg-blue-50/30 dark:hover:bg-blue-900/50">
  <Camera className="w-4 h-4 mr-2"/>
  View Image
  </Button>
@@ -485,20 +485,20 @@ const showSuccessToast = options?.showSuccessToast ?? true
  )}
 
  {activeTab ==='academic'&& (
- <div className="rounded-2xl border border-slate-200/90 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md dark:border-emerald-800/70 dark:bg-emerald-900/25">
+ <div className="rounded-2xl border border-slate-200/90 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md dark:border-blue-800/70 dark:bg-blue-900/25">
  <div className="flex items-center justify-between mb-6">
  <div className="flex items-center space-x-3">
- <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-sage-deep shadow-sm dark:bg-emerald-600">
+ <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-600 shadow-sm dark:bg-blue-600">
  <GraduationCap className="w-6 h-6 text-white"/>
  </div>
  <div>
- <h3 className="text-xl font-semibold text-slate-900 dark:text-emerald-50">Academic Information</h3>
- <p className="text-sm text-slate-600 dark:text-emerald-200/85">Educational background and achievements</p>
+ <h3 className="text-xl font-semibold text-slate-900 dark:text-blue-50">Academic Information</h3>
+ <p className="text-sm text-slate-600 dark:text-blue-200/85">Educational background and achievements</p>
  </div>
  </div>
  <Button
  variant="ghost"size="sm"onClick={() => setEditing('academic')}
- className="text-emerald-600 hover:text-emerald-700 text-xs transition-all duration-200">
+ className="text-blue-600 hover:text-blue-700 text-xs transition-all duration-200">
  <ChevronRight className="w-3 h-3 mr-1"/>
  Edit
  </Button>
@@ -515,12 +515,12 @@ const showSuccessToast = options?.showSuccessToast ?? true
  ) : (
  <div className="space-y-6">
  {/* College Section */}
- <div className="rounded-2xl border border-slate-200/90 bg-white p-6 dark:border-emerald-800/70 dark:bg-emerald-900/25">
+ <div className="rounded-2xl border border-slate-200/90 bg-white p-6 dark:border-blue-800/70 dark:bg-blue-900/25">
  <div className="flex items-center space-x-3 mb-4">
  <div className="w-8 h-8 rounded-2xl flex items-center justify-center">
  <GraduationCap className="w-4 h-4 text-white"/>
  </div>
- <h3 className="text-lg font-semibold text-emerald-900">College</h3>
+ <h3 className="text-lg font-semibold text-blue-900">College</h3>
  </div>
 
  {/* We need to fetch universities here to display the name if only ID is present */}
@@ -529,28 +529,28 @@ const showSuccessToast = options?.showSuccessToast ?? true
  </div>
 
  {/* 12th Section */}
- <div className="rounded-2xl border border-slate-200/90 bg-white p-6 dark:border-emerald-800/70 dark:bg-emerald-900/25">
+ <div className="rounded-2xl border border-slate-200/90 bg-white p-6 dark:border-blue-800/70 dark:bg-blue-900/25">
  <div className="flex items-center space-x-3 mb-4">
  <div className="w-8 h-8 rounded-2xl flex items-center justify-center">
  <svg className="w-4 h-4 text-white"fill="none"stroke="currentColor"viewBox="0 0 24 24">
  <path strokeLinecap="round"strokeLinejoin="round"strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
  </svg>
  </div>
- <h3 className="text-lg font-semibold text-slate-900 dark:text-emerald-50">Class XII</h3>
+ <h3 className="text-lg font-semibold text-slate-900 dark:text-blue-50">Class XII</h3>
  </div>
 
  {profile.twelfth_grade_percentage ? (
- <div className="rounded-2xl border border-slate-200/90 bg-white/90 p-4 dark:border-emerald-800/70 dark:bg-emerald-900/20">
- <div className="font-medium text-slate-900 dark:text-emerald-50 mb-2">
+ <div className="rounded-2xl border border-slate-200/90 bg-white/90 p-4 dark:border-blue-800/70 dark:bg-blue-900/20">
+ <div className="font-medium text-slate-900 dark:text-blue-50 mb-2">
  Percentage
  </div>
- <div className="text-sm text-slate-700 dark:text-emerald-300">
+ <div className="text-sm text-slate-700 dark:text-blue-300">
  {profile.twelfth_grade_percentage}%
  </div>
  </div>
  ) : (
- <div className="rounded-2xl border border-slate-200/90 bg-white/90 p-4 dark:border-emerald-800/70 dark:bg-emerald-900/20">
- <div className="text-sm text-slate-700 dark:text-emerald-300">
+ <div className="rounded-2xl border border-slate-200/90 bg-white/90 p-4 dark:border-blue-800/70 dark:bg-blue-900/20">
+ <div className="text-sm text-slate-700 dark:text-blue-300">
  No Class XII details provided yet
  </div>
  </div>
@@ -558,7 +558,7 @@ const showSuccessToast = options?.showSuccessToast ?? true
  </div>
 
  {/* 10th Section */}
- <div className="rounded-2xl border border-slate-200/90 bg-white p-6 dark:border-emerald-800/70 dark:bg-emerald-900/25">
+ <div className="rounded-2xl border border-slate-200/90 bg-white p-6 dark:border-blue-800/70 dark:bg-blue-900/25">
  <div className="flex items-center space-x-3 mb-4">
  <div className="w-8 h-8 rounded-2xl flex items-center justify-center">
  <svg className="w-4 h-4 text-white"fill="none"stroke="currentColor"viewBox="0 0 24 24">
@@ -569,7 +569,7 @@ const showSuccessToast = options?.showSuccessToast ?? true
  </div>
 
  {profile.tenth_grade_percentage ? (
- <div className="rounded-2xl border border-slate-200/90 bg-white/90 p-4 dark:border-emerald-800/70 dark:bg-emerald-900/20">
+ <div className="rounded-2xl border border-slate-200/90 bg-white/90 p-4 dark:border-blue-800/70 dark:bg-blue-900/20">
  <div className="font-medium text-purple-900 mb-2">
  Percentage
  </div>
@@ -578,7 +578,7 @@ const showSuccessToast = options?.showSuccessToast ?? true
  </div>
  </div>
  ) : (
- <div className="rounded-2xl border border-slate-200/90 bg-white/90 p-4 dark:border-emerald-800/70 dark:bg-emerald-900/20">
+ <div className="rounded-2xl border border-slate-200/90 bg-white/90 p-4 dark:border-blue-800/70 dark:bg-blue-900/20">
  <div className="text-sm text-purple-700">
  No Class X details provided yet
  </div>
@@ -591,15 +591,15 @@ const showSuccessToast = options?.showSuccessToast ?? true
  )}
 
  {activeTab ==='skills'&& (
- <div className="rounded-2xl border border-slate-200/90 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md dark:border-emerald-800/70 dark:bg-emerald-900/25">
+ <div className="rounded-2xl border border-slate-200/90 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md dark:border-blue-800/70 dark:bg-blue-900/25">
  <div className="flex items-center justify-between mb-6">
  <div className="flex items-center space-x-3">
- <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-sage-deep shadow-sm dark:bg-emerald-600">
+ <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-600 shadow-sm dark:bg-blue-600">
  <Zap className="w-6 h-6 text-white"/>
  </div>
  <div>
- <h3 className="text-xl font-semibold text-slate-900 dark:text-emerald-50">Skills & Interests</h3>
- <p className="text-sm text-slate-600 dark:text-emerald-200/85">Technical skills, soft skills, and career preferences</p>
+ <h3 className="text-xl font-semibold text-slate-900 dark:text-blue-50">Skills & Interests</h3>
+ <p className="text-sm text-slate-600 dark:text-blue-200/85">Technical skills, soft skills, and career preferences</p>
  </div>
  </div>
  <Button
@@ -621,77 +621,77 @@ const showSuccessToast = options?.showSuccessToast ?? true
  ) : (
  <div className="space-y-4">
  {profile.technical_skills && (
- <div className="rounded-2xl border border-slate-200/90 bg-white/90 p-4 dark:border-emerald-800/70 dark:bg-emerald-900/20">
- <div className="font-medium text-slate-900 dark:text-emerald-50 mb-2">
+ <div className="rounded-2xl border border-slate-200/90 bg-white/90 p-4 dark:border-blue-800/70 dark:bg-blue-900/20">
+ <div className="font-medium text-slate-900 dark:text-blue-50 mb-2">
  Technical Skills
  </div>
- <div className="text-sm text-slate-600 dark:text-emerald-200/85">
+ <div className="text-sm text-slate-600 dark:text-blue-200/85">
  {profile.technical_skills}
  </div>
  </div>
  )}
 
  {profile.soft_skills && (
- <div className="rounded-2xl border border-slate-200/90 bg-white/90 p-4 dark:border-emerald-800/70 dark:bg-emerald-900/20">
- <div className="font-medium text-slate-900 dark:text-emerald-50 mb-2">
+ <div className="rounded-2xl border border-slate-200/90 bg-white/90 p-4 dark:border-blue-800/70 dark:bg-blue-900/20">
+ <div className="font-medium text-slate-900 dark:text-blue-50 mb-2">
  Soft Skills
  </div>
- <div className="text-sm text-slate-600 dark:text-emerald-200/85">
+ <div className="text-sm text-slate-600 dark:text-blue-200/85">
  {profile.soft_skills}
  </div>
  </div>
  )}
 
  {profile.certifications && (
- <div className="rounded-2xl border border-slate-200/90 bg-white/90 p-4 dark:border-emerald-800/70 dark:bg-emerald-900/20">
- <div className="font-medium text-slate-900 dark:text-emerald-50 mb-2">
+ <div className="rounded-2xl border border-slate-200/90 bg-white/90 p-4 dark:border-blue-800/70 dark:bg-blue-900/20">
+ <div className="font-medium text-slate-900 dark:text-blue-50 mb-2">
  Certifications
  </div>
- <div className="text-sm text-slate-600 dark:text-emerald-200/85">
+ <div className="text-sm text-slate-600 dark:text-blue-200/85">
  {profile.certifications}
  </div>
  </div>
  )}
 
  {profile.preferred_industry && (
- <div className="rounded-2xl border border-slate-200/90 bg-white/90 p-4 dark:border-emerald-800/70 dark:bg-emerald-900/20">
- <div className="font-medium text-slate-900 dark:text-emerald-50 mb-2">
+ <div className="rounded-2xl border border-slate-200/90 bg-white/90 p-4 dark:border-blue-800/70 dark:bg-blue-900/20">
+ <div className="font-medium text-slate-900 dark:text-blue-50 mb-2">
  Preferred Industry
  </div>
- <div className="text-sm text-slate-600 dark:text-emerald-200/85">
+ <div className="text-sm text-slate-600 dark:text-blue-200/85">
  {profile.preferred_industry}
  </div>
  </div>
  )}
 
  {profile.job_roles_of_interest && (
- <div className="rounded-2xl border border-slate-200/90 bg-white/90 p-4 dark:border-emerald-800/70 dark:bg-emerald-900/20">
- <div className="font-medium text-slate-900 dark:text-emerald-50 mb-2">
+ <div className="rounded-2xl border border-slate-200/90 bg-white/90 p-4 dark:border-blue-800/70 dark:bg-blue-900/20">
+ <div className="font-medium text-slate-900 dark:text-blue-50 mb-2">
  Job Roles Of Interest
  </div>
- <div className="text-sm text-slate-600 dark:text-emerald-200/85">
+ <div className="text-sm text-slate-600 dark:text-blue-200/85">
  {profile.job_roles_of_interest}
  </div>
  </div>
  )}
 
  {profile.location_preferences && (
- <div className="rounded-2xl border border-slate-200/90 bg-white/90 p-4 dark:border-emerald-800/70 dark:bg-emerald-900/20">
- <div className="font-medium text-slate-900 dark:text-emerald-50 mb-2">
+ <div className="rounded-2xl border border-slate-200/90 bg-white/90 p-4 dark:border-blue-800/70 dark:bg-blue-900/20">
+ <div className="font-medium text-slate-900 dark:text-blue-50 mb-2">
  Location Preferences
  </div>
- <div className="text-sm text-slate-600 dark:text-emerald-200/85">
+ <div className="text-sm text-slate-600 dark:text-blue-200/85">
  {profile.location_preferences}
  </div>
  </div>
  )}
 
  {!profile.technical_skills && !profile.soft_skills && !profile.certifications && !profile.preferred_industry && !profile.job_roles_of_interest && !profile.location_preferences && (
- <div className="rounded-2xl border border-slate-200/90 bg-white/90 p-4 dark:border-emerald-800/70 dark:bg-emerald-900/20">
- <div className="font-medium text-slate-900 dark:text-emerald-50 mb-2">
+ <div className="rounded-2xl border border-slate-200/90 bg-white/90 p-4 dark:border-blue-800/70 dark:bg-blue-900/20">
+ <div className="font-medium text-slate-900 dark:text-blue-50 mb-2">
  Skills & Interests
  </div>
- <div className="text-sm text-slate-600 dark:text-emerald-200/85">
+ <div className="text-sm text-slate-600 dark:text-blue-200/85">
  No skills or interests provided yet
  </div>
  </div>
@@ -702,20 +702,20 @@ const showSuccessToast = options?.showSuccessToast ?? true
  )}
 
  {activeTab ==='experience'&& (
- <div className="rounded-2xl border border-slate-200/90 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md dark:border-emerald-800/70 dark:bg-emerald-900/25">
+ <div className="rounded-2xl border border-slate-200/90 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md dark:border-blue-800/70 dark:bg-blue-900/25">
  <div className="flex items-center justify-between mb-6">
  <div className="flex items-center space-x-3">
- <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-sage-deep shadow-sm dark:bg-emerald-600">
+ <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-600 shadow-sm dark:bg-blue-600">
  <Trophy className="w-6 h-6 text-white"/>
  </div>
  <div>
- <h3 className="text-xl font-semibold text-slate-900 dark:text-emerald-50">Experience & Projects</h3>
- <p className="text-sm text-slate-600 dark:text-emerald-200/85">Internships, projects, and extracurricular activities</p>
+ <h3 className="text-xl font-semibold text-slate-900 dark:text-blue-50">Experience & Projects</h3>
+ <p className="text-sm text-slate-600 dark:text-blue-200/85">Internships, projects, and extracurricular activities</p>
  </div>
  </div>
  <Button
  variant="ghost"size="sm"onClick={() => setEditing('experience')}
- className="text-sage-deep dark:text-emerald-300 hover:text-purple-700 text-xs transition-all duration-200">
+ className="text-blue-600 dark:text-blue-300 hover:text-purple-700 text-xs transition-all duration-200">
  <ChevronRight className="w-3 h-3 mr-1"/>
  Edit
  </Button>
@@ -732,18 +732,18 @@ const showSuccessToast = options?.showSuccessToast ?? true
  ) : (
  <div className="space-y-4">
  {profile.internship_experience && (
- <div className="rounded-2xl border border-slate-200/90 bg-white/90 p-4 dark:border-emerald-800/70 dark:bg-emerald-900/20">
+ <div className="rounded-2xl border border-slate-200/90 bg-white/90 p-4 dark:border-blue-800/70 dark:bg-blue-900/20">
  <div className="flex items-start space-x-3">
- <div className="w-10 h-10 bg-sage/35 dark:bg-emerald-900/45 rounded-2xl flex items-center justify-center flex-shrink-0">
- <svg className="w-5 h-5 text-sage-deep dark:text-emerald-300"fill="none"stroke="currentColor"viewBox="0 0 24 24">
+ <div className="w-10 h-10 bg-blue-50/35 dark:bg-blue-900/45 rounded-2xl flex items-center justify-center flex-shrink-0">
+ <svg className="w-5 h-5 text-blue-600 dark:text-blue-300"fill="none"stroke="currentColor"viewBox="0 0 24 24">
  <path strokeLinecap="round"strokeLinejoin="round"strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
  </svg>
  </div>
  <div className="flex-1 min-w-0">
- <div className="font-medium text-slate-900 dark:text-emerald-50 mb-1">
+ <div className="font-medium text-slate-900 dark:text-blue-50 mb-1">
  Internship Experience
  </div>
- <div className="text-sm text-slate-600 dark:text-emerald-200/85">
+ <div className="text-sm text-slate-600 dark:text-blue-200/85">
  {profile.internship_experience}
  </div>
  </div>
@@ -752,18 +752,18 @@ const showSuccessToast = options?.showSuccessToast ?? true
  )}
 
  {profile.project_details && (
- <div className="rounded-2xl border border-slate-200/90 bg-white/90 p-4 dark:border-emerald-800/70 dark:bg-emerald-900/20">
+ <div className="rounded-2xl border border-slate-200/90 bg-white/90 p-4 dark:border-blue-800/70 dark:bg-blue-900/20">
  <div className="flex items-start space-x-3">
- <div className="w-10 h-10 bg-emerald-100/90 dark:bg-emerald-900/40 rounded-2xl flex items-center justify-center flex-shrink-0">
- <svg className="w-5 h-5 text-emerald-800 dark:text-emerald-300"fill="none"stroke="currentColor"viewBox="0 0 24 24">
+ <div className="w-10 h-10 bg-blue-100/90 dark:bg-blue-900/40 rounded-2xl flex items-center justify-center flex-shrink-0">
+ <svg className="w-5 h-5 text-blue-800 dark:text-blue-300"fill="none"stroke="currentColor"viewBox="0 0 24 24">
  <path strokeLinecap="round"strokeLinejoin="round"strokeWidth={2} d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
  </svg>
  </div>
  <div className="flex-1 min-w-0">
- <div className="font-medium text-slate-900 dark:text-emerald-50 mb-1">
+ <div className="font-medium text-slate-900 dark:text-blue-50 mb-1">
  Project Details
  </div>
- <div className="text-sm text-slate-600 dark:text-emerald-200/85">
+ <div className="text-sm text-slate-600 dark:text-blue-200/85">
  {profile.project_details}
  </div>
  </div>
@@ -772,18 +772,18 @@ const showSuccessToast = options?.showSuccessToast ?? true
  )}
 
  {profile.extracurricular_activities && (
- <div className="rounded-2xl border border-slate-200/90 bg-white/90 p-4 dark:border-emerald-800/70 dark:bg-emerald-900/20">
+ <div className="rounded-2xl border border-slate-200/90 bg-white/90 p-4 dark:border-blue-800/70 dark:bg-blue-900/20">
  <div className="flex items-start space-x-3">
- <div className="w-10 h-10 bg-sage/30 dark:bg-emerald-900/40 rounded-2xl flex items-center justify-center flex-shrink-0">
- <svg className="w-5 h-5 text-sage-deep dark:text-emerald-300"fill="none"stroke="currentColor"viewBox="0 0 24 24">
+ <div className="w-10 h-10 bg-blue-50/30 dark:bg-blue-900/40 rounded-2xl flex items-center justify-center flex-shrink-0">
+ <svg className="w-5 h-5 text-blue-600 dark:text-blue-300"fill="none"stroke="currentColor"viewBox="0 0 24 24">
  <path strokeLinecap="round"strokeLinejoin="round"strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
  </svg>
  </div>
  <div className="flex-1 min-w-0">
- <div className="font-medium text-slate-900 dark:text-emerald-50 mb-1">
+ <div className="font-medium text-slate-900 dark:text-blue-50 mb-1">
  Extracurricular Activities
  </div>
- <div className="text-sm text-slate-600 dark:text-emerald-200/85">
+ <div className="text-sm text-slate-600 dark:text-blue-200/85">
  {profile.extracurricular_activities}
  </div>
  </div>
@@ -792,18 +792,18 @@ const showSuccessToast = options?.showSuccessToast ?? true
  )}
 
  {!profile.internship_experience && !profile.project_details && !profile.extracurricular_activities && (
- <div className="rounded-2xl border border-slate-200/90 bg-white/90 p-4 dark:border-emerald-800/70 dark:bg-emerald-900/20">
+ <div className="rounded-2xl border border-slate-200/90 bg-white/90 p-4 dark:border-blue-800/70 dark:bg-blue-900/20">
  <div className="flex items-start space-x-3">
- <div className="w-10 h-10 bg-slate-100 dark:bg-emerald-900/35 rounded-2xl flex items-center justify-center flex-shrink-0">
- <svg className="w-5 h-5 text-slate-600 dark:text-emerald-200/85"fill="none"stroke="currentColor"viewBox="0 0 24 24">
+ <div className="w-10 h-10 bg-slate-100 dark:bg-blue-900/35 rounded-2xl flex items-center justify-center flex-shrink-0">
+ <svg className="w-5 h-5 text-slate-600 dark:text-blue-200/85"fill="none"stroke="currentColor"viewBox="0 0 24 24">
  <path strokeLinecap="round"strokeLinejoin="round"strokeWidth={2} d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
  </svg>
  </div>
  <div className="flex-1 min-w-0">
- <div className="font-medium text-slate-900 dark:text-emerald-50 mb-1">
+ <div className="font-medium text-slate-900 dark:text-blue-50 mb-1">
  Experience & Projects
  </div>
- <div className="text-sm text-slate-600 dark:text-emerald-200/85">
+ <div className="text-sm text-slate-600 dark:text-blue-200/85">
  No experience or projects provided yet
  </div>
  </div>
@@ -816,15 +816,15 @@ const showSuccessToast = options?.showSuccessToast ?? true
  )}
 
  {activeTab ==='documents'&& (
- <div className="rounded-2xl border border-slate-200/90 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md dark:border-emerald-800/70 dark:bg-emerald-900/25">
+ <div className="rounded-2xl border border-slate-200/90 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md dark:border-blue-800/70 dark:bg-blue-900/25">
  <div className="flex items-center justify-between mb-6">
  <div className="flex items-center space-x-3">
- <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-sage-deep shadow-sm dark:bg-emerald-600">
+ <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-600 shadow-sm dark:bg-blue-600">
  <Shield className="w-6 h-6 text-white"/>
  </div>
  <div>
- <h3 className="text-xl font-semibold text-slate-900 dark:text-emerald-50">Documents & Certificates</h3>
- <p className="text-sm text-slate-600 dark:text-emerald-200/85">Resume, certificates, and important documents</p>
+ <h3 className="text-xl font-semibold text-slate-900 dark:text-blue-50">Documents & Certificates</h3>
+ <p className="text-sm text-slate-600 dark:text-blue-200/85">Resume, certificates, and important documents</p>
  </div>
  </div>
  <Button
@@ -845,27 +845,27 @@ const showSuccessToast = options?.showSuccessToast ?? true
  />
  ) : (
  <div className="space-y-4">
- <div className="rounded-2xl border border-slate-200/90 bg-white/90 p-4 dark:border-emerald-800/70 dark:bg-emerald-900/20">
- <div className="font-medium text-slate-900 dark:text-emerald-50 mb-2">
+ <div className="rounded-2xl border border-slate-200/90 bg-white/90 p-4 dark:border-blue-800/70 dark:bg-blue-900/20">
+ <div className="font-medium text-slate-900 dark:text-blue-50 mb-2">
  Resume
  </div>
  <div className="flex items-center justify-between">
  <div className="flex items-center space-x-3">
  {profile.resume ? (
  <>
- <div className="w-10 h-10 bg-emerald-100/90 dark:bg-emerald-900/40 rounded-2xl flex items-center justify-center">
- <FileText className="w-5 h-5 text-emerald-800 dark:text-emerald-300"/>
+ <div className="w-10 h-10 bg-blue-100/90 dark:bg-blue-900/40 rounded-2xl flex items-center justify-center">
+ <FileText className="w-5 h-5 text-blue-800 dark:text-blue-300"/>
  </div>
- <span className="text-sm text-emerald-800 dark:text-emerald-300"> Uploaded</span>
+ <span className="text-sm text-blue-800 dark:text-blue-300"> Uploaded</span>
  </>
  ) : (
- <span className="text-sm text-slate-500 dark:text-emerald-400"> Not uploaded</span>
+ <span className="text-sm text-slate-500 dark:text-blue-400"> Not uploaded</span>
  )}
  </div>
  {profile.resume && (
  <Button
  variant="outline"size="sm"onClick={() => window.open(profile.resume,'_blank')}
- className="text-sage-deep dark:text-emerald-300 hover:text-slate-700 dark:text-emerald-300 hover:bg-sage/30 dark:hover:bg-emerald-900/50">
+ className="text-blue-600 dark:text-blue-300 hover:text-slate-700 dark:text-blue-300 hover:bg-blue-50/30 dark:hover:bg-blue-900/50">
  <FileText className="w-4 h-4 mr-2"/>
  View File
  </Button>
@@ -873,24 +873,24 @@ const showSuccessToast = options?.showSuccessToast ?? true
  </div>
  </div>
 
- <div className="rounded-2xl border border-slate-200/90 bg-white/90 p-4 dark:border-emerald-800/70 dark:bg-emerald-900/20">
- <div className="font-medium text-slate-900 dark:text-emerald-50 mb-2">
+ <div className="rounded-2xl border border-slate-200/90 bg-white/90 p-4 dark:border-blue-800/70 dark:bg-blue-900/20">
+ <div className="font-medium text-slate-900 dark:text-blue-50 mb-2">
  Academic Certificates
  </div>
  <div className="space-y-3">
  <div className="flex items-center justify-between">
  <div className="flex items-center space-x-3">
- <span className="text-sm text-slate-600 dark:text-emerald-200/85">10th Certificate:</span>
+ <span className="text-sm text-slate-600 dark:text-blue-200/85">10th Certificate:</span>
  {profile.tenth_certificate ? (
- <span className="text-sm text-emerald-800 dark:text-emerald-300"> Uploaded</span>
+ <span className="text-sm text-blue-800 dark:text-blue-300"> Uploaded</span>
  ) : (
- <span className="text-sm text-slate-500 dark:text-emerald-400"> Not uploaded</span>
+ <span className="text-sm text-slate-500 dark:text-blue-400"> Not uploaded</span>
  )}
  </div>
  {profile.tenth_certificate && (
  <Button
  variant="outline"size="sm"onClick={() => window.open(profile.tenth_certificate,'_blank')}
- className="text-sage-deep dark:text-emerald-300 hover:text-slate-700 dark:text-emerald-300 hover:bg-sage/30 dark:hover:bg-emerald-900/50">
+ className="text-blue-600 dark:text-blue-300 hover:text-slate-700 dark:text-blue-300 hover:bg-blue-50/30 dark:hover:bg-blue-900/50">
  <FileText className="w-4 h-4 mr-2"/>
  View File
  </Button>
@@ -898,17 +898,17 @@ const showSuccessToast = options?.showSuccessToast ?? true
  </div>
  <div className="flex items-center justify-between">
  <div className="flex items-center space-x-3">
- <span className="text-sm text-slate-600 dark:text-emerald-200/85">12th Certificate:</span>
+ <span className="text-sm text-slate-600 dark:text-blue-200/85">12th Certificate:</span>
  {profile.twelfth_certificate ? (
- <span className="text-sm text-emerald-800 dark:text-emerald-300"> Uploaded</span>
+ <span className="text-sm text-blue-800 dark:text-blue-300"> Uploaded</span>
  ) : (
- <span className="text-sm text-slate-500 dark:text-emerald-400"> Not uploaded</span>
+ <span className="text-sm text-slate-500 dark:text-blue-400"> Not uploaded</span>
  )}
  </div>
  {profile.twelfth_certificate && (
  <Button
  variant="outline"size="sm"onClick={() => window.open(profile.twelfth_certificate,'_blank')}
- className="text-sage-deep dark:text-emerald-300 hover:text-slate-700 dark:text-emerald-300 hover:bg-sage/30 dark:hover:bg-emerald-900/50">
+ className="text-blue-600 dark:text-blue-300 hover:text-slate-700 dark:text-blue-300 hover:bg-blue-50/30 dark:hover:bg-blue-900/50">
  <FileText className="w-4 h-4 mr-2"/>
  View File
  </Button>
@@ -917,27 +917,27 @@ const showSuccessToast = options?.showSuccessToast ?? true
  </div>
  </div>
 
- <div className="rounded-2xl border border-slate-200/90 bg-white/90 p-4 dark:border-emerald-800/70 dark:bg-emerald-900/20">
- <div className="font-medium text-slate-900 dark:text-emerald-50 mb-2">
+ <div className="rounded-2xl border border-slate-200/90 bg-white/90 p-4 dark:border-blue-800/70 dark:bg-blue-900/20">
+ <div className="font-medium text-slate-900 dark:text-blue-50 mb-2">
  Internship Certificates
  </div>
  <div className="flex items-center justify-between">
  <div className="flex items-center space-x-3">
  {profile.internship_certificates ? (
  <>
- <div className="w-10 h-10 bg-emerald-100/90 dark:bg-emerald-900/40 rounded-2xl flex items-center justify-center">
- <FileText className="w-5 h-5 text-emerald-800 dark:text-emerald-300"/>
+ <div className="w-10 h-10 bg-blue-100/90 dark:bg-blue-900/40 rounded-2xl flex items-center justify-center">
+ <FileText className="w-5 h-5 text-blue-800 dark:text-blue-300"/>
  </div>
- <span className="text-sm text-emerald-800 dark:text-emerald-300"> Uploaded</span>
+ <span className="text-sm text-blue-800 dark:text-blue-300"> Uploaded</span>
  </>
  ) : (
- <span className="text-sm text-slate-500 dark:text-emerald-400"> Not uploaded</span>
+ <span className="text-sm text-slate-500 dark:text-blue-400"> Not uploaded</span>
  )}
  </div>
  {profile.internship_certificates && (
  <Button
  variant="outline"size="sm"onClick={() => window.open(profile.internship_certificates,'_blank')}
- className="text-sage-deep dark:text-emerald-300 hover:text-slate-700 dark:text-emerald-300 hover:bg-sage/30 dark:hover:bg-emerald-900/50">
+ className="text-blue-600 dark:text-blue-300 hover:text-slate-700 dark:text-blue-300 hover:bg-blue-50/30 dark:hover:bg-blue-900/50">
  <FileText className="w-4 h-4 mr-2"/>
  View File
  </Button>
@@ -950,15 +950,15 @@ const showSuccessToast = options?.showSuccessToast ?? true
  )}
 
  {activeTab ==='social'&& (
- <div className="rounded-2xl border border-slate-200/90 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md dark:border-emerald-800/70 dark:bg-emerald-900/25">
+ <div className="rounded-2xl border border-slate-200/90 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md dark:border-blue-800/70 dark:bg-blue-900/25">
  <div className="flex items-center justify-between mb-6">
  <div className="flex items-center space-x-3">
- <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-sage-deep shadow-sm dark:bg-emerald-600">
+ <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-600 shadow-sm dark:bg-blue-600">
  <Globe className="w-6 h-6 text-white"/>
  </div>
  <div>
- <h3 className="text-xl font-semibold text-slate-900 dark:text-emerald-50">Social Profiles</h3>
- <p className="text-sm text-slate-600 dark:text-emerald-200/85">LinkedIn, GitHub, and personal websites</p>
+ <h3 className="text-xl font-semibold text-slate-900 dark:text-blue-50">Social Profiles</h3>
+ <p className="text-sm text-slate-600 dark:text-blue-200/85">LinkedIn, GitHub, and personal websites</p>
  </div>
  </div>
  <Button
@@ -980,14 +980,14 @@ const showSuccessToast = options?.showSuccessToast ?? true
  ) : (
  <div className="space-y-4">
  {profile.linkedin_profile && (
- <div className="rounded-2xl border border-slate-200/90 bg-white/90 p-4 dark:border-emerald-800/70 dark:bg-emerald-900/20">
- <div className="font-medium text-slate-900 dark:text-emerald-50 mb-2">
+ <div className="rounded-2xl border border-slate-200/90 bg-white/90 p-4 dark:border-blue-800/70 dark:bg-blue-900/20">
+ <div className="font-medium text-slate-900 dark:text-blue-50 mb-2">
  LinkedIn Profile
  </div>
- <div className="text-sm text-slate-600 dark:text-emerald-200/85">
+ <div className="text-sm text-slate-600 dark:text-blue-200/85">
  <a
  href={profile.linkedin_profile}
- target="_blank"rel="noopener noreferrer"className="text-sage-deep dark:text-emerald-300 hover:text-sage-deep dark:text-emerald-200 underline hover:no-underline transition-all duration-200">
+ target="_blank"rel="noopener noreferrer"className="text-blue-600 dark:text-blue-300 hover:text-blue-600 dark:text-blue-200 underline hover:no-underline transition-all duration-200">
  {profile.linkedin_profile}
  </a>
  </div>
@@ -995,14 +995,14 @@ const showSuccessToast = options?.showSuccessToast ?? true
  )}
 
  {profile.github_profile && (
- <div className="rounded-2xl border border-slate-200/90 bg-white/90 p-4 dark:border-emerald-800/70 dark:bg-emerald-900/20">
- <div className="font-medium text-slate-900 dark:text-emerald-50 mb-2">
+ <div className="rounded-2xl border border-slate-200/90 bg-white/90 p-4 dark:border-blue-800/70 dark:bg-blue-900/20">
+ <div className="font-medium text-slate-900 dark:text-blue-50 mb-2">
  GitHub Profile
  </div>
- <div className="text-sm text-slate-600 dark:text-emerald-200/85">
+ <div className="text-sm text-slate-600 dark:text-blue-200/85">
  <a
  href={profile.github_profile}
- target="_blank"rel="noopener noreferrer"className="text-sage-deep dark:text-emerald-300 hover:text-sage-deep dark:text-emerald-200 underline hover:no-underline transition-all duration-200">
+ target="_blank"rel="noopener noreferrer"className="text-blue-600 dark:text-blue-300 hover:text-blue-600 dark:text-blue-200 underline hover:no-underline transition-all duration-200">
  {profile.github_profile}
  </a>
  </div>
@@ -1010,14 +1010,14 @@ const showSuccessToast = options?.showSuccessToast ?? true
  )}
 
  {profile.personal_website && (
- <div className="rounded-2xl border border-slate-200/90 bg-white/90 p-4 dark:border-emerald-800/70 dark:bg-emerald-900/20">
- <div className="font-medium text-slate-900 dark:text-emerald-50 mb-2">
+ <div className="rounded-2xl border border-slate-200/90 bg-white/90 p-4 dark:border-blue-800/70 dark:bg-blue-900/20">
+ <div className="font-medium text-slate-900 dark:text-blue-50 mb-2">
  Personal Website
  </div>
- <div className="text-sm text-slate-600 dark:text-emerald-200/85">
+ <div className="text-sm text-slate-600 dark:text-blue-200/85">
  <a
  href={profile.personal_website}
- target="_blank"rel="noopener noreferrer"className="text-sage-deep dark:text-emerald-300 hover:text-sage-deep dark:text-emerald-200 underline hover:no-underline transition-all duration-200">
+ target="_blank"rel="noopener noreferrer"className="text-blue-600 dark:text-blue-300 hover:text-blue-600 dark:text-blue-200 underline hover:no-underline transition-all duration-200">
  {profile.personal_website}
  </a>
  </div>
@@ -1025,11 +1025,11 @@ const showSuccessToast = options?.showSuccessToast ?? true
  )}
 
  {!profile.linkedin_profile && !profile.github_profile && !profile.personal_website && (
- <div className="rounded-2xl border border-slate-200/90 bg-white/90 p-4 dark:border-emerald-800/70 dark:bg-emerald-900/20">
- <div className="font-medium text-slate-900 dark:text-emerald-50 mb-2">
+ <div className="rounded-2xl border border-slate-200/90 bg-white/90 p-4 dark:border-blue-800/70 dark:bg-blue-900/20">
+ <div className="font-medium text-slate-900 dark:text-blue-50 mb-2">
  Social Profiles
  </div>
- <div className="text-sm text-slate-600 dark:text-emerald-200/85">
+ <div className="text-sm text-slate-600 dark:text-blue-200/85">
  No social profiles provided yet
  </div>
  </div>
@@ -1045,8 +1045,8 @@ const showSuccessToast = options?.showSuccessToast ?? true
  completion={profileCompletion?.completion_percentage || profile?.profile_completion_percentage || 0}
  completionData={profileCompletion || undefined}
  />
- <div className="rounded-2xl border border-slate-200/90 bg-white p-4 shadow-[0_4px_24px_-6px_rgba(15,23,42,0.09)] dark:border-emerald-800/70 dark:bg-emerald-900/25 dark:shadow-none">
- <p className="text-xs font-semibold uppercase tracking-[0.14em] text-sage-deep dark:text-emerald-300">AI suggestions</p>
+ <div className="rounded-2xl border border-slate-200/90 bg-white p-4 shadow-[0_4px_24px_-6px_rgba(15,23,42,0.09)] dark:border-blue-800/70 dark:bg-blue-900/25 dark:shadow-none">
+ <p className="text-xs font-semibold uppercase tracking-[0.14em] text-blue-600 dark:text-blue-300">AI suggestions</p>
  <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
  <li>Add measurable project outcomes</li>
  <li>Upload latest one-page resume</li>
@@ -1054,8 +1054,8 @@ const showSuccessToast = options?.showSuccessToast ?? true
  <li>Showcase certifications clearly</li>
  </ul>
  </div>
- <div className="rounded-2xl border border-slate-200/90 bg-white p-4 shadow-[0_4px_24px_-6px_rgba(15,23,42,0.09)] dark:border-emerald-800/70 dark:bg-emerald-900/25 dark:shadow-none">
- <p className="text-xs font-semibold uppercase tracking-[0.14em] text-sage-deep dark:text-emerald-300">Next steps</p>
+ <div className="rounded-2xl border border-slate-200/90 bg-white p-4 shadow-[0_4px_24px_-6px_rgba(15,23,42,0.09)] dark:border-blue-800/70 dark:bg-blue-900/25 dark:shadow-none">
+ <p className="text-xs font-semibold uppercase tracking-[0.14em] text-blue-600 dark:text-blue-300">Next steps</p>
  <p className="mt-2 text-sm text-muted-foreground">Complete remaining sections to improve recruiter visibility.</p>
  </div>
  </aside>
@@ -1453,7 +1453,7 @@ setFormData({ ...formData, [field]: fileUrl })
  type="email"value={value}
  readOnly
  disabled
- className="w-full px-3 py-2 border border-slate-300 dark:border-emerald-700 rounded-2xl bg-slate-100 dark:bg-emerald-900/35 text-slate-500 dark:text-emerald-400 cursor-not-allowed"placeholder="Email address"/>
+ className="w-full px-3 py-2 border border-slate-300 dark:border-blue-700 rounded-2xl bg-slate-100 dark:bg-blue-900/35 text-slate-500 dark:text-blue-400 cursor-not-allowed"placeholder="Email address"/>
  )
  }
  // Handle file upload fields
@@ -1467,8 +1467,8 @@ setFormData({ ...formData, [field]: fileUrl })
  placeholder="Upload your profile picture"disabled={uploading === field}
  />
  {uploading === field && (
- <div className="flex items-center space-x-2 text-sm text-sage-deep dark:text-emerald-300">
- <div className="w-4 h-4 border-2 border-sage-deep dark:border-emerald-400 border-t-transparent animate-spin"></div>
+ <div className="flex items-center space-x-2 text-sm text-blue-600 dark:text-blue-300">
+ <div className="w-4 h-4 border-2 border-blue-600 dark:border-blue-400 border-t-transparent animate-spin"></div>
  <span>Uploading...</span>
  </div>
  )}
@@ -1486,8 +1486,8 @@ setFormData({ ...formData, [field]: fileUrl })
  placeholder="Upload your resume (PDF only)"disabled={uploading === field}
  />
  {uploading === field && (
- <div className="flex items-center space-x-2 text-sm text-sage-deep dark:text-emerald-300">
- <div className="w-4 h-4 border-2 border-sage-deep dark:border-emerald-400 border-t-transparent animate-spin"></div>
+ <div className="flex items-center space-x-2 text-sm text-blue-600 dark:text-blue-300">
+ <div className="w-4 h-4 border-2 border-blue-600 dark:border-blue-400 border-t-transparent animate-spin"></div>
  <span>Uploading...</span>
  </div>
  )}
@@ -1514,8 +1514,8 @@ const backendFieldName = field ==='10th_certificate'?'tenth_certificate':
  disabled={uploading === backendFieldName}
  />
  {uploading === backendFieldName && (
- <div className="flex items-center space-x-2 text-sm text-sage-deep dark:text-emerald-300">
- <div className="w-4 h-4 border-2 border-sage-deep dark:border-emerald-400 border-t-transparent animate-spin"></div>
+ <div className="flex items-center space-x-2 text-sm text-blue-600 dark:text-blue-300">
+ <div className="w-4 h-4 border-2 border-blue-600 dark:border-blue-400 border-t-transparent animate-spin"></div>
  <span>Uploading...</span>
  </div>
  )}
@@ -1534,7 +1534,7 @@ const backendFieldName = field ==='10th_certificate'?'tenth_certificate':
  setFormData({ ...formData, [field]: limited })
  }}
  maxLength={10}
- className="w-full px-3 py-2 border border-slate-300 dark:border-emerald-700 rounded-2xl focus:ring-2 focus:ring-sage-deep dark:focus:ring-emerald-500 focus:border-transparent"placeholder="Enter your phone number"/>
+ className="w-full px-3 py-2 border border-slate-300 dark:border-blue-700 rounded-2xl focus:ring-2 focus:ring-blue-600 dark:focus:ring-blue-500 focus:border-transparent"placeholder="Enter your phone number"/>
  )
  }
 
@@ -1544,7 +1544,7 @@ const backendFieldName = field ==='10th_certificate'?'tenth_certificate':
  value={value}
  onChange={(e) => setFormData({ ...formData, [field]: e.target.value })}
  rows={4}
- className="w-full px-3 py-2 border border-slate-300 dark:border-emerald-700 rounded-2xl focus:ring-2 focus:ring-sage-deep dark:focus:ring-emerald-500 focus:border-transparent"placeholder={`Enter your ${field.replace(/_/g,'')}`}
+ className="w-full px-3 py-2 border border-slate-300 dark:border-blue-700 rounded-2xl focus:ring-2 focus:ring-blue-600 dark:focus:ring-blue-500 focus:border-transparent"placeholder={`Enter your ${field.replace(/_/g,'')}`}
  />
  )
  }
@@ -1555,7 +1555,7 @@ const backendFieldName = field ==='10th_certificate'?'tenth_certificate':
  <input
  type="date"value={value}
  onChange={(e) => setFormData({ ...formData, [field]: e.target.value })}
- className="w-full px-3 py-2 border border-slate-300 dark:border-emerald-700 rounded-2xl focus:ring-2 focus:ring-sage-deep dark:focus:ring-emerald-500 focus:border-transparent"placeholder="Select your date of birth"/>
+ className="w-full px-3 py-2 border border-slate-300 dark:border-blue-700 rounded-2xl focus:ring-2 focus:ring-blue-600 dark:focus:ring-blue-500 focus:border-transparent"placeholder="Select your date of birth"/>
  )
  }
 
@@ -1565,7 +1565,7 @@ const backendFieldName = field ==='10th_certificate'?'tenth_certificate':
  <select
  value={value}
  onChange={(e) => setFormData({ ...formData, [field]: e.target.value })}
- className="w-full px-3 py-2 border border-slate-300 dark:border-emerald-700 rounded-2xl focus:ring-2 focus:ring-sage-deep dark:focus:ring-emerald-500 focus:border-transparent">
+ className="w-full px-3 py-2 border border-slate-300 dark:border-blue-700 rounded-2xl focus:ring-2 focus:ring-blue-600 dark:focus:ring-blue-500 focus:border-transparent">
  <option value="">Select your gender</option>
  <option value="male">Male</option>
  <option value="female">Female</option>
@@ -1581,18 +1581,18 @@ const backendFieldName = field ==='10th_certificate'?'tenth_certificate':
  value={value}
  onChange={(e) => setFormData({ ...formData, [field]: e.target.value })}
  rows={3}
- className="w-full px-3 py-2 border border-slate-300 dark:border-emerald-700 rounded-2xl focus:ring-2 focus:ring-sage-deep dark:focus:ring-emerald-500 focus:border-transparent"placeholder="Enter your preferred locations (e.g., Mumbai, Delhi, Remote, Bangalore)"/>
+ className="w-full px-3 py-2 border border-slate-300 dark:border-blue-700 rounded-2xl focus:ring-2 focus:ring-blue-600 dark:focus:ring-blue-500 focus:border-transparent"placeholder="Enter your preferred locations (e.g., Mumbai, Delhi, Remote, Bangalore)"/>
  )
  }
 
  if (field ==='preferred_job_remote'|| field ==='open_to_relocation') {
  return (
- <label className="inline-flex items-center space-x-2 rounded-2xl border border-slate-300 dark:border-emerald-700 px-3 py-2">
+ <label className="inline-flex items-center space-x-2 rounded-2xl border border-slate-300 dark:border-blue-700 px-3 py-2">
  <input
  type="checkbox"checked={Boolean(formData[field])}
  onChange={(e) => setFormData({ ...formData, [field]: e.target.checked })}
- className="h-4 w-4 rounded-none border-slate-300 dark:border-emerald-700 text-sage-deep dark:text-emerald-300 focus:ring-sage-deep dark:focus:ring-emerald-500"/>
- <span className="text-sm text-slate-700 dark:text-emerald-200/90">
+ className="h-4 w-4 rounded-none border-slate-300 dark:border-blue-700 text-blue-600 dark:text-blue-300 focus:ring-blue-600 dark:focus:ring-blue-500"/>
+ <span className="text-sm text-slate-700 dark:text-blue-200/90">
  {field ==='preferred_job_remote'?'Prefer remote roles':'Open to relocation'}
  </span>
  </label>
@@ -1604,7 +1604,7 @@ const backendFieldName = field ==='10th_certificate'?'tenth_certificate':
  <input
  type="text"value={value}
  onChange={(e) => setFormData({ ...formData, [field]: e.target.value ===''? null : e.target.value })}
- className="w-full px-3 py-2 border border-slate-300 dark:border-emerald-700 rounded-2xl focus:ring-2 focus:ring-sage-deep dark:focus:ring-emerald-500 focus:border-transparent"placeholder={`Enter your ${field.replace(/_/g,'')} (e.g., 2021-2022)`}
+ className="w-full px-3 py-2 border border-slate-300 dark:border-blue-700 rounded-2xl focus:ring-2 focus:ring-blue-600 dark:focus:ring-blue-500 focus:border-transparent"placeholder={`Enter your ${field.replace(/_/g,'')} (e.g., 2021-2022)`}
  />
  )
  }
@@ -1614,7 +1614,7 @@ const backendFieldName = field ==='10th_certificate'?'tenth_certificate':
  <input
  type="number"step="0.01"min="0"max="10"value={value}
  onChange={(e) => setFormData({ ...formData, [field]: e.target.value ===''? null : e.target.value })}
- className="w-full px-3 py-2 border border-slate-300 dark:border-emerald-700 rounded-2xl focus:ring-2 focus:ring-sage-deep dark:focus:ring-emerald-500 focus:border-transparent"placeholder={`Enter your ${field.replace(/_/g,'')}`}
+ className="w-full px-3 py-2 border border-slate-300 dark:border-blue-700 rounded-2xl focus:ring-2 focus:ring-blue-600 dark:focus:ring-blue-500 focus:border-transparent"placeholder={`Enter your ${field.replace(/_/g,'')}`}
  />
  )
  }
@@ -1624,7 +1624,7 @@ const backendFieldName = field ==='10th_certificate'?'tenth_certificate':
  <input
  type="number"step="0.01"min="0"max="100"value={value}
  onChange={(e) => setFormData({ ...formData, [field]: e.target.value ===''? null : e.target.value })}
- className="w-full px-3 py-2 border border-slate-300 dark:border-emerald-700 rounded-2xl focus:ring-2 focus:ring-sage-deep dark:focus:ring-emerald-500 focus:border-transparent"placeholder={`Enter your ${field.replace(/_/g,'')}`}
+ className="w-full px-3 py-2 border border-slate-300 dark:border-blue-700 rounded-2xl focus:ring-2 focus:ring-blue-600 dark:focus:ring-blue-500 focus:border-transparent"placeholder={`Enter your ${field.replace(/_/g,'')}`}
  />
  )
  }
@@ -1662,8 +1662,8 @@ const backendFieldName = field ==='10th_certificate'?'tenth_certificate':
  [`${field}_error`]:'Please enter a valid URL'})
  }
  }}
- className={`w-full px-3 py-2 border rounded-2xl focus:ring-2 focus:ring-sage-deep dark:focus:ring-emerald-500 focus:border-transparent dark:bg-emerald-950/70 dark:text-emerald-50 ${fieldError
- ?'border-red-500 focus:ring-red-500':'border-slate-300 dark:border-emerald-700 focus:ring-sage-deep dark:focus:ring-emerald-500'}`}
+ className={`w-full px-3 py-2 border rounded-2xl focus:ring-2 focus:ring-blue-600 dark:focus:ring-blue-500 focus:border-transparent dark:bg-blue-950/70 dark:text-blue-50 ${fieldError
+ ?'border-red-500 focus:ring-red-500':'border-slate-300 dark:border-blue-700 focus:ring-blue-600 dark:focus:ring-blue-500'}`}
  placeholder={`Enter your ${field.replace(/_/g,'')} URL`}
  />
  {fieldError && (
@@ -1710,7 +1710,7 @@ const backendFieldName = field ==='10th_certificate'?'tenth_certificate':
  <input
  type="text"value={value ||''}
  readOnly
- className="w-full px-3 py-2 border border-slate-300 dark:border-emerald-700 rounded-2xl bg-slate-100 dark:bg-emerald-900/35 text-slate-700 dark:text-emerald-200/90 cursor-not-allowed"placeholder="Institution will be set from your college selection"/>
+ className="w-full px-3 py-2 border border-slate-300 dark:border-blue-700 rounded-2xl bg-slate-100 dark:bg-blue-900/35 text-slate-700 dark:text-blue-200/90 cursor-not-allowed"placeholder="Institution will be set from your college selection"/>
  )
  }
 
@@ -1718,7 +1718,7 @@ const backendFieldName = field ==='10th_certificate'?'tenth_certificate':
  <input
  type="text"value={value}
  onChange={(e) => setFormData({ ...formData, [field]: e.target.value })}
- className="w-full px-3 py-2 border border-slate-300 dark:border-emerald-700 rounded-2xl focus:ring-2 focus:ring-sage-deep dark:focus:ring-emerald-500 focus:border-transparent"placeholder={`Enter your ${field.replace(/_/g,'')}`}
+ className="w-full px-3 py-2 border border-slate-300 dark:border-blue-700 rounded-2xl focus:ring-2 focus:ring-blue-600 dark:focus:ring-blue-500 focus:border-transparent"placeholder={`Enter your ${field.replace(/_/g,'')}`}
  />
  )
  }
@@ -1737,8 +1737,8 @@ const backendFieldName = field ==='10th_certificate'?'tenth_certificate':
 
  {/* Display upload success */}
  {uploadSuccess && (
- <div className="p-4 bg-green-50 border border-green-200 rounded-2xl">
- <div className="flex items-center space-x-2 text-sm text-emerald-800 dark:text-emerald-300">
+ <div className="p-4 bg-blue-50 border border-blue-200 rounded-2xl">
+ <div className="flex items-center space-x-2 text-sm text-blue-800 dark:text-blue-300">
  <CheckCircle className="w-4 h-4"/>
  <span>File uploaded successfully!</span>
  </div>
@@ -1749,18 +1749,18 @@ const backendFieldName = field ==='10th_certificate'?'tenth_certificate':
  // Academic Section - Organized Layout
  <>
  {/* Academic Information Notice */}
- <div className="mb-6 p-4 bg-sage/15 dark:bg-emerald-900/30 border border-sage-deep/25 dark:border-emerald-700 rounded-2xl">
+ <div className="mb-6 p-4 bg-blue-50/15 dark:bg-blue-900/30 border border-blue-600/25 dark:border-blue-700 rounded-2xl">
  <div className="flex items-start space-x-3">
- <div className="w-5 h-5 bg-sage/15 dark:bg-emerald-900/300 flex items-center justify-center mt-0.5">
+ <div className="w-5 h-5 bg-blue-50/15 dark:bg-blue-900/300 flex items-center justify-center mt-0.5">
  <svg className="w-3 h-3 text-white"fill="currentColor"viewBox="0 0 20 20">
  <path fillRule="evenodd"d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"clipRule="evenodd"/>
  </svg>
  </div>
  <div>
- <h4 className="text-sm font-medium text-sage-deep dark:text-emerald-200 mb-1">
+ <h4 className="text-sm font-medium text-blue-600 dark:text-blue-200 mb-1">
  Flexible Academic Information
  </h4>
- <p className="text-xs text-slate-700 dark:text-emerald-300">
+ <p className="text-xs text-slate-700 dark:text-blue-300">
  You can fill any combination of College, Class XII, and Class X information.
  Fill in the sections that apply to your educational background.
  </p>
@@ -1769,12 +1769,12 @@ const backendFieldName = field ==='10th_certificate'?'tenth_certificate':
  </div>
 
  {/* College Section */}
- <div className="border border-emerald-200 rounded-2xl p-6">
+ <div className="border border-blue-200 rounded-2xl p-6">
  <div className="flex items-center space-x-3 mb-6">
  <div className="w-8 h-8 rounded-2xl flex items-center justify-center">
  <GraduationCap className="w-4 h-4 text-white"/>
  </div>
- <h3 className="text-lg font-semibold text-emerald-900">College</h3>
+ <h3 className="text-lg font-semibold text-blue-900">College</h3>
  </div>
 
  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -1782,7 +1782,7 @@ const backendFieldName = field ==='10th_certificate'?'tenth_certificate':
  ['institution','degree','branch','graduation_year','btech_cgpa'].includes(field)
  ).map((field) => (
  <div key={field} className={field.includes('bio') || field.includes('experience') || field.includes('details') || field.includes('activities') ?'md:col-span-2':''}>
- <label className="block text-sm font-medium text-emerald-700 mb-2 capitalize">
+ <label className="block text-sm font-medium text-blue-700 mb-2 capitalize">
  {field.replace(/_/g,'')}
  </label>
  {renderField(field)}
@@ -1792,25 +1792,25 @@ const backendFieldName = field ==='10th_certificate'?'tenth_certificate':
  </div>
 
  {/* 12th Section */}
- <div className="border border-sage-deep/25 dark:border-emerald-700 rounded-2xl p-6">
+ <div className="border border-blue-600/25 dark:border-blue-700 rounded-2xl p-6">
  <div className="flex items-center space-x-3 mb-6">
  <div className="w-8 h-8 rounded-2xl flex items-center justify-center">
  <svg className="w-4 h-4 text-white"fill="none"stroke="currentColor"viewBox="0 0 24 24">
  <path strokeLinecap="round"strokeLinejoin="round"strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
  </svg>
  </div>
- <h3 className="text-lg font-semibold text-slate-900 dark:text-emerald-50">Class XII</h3>
+ <h3 className="text-lg font-semibold text-slate-900 dark:text-blue-50">Class XII</h3>
  </div>
 
  <div className="grid grid-cols-1 gap-6">
  <div>
- <label className="block text-sm font-medium text-slate-700 dark:text-emerald-300 mb-2">
+ <label className="block text-sm font-medium text-slate-700 dark:text-blue-300 mb-2">
  Twelfth Grade Percentage
  </label>
  <input
  type="number"step="0.01"min="0"max="100"value={formData.twelfth_grade_percentage ||''}
  onChange={(e) => setFormData({ ...formData, twelfth_grade_percentage: e.target.value ===''? null : e.target.value })}
- className="w-full px-3 py-2 border border-slate-300 dark:border-emerald-700 rounded-2xl focus:ring-2 focus:ring-sage-deep dark:focus:ring-emerald-500 focus:border-transparent"placeholder="Enter your 12th grade percentage"/>
+ className="w-full px-3 py-2 border border-slate-300 dark:border-blue-700 rounded-2xl focus:ring-2 focus:ring-blue-600 dark:focus:ring-blue-500 focus:border-transparent"placeholder="Enter your 12th grade percentage"/>
  </div>
  </div>
  </div>
@@ -1834,7 +1834,7 @@ const backendFieldName = field ==='10th_certificate'?'tenth_certificate':
  <input
  type="number"step="0.01"min="0"max="100"value={formData.tenth_grade_percentage ||''}
  onChange={(e) => setFormData({ ...formData, tenth_grade_percentage: e.target.value ===''? null : e.target.value })}
- className="w-full px-3 py-2 border border-slate-300 dark:border-emerald-700 rounded-2xl focus:ring-2 focus:ring-sage-deep dark:focus:ring-emerald-500 focus:border-transparent"placeholder="Enter your 10th grade percentage"/>
+ className="w-full px-3 py-2 border border-slate-300 dark:border-blue-700 rounded-2xl focus:ring-2 focus:ring-blue-600 dark:focus:ring-blue-500 focus:border-transparent"placeholder="Enter your 10th grade percentage"/>
  </div>
  </div>
  </div>
@@ -1857,7 +1857,7 @@ const getFieldLabel = (fieldName: string) => {
 
  return (
  <div key={field} className={field.includes('bio') || field.includes('experience') || field.includes('details') || field.includes('activities') ?'md:col-span-2':''}>
- <label className="block text-sm font-medium text-slate-700 dark:text-emerald-200/90 mb-2">
+ <label className="block text-sm font-medium text-slate-700 dark:text-blue-200/90 mb-2">
  {getFieldLabel(field)}
  </label>
  {renderField(field)}
@@ -1867,7 +1867,7 @@ const getFieldLabel = (fieldName: string) => {
  </div>
  )}
 
- <div className="flex justify-end space-x-3 pt-6 border-t border-slate-200 dark:border-emerald-800">
+ <div className="flex justify-end space-x-3 pt-6 border-t border-slate-200 dark:border-blue-800">
  <Button
  type="button"variant="outline"onClick={onCancel}
  className="px-6 py-2">
@@ -1875,7 +1875,7 @@ const getFieldLabel = (fieldName: string) => {
  </Button>
  <Button
  type="submit"disabled={saving}
- className="px-6 py-2 bg-sage-deep hover:bg-sage-deep/90 dark:bg-emerald-600 dark:hover:bg-emerald-500 text-white">
+ className="px-6 py-2 bg-blue-600 hover:bg-blue-600/90 dark:bg-blue-600 dark:hover:bg-blue-500 text-white">
  {saving ?'Saving...':'Save Changes'}
  </Button>
  </div>

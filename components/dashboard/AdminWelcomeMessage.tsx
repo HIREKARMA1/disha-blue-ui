@@ -35,12 +35,12 @@ export function AdminWelcomeMessage({ adminInfo }: AdminWelcomeMessageProps) {
  initial={{ opacity: 0, y: 20 }}
  animate={{ opacity: 1, y: 0 }}
  transition={{ duration: 0.6 }}
- className="dashboard-overview-card p-6 transition-colors hover:border-sage-deep/70">
+ className="dashboard-overview-card p-6 transition-colors hover:border-blue-600/70">
  <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
  <div className="flex-1 space-y-4">
  <div className="flex items-center space-x-3">
- <div className="flex h-12 w-12 items-center justify-center rounded-none border border-slate-200 bg-sage">
- <Shield className="h-6 w-6 text-sage-deep"/>
+ <div className="flex h-12 w-12 items-center justify-center rounded-none border border-slate-200 bg-blue-50">
+ <Shield className="h-6 w-6 text-blue-600"/>
  </div>
  <div>
  <h1 className="text-2xl font-semibold text-slate-900">
@@ -55,7 +55,7 @@ export function AdminWelcomeMessage({ adminInfo }: AdminWelcomeMessageProps) {
  <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
  <div className="dashboard-overview-card p-5">
  <div className="mb-2 flex items-center space-x-2">
- <Calendar className="h-4 w-4 text-sage-deep"/>
+ <Calendar className="h-4 w-4 text-blue-600"/>
  <span className="text-sm text-slate-600">{tf(locale,'admin.welcome.today','Today')}</span>
  </div>
  <p className="text-base font-medium text-slate-900">{getCurrentDate()}</p>
@@ -63,7 +63,7 @@ export function AdminWelcomeMessage({ adminInfo }: AdminWelcomeMessageProps) {
 
  <div className="dashboard-overview-card p-5">
  <div className="mb-2 flex items-center space-x-2">
- <Clock className="h-4 w-4 text-sage-deep"/>
+ <Clock className="h-4 w-4 text-blue-600"/>
  <span className="text-sm text-slate-600">{tf(locale,'admin.welcome.systemStatus','System Status')}</span>
  </div>
  <p className="text-base font-medium text-slate-900">{tf(locale,'admin.welcome.operational','Operational')}</p>
@@ -72,15 +72,15 @@ export function AdminWelcomeMessage({ adminInfo }: AdminWelcomeMessageProps) {
  </div>
 
  <div className="lg:ml-8">
- <div className="rounded-2xl border border-slate-200 bg-sage p-6 text-center shadow-[0_4px_24px_-6px_rgba(15,23,42,0.08)] dark:border-emerald-800 dark:bg-emerald-900/40">
+ <div className="rounded-2xl border border-slate-200 bg-blue-50 p-6 text-center shadow-[0_4px_24px_-6px_rgba(15,23,42,0.08)] dark:border-blue-800 dark:bg-blue-900/40">
  <h3 className="mb-4 text-lg font-medium text-slate-900">{tf(locale,'admin.welcome.snapshot','Snapshot')}</h3>
  <div className="grid grid-cols-2 gap-4">
  <div>
- <p className="text-base font-semibold text-emerald-900">{adminInfo.total_users.toLocaleString()}</p>
+ <p className="text-base font-semibold text-blue-900">{adminInfo.total_users.toLocaleString()}</p>
  <p className="text-sm text-slate-600">{tf(locale,'admin.welcome.totalUsers','Total Users')}</p>
  </div>
  <div>
- <p className="text-base font-semibold text-emerald-900">{adminInfo.total_jobs.toLocaleString()}</p>
+ <p className="text-base font-semibold text-blue-900">{adminInfo.total_jobs.toLocaleString()}</p>
  <p className="text-sm text-slate-600">{tf(locale,'admin.welcome.jobs','Jobs')}</p>
  </div>
  </div>

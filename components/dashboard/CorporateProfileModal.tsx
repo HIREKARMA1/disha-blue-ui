@@ -105,7 +105,7 @@ const extendedCorporate: ExtendedCorporateProfile = {
  const getStatusColor = (status: string) => {
  switch (status) {
  case 'active':
- return 'bg-green-100 text-green-800'
+ return 'bg-blue-100 text-blue-800'
  case 'inactive':
  return 'bg-yellow-100 text-yellow-800'
  case 'suspended':
@@ -129,9 +129,9 @@ const extendedCorporate: ExtendedCorporateProfile = {
  icon:'text-purple-600'}
  case'jobs':
  return {
- active:'border-green-500 text-green-600 bg-green-50',
- indicator:'bg-green-500',
- icon:'text-green-600'}
+ active:'border-blue-500 text-blue-600 bg-blue-50',
+ indicator:'bg-blue-500',
+ icon:'text-blue-600'}
  case'contact':
  return {
  active:'border-orange-500 text-orange-600 bg-orange-50',
@@ -175,7 +175,7 @@ const extendedCorporate: ExtendedCorporateProfile = {
  } catch (error) {
  console.error('Error rendering tab content for tab:', activeTab, error)
  return (
- <div className="bg-white rounded-none-none shadow-sm border border-gray-200 p-6">
+ <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
  <div className="text-center py-8">
  <div className="w-16 h-16 mx-auto mb-4 bg-red-100 flex items-center justify-center">
  <AlertCircle className="w-8 h-8 text-red-600"/>
@@ -199,7 +199,7 @@ const extendedCorporate: ExtendedCorporateProfile = {
  if (!extendedCorporate) {
  console.error('CorporateProfileModal - extendedCorporate is undefined in renderBasicInfo')
  return (
- <div className="bg-white rounded-none-none shadow-sm border border-gray-200 p-6">
+ <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
  <div className="text-center py-8">
  <div className="w-16 h-16 mx-auto mb-4 bg-red-100 flex items-center justify-center">
  <AlertCircle className="w-8 h-8 text-red-600"/>
@@ -218,9 +218,9 @@ const extendedCorporate: ExtendedCorporateProfile = {
  return (
  <div className="space-y-6">
  {/* Corporate Information */}
- <div className="rounded-none-none shadow-sm border border-blue-200 p-6">
+ <div className="rounded-xl shadow-sm border border-blue-200 p-6">
  <div className="flex items-center gap-3 mb-4">
- <div className="p-3 rounded-none-none shadow-lg">
+ <div className="p-3 rounded-xl shadow-lg">
  <Building2 className="w-6 h-6 text-white"/>
  </div>
  <h3 className="text-lg font-semibold text-blue-900">
@@ -229,8 +229,8 @@ const extendedCorporate: ExtendedCorporateProfile = {
  </div>
  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
  <div className="space-y-3">
- <div className="flex items-center gap-3 p-3 rounded-none-none">
- <div className="p-2 bg-blue-100 rounded-none-none">
+ <div className="flex items-center gap-3 p-3 rounded-xl">
+ <div className="p-2 bg-blue-100 rounded-xl">
  <Building2 className="w-4 h-4 text-blue-600"/>
  </div>
  <div>
@@ -240,8 +240,8 @@ const extendedCorporate: ExtendedCorporateProfile = {
  <p className="text-xs text-blue-600">Company Name</p>
  </div>
  </div>
- <div className="flex items-center gap-3 p-3 rounded-none-none">
- <div className="p-2 bg-purple-100 rounded-none-none">
+ <div className="flex items-center gap-3 p-3 rounded-xl">
+ <div className="p-2 bg-purple-100 rounded-xl">
  <Briefcase className="w-4 h-4 text-purple-600"/>
  </div>
  <div>
@@ -252,22 +252,22 @@ const extendedCorporate: ExtendedCorporateProfile = {
  </div>
  </div>
  {extendedCorporate.founded_year && (
- <div className="flex items-center gap-3 p-3 rounded-none-none">
- <div className="p-2 bg-green-100 rounded-none-none">
- <Calendar className="w-4 h-4 text-green-600"/>
+ <div className="flex items-center gap-3 p-3 rounded-xl">
+ <div className="p-2 bg-blue-100 rounded-xl">
+ <Calendar className="w-4 h-4 text-blue-600"/>
  </div>
  <div>
  <p className="text-sm font-medium text-gray-900">
  {extendedCorporate.founded_year}
  </p>
- <p className="text-xs text-green-600">Founded Year</p>
+ <p className="text-xs text-blue-600">Founded Year</p>
  </div>
  </div>
  )}
  </div>
  <div className="space-y-3">
- <div className="flex items-center gap-3 p-3 rounded-none-none">
- <div className="p-2 bg-orange-100 rounded-none-none">
+ <div className="flex items-center gap-3 p-3 rounded-xl">
+ <div className="p-2 bg-orange-100 rounded-xl">
  <Calendar className="w-4 h-4 text-orange-600"/>
  </div>
  <div>
@@ -277,8 +277,8 @@ const extendedCorporate: ExtendedCorporateProfile = {
  <p className="text-xs text-orange-600">Joined Platform</p>
  </div>
  </div>
- <div className="flex items-center gap-3 p-3 rounded-none-none">
- <div className="p-2 bg-indigo-100 rounded-none-none">
+ <div className="flex items-center gap-3 p-3 rounded-xl">
+ <div className="p-2 bg-indigo-100 rounded-xl">
  <Briefcase className="w-4 h-4 text-indigo-600"/>
  </div>
  <div>
@@ -288,8 +288,8 @@ const extendedCorporate: ExtendedCorporateProfile = {
  <p className="text-xs text-indigo-600">Total Jobs</p>
  </div>
  </div>
- <div className="flex items-center gap-3 p-3 rounded-none-none">
- <div className="p-2 bg-red-100 rounded-none-none">
+ <div className="flex items-center gap-3 p-3 rounded-xl">
+ <div className="p-2 bg-red-100 rounded-xl">
  <Shield className="w-4 h-4 text-red-600"/>
  </div>
  <div>
@@ -305,7 +305,7 @@ const extendedCorporate: ExtendedCorporateProfile = {
 
  {/* Additional Information */}
  {extendedCorporate.bio && (
- <div className="bg-white rounded-none-none shadow-sm border border-gray-200 p-6">
+ <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
  <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
  <FileText className="w-5 h-5 text-gray-600"/>
  Bio
@@ -317,23 +317,23 @@ const extendedCorporate: ExtendedCorporateProfile = {
  )}
 
  {/* Status Information */}
- <div className="bg-white rounded-none-none shadow-sm border border-gray-200 p-6">
+ <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
  <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
  <Shield className="w-5 h-5 text-blue-600"/>
  Status & Verification
  </h3>
  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
- <div className="p-4 bg-gray-50 rounded-none-none">
+ <div className="p-4 bg-gray-50 rounded-xl">
  <p className="text-sm text-gray-600 mb-1">Status</p>
  <span className={`inline-flex items-center px-2.5 py-0.5 text-xs font-medium ${getStatusColor(extendedCorporate.status)}`}>
  {extendedCorporate.status}
  </span>
  </div>
- <div className="p-4 bg-gray-50 rounded-none-none">
+ <div className="p-4 bg-gray-50 rounded-xl">
  <p className="text-sm text-gray-600 mb-1">Email Verified</p>
  <div className="flex items-center gap-2">
  {extendedCorporate.email_verified ? (
- <CheckCircle className="w-4 h-4 text-green-600"/>
+ <CheckCircle className="w-4 h-4 text-blue-600"/>
  ) : (
  <AlertCircle className="w-4 h-4 text-yellow-600"/>
  )}
@@ -342,11 +342,11 @@ const extendedCorporate: ExtendedCorporateProfile = {
  </span>
  </div>
  </div>
- <div className="p-4 bg-gray-50 rounded-none-none">
+ <div className="p-4 bg-gray-50 rounded-xl">
  <p className="text-sm text-gray-600 mb-1">Phone Verified</p>
  <div className="flex items-center gap-2">
  {extendedCorporate.phone_verified ? (
- <CheckCircle className="w-4 h-4 text-green-600"/>
+ <CheckCircle className="w-4 h-4 text-blue-600"/>
  ) : (
  <AlertCircle className="w-4 h-4 text-yellow-600"/>
  )}
@@ -364,7 +364,7 @@ const extendedCorporate: ExtendedCorporateProfile = {
  const renderCompanyInfo = () => {
  if (!extendedCorporate) {
  return (
- <div className="bg-white rounded-none-none shadow-sm border border-gray-200 p-6">
+ <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
  <div className="text-center py-8">
  <div className="w-16 h-16 mx-auto mb-4 bg-red-100 flex items-center justify-center">
  <AlertCircle className="w-8 h-8 text-red-600"/>
@@ -390,7 +390,7 @@ const hasCompanyData = extendedCorporate.industry ||
 
  if (!hasCompanyData) {
  return (
- <div className="bg-white rounded-none-none shadow-sm border border-gray-200 p-6">
+ <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
  <div className="text-center py-8">
  <div className="w-16 h-16 mx-auto mb-4 bg-gray-100 flex items-center justify-center">
  <Building2 className="w-8 h-8 text-gray-400"/>
@@ -412,9 +412,9 @@ const hasCompanyData = extendedCorporate.industry ||
  return (
  <div className="space-y-6">
  {/* Company Details */}
- <div className="rounded-none-none shadow-sm border border-purple-200 p-6">
+ <div className="rounded-xl shadow-sm border border-purple-200 p-6">
  <div className="flex items-center gap-3 mb-4">
- <div className="p-3 rounded-none-none shadow-lg">
+ <div className="p-3 rounded-xl shadow-lg">
  <Building2 className="w-6 h-6 text-white"/>
  </div>
  <h3 className="text-lg font-semibold text-purple-900">
@@ -425,7 +425,7 @@ const hasCompanyData = extendedCorporate.industry ||
  {extendedCorporate.industry && (
  <div className="space-y-3">
  <h4 className="font-medium text-purple-800">Industry</h4>
- <p className="text-sm text-gray-700 p-3 rounded-none-none">
+ <p className="text-sm text-gray-700 p-3 rounded-xl">
  {extendedCorporate.industry}
  </p>
  </div>
@@ -433,7 +433,7 @@ const hasCompanyData = extendedCorporate.industry ||
  {extendedCorporate.company_size && (
  <div className="space-y-3">
  <h4 className="font-medium text-purple-800">Company Size</h4>
- <p className="text-sm text-gray-700 p-3 rounded-none-none">
+ <p className="text-sm text-gray-700 p-3 rounded-xl">
  {extendedCorporate.company_size}
  </p>
  </div>
@@ -441,7 +441,7 @@ const hasCompanyData = extendedCorporate.industry ||
  {extendedCorporate.description && (
  <div className="space-y-3 md:col-span-2">
  <h4 className="font-medium text-purple-800">Description</h4>
- <p className="text-sm text-gray-700 p-3 rounded-none-none">
+ <p className="text-sm text-gray-700 p-3 rounded-xl">
  {extendedCorporate.description}
  </p>
  </div>
@@ -451,17 +451,17 @@ const hasCompanyData = extendedCorporate.industry ||
 
  {/* Address */}
  {extendedCorporate.address && (
- <div className="rounded-none-none shadow-sm border border-indigo-200 p-6">
+ <div className="rounded-xl shadow-sm border border-indigo-200 p-6">
  <div className="flex items-center gap-3 mb-4">
- <div className="p-3 rounded-none-none shadow-lg">
+ <div className="p-3 rounded-xl shadow-lg">
  <MapPin className="w-6 h-6 text-white"/>
  </div>
  <h3 className="text-lg font-semibold text-indigo-900">
  Address
  </h3>
  </div>
- <div className="flex items-center gap-3 p-3 rounded-none-none">
- <div className="p-2 bg-indigo-100 rounded-none-none">
+ <div className="flex items-center gap-3 p-3 rounded-xl">
+ <div className="p-2 bg-indigo-100 rounded-xl">
  <MapPin className="w-4 h-4 text-indigo-600"/>
  </div>
  <div>
@@ -480,7 +480,7 @@ const hasCompanyData = extendedCorporate.industry ||
  const renderJobsInfo = () => {
  if (!extendedCorporate) {
  return (
- <div className="bg-white rounded-none-none shadow-sm border border-gray-200 p-6">
+ <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
  <div className="text-center py-8">
  <div className="w-16 h-16 mx-auto mb-4 bg-red-100 flex items-center justify-center">
  <AlertCircle className="w-8 h-8 text-red-600"/>
@@ -501,7 +501,7 @@ const hasJobsData = extendedCorporate.total_jobs && extendedCorporate.total_jobs
 
  if (!hasJobsData) {
  return (
- <div className="bg-white rounded-none-none shadow-sm border border-gray-200 p-6">
+ <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
  <div className="text-center py-8">
  <div className="w-16 h-16 mx-auto mb-4 bg-gray-100 flex items-center justify-center">
  <Briefcase className="w-8 h-8 text-gray-400"/>
@@ -524,14 +524,14 @@ const hasJobsData = extendedCorporate.total_jobs && extendedCorporate.total_jobs
  <div className="space-y-6">
  {/* Jobs Statistics */}
  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
- <div className="rounded-none-none shadow-sm border border-green-200 p-6">
+ <div className="rounded-xl shadow-sm border border-blue-200 p-6">
  <div className="flex items-center gap-3 mb-3">
- <div className="p-2 bg-green-100 rounded-none-none">
- <BarChart3 className="w-5 h-5 text-green-600"/>
+ <div className="p-2 bg-blue-100 rounded-xl">
+ <BarChart3 className="w-5 h-5 text-blue-600"/>
  </div>
- <h4 className="font-medium text-green-800">Total Jobs</h4>
+ <h4 className="font-medium text-blue-800">Total Jobs</h4>
  </div>
- <p className="text-2xl font-bold text-green-600">
+ <p className="text-2xl font-bold text-blue-600">
  {extendedCorporate.total_jobs || 0}
  </p>
  </div>
@@ -543,7 +543,7 @@ const hasJobsData = extendedCorporate.total_jobs && extendedCorporate.total_jobs
  const renderContactInfo = () => {
  if (!extendedCorporate) {
  return (
- <div className="bg-white rounded-none-none shadow-sm border border-gray-200 p-6">
+ <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
  <div className="text-center py-8">
  <div className="w-16 h-16 mx-auto mb-4 bg-red-100 flex items-center justify-center">
  <AlertCircle className="w-8 h-8 text-red-600"/>
@@ -562,9 +562,9 @@ const hasJobsData = extendedCorporate.total_jobs && extendedCorporate.total_jobs
  return (
  <div className="space-y-6">
  {/* Contact Information */}
- <div className="rounded-none-none shadow-sm border border-orange-200 p-6">
+ <div className="rounded-xl shadow-sm border border-orange-200 p-6">
  <div className="flex items-center gap-3 mb-4">
- <div className="p-3 rounded-none-none shadow-lg">
+ <div className="p-3 rounded-xl shadow-lg">
  <Mail className="w-6 h-6 text-white"/>
  </div>
  <h3 className="text-lg font-semibold text-orange-900">
@@ -573,8 +573,8 @@ const hasJobsData = extendedCorporate.total_jobs && extendedCorporate.total_jobs
  </div>
  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
  <div className="space-y-3">
- <div className="flex items-center gap-3 p-3 rounded-none-none">
- <div className="p-2 bg-blue-100 rounded-none-none">
+ <div className="flex items-center gap-3 p-3 rounded-xl">
+ <div className="p-2 bg-blue-100 rounded-xl">
  <Mail className="w-4 h-4 text-blue-600"/>
  </div>
  <div>
@@ -583,7 +583,7 @@ const hasJobsData = extendedCorporate.total_jobs && extendedCorporate.total_jobs
  </p>
  <p className="text-xs text-blue-600">Email Address</p>
  {extendedCorporate.email_verified && (
- <span className="inline-flex items-center text-xs text-green-600">
+ <span className="inline-flex items-center text-xs text-blue-600">
  <CheckCircle className="w-3 h-3 mr-1"/>
  Verified
  </span>
@@ -591,17 +591,17 @@ const hasJobsData = extendedCorporate.total_jobs && extendedCorporate.total_jobs
  </div>
  </div>
  {extendedCorporate.phone && (
- <div className="flex items-center gap-3 p-3 rounded-none-none">
- <div className="p-2 bg-green-100 rounded-none-none">
- <Phone className="w-4 h-4 text-green-600"/>
+ <div className="flex items-center gap-3 p-3 rounded-xl">
+ <div className="p-2 bg-blue-100 rounded-xl">
+ <Phone className="w-4 h-4 text-blue-600"/>
  </div>
  <div>
  <p className="text-sm font-medium text-gray-900">
  {extendedCorporate.phone}
  </p>
- <p className="text-xs text-green-600">Phone Number</p>
+ <p className="text-xs text-blue-600">Phone Number</p>
  {extendedCorporate.phone_verified && (
- <span className="inline-flex items-center text-xs text-green-600">
+ <span className="inline-flex items-center text-xs text-blue-600">
  <CheckCircle className="w-3 h-3 mr-1"/>
  Verified
  </span>
@@ -610,8 +610,8 @@ const hasJobsData = extendedCorporate.total_jobs && extendedCorporate.total_jobs
  </div>
  )}
  {extendedCorporate.website_url && (
- <div className="flex items-center gap-3 p-3 rounded-none-none">
- <div className="p-2 bg-purple-100 rounded-none-none">
+ <div className="flex items-center gap-3 p-3 rounded-xl">
+ <div className="p-2 bg-purple-100 rounded-xl">
  <Globe className="w-4 h-4 text-purple-600"/>
  </div>
  <div>
@@ -630,8 +630,8 @@ const hasJobsData = extendedCorporate.total_jobs && extendedCorporate.total_jobs
  </div>
  <div className="space-y-3">
  {extendedCorporate.address && (
- <div className="flex items-start gap-3 p-3 rounded-none-none">
- <div className="p-2 bg-red-100 rounded-none-none">
+ <div className="flex items-start gap-3 p-3 rounded-xl">
+ <div className="p-2 bg-red-100 rounded-xl">
  <MapPin className="w-4 h-4 text-red-600"/>
  </div>
  <div>
@@ -643,8 +643,8 @@ const hasJobsData = extendedCorporate.total_jobs && extendedCorporate.total_jobs
  </div>
  )}
  {extendedCorporate.contact_person && (
- <div className="flex items-center gap-3 p-3 rounded-none-none">
- <div className="p-2 bg-indigo-100 rounded-none-none">
+ <div className="flex items-center gap-3 p-3 rounded-xl">
+ <div className="p-2 bg-indigo-100 rounded-xl">
  <Users className="w-4 h-4 text-indigo-600"/>
  </div>
  <div>
@@ -675,14 +675,14 @@ const hasJobsData = extendedCorporate.total_jobs && extendedCorporate.total_jobs
  onClick={handleBackdropClick}
  >
  <motion.div
- className="bg-white rounded-none-none shadow-2xl max-w-5xl w-full mx-2 sm:mx-4 h-[90vh] sm:h-[80vh] lg:h-[75vh] overflow-hidden flex flex-col"initial={{ scale: 0.9, opacity: 0 }}
+ className="bg-white rounded-xl shadow-2xl max-w-5xl w-full mx-2 sm:mx-4 h-[90vh] sm:h-[80vh] lg:h-[75vh] overflow-hidden flex flex-col"initial={{ scale: 0.9, opacity: 0 }}
  animate={{ scale: 1, opacity: 1 }}
  exit={{ scale: 0.9, opacity: 0 }}
  transition={{ type:"spring", duration: 0.3 }}
  onClick={(e) => e.stopPropagation()}
  >
  {/* Header */}
- <div className="bg-white border-b border-gray-200 p-3 sm:p-4 lg:p-6 rounded-none-none">
+ <div className="bg-white border-b border-gray-200 p-3 sm:p-4 lg:p-6 rounded-xl">
  <div className="flex items-center justify-between">
  <div className="flex items-center gap-4">
  {/* Profile image and name removed from top */}
@@ -692,7 +692,7 @@ const hasJobsData = extendedCorporate.total_jobs && extendedCorporate.total_jobs
  {/* Close Button */}
  <button
  onClick={onClose}
- className="p-2 hover:bg-gray-100 rounded-none-none transition-colors duration-200"title="Close">
+ className="p-2 hover:bg-gray-100 rounded-xl transition-colors duration-200"title="Close">
  <X className="w-5 h-5 text-gray-500"/>
  </button>
  </div>
@@ -742,10 +742,10 @@ const target = e.target as HTMLImageElement;
  <div className="flex-1 w-full">
  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3 lg:gap-4 mb-2 sm:mb-3 lg:mb-4">
  {/* Email Card - Blue Theme */}
- <div className="flex items-center justify-between p-2 sm:p-3 lg:p-4 rounded-none-none border">
+ <div className="flex items-center justify-between p-2 sm:p-3 lg:p-4 rounded-xl border">
  <span className="text-xs text-blue-700 font-medium">Email</span>
  {extendedCorporate.email_verified ? (
- <div className="p-1.5 bg-green-500">
+ <div className="p-1.5 bg-blue-500">
  <CheckCircle className="w-3 h-3 text-white"/>
  </div>
  ) : (
@@ -756,10 +756,10 @@ const target = e.target as HTMLImageElement;
  </div>
 
  {/* Phone Card - Purple Theme */}
- <div className="flex items-center justify-between p-2 sm:p-3 lg:p-4 rounded-none-none border">
+ <div className="flex items-center justify-between p-2 sm:p-3 lg:p-4 rounded-xl border">
  <span className="text-xs text-purple-700 font-medium">Phone</span>
  {extendedCorporate.phone_verified ? (
- <div className="p-1.5 bg-green-500">
+ <div className="p-1.5 bg-blue-500">
  <CheckCircle className="w-3 h-3 text-white"/>
  </div>
  ) : (
@@ -770,7 +770,7 @@ const target = e.target as HTMLImageElement;
  </div>
 
  {/* Status Card - Orange Theme */}
- <div className="flex items-center justify-between p-2 sm:p-3 lg:p-4 rounded-none-none border">
+ <div className="flex items-center justify-between p-2 sm:p-3 lg:p-4 rounded-xl border">
  <span className="text-xs text-orange-700 font-medium">Status</span>
  <div className={`px-2 py-1 text-xs font-medium ${getStatusColor(extendedCorporate.status)}`}>
  {extendedCorporate.status}
@@ -778,9 +778,9 @@ const target = e.target as HTMLImageElement;
  </div>
 
  {/* Verification Card - Green Theme */}
- <div className="flex items-center justify-between p-2 sm:p-3 lg:p-4 rounded-none-none border">
- <span className="text-xs text-green-700 font-medium">Verified</span>
- <span className="text-xs font-medium text-green-600">
+ <div className="flex items-center justify-between p-2 sm:p-3 lg:p-4 rounded-xl border">
+ <span className="text-xs text-blue-700 font-medium">Verified</span>
+ <span className="text-xs font-medium text-blue-600">
  {extendedCorporate.verified ?'Yes':'No'}
  </span>
  </div>

@@ -315,7 +315,7 @@ const header = ['university_name','email','institute_type','phone','address','we
  animate={{ opacity: 1, scale: 1, y: 0 }}
  exit={{ opacity: 0, scale: 0.95, y: 20 }}
  transition={{ duration: 0.2 }}
- className="relative inline-block align-bottom bg-white rounded-none-none text-left overflow-hidden transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full border-2 border-gray-300"
+ className="relative inline-block align-bottom bg-white rounded-xl text-left overflow-hidden transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full border-2 border-gray-300"
  onClick={(e) => {
  console.log(' Modal container clicked, stopping propagation')
  e.stopPropagation()
@@ -351,7 +351,7 @@ const header = ['university_name','email','institute_type','phone','address','we
 
 
  {/* Instructions */}
- <div className="bg-blue-50 border border-blue-200 rounded-none-none p-4">
+ <div className="bg-blue-50 border border-blue-200 rounded-xl p-4">
  <div className="flex items-start gap-3">
  <AlertCircle className="w-5 h-5 text-blue-600 mt-0.5"/>
  <div>
@@ -381,7 +381,7 @@ const header = ['university_name','email','institute_type','phone','address','we
  </div>
 
  {/* Template Download */}
- <div className="bg-gray-50 rounded-none-none p-4">
+ <div className="bg-gray-50 rounded-xl p-4">
  <div className="flex items-center justify-between">
  <div>
  <h4 className="text-sm font-medium text-gray-900 mb-1">
@@ -399,7 +399,7 @@ const header = ['university_name','email','institute_type','phone','address','we
  handleDownloadTemplate()
  }}
  disabled={isDownloadingTemplate}
- className="inline-flex items-center gap-2 px-3 py-2 bg-secondary-600 hover:bg-secondary-700 text-white rounded-none-none text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200">
+ className="inline-flex items-center gap-2 px-3 py-2 bg-secondary-600 hover:bg-secondary-700 text-white rounded-xl text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200">
  <Download className="w-4 h-4"/>
  {isDownloadingTemplate ?'Downloading...':'Download'}
  </button>
@@ -411,13 +411,13 @@ const header = ['university_name','email','institute_type','phone','address','we
  <label htmlFor="file-upload" className="block text-sm font-medium text-gray-700 mb-2">
  Select CSV File
  </label>
- <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-none-none hover:border-gray-400 transition-colors duration-200">
+ <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-xl hover:border-gray-400 transition-colors duration-200">
  <div className="space-y-1 text-center">
  <Upload className="mx-auto h-12 w-12 text-gray-400"/>
  <div className="flex text-sm text-gray-600">
  <label
  htmlFor="file-upload"
- className="relative cursor-pointer bg-white rounded-none-none font-medium text-primary-600 hover:text-primary-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-primary-500">
+ className="relative cursor-pointer bg-white rounded-xl font-medium text-primary-600 hover:text-primary-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-primary-500">
  <span>Upload a file</span>
  <input
  id="file-upload"
@@ -439,17 +439,17 @@ const header = ['university_name','email','institute_type','phone','address','we
 
  {/* Selected File - Success */}
  {selectedFile && fileValidation && fileValidation.isValid && (
- <div className="bg-green-50 border border-green-200 rounded-none-none p-4">
+ <div className="bg-blue-50 border border-blue-200 rounded-xl p-4">
  <div className="flex items-center gap-3">
- <CheckCircle className="w-5 h-5 text-green-600"/>
+ <CheckCircle className="w-5 h-5 text-blue-600"/>
  <div className="flex-1">
- <p className="text-sm font-medium text-green-900">
+ <p className="text-sm font-medium text-blue-900">
  File Validated Successfully
  </p>
- <p className="text-sm text-green-800">
+ <p className="text-sm text-blue-800">
  {selectedFile.name} ({(selectedFile.size / 1024 / 1024).toFixed(2)} MB)
  </p>
- <div className="mt-2 text-xs text-green-700">
+ <div className="mt-2 text-xs text-blue-700">
  <p>• {fileValidation.rowCount} student(s) found</p>
  <p>• All required columns present</p>
  <p>• All data validated successfully</p>
@@ -461,7 +461,7 @@ const header = ['university_name','email','institute_type','phone','address','we
 
  {/* Selected File - With Errors */}
  {selectedFile && fileValidation && !fileValidation.isValid && (
- <div className="bg-yellow-50 border border-yellow-200 rounded-none-none p-4">
+ <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-4">
  <div className="flex items-start gap-3">
  <AlertCircle className="w-5 h-5 text-yellow-600 mt-0.5 flex-shrink-0"/>
  <div className="flex-1">
@@ -483,7 +483,7 @@ const header = ['university_name','email','institute_type','phone','address','we
 
  {/* File Validation Issues */}
  {fileValidation && !fileValidation.isValid && (
- <div className="bg-yellow-50 border border-yellow-200 rounded-none-none p-4">
+ <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-4">
  <div className="flex items-start gap-3">
  <AlertCircle className="w-5 h-5 text-yellow-600 mt-0.5 flex-shrink-0"/>
  <div className="flex-1">
@@ -519,7 +519,7 @@ const header = ['university_name','email','institute_type','phone','address','we
  e.stopPropagation()
  handleClose()
  }}
- className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-none-none hover:bg-gray-200 transition-colors duration-200">
+ className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-xl hover:bg-gray-200 transition-colors duration-200">
  Cancel
  </button>
  <button
@@ -531,7 +531,7 @@ const header = ['university_name','email','institute_type','phone','address','we
  handleSubmit(e)
  }}
  disabled={!selectedFile || isUploading || (fileValidation ? !fileValidation.isValid : false)}
- className="px-4 py-2 text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 rounded-none-none disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200">
+ className="px-4 py-2 text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 rounded-xl disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200">
  {isUploading ?'Uploading...': (mode ==='universities'?'Upload Universities':'Upload Students')}
  </button>
  </div>

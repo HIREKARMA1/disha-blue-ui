@@ -97,22 +97,22 @@ export function CorporateDashboardContent({ children }: CorporateDashboardLayout
   <CorporateDashboardStats dashboardData={dashboardData} isLoading={isLoading} />
   <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
   <Link href="/dashboard/corporate/jobs" className="dashboard-overview-card-interactive p-5">
-  <p className="text-xs font-semibold uppercase tracking-wide text-sage-deep">Jobs</p>
+  <p className="text-xs font-semibold uppercase tracking-wide text-blue-600">Jobs</p>
   <p className="mt-2 font-display text-lg font-semibold text-slate-900">Manage postings</p>
   <p className="mt-1 text-sm text-slate-600">Open, close, and optimize roles</p>
   </Link>
   <Link href="/dashboard/corporate/applications" className="dashboard-overview-card-interactive p-5">
-  <p className="text-xs font-semibold uppercase tracking-wide text-sage-deep">Pipeline</p>
+  <p className="text-xs font-semibold uppercase tracking-wide text-blue-600">Pipeline</p>
   <p className="mt-2 font-display text-lg font-semibold text-slate-900">Applications</p>
   <p className="mt-1 text-sm text-slate-600">Review and progress candidates</p>
   </Link>
   <Link href="/dashboard/corporate/candidates" className="dashboard-overview-card-interactive p-5">
-  <p className="text-xs font-semibold uppercase tracking-wide text-sage-deep">Candidates</p>
+  <p className="text-xs font-semibold uppercase tracking-wide text-blue-600">Candidates</p>
   <p className="mt-2 font-display text-lg font-semibold text-slate-900">Talent workspace</p>
   <p className="mt-1 text-sm text-slate-600">Shortlist high-fit applicants</p>
   </Link>
   <Link href="/dashboard/corporate/analytics" className="dashboard-overview-card-interactive p-5">
-  <p className="text-xs font-semibold uppercase tracking-wide text-sage-deep">Insights</p>
+  <p className="text-xs font-semibold uppercase tracking-wide text-blue-600">Insights</p>
   <p className="mt-2 font-display text-lg font-semibold text-slate-900">Hiring analytics</p>
   <p className="mt-1 text-sm text-slate-600">Track funnel performance</p>
   </Link>
@@ -124,7 +124,7 @@ export function CorporateDashboardContent({ children }: CorporateDashboardLayout
   </div>
   <div className="space-y-6 lg:col-span-2">
   <div className="dashboard-overview-card p-5">
-  <p className="text-xs font-semibold uppercase tracking-[0.14em] text-sage-deep">Hiring operations</p>
+  <p className="text-xs font-semibold uppercase tracking-[0.14em] text-blue-600">Hiring operations</p>
   <h3 className="mt-2 font-display text-lg font-semibold text-slate-900">Pending actions</h3>
   <ul className="mt-4 space-y-2.5 text-sm text-slate-600">
   <li>Review fresh applicants by role fit</li>
@@ -139,17 +139,17 @@ export function CorporateDashboardContent({ children }: CorporateDashboardLayout
   </div>
   <aside className="space-y-4 xl:col-span-3">
   <div className="dashboard-overview-card p-5">
-  <p className="text-xs font-semibold uppercase tracking-[0.14em] text-sage-deep">Recruiter focus</p>
+  <p className="text-xs font-semibold uppercase tracking-[0.14em] text-blue-600">Recruiter focus</p>
   <p className="mt-2 font-display text-2xl font-semibold text-slate-900">ATS command panel</p>
   <p className="mt-2 text-sm text-slate-600">Stay on top of interviews, shortlists, and offer-readiness across openings.</p>
   </div>
   <div className="dashboard-overview-card p-5">
-  <p className="text-xs font-semibold uppercase tracking-[0.14em] text-sage-deep">Quick actions</p>
+  <p className="text-xs font-semibold uppercase tracking-[0.14em] text-blue-600">Quick actions</p>
   <div className="mt-3 space-y-2">
-  <Link href="/dashboard/corporate/jobs" className="block rounded-xl border border-slate-200/90 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm transition hover:border-sage-deep hover:bg-sage/50 dark:bg-emerald-950/40 dark:hover:bg-emerald-900/60">Create or edit jobs</Link>
-  <Link href="/dashboard/corporate/applications" className="block rounded-xl border border-slate-200/90 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm transition hover:border-sage-deep hover:bg-sage/50 dark:bg-emerald-950/40 dark:hover:bg-emerald-900/60">Manage application stages</Link>
-  <Link href="/dashboard/corporate/interviews" className="block rounded-xl border border-slate-200/90 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm transition hover:border-sage-deep hover:bg-sage/50 dark:bg-emerald-950/40 dark:hover:bg-emerald-900/60">Plan interview slots</Link>
-  <Link href="/dashboard/corporate/profile" className="block rounded-xl border border-slate-200/90 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm transition hover:border-sage-deep hover:bg-sage/50 dark:bg-emerald-950/40 dark:hover:bg-emerald-900/60">Update company profile</Link>
+  <Link href="/dashboard/corporate/jobs" className="block rounded-xl border border-slate-200/90 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm transition hover:border-blue-600 hover:bg-blue-50/50 dark:bg-blue-950/40 dark:hover:bg-blue-900/60">Create or edit jobs</Link>
+  <Link href="/dashboard/corporate/applications" className="block rounded-xl border border-slate-200/90 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm transition hover:border-blue-600 hover:bg-blue-50/50 dark:bg-blue-950/40 dark:hover:bg-blue-900/60">Manage application stages</Link>
+  <Link href="/dashboard/corporate/interviews" className="block rounded-xl border border-slate-200/90 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm transition hover:border-blue-600 hover:bg-blue-50/50 dark:bg-blue-950/40 dark:hover:bg-blue-900/60">Plan interview slots</Link>
+  <Link href="/dashboard/corporate/profile" className="block rounded-xl border border-slate-200/90 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm transition hover:border-blue-600 hover:bg-blue-50/50 dark:bg-blue-950/40 dark:hover:bg-blue-900/60">Update company profile</Link>
   </div>
   </div>
   </aside>

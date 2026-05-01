@@ -86,7 +86,7 @@ interface JobCardProps {
  matchedSkillsHighlight?: string[]
  /** Short explainability lines (1–2 shown) */
  recommendationReasons?: string[]
- /** 0–100 — shows green % badge when set */
+ /** 0–100 — shows blue % badge when set */
  recommendationScorePct?: number
  /** When set (e.g. resume-flow cards), fires once per action for adaptive ranking */
  onRecommendTrack?: (action: 'view' | 'click' | 'apply') => void
@@ -127,7 +127,7 @@ export function JobCard({
  if (!job || typeof job !=='object') {
  console.error('Invalid job object:', job)
  return (
- <div className="rounded-none-none border p-6">
+ <div className="rounded-xl border p-6">
  <p className="text-center text-sm text-destructive">Invalid job data</p>
  </div>
  )
@@ -244,7 +244,7 @@ export function JobCard({
  )
  case'selected':
  return (
- <span className="inline-flex items-center justify-center gap-1 px-2.5 py-1 text-xs font-semibold text-emerald-700">
+ <span className="inline-flex items-center justify-center gap-1 px-2.5 py-1 text-xs font-semibold text-blue-700">
  <CheckCircle className="h-3 w-3"/>
  Selected
  </span>
@@ -282,12 +282,12 @@ export function JobCard({
  initial={{ opacity: 0, y: 12 }}
  animate={{ opacity: 1, y: 0 }}
  transition={{ duration: 0.35, delay: Math.min(cardIndex * 0.04, 0.2) }}
- className={cn('group flex h-full flex-col overflow-hidden rounded-none-none border bg-card transition-all duration-300','',
+ className={cn('group flex h-full flex-col overflow-hidden rounded-xl border bg-card transition-all duration-300','',
  )}
  >
  <div className="relative border-b px-5 pb-4 pt-5">
  <div className="flex gap-4">
- <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-none-none text-sm font-bold text-white shadow-md shadow-primary/20">
+ <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl text-sm font-bold text-white shadow-md shadow-primary/20">
  {initials.slice(0, 3)}
  </div>
  <div className="min-w-0 flex-1">
@@ -297,7 +297,7 @@ export function JobCard({
  </h3>
  <div className="flex shrink-0 flex-col items-end gap-1">
  {recommendationScorePct !== undefined && (
- <span className="rounded-none border border-emerald-600/50 bg-emerald-500/15 px-2 py-0.5 text-xs font-bold text-emerald-700 dark:text-emerald-400">
+ <span className="rounded-none border border-blue-600/50 bg-blue-500/15 px-2 py-0.5 text-xs font-bold text-blue-700 dark:text-blue-400">
  {Math.round(recommendationScorePct)}% Match
  </span>
  )}
@@ -308,7 +308,7 @@ export function JobCard({
  e.stopPropagation()
  onSaveToggle()
  }}
- className={cn('rounded-none-none p-2 transition-colors',
+ className={cn('rounded-xl p-2 transition-colors',
  isSaved
  ?'text-primary':'text-muted-foreground hover:bg-muted hover:text-foreground',
  )}
@@ -383,9 +383,9 @@ export function JobCard({
  <span
  key={index}
  className={cn(
- 'rounded-none-none border px-2 py-0.5 text-[11px] font-medium',
+ 'rounded-xl border px-2 py-0.5 text-[11px] font-medium',
  hi
- ? 'border-emerald-600/60 bg-emerald-500/10 text-emerald-800 dark:text-emerald-300'
+ ? 'border-blue-600/60 bg-blue-500/10 text-blue-800 dark:text-blue-300'
  : 'border-border',
  )}
  >
@@ -394,7 +394,7 @@ export function JobCard({
  )
  })}
  {!matchedSkillsHighlight?.length && job.skills_required.length > 4 && (
- <span className="rounded-none-none border border-dashed border-border px-2 py-0.5 text-[11px] text-muted-foreground">
+ <span className="rounded-xl border border-dashed border-border px-2 py-0.5 text-[11px] text-muted-foreground">
  +{job.skills_required.length - 4}
  </span>
  )}
@@ -402,10 +402,10 @@ export function JobCard({
  )}
 
  {recommendationReasons && recommendationReasons.length > 0 && (
- <ul className="mt-3 space-y-1 border-l-2 border-emerald-600/50 pl-3">
+ <ul className="mt-3 space-y-1 border-l-2 border-blue-600/50 pl-3">
  {recommendationReasons.slice(0, 2).map((line, i) => (
  <li key={i} className="text-xs leading-snug text-muted-foreground">
- <span className="mr-1 inline-block h-1.5 w-1.5 translate-y-px rounded-full bg-emerald-600 dark:bg-emerald-400" />
+ <span className="mr-1 inline-block h-1.5 w-1.5 translate-y-px rounded-full bg-blue-600 dark:bg-blue-400" />
  {line}
  </li>
  ))}
@@ -427,7 +427,7 @@ export function JobCard({
  })
  }}
  className={cn(
- 'flex w-full items-center justify-between gap-2 rounded-none-none border border-border bg-muted/30 px-3 py-2 text-left text-xs font-semibold text-foreground transition-colors hover:bg-muted/50',
+ 'flex w-full items-center justify-between gap-2 rounded-xl border border-border bg-muted/30 px-3 py-2 text-left text-xs font-semibold text-foreground transition-colors hover:bg-muted/50',
  )}
  aria-expanded={whyThisJobOpen}
  >
@@ -499,7 +499,7 @@ export function JobCard({
  onRecommendTrack?.('click')
  onViewDescription()
  }}
- variant="outline"className="h-10 flex-1 rounded-none-none font-semibold">
+ variant="outline"className="h-10 flex-1 rounded-xl font-semibold">
  View role
  </Button>
  <Button
@@ -509,7 +509,7 @@ export function JobCard({
  onApply()
  }}
  disabled={!canApply() || isApplying}
- variant="gradient"className="h-10 flex-1 rounded-none-none font-semibold shadow-md shadow-primary/15">
+ variant="gradient"className="h-10 flex-1 rounded-xl font-semibold shadow-md shadow-primary/15">
  {isApplying ? (
  <>
  <span className="mr-2 inline-block h-4 w-4 animate-spin border-2 border-white border-t-transparent"/>

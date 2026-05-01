@@ -51,7 +51,7 @@ export function ArchiveConfirmationModal({
  
  {/* Modal Content */}
  <motion.div
- className="relative bg-white rounded-none-none shadow-2xl max-w-md w-full mx-4"initial={{ scale: 0.9, opacity: 0 }}
+ className="relative bg-white rounded-xl shadow-2xl max-w-md w-full mx-4"initial={{ scale: 0.9, opacity: 0 }}
  animate={{ scale: 1, opacity: 1 }}
  exit={{ scale: 0.9, opacity: 0 }}
  transition={{ type:"spring", duration: 0.3 }}
@@ -61,11 +61,11 @@ export function ArchiveConfirmationModal({
  <div className="flex items-center justify-between p-6 border-b border-gray-200">
  <div className="flex items-center gap-3">
  <div className={`p-2 ${isArchiving
- ?'bg-orange-100':'bg-green-100'}`}>
+ ?'bg-orange-100':'bg-blue-100'}`}>
  {isArchiving ? (
  <Archive className="w-5 h-5 text-orange-600"/>
  ) : (
- <Eye className="w-5 h-5 text-green-600"/>
+ <Eye className="w-5 h-5 text-blue-600"/>
  )}
  </div>
  <div>
@@ -79,7 +79,7 @@ export function ArchiveConfirmationModal({
  </div>
  <button
  onClick={onClose}
- className="p-2 hover:bg-gray-100 rounded-none-none transition-colors duration-200"disabled={isLoading}
+ className="p-2 hover:bg-gray-100 rounded-xl transition-colors duration-200"disabled={isLoading}
  >
  <X className="w-5 h-5 text-gray-500"/>
  </button>
@@ -99,7 +99,7 @@ export function ArchiveConfirmationModal({
  </>
  ) : (
  <>
- Are you sure you want to <strong>unarchive</strong> <span className="font-semibold text-green-600">{studentName}</span>?
+ Are you sure you want to <strong>unarchive</strong> <span className="font-semibold text-blue-600">{studentName}</span>?
  </>
  )}
  </p>
@@ -126,14 +126,14 @@ export function ArchiveConfirmationModal({
  <button
  onClick={onClose}
  disabled={isLoading}
- className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-none-none transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
+ className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-xl transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
  Cancel
  </button>
  <button
  onClick={handleConfirm}
  disabled={isLoading}
- className={`px-4 py-2 text-sm font-medium text-white rounded-none-none transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 ${isArchiving
- ?'bg-orange-600 hover:bg-orange-700':'bg-green-600 hover:bg-green-700'}`}
+ className={`px-4 py-2 text-sm font-medium text-white rounded-xl transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 ${isArchiving
+ ?'bg-orange-600 hover:bg-orange-700':'bg-blue-600 hover:bg-blue-700'}`}
  >
  {isLoading ? (
  <>

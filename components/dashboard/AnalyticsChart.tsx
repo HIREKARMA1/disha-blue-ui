@@ -137,14 +137,14 @@ const totalForPie = totalJobs + appliedJobs + selected + rejected
  {appliedJobs} out of {totalJobs} jobs applied
  </p>
  </div>
- <div className="bg-green-50 rounded-xl p-4">
+ <div className="bg-blue-50 rounded-xl p-4">
  <div className="flex items-center space-x-2 mb-2">
- <TrendingUp className="w-4 h-4 text-green-500"/>
- <span className="text-sm font-medium text-green-700">Selection Rate</span>
+ <TrendingUp className="w-4 h-4 text-blue-500"/>
+ <span className="text-sm font-medium text-blue-700">Selection Rate</span>
  </div>
- <p className="text-lg font-bold text-green-600">{selectionRate}%</p>
- <div className="w-full bg-green-200 h-2 mt-2">
- <div className="bg-green-500 h-2"style={{ width: `${selectionRate}%` }}></div>
+ <p className="text-lg font-bold text-blue-600">{selectionRate}%</p>
+ <div className="w-full bg-blue-200 h-2 mt-2">
+ <div className="bg-blue-500 h-2"style={{ width: `${selectionRate}%` }}></div>
  </div>
  <p className="text-xs text-gray-500 mt-1">
  {selected} out of {appliedJobs} applications selected
@@ -177,11 +177,11 @@ const totalForPie = totalJobs + appliedJobs + selected + rejected
  <div className="space-y-2">
  <div className="flex justify-between items-center">
  <span className="text-sm font-medium text-gray-700">Applied Jobs</span>
- <span className="text-sm font-bold text-green-600">{appliedJobs}</span>
+ <span className="text-sm font-bold text-blue-600">{appliedJobs}</span>
  </div>
  <div className="w-full bg-gray-200 h-3">
  <div
- className="bg-green-500 h-3 transition-all duration-500"style={{ width: totalJobs > 0 ? `${(appliedJobs / totalJobs) * 100}%` :'0%'}}
+ className="bg-blue-500 h-3 transition-all duration-500"style={{ width: totalJobs > 0 ? `${(appliedJobs / totalJobs) * 100}%` :'0%'}}
  ></div>
  </div>
  </div>
@@ -190,11 +190,11 @@ const totalForPie = totalJobs + appliedJobs + selected + rejected
  <div className="space-y-2">
  <div className="flex justify-between items-center">
  <span className="text-sm font-medium text-gray-700">Selected</span>
- <span className="text-sm font-bold text-green-700">{selected}</span>
+ <span className="text-sm font-bold text-blue-700">{selected}</span>
  </div>
  <div className="w-full bg-gray-200 h-3">
  <div
- className="bg-green-700 h-3 transition-all duration-500"style={{ width: totalJobs > 0 ? `${(selected / totalJobs) * 100}%` :'0%'}}
+ className="bg-blue-700 h-3 transition-all duration-500"style={{ width: totalJobs > 0 ? `${(selected / totalJobs) * 100}%` :'0%'}}
  ></div>
  </div>
  </div>
@@ -221,11 +221,11 @@ const totalForPie = totalJobs + appliedJobs + selected + rejected
  <span className="text-xs sm:text-sm truncate">Total Jobs</span>
  </div>
  <div className="flex items-center space-x-2 justify-center sm:justify-start">
- <div className="w-3 h-3 bg-green-500 rounded-none flex-shrink-0"></div>
+ <div className="w-3 h-3 bg-blue-500 rounded-none flex-shrink-0"></div>
  <span className="text-xs sm:text-sm truncate">Applied</span>
  </div>
  <div className="flex items-center space-x-2 justify-center sm:justify-start">
- <div className="w-3 h-3 bg-green-700 rounded-none flex-shrink-0"></div>
+ <div className="w-3 h-3 bg-blue-700 rounded-none flex-shrink-0"></div>
  <span className="text-xs sm:text-sm truncate">Selected</span>
  </div>
  <div className="flex items-center space-x-2 justify-center sm:justify-start">
