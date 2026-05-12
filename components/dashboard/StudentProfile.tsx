@@ -1685,7 +1685,6 @@ const backendFieldName = field ==='10th_certificate'?'tenth_certificate':
  data={branches}
  loading={loadingBranches}
  placeholder="Select your branch"error={branchesError || undefined}
- required
  />
  )
  }
@@ -1699,7 +1698,6 @@ const backendFieldName = field ==='10th_certificate'?'tenth_certificate':
  data={degrees}
  loading={loadingDegrees}
  placeholder="Select your degree"error={degreesError || undefined}
- required
  />
  )
  }
