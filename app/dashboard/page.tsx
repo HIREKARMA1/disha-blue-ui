@@ -75,7 +75,7 @@ export default function LakshyaDashboardPage() {
           <span className="nl-name">Lakshya<b></b></span>
         </div>
         <ul className="nlinks">
-          <li><a href="#">Dashboard</a></li>
+          <li><a href="#">Home</a></li>
           <li><a href="#">Courses</a></li>
           <li><a href="#">Jobs</a></li>
           <li><a href="#">Profile</a></li>
@@ -95,7 +95,7 @@ export default function LakshyaDashboardPage() {
         <div className="hero-content">
           <div className="hl">
             <div className="h-kicker"><span className="hk-line"></span>Welcome back, Learner</div>
-            <h1 className="h1">Your Career<br /><em>Dashboard.</em></h1>
+            <h1 className="h1">Your Career<br /><em>Home.</em></h1>
             <p className="hdesc">Track your skill progress, build your AI resume, and apply to verified local jobs — all from your personalized command center.</p>
             <div className="hbtns">
               <button className="btn-hero">Resume Builder</button>

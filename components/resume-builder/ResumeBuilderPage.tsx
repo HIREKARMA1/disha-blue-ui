@@ -118,7 +118,7 @@ export function ResumeBuilderPage() {
   className="flex items-center gap-2 border-slate-200/90 text-sage-deep hover:bg-sage/20 dark:border-emerald-700 dark:text-emerald-200 dark:hover:bg-emerald-900/50"
   >
   <FileText className="h-4 w-4" />
-  <span>Dashboard</span>
+  <span>Home</span>
   </Button>
   )}
   {currentView === 'builder' && (

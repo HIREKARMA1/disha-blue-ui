@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
  Compass,
- LayoutDashboard,
+ Home,
  UserCircle2,
  FileText,
 MessagesSquare,
@@ -56,7 +56,7 @@ export function StudentSidebar({ className =''}: StudentSidebarProps) {
  {
 title: 'Overview',
 items: [
-{ label: 'Dashboard', href:'/dashboard/student', icon: LayoutDashboard, description:'Your career control center'},
+{ label: 'Home', href:'/dashboard/student', icon: Home, description:'Your career control center'},
 { label:'AI Interview Session', href:'/dashboard/student/career-align', icon: MessagesSquare, description:'Mock interview with live AI coach'},
 { label:'AI Communication Assessments', href:'/ai-communication', icon: Mic, description:'Voice-based communication coaching'},
 { label:'Build with AI', href:'/dashboard/student/resume/ai', icon: Bot, description:'Generate resume using AI'},
