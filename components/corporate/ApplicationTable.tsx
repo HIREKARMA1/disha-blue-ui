@@ -185,7 +185,7 @@ export function ApplicationTable({
   <button
   type="button"
   onClick={onRetry}
-  className="rounded-xl bg-gradient-to-r from-primary to-secondary px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-md transition hover:opacity-95"
+  className="rounded-xl bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-md transition hover:bg-primary/90"
   >
   Try again
   </button>
