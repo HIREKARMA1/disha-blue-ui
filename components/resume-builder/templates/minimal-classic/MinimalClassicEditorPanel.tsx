@@ -1,20 +1,14 @@
 "use client"
 
-import { Sparkles } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import type { MinimalClassicCopy, MinimalClassicModel } from "@/lib/minimalClassicResume"
 import { newId } from "@/lib/minimalClassicResume"
+import { AiEnhanceButton } from "./AiEnhanceButton"
 
-type AiTarget =
-  | { kind: "about_me" }
-  | { kind: "personal_job_title" }
-  | { kind: "education_item"; index: number }
-  | { kind: "experience_item"; index: number }
-  | { kind: "skills_blob" }
-  | { kind: "reference_item"; index: number }
+export type AiTarget = { kind: "about_me" } | { kind: "experience_item"; index: number }
 
 export function MinimalClassicEditorPanel({
   copy,
@@ -99,27 +93,9 @@ export function MinimalClassicEditorPanel({
   return (
     <div className="space-y-6">
       <section className="dashboard-overview-card rounded-2xl border border-slate-200/90 p-4 dark:border-emerald-800/60">
-        <div className="mb-3 flex items-center justify-between gap-2">
-          <h2 className="text-sm font-semibold text-slate-900 dark:text-emerald-50">
-            {copy.editor.personalBlockTitle}
-          </h2>
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            className="gap-1 border-sage/40 text-sage-deep dark:border-emerald-700 dark:text-emerald-200"
-            onClick={() =>
-              onAiTarget(
-                { kind: "personal_job_title" },
-                model.personalInfo.jobTitle,
-                copy.editor.personalFieldLabels.jobTitle
-              )
-            }
-          >
-            <Sparkles className="h-3.5 w-3.5" />
-            {copy.editor.aiEnhance}
-          </Button>
-        </div>
+        <h2 className="mb-3 text-sm font-semibold text-slate-900 dark:text-emerald-50">
+          {copy.editor.personalBlockTitle}
+        </h2>
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
           <div>
             <Label>{copy.editor.personalFieldLabels.fullName}</Label>
@@ -169,16 +145,10 @@ export function MinimalClassicEditorPanel({
           <h2 className="text-sm font-semibold text-slate-900 dark:text-emerald-50">
             {copy.sections.aboutMe.heading}
           </h2>
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            className="gap-1 border-sage/40 text-sage-deep dark:border-emerald-700 dark:text-emerald-200"
+          <AiEnhanceButton
+            label={copy.editor.aiEnhance}
             onClick={() => onAiTarget({ kind: "about_me" }, model.aboutMe, copy.sections.aboutMe.heading)}
-          >
-            <Sparkles className="h-3.5 w-3.5" />
-            {copy.editor.aiEnhance}
-          </Button>
+          />
         </div>
         <Textarea
           rows={6}
@@ -207,25 +177,7 @@ export function MinimalClassicEditorPanel({
                 key={row.id}
                 className="rounded-xl border border-slate-200/80 p-3 dark:border-emerald-800/50"
               >
-                <div className="mb-2 flex justify-end gap-2">
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    className="gap-1"
-                    onClick={() =>
-                      onAiTarget(
-                        listKey === "education"
-                          ? { kind: "education_item", index }
-                          : { kind: "experience_item", index },
-                        row.body,
-                        copy.sections[listKey].heading
-                      )
-                    }
-                  >
-                    <Sparkles className="h-3.5 w-3.5" />
-                    {copy.editor.aiEnhance}
-                  </Button>
+                <div className="mb-2 flex justify-end">
                   <Button type="button" variant="ghost" size="sm" onClick={() => removeTimeline(listKey, index)}>
                     {copy.sections[listKey].removeEntry}
                   </Button>
@@ -256,7 +208,21 @@ export function MinimalClassicEditorPanel({
                     />
                   </div>
                   <div className="sm:col-span-2">
-                    <Label>{copy.editor.timelineBody}</Label>
+                    <div className="mb-1 flex flex-wrap items-center justify-between gap-2">
+                      <Label>{copy.editor.timelineBody}</Label>
+                      {listKey === "experience" && (
+                        <AiEnhanceButton
+                          label={copy.editor.aiEnhance}
+                          onClick={() =>
+                            onAiTarget(
+                              { kind: "experience_item", index },
+                              row.body,
+                              copy.sections.experience.heading
+                            )
+                          }
+                        />
+                      )}
+                    </div>
                     <Textarea
                       className="mt-1"
                       rows={4}
@@ -276,22 +242,6 @@ export function MinimalClassicEditorPanel({
           <h2 className="text-sm font-semibold text-slate-900 dark:text-emerald-50">
             {copy.sections.skills.heading}
           </h2>
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            className="gap-1"
-            onClick={() =>
-              onAiTarget(
-                { kind: "skills_blob" },
-                model.skills.filter(Boolean).join("\n"),
-                copy.sections.skills.heading
-              )
-            }
-          >
-            <Sparkles className="h-3.5 w-3.5" />
-            {copy.editor.aiEnhance}
-          </Button>
         </div>
         <p className="mb-2 text-xs text-slate-500 dark:text-emerald-400/80">{copy.sections.skills.columnHint}</p>
         <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
@@ -321,23 +271,7 @@ export function MinimalClassicEditorPanel({
               key={r.id}
               className="rounded-xl border border-slate-200/80 p-3 dark:border-emerald-800/50"
             >
-              <div className="mb-2 flex justify-end gap-2">
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  className="gap-1"
-                  onClick={() =>
-                    onAiTarget(
-                      { kind: "reference_item", index },
-                      `${r.name}\n${r.subtitle}\n${r.phone}\n${r.social}`,
-                      copy.sections.references.heading
-                    )
-                  }
-                >
-                  <Sparkles className="h-3.5 w-3.5" />
-                  {copy.editor.aiEnhance}
-                </Button>
+              <div className="mb-2 flex justify-end">
                 <Button type="button" variant="ghost" size="sm" onClick={() => removeRef(index)}>
                   {copy.sections.education.removeEntry}
                 </Button>
@@ -383,5 +317,3 @@ export function MinimalClassicEditorPanel({
     </div>
   )
 }
-
-export type { AiTarget }

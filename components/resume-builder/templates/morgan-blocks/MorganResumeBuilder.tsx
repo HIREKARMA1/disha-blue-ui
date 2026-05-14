@@ -24,73 +24,20 @@ if (typeof window !== "undefined") {
 }
 
 function applyAiTextToMorganModel(model: MorganModel, target: MorganAiTarget, text: string): MorganModel {
-  const next = { ...model }
-  switch (target.kind) {
-    case "summary":
-      next.summary = text
-      break
-    case "expertise":
-      next.expertise = text
-      break
-    case "personal_job_title":
-      next.personalInfo = {
-        ...next.personalInfo,
-        jobTitle: text.split("\n")[0]?.trim() || text,
-      }
-      break
-    case "education_item": {
-      const list = [...next.education]
-      const lines = text.split("\n").map((l) => l.trim())
-      const row = { ...list[target.index] }
-      if (lines.length >= 2) {
-        row.institution = lines[0]
-        row.degreeDatesLine = lines[1]
-        row.bullets = lines.slice(2).filter(Boolean).length ? lines.slice(2) : row.bullets
-      } else {
-        row.degreeDatesLine = text
-      }
-      list[target.index] = row
-      next.education = list
-      break
+  if (target.kind === "summary") return { ...model, summary: text }
+  if (target.kind === "expertise") return { ...model, expertise: text }
+  if (target.kind === "experience_item") {
+    const list = [...model.experience]
+    const row = list[target.index]
+    if (!row) return model
+    const lines = text.split("\n").map((l) => l.trim()).filter(Boolean)
+    list[target.index] = {
+      ...row,
+      bullets: lines.length ? lines : text.trim() ? [text.trim()] : [""],
     }
-    case "experience_item": {
-      const list = [...next.experience]
-      const lines = text.split("\n").map((l) => l.trim())
-      const row = { ...list[target.index] }
-      if (lines.length >= 2) {
-        row.title = lines[0]
-        row.companyDatesLine = lines[1]
-        row.bullets = lines.slice(2).filter(Boolean).length ? lines.slice(2) : row.bullets
-      } else {
-        row.title = text
-      }
-      list[target.index] = row
-      next.experience = list
-      break
-    }
-    case "reference_item": {
-      const list = [...next.references]
-      const lines = text.split("\n").map((l) => l.trim())
-      const row = { ...list[target.index] }
-      if (lines.length >= 4) {
-        row.name = lines[0]
-        row.titleCompany = lines[1]
-        row.phone = lines[2]
-        row.email = lines[3]
-      } else if (lines.length === 2) {
-        row.name = lines[0]
-        row.titleCompany = lines[1]
-      } else {
-        row.titleCompany = text
-      }
-      list[target.index] = row
-      next.references = list
-      break
-    }
-    default:
-      break
+    return { ...model, experience: list }
   }
-  return next
+  return model
 }
 
 export function MorganResumeBuilder({ resumeId, initialModel }: { resumeId: string | null; initialModel: MorganModel | null }) {

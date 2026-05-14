@@ -33,61 +33,17 @@ function applyAiTextToModel(
   target: AiTarget,
   text: string
 ): MinimalClassicModel {
-  const next = { ...model }
-  switch (target.kind) {
-    case "about_me":
-      next.aboutMe = text
-      break
-    case "personal_job_title":
-      next.personalInfo = { ...next.personalInfo, jobTitle: text.split("\n")[0]?.trim() || text }
-      break
-    case "education_item": {
-      const list = [...next.education]
-      const row = { ...list[target.index], body: text }
-      list[target.index] = row
-      next.education = list
-      break
-    }
-    case "experience_item": {
-      const list = [...next.experience]
-      const row = { ...list[target.index], body: text }
-      list[target.index] = row
-      next.experience = list
-      break
-    }
-    case "skills_blob": {
-      const parts = text
-        .split(/[\n,;|]+/)
-        .map((s) => s.trim())
-        .filter(Boolean)
-      const targetLen = Math.max(8, Math.ceil(parts.length / 4) * 4)
-      while (parts.length < targetLen) parts.push("")
-      next.skills = parts.slice(0, 32)
-      break
-    }
-    case "reference_item": {
-      const refs = [...next.references]
-      const lines = text.split("\n").map((l) => l.trim())
-      const cur = { ...refs[target.index] }
-      if (lines.length >= 4) {
-        cur.name = lines[0]
-        cur.subtitle = lines[1]
-        cur.phone = lines[2].replace(/^Phone:\s*/i, "")
-        cur.social = lines[3].replace(/^Social:\s*/i, "")
-      } else if (lines.length === 2) {
-        cur.name = lines[0]
-        cur.subtitle = lines[1]
-      } else {
-        cur.subtitle = text
-      }
-      refs[target.index] = cur
-      next.references = refs
-      break
-    }
-    default:
-      break
+  if (target.kind === "about_me") {
+    return { ...model, aboutMe: text }
   }
-  return next
+  if (target.kind === "experience_item") {
+    const list = [...model.experience]
+    const row = list[target.index]
+    if (!row) return model
+    list[target.index] = { ...row, body: text }
+    return { ...model, experience: list }
+  }
+  return model
 }
 
 export function MinimalClassicResumeBuilder({

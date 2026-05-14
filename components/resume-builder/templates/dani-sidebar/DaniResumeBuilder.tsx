@@ -24,45 +24,21 @@ if (typeof window !== "undefined") {
 }
 
 function applyAiTextToDaniModel(model: DaniModel, target: DaniAiTarget, text: string): DaniModel {
-  const next = { ...model }
-  switch (target.kind) {
-    case "profile_summary":
-      next.profileSummary = text
-      break
-    case "personal_job_title":
-      next.personalInfo = {
-        ...next.personalInfo,
-        jobTitle: text.split("\n")[0]?.trim() || text,
-      }
-      break
-    case "experience_item": {
-      const list = [...next.experience]
-      const lines = text.split("\n").map((l) => l.trim()).filter(Boolean)
-      const row = { ...list[target.index] }
-      if (lines.length >= 3) {
-        row.title = lines[0]
-        row.company = lines[1]
-        row.dates = lines[2]
-        row.bullets = lines.slice(3).length ? lines.slice(3) : row.bullets
-      } else if (lines.length === 1) {
-        row.bullets = [text]
-      }
-      list[target.index] = row
-      next.experience = list
-      break
-    }
-    case "skills_blob": {
-      const parts = text
-        .split(/[\n,;|]+/)
-        .map((s) => s.trim())
-        .filter(Boolean)
-      next.sidebar = { ...next.sidebar, skills: parts.length ? parts : next.sidebar.skills }
-      break
-    }
-    default:
-      break
+  if (target.kind === "profile_summary") {
+    return { ...model, profileSummary: text }
   }
-  return next
+  if (target.kind === "experience_item") {
+    const list = [...model.experience]
+    const row = list[target.index]
+    if (!row) return model
+    const lines = text.split("\n").map((l) => l.trim()).filter(Boolean)
+    list[target.index] = {
+      ...row,
+      bullets: lines.length ? lines : text.trim() ? [text.trim()] : [""],
+    }
+    return { ...model, experience: list }
+  }
+  return model
 }
 
 export function DaniResumeBuilder({ resumeId, initialModel }: { resumeId: string | null; initialModel: DaniModel | null }) {

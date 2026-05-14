@@ -1,6 +1,5 @@
 "use client"
 
-import { Sparkles } from "lucide-react"
 import daniEn from "@/data/resume-templates/dani-sidebar.en.json"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -8,6 +7,7 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import type { DaniContactIcon, DaniModel } from "@/lib/designerVariantsResume"
 import { newId } from "@/lib/minimalClassicResume"
+import { AiEnhanceButton } from "../minimal-classic/AiEnhanceButton"
 
 type DaniCopy = typeof daniEn
 
@@ -18,11 +18,7 @@ const ICON_OPTIONS: { value: DaniContactIcon; label: string }[] = [
   { value: "web", label: "Web" },
 ]
 
-export type DaniAiTarget =
-  | { kind: "profile_summary" }
-  | { kind: "personal_job_title" }
-  | { kind: "experience_item"; index: number }
-  | { kind: "skills_blob" }
+export type DaniAiTarget = { kind: "profile_summary" } | { kind: "experience_item"; index: number }
 
 export function DaniEditorPanel({
   copy,
@@ -50,25 +46,13 @@ export function DaniEditorPanel({
               onChange={(e) => patch({ personalInfo: { ...model.personalInfo, fullName: e.target.value } })}
             />
           </div>
-          <div className="flex items-end gap-2">
-            <div className="min-w-0 flex-1">
-              <Label>{copy.editor.personalFieldLabels.jobTitle}</Label>
-              <Input
-                className="mt-1"
-                value={model.personalInfo.jobTitle}
-                onChange={(e) => patch({ personalInfo: { ...model.personalInfo, jobTitle: e.target.value } })}
-              />
-            </div>
-            <Button
-              type="button"
-              variant="outline"
-              size="icon"
-              onClick={() =>
-                onAiTarget({ kind: "personal_job_title" }, model.personalInfo.jobTitle, copy.editor.personalFieldLabels.jobTitle)
-              }
-            >
-              <Sparkles className="h-4 w-4" />
-            </Button>
+          <div>
+            <Label>{copy.editor.personalFieldLabels.jobTitle}</Label>
+            <Input
+              className="mt-1"
+              value={model.personalInfo.jobTitle}
+              onChange={(e) => patch({ personalInfo: { ...model.personalInfo, jobTitle: e.target.value } })}
+            />
           </div>
         </div>
       </div>
@@ -151,33 +135,14 @@ export function DaniEditorPanel({
         <div className="mt-4">
           <div className="mb-2 flex items-center justify-between gap-2">
             <h2 className="text-sm font-semibold text-slate-900 dark:text-emerald-50">{copy.sections.sidebarSkills.heading}</h2>
-            <div className="flex gap-2">
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                onClick={() =>
-                  onAiTarget(
-                    { kind: "skills_blob" },
-                    model.sidebar.skills.join("\n"),
-                    copy.sections.sidebarSkills.heading
-                  )
-                }
-              >
-                <Sparkles className="mr-1 h-3 w-3" />
-                AI
-              </Button>
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                onClick={() =>
-                  patch({ sidebar: { ...model.sidebar, skills: [...model.sidebar.skills, ""] } })
-                }
-              >
-                {copy.sections.sidebarSkills.addSkill}
-              </Button>
-            </div>
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={() => patch({ sidebar: { ...model.sidebar, skills: [...model.sidebar.skills, ""] } })}
+            >
+              {copy.sections.sidebarSkills.addSkill}
+            </Button>
           </div>
           <div className="space-y-2">
             {model.sidebar.skills.map((sk, index) => (
@@ -249,18 +214,26 @@ export function DaniEditorPanel({
                   </Button>
                 </div>
                 <Label>{copy.editor.eduLevel}</Label>
-                <Input className="mt-1" value={ed.level} onChange={(e) => {
-                  const list = [...model.sidebar.education]
-                  list[index] = { ...ed, level: e.target.value }
-                  patch({ sidebar: { ...model.sidebar, education: list } })
-                }} />
+                <Input
+                  className="mt-1"
+                  value={ed.level}
+                  onChange={(e) => {
+                    const list = [...model.sidebar.education]
+                    list[index] = { ...ed, level: e.target.value }
+                    patch({ sidebar: { ...model.sidebar, education: list } })
+                  }}
+                />
                 <div className="mt-2">
                   <Label>{copy.editor.eduSchoolYears}</Label>
-                  <Input className="mt-1" value={ed.schoolYearsLine} onChange={(e) => {
-                    const list = [...model.sidebar.education]
-                    list[index] = { ...ed, schoolYearsLine: e.target.value }
-                    patch({ sidebar: { ...model.sidebar, education: list } })
-                  }} />
+                  <Input
+                    className="mt-1"
+                    value={ed.schoolYearsLine}
+                    onChange={(e) => {
+                      const list = [...model.sidebar.education]
+                      list[index] = { ...ed, schoolYearsLine: e.target.value }
+                      patch({ sidebar: { ...model.sidebar, education: list } })
+                    }}
+                  />
                 </div>
               </div>
             ))}
@@ -271,10 +244,10 @@ export function DaniEditorPanel({
       <div className="rounded-xl border border-slate-200/90 bg-white/90 p-4 dark:border-emerald-800/60 dark:bg-emerald-950/40">
         <div className="mb-2 flex items-center justify-between gap-2">
           <h2 className="text-sm font-semibold text-slate-900 dark:text-emerald-50">{copy.editor.profileBody}</h2>
-          <Button type="button" variant="outline" size="sm" onClick={() => onAiTarget({ kind: "profile_summary" }, model.profileSummary, copy.sections.profile.heading)}>
-            <Sparkles className="mr-1 h-4 w-4" />
-            {copy.editor.aiEnhance}
-          </Button>
+          <AiEnhanceButton
+            label={copy.editor.aiEnhance}
+            onClick={() => onAiTarget({ kind: "profile_summary" }, model.profileSummary, copy.sections.profile.heading)}
+          />
         </div>
         <Textarea className="min-h-[120px]" value={model.profileSummary} onChange={(e) => patch({ profileSummary: e.target.value })} />
       </div>
@@ -298,22 +271,7 @@ export function DaniEditorPanel({
         <div className="space-y-3">
           {model.experience.map((xp, index) => (
             <div key={xp.id} className="rounded-lg border border-slate-200/80 p-3 dark:border-emerald-800/50">
-              <div className="mb-2 flex justify-end gap-2">
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  onClick={() =>
-                    onAiTarget(
-                      { kind: "experience_item", index },
-                      [xp.title, xp.company, xp.dates, ...xp.bullets].join("\n"),
-                      copy.sections.experience.heading
-                    )
-                  }
-                >
-                  <Sparkles className="mr-1 h-3 w-3" />
-                  AI
-                </Button>
+              <div className="mb-2 flex justify-end">
                 <Button
                   type="button"
                   variant="ghost"
@@ -330,40 +288,68 @@ export function DaniEditorPanel({
               <div className="grid gap-2 sm:grid-cols-2">
                 <div>
                   <Label>{copy.editor.expTitle}</Label>
-                  <Input className="mt-1" value={xp.title} onChange={(e) => {
-                    const list = [...model.experience]
-                    list[index] = { ...xp, title: e.target.value }
-                    patch({ experience: list })
-                  }} />
+                  <Input
+                    className="mt-1"
+                    value={xp.title}
+                    onChange={(e) => {
+                      const list = [...model.experience]
+                      list[index] = { ...xp, title: e.target.value }
+                      patch({ experience: list })
+                    }}
+                  />
                 </div>
                 <div>
                   <Label>{copy.editor.expCompany}</Label>
-                  <Input className="mt-1" value={xp.company} onChange={(e) => {
-                    const list = [...model.experience]
-                    list[index] = { ...xp, company: e.target.value }
-                    patch({ experience: list })
-                  }} />
+                  <Input
+                    className="mt-1"
+                    value={xp.company}
+                    onChange={(e) => {
+                      const list = [...model.experience]
+                      list[index] = { ...xp, company: e.target.value }
+                      patch({ experience: list })
+                    }}
+                  />
                 </div>
                 <div className="sm:col-span-2">
                   <Label>{copy.editor.expDates}</Label>
-                  <Input className="mt-1" value={xp.dates} onChange={(e) => {
-                    const list = [...model.experience]
-                    list[index] = { ...xp, dates: e.target.value }
-                    patch({ experience: list })
-                  }} />
+                  <Input
+                    className="mt-1"
+                    value={xp.dates}
+                    onChange={(e) => {
+                      const list = [...model.experience]
+                      list[index] = { ...xp, dates: e.target.value }
+                      patch({ experience: list })
+                    }}
+                  />
                 </div>
                 <div className="sm:col-span-2">
-                  <Label>{copy.editor.bulletPlaceholder}</Label>
-                  <Textarea className="mt-1 min-h-[72px]" value={xp.bullets.join("\n")} onChange={(e) => {
-                    const list = [...model.experience]
-                    list[index] = {
-                      ...xp,
-                      bullets: e.target.value.split("\n").map((l) => l.trim()).filter(Boolean).length
-                        ? e.target.value.split("\n").map((l) => l.trim()).filter(Boolean)
-                        : [""],
-                    }
-                    patch({ experience: list })
-                  }} />
+                  <div className="mb-1 flex flex-wrap items-center justify-between gap-2">
+                    <Label>{copy.editor.bulletPlaceholder}</Label>
+                    <AiEnhanceButton
+                      label={copy.editor.aiEnhance}
+                      onClick={() =>
+                        onAiTarget(
+                          { kind: "experience_item", index },
+                          xp.bullets.filter(Boolean).join("\n"),
+                          copy.sections.experience.heading
+                        )
+                      }
+                    />
+                  </div>
+                  <Textarea
+                    className="mt-1 min-h-[72px]"
+                    value={xp.bullets.join("\n")}
+                    onChange={(e) => {
+                      const list = [...model.experience]
+                      list[index] = {
+                        ...xp,
+                        bullets: e.target.value.split("\n").map((l) => l.trim()).filter(Boolean).length
+                          ? e.target.value.split("\n").map((l) => l.trim()).filter(Boolean)
+                          : [""],
+                      }
+                      patch({ experience: list })
+                    }}
+                  />
                 </div>
               </div>
             </div>

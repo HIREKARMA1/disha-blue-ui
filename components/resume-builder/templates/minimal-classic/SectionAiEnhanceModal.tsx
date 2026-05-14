@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { Sparkles } from "lucide-react"
 import { Modal } from "@/components/ui/modal"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
@@ -65,7 +66,8 @@ export function SectionAiEnhanceModal({
           <Button type="button" variant="outline" onClick={onClose} disabled={loading}>
             {copy.editor.aiCancel}
           </Button>
-          <Button type="button" onClick={() => onConfirm(instruction)} disabled={loading}>
+          <Button type="button" onClick={() => onConfirm(instruction)} disabled={loading} className="gap-1.5">
+            <Sparkles className="h-4 w-4 shrink-0" aria-hidden />
             {loading ? copy.editor.aiWorking : copy.editor.aiApply}
           </Button>
         </div>

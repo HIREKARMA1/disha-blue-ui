@@ -32,74 +32,21 @@ function applyAiTextToMarcelineModel(
   target: MarcelineAiTarget,
   text: string
 ): MarcelineModel {
-  const next = { ...model }
-  switch (target.kind) {
-    case "profile_summary":
-      next.profileSummary = text
-      break
-    case "personal_job_title":
-      next.personalInfo = {
-        ...next.personalInfo,
-        jobTitle: text.split("\n")[0]?.trim() || text,
-      }
-      break
-    case "experience_item": {
-      const list = [...next.experience]
-      const lines = text.split("\n").map((l) => l.trim()).filter(Boolean)
-      const row = { ...list[target.index] }
-      if (lines.length >= 3) {
-        row.role = lines[0]
-        row.company = lines[1]
-        row.dates = lines[2]
-        row.bullets = lines.slice(3).length ? lines.slice(3) : row.bullets
-      } else if (lines.length === 2) {
-        row.role = lines[0]
-        row.company = lines[1]
-      } else {
-        row.bullets = lines.length ? lines : [text]
-      }
-      list[target.index] = row
-      next.experience = list
-      break
-    }
-    case "education_item": {
-      const list = [...next.education]
-      const lines = text.split("\n").map((l) => l.trim())
-      const row = { ...list[target.index] }
-      if (lines.length >= 2) {
-        row.degree = lines[0]
-        row.institutionYear = lines.slice(1).join(" ")
-      } else {
-        row.degree = text
-      }
-      list[target.index] = row
-      next.education = list
-      break
-    }
-    case "skill_group": {
-      const list = [...next.skillGroups]
-      const row = { ...list[target.index] }
-      const lines = text.split("\n").map((l) => l.trim())
-      if (lines.length >= 2) {
-        row.label = lines[0]
-        row.itemsLine = lines.slice(1).join(", ")
-      } else {
-        row.itemsLine = text
-      }
-      list[target.index] = row
-      next.skillGroups = list
-      break
-    }
-    case "achievement_item": {
-      const list = [...next.achievements]
-      list[target.index] = { ...list[target.index], text }
-      next.achievements = list
-      break
-    }
-    default:
-      break
+  if (target.kind === "profile_summary") {
+    return { ...model, profileSummary: text }
   }
-  return next
+  if (target.kind === "experience_item") {
+    const list = [...model.experience]
+    const row = list[target.index]
+    if (!row) return model
+    const lines = text.split("\n").map((l) => l.trim()).filter(Boolean)
+    list[target.index] = {
+      ...row,
+      bullets: lines.length ? lines : text.trim() ? [text.trim()] : [""],
+    }
+    return { ...model, experience: list }
+  }
+  return model
 }
 
 export function MarcelineResumeBuilder({
