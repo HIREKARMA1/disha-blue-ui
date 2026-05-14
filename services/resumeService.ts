@@ -1,6 +1,9 @@
 import { apiClient } from '@/lib/api'
 
-export interface ResumeContent {
+import type { MinimalClassicResumeContent } from '@/lib/minimalClassicResume'
+import type { DesignerVariantResumeContent } from '@/lib/designerVariantsResume'
+
+export interface ClassicResumeContent {
   header: {
   fullName: string
   email: string
@@ -55,12 +58,21 @@ export interface ResumeContent {
   }>
 }
 
+/** Payload stored on student_resumes.content — classic ATS JSON or structured template JSON */
+export type ResumeStoredContent =
+  | ClassicResumeContent
+  | MinimalClassicResumeContent
+  | DesignerVariantResumeContent
+
+/** @deprecated Use ClassicResumeContent or ResumeStoredContent */
+export type ResumeContent = ClassicResumeContent
+
 export interface ResumeData {
   id: string
   student_id: string
   template_id: string
   name: string
-  content: ResumeContent
+  content: ResumeStoredContent
   settings: Record<string, any>
   status: 'draft' | 'published' | 'archived'
   created_at: string
@@ -76,7 +88,7 @@ export interface ResumeData {
 export interface CreateResumeRequest {
   template_id: string
   name: string
-  content: ResumeContent
+  content: ResumeStoredContent
   settings?: Record<string, any>
   status?: 'draft' | 'published' | 'archived'
 }
@@ -84,9 +96,21 @@ export interface CreateResumeRequest {
 export interface UpdateResumeRequest {
   template_id?: string
   name?: string
-  content?: ResumeContent
+  content?: ResumeStoredContent
   settings?: Record<string, any>
   status?: 'draft' | 'published' | 'archived'
+}
+
+export interface EnhanceResumeSectionRequest {
+  section_type: string
+  section_context: string
+  user_instruction: string
+  current_text: string
+  language?: string
+}
+
+export interface EnhanceResumeSectionResponse {
+  enhanced_text: string
 }
 
 export interface ResumeListResponse {
@@ -136,12 +160,29 @@ class ResumeService {
   // Get resume templates
   async getTemplates(): Promise<{ templates: any[], total: number }> {
   const response = await apiClient.client.get('/resume/templates')
-  return response.data
+  const d = response.data
+  if (d && Array.isArray(d.templates)) {
+  return d
+  }
+  if (d?.data && Array.isArray(d.data.templates)) {
+  return {
+  templates: d.data.templates,
+  total: typeof d.data.total === 'number' ? d.data.total : d.data.templates.length
+  }
+  }
+  return { templates: [], total: 0 }
   }
 
   // Get a specific template by ID
   async getTemplateById(templateId: string): Promise<any> {
   const response = await apiClient.client.get(`/resume/templates/${templateId}`)
+  return response.data
+  }
+
+  async enhanceResumeSection(
+  body: EnhanceResumeSectionRequest
+  ): Promise<EnhanceResumeSectionResponse> {
+  const response = await apiClient.client.post<EnhanceResumeSectionResponse>('/resume/enhance-section', body)
   return response.data
   }
 }

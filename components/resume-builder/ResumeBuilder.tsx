@@ -8,6 +8,7 @@ import { ResumeForm } from './ResumeForm'
 import { ResumePreview } from './ResumePreview'
 import { useProfile } from '@/hooks/useProfile'
 import { resumeService, type ResumeContent } from '@/services/resumeService'
+import { isAnyStructuredResumeContent } from '@/lib/designerVariantsResume'
 // Defer importing html2pdf to client runtime to avoid SSR ReferenceError: self is not defined
 let html2pdf: any
 if (typeof window !== 'undefined') {
@@ -15,6 +16,7 @@ if (typeof window !== 'undefined') {
   html2pdf = require('html2pdf.js')
 }
 import toast from 'react-hot-toast'
+import { ClassicResumeAiPanel } from './ClassicResumeAiPanel'
 
 interface ResumeBuilderProps {
   templateId: string | null
@@ -172,7 +174,11 @@ export function ResumeBuilder({ templateId, resumeId }: ResumeBuilderProps) {
   const loadResumeData = async (resumeId: string) => {
   try {
   const resume = await resumeService.getResumeById(resumeId)
-  setResumeData(resume.content)
+  if (isAnyStructuredResumeContent(resume.content)) {
+  toast.error('This resume is edited with a structured template builder. Open it from the resume list to continue.')
+  return
+  }
+  setResumeData(resume.content as ResumeData)
   } catch (error) {
   console.error('Error loading resume:', error)
   toast.error('Failed to load resume data')
@@ -207,7 +213,8 @@ export function ResumeBuilder({ templateId, resumeId }: ResumeBuilderProps) {
   // Create new resume
   // Get the first available template
   const templates = await resumeService.getTemplates()
-  const defaultTemplateId = templates.templates[0]?.id || '550e8400-e29b-41d4-a716-446655440000'
+  const defaultTemplateId =
+    templates.templates[0]?.id || "550e8400-e29b-41d4-a716-446655440001"
 
   const created = await resumeService.createResume({
   template_id: templateId || defaultTemplateId,
@@ -657,6 +664,7 @@ export function ResumeBuilder({ templateId, resumeId }: ResumeBuilderProps) {
   animate={{ opacity: 1, x: 0 }}
   className={`space-y-6 ${!showForm && !showPreview ? 'block' : showForm ? 'block' : 'hidden lg:block'}`}
   >
+  <ClassicResumeAiPanel resumeData={resumeData as never} onApply={(next) => setResumeData(next as ResumeData)} />
   <ResumeForm
   resumeData={resumeData}
   onUpdate={updateResumeData}

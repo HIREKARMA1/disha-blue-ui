@@ -4,9 +4,11 @@ import { motion } from 'framer-motion'
 import { Plus, FileText, Download, Edit, Trash2, MoreVertical } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useState, useEffect, useRef } from 'react'
-import { resumeService, type ResumeData } from '@/services/resumeService'
+import { resumeService, type ResumeData, type ClassicResumeContent } from '@/services/resumeService'
 import toast from 'react-hot-toast'
 import { ResumePreview } from './ResumePreview'
+import { isMinimalClassicResumeContent } from '@/lib/minimalClassicResume'
+import { isMarcelineResumeContent, isMorganResumeContent, isDaniResumeContent } from '@/lib/designerVariantsResume'
 
 // Defer importing html2pdf to client runtime to avoid SSR issues
 let html2pdf: any
@@ -94,7 +96,69 @@ export function ResumeBuilderDashboard({ onNewResume, onEditResume }: ResumeBuil
 
   // Helper function to get resume preview data
   const getResumePreview = (resume: ResumeData): ResumePreview => {
-  const content = resume.content
+  const raw = resume.content
+  if (isMinimalClassicResumeContent(raw)) {
+  const m = raw.minimalClassic
+  return {
+  name: m.personalInfo.fullName || 'Unnamed',
+  title: m.personalInfo.jobTitle || 'Professional',
+  email: m.personalInfo.email || '',
+  phone: m.personalInfo.phone || '',
+  summary: m.aboutMe || '',
+  skills: m.skills.filter(Boolean).slice(0, 8),
+  experience: m.experience[0]
+  ? `${m.experience[0].title} — ${m.experience[0].organization}`
+  : 'No experience listed'
+  }
+  }
+  if (isMarcelineResumeContent(raw)) {
+  const m = raw.marcelineSingle
+  const skillParts = m.skillGroups.flatMap((g) => g.itemsLine.split(',').map((s) => s.trim())).filter(Boolean)
+  return {
+  name: m.personalInfo.fullName || 'Unnamed',
+  title: m.personalInfo.jobTitle || 'Professional',
+  email: m.personalInfo.email || '',
+  phone: m.personalInfo.phone || '',
+  summary: m.profileSummary || '',
+  skills: skillParts.slice(0, 8),
+  experience: m.experience[0]
+  ? `${m.experience[0].role} — ${m.experience[0].company}`
+  : 'No experience listed'
+  }
+  }
+  if (isMorganResumeContent(raw)) {
+  const m = raw.morganBlocks
+  const emailRow = m.contacts.find((c) => c.icon === 'email')
+  const phoneRow = m.contacts.find((c) => c.icon === 'phone')
+  return {
+  name: m.personalInfo.fullName || 'Unnamed',
+  title: m.personalInfo.jobTitle || 'Professional',
+  email: emailRow?.text || '',
+  phone: phoneRow?.text || '',
+  summary: m.summary || '',
+  skills: m.expertise.split(/[,;]+/).map((s) => s.trim()).filter(Boolean).slice(0, 8),
+  experience: m.experience[0]
+  ? `${m.experience[0].title} — ${m.experience[0].companyDatesLine}`
+  : 'No experience listed'
+  }
+  }
+  if (isDaniResumeContent(raw)) {
+  const m = raw.daniSidebar
+  const emailRow = m.sidebar.contacts.find((c) => c.icon === 'email')
+  const phoneRow = m.sidebar.contacts.find((c) => c.icon === 'phone')
+  return {
+  name: m.personalInfo.fullName || 'Unnamed',
+  title: m.personalInfo.jobTitle || 'Professional',
+  email: emailRow?.text || '',
+  phone: phoneRow?.text || '',
+  summary: m.profileSummary || '',
+  skills: m.sidebar.skills.filter(Boolean).slice(0, 8),
+  experience: m.experience[0]
+  ? `${m.experience[0].title} — ${m.experience[0].company}`
+  : 'No experience listed'
+  }
+  }
+  const content = raw as ClassicResumeContent
   return {
   name: content.header.fullName || 'Unnamed',
   title: content.experience?.[0]?.position || 'Professional',
@@ -144,10 +208,26 @@ export function ResumeBuilderDashboard({ onNewResume, onEditResume }: ResumeBuil
   try {
   setIsDownloading(true)
 
-  const safeName =
-  downloadingResume.content?.header?.fullName ||
+  const safeName = (() => {
+  const c = downloadingResume.content
+  if (isMinimalClassicResumeContent(c)) {
+  return c.minimalClassic.personalInfo.fullName || downloadingResume.name || 'resume'
+  }
+  if (isMarcelineResumeContent(c)) {
+  return c.marcelineSingle.personalInfo.fullName || downloadingResume.name || 'resume'
+  }
+  if (isMorganResumeContent(c)) {
+  return c.morganBlocks.personalInfo.fullName || downloadingResume.name || 'resume'
+  }
+  if (isDaniResumeContent(c)) {
+  return c.daniSidebar.personalInfo.fullName || downloadingResume.name || 'resume'
+  }
+  return (
+  (downloadingResume.content as ClassicResumeContent)?.header?.fullName ||
   downloadingResume.name ||
   'resume'
+  )
+  })()
 
   const fileName = `${safeName.replace(/[^a-z0-9]/gi, '_').toLowerCase()}_resume.pdf`
 

@@ -1,0 +1,115 @@
+{
+  "locale": "en",
+  "sections": {
+    "contacts": { "heading": "Contact", "addRow": "Add contact row", "removeRow": "Remove" },
+    "summary": { "heading": "Professional summary" },
+    "expertise": { "heading": "Areas of expertise" },
+    "education": { "heading": "Educational history", "addEntry": "Add school", "removeEntry": "Remove" },
+    "experience": { "heading": "Professional history", "addEntry": "Add role", "removeEntry": "Remove" },
+    "references": { "heading": "Character references", "addRef": "Add reference", "removeRef": "Remove" }
+  },
+  "editor": {
+    "titleCreate": "Create resume",
+    "titleEdit": "Edit resume",
+    "save": "Save",
+    "saved": "Saved!",
+    "saving": "Saving...",
+    "downloadPdf": "Download PDF",
+    "generatingPdf": "Generating...",
+    "addToProfile": "Save to profile",
+    "addToProfileSaving": "Syncing...",
+    "aiEnhance": "Enhance with AI",
+    "aiModalTitle": "Enhance section with AI",
+    "aiInstructionLabel": "What should the AI focus on?",
+    "aiInstructionPlaceholder": "e.g. More concise, stronger technical keywords…",
+    "aiApply": "Apply enhancement",
+    "aiCancel": "Cancel",
+    "aiWorking": "Enhancing…",
+    "personalBlockTitle": "Name, title & photo URL",
+    "personalFieldLabels": {
+      "fullName": "Full name",
+      "jobTitle": "Professional title",
+      "photoUrl": "Profile photo URL"
+    },
+    "contactIconLabel": "Icon",
+    "contactText": "Text",
+    "summaryBody": "Summary paragraph",
+    "expertiseBody": "Expertise paragraph",
+    "eduInstitution": "Institution",
+    "eduDegreeDates": "Degree and dates (one line)",
+    "expTitle": "Job title",
+    "expCompanyDates": "Company and dates (one line)",
+    "refName": "Reference name",
+    "refTitleCompany": "Title, company",
+    "refPhone": "Phone",
+    "refEmail": "Email",
+    "bulletPlaceholder": "Bullet point"
+  },
+  "ai": {
+    "sectionContextHeader": "Full name and target role for tone:",
+    "defaultInstruction": "Polish for clarity and professional tone without adding new facts."
+  },
+  "defaults": {
+    "personalInfo": {
+      "fullName": "MORGAN MAXWELL",
+      "jobTitle": "SOFTWARE EXPERT",
+      "photoUrl": ""
+    },
+    "contacts": [
+      { "id": "mc-1", "icon": "phone", "text": "+1 234 567 8901" },
+      { "id": "mc-2", "icon": "location", "text": "123 Anywhere St., Any City" },
+      { "id": "mc-3", "icon": "email", "text": "hello@reallygreatsite.com" },
+      { "id": "mc-4", "icon": "web", "text": "reallygreatsite.com" },
+      { "id": "mc-5", "icon": "linkedin", "text": "linkedin.com/in/yourprofile" }
+    ],
+    "summary": "Results-driven software professional with experience shipping reliable products, improving performance, and collaborating across engineering, design, and stakeholders.",
+    "expertise": "Full-stack development, cloud architecture, API design, automated testing, and mentoring junior engineers.",
+    "education": [
+      {
+        "id": "mrg-ed-1",
+        "institution": "WARDIERE UNIVERSITY",
+        "degreeDatesLine": "MSC COMPUTER SCIENCE | 2016 – 2018",
+        "bullets": ["Graduated with distinction.", "Research focus on distributed systems."]
+      },
+      {
+        "id": "mrg-ed-2",
+        "institution": "BORCELLE COLLEGE",
+        "degreeDatesLine": "BSC INFORMATION TECHNOLOGY | 2012 – 2016",
+        "bullets": ["Dean's list.", "Led student developer guild."]
+      }
+    ],
+    "experience": [
+      {
+        "id": "mrg-xp-1",
+        "title": "SENIOR SOFTWARE ENGINEER",
+        "companyDatesLine": "BORCELLE TECHNOLOGIES | 2019 – PRESENT",
+        "bullets": [
+          "Owned roadmap for core services used by 50k+ weekly active users.",
+          "Reduced incident rate by improving observability and on-call runbooks."
+        ]
+      },
+      {
+        "id": "mrg-xp-2",
+        "title": "SOFTWARE ENGINEER",
+        "companyDatesLine": "ACME DIGITAL | 2016 – 2019",
+        "bullets": ["Built internal tooling and CI pipelines.", "Partnered with product on MVP delivery."]
+      }
+    ],
+    "references": [
+      {
+        "id": "mrg-r-1",
+        "name": "JORDAN LEE",
+        "titleCompany": "Engineering Manager, Borcelle Technologies",
+        "phone": "+1 234 567 0001",
+        "email": "jordan.lee@example.com"
+      },
+      {
+        "id": "mrg-r-2",
+        "name": "SAMIRA PATEL",
+        "titleCompany": "Director of Product, Acme Digital",
+        "phone": "+1 234 567 0002",
+        "email": "samira.patel@example.com"
+      }
+    ]
+  }
+}

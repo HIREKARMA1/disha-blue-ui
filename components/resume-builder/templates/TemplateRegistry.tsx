@@ -25,7 +25,7 @@ export const TEMPLATES: Record<string, TemplateInfo> = {
   category: "professional",
   sections: 5,
   preview_image:
-  "https://your-resume-templates.s3.us-east-1.amazonaws.com/modern-profile.png",
+  "/assets/resume-template-classic-ats.png",
   },
   // Future templates will be added here
   // 'professional-resume': {

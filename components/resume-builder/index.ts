@@ -1,5 +1,7 @@
-export { ResumeBuilderDashboard } from './ResumeBuilderDashboard'
+export { ResumeBuilderRouter } from './ResumeBuilderRouter'
+export type { SelectedResumeTemplateMeta } from './TemplateSelection'
 export { TemplateSelection } from './TemplateSelection'
+export { ResumeBuilderDashboard } from './ResumeBuilderDashboard'
 export { ResumeBuilder } from './ResumeBuilder'
 export { ResumeForm } from './ResumeForm'
 export { ResumePreview } from './ResumePreview'

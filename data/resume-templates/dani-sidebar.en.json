@@ -1,0 +1,106 @@
+{
+  "locale": "en",
+  "sections": {
+    "profile": { "heading": "PROFILE" },
+    "experience": { "heading": "EXPERIENCE", "addEntry": "Add role", "removeEntry": "Remove" },
+    "sidebarSkills": { "heading": "SKILLS", "addSkill": "Add skill", "removeSkill": "Remove" },
+    "sidebarEducation": { "heading": "EDUCATION", "addEntry": "Add entry", "removeEntry": "Remove" },
+    "sidebarContacts": { "heading": "Contact", "addRow": "Add row", "removeRow": "Remove" }
+  },
+  "editor": {
+    "titleCreate": "Create resume",
+    "titleEdit": "Edit resume",
+    "save": "Save",
+    "saved": "Saved!",
+    "saving": "Saving...",
+    "downloadPdf": "Download PDF",
+    "generatingPdf": "Generating...",
+    "addToProfile": "Save to profile",
+    "addToProfileSaving": "Syncing...",
+    "aiEnhance": "Enhance with AI",
+    "aiModalTitle": "Enhance section with AI",
+    "aiInstructionLabel": "What should the AI focus on?",
+    "aiInstructionPlaceholder": "e.g. Stronger action verbs, ATS-friendly phrasing…",
+    "aiApply": "Apply enhancement",
+    "aiCancel": "Cancel",
+    "aiWorking": "Enhancing…",
+    "personalBlockTitle": "Name & headline (header bar)",
+    "personalFieldLabels": {
+      "fullName": "Full name",
+      "jobTitle": "Professional title"
+    },
+    "photoUrl": "Sidebar photo URL",
+    "profileBody": "Profile summary",
+    "contactIconLabel": "Icon",
+    "contactText": "Text",
+    "skillLabel": "Skill",
+    "eduLevel": "Program / level",
+    "eduSchoolYears": "School and years",
+    "expTitle": "Job title",
+    "expCompany": "Company",
+    "expDates": "Dates",
+    "bulletPlaceholder": "Responsibility or result"
+  },
+  "ai": {
+    "sectionContextHeader": "Full name and target role for tone:",
+    "defaultInstruction": "Polish for clarity and professional tone without adding new facts."
+  },
+  "defaults": {
+    "personalInfo": {
+      "fullName": "DANI SCHWAIGER",
+      "jobTitle": "WEB DEVELOPER"
+    },
+    "sidebar": {
+      "photoUrl": "",
+      "contacts": [
+        { "id": "dc-1", "icon": "phone", "text": "123-456-7890" },
+        { "id": "dc-2", "icon": "email", "text": "hello@reallygreatsite.com" },
+        { "id": "dc-3", "icon": "location", "text": "123 Anywhere St., Any City" },
+        { "id": "dc-4", "icon": "web", "text": "reallygreatsite.com" }
+      ],
+      "skills": [
+        "Web Design",
+        "Design Thinking",
+        "Wireframe Creation",
+        "Front End Coding",
+        "Problem-Solving",
+        "Computer Literacy",
+        "Project Management Tools",
+        "Strong Communication"
+      ],
+      "education": [
+        {
+          "id": "de-1",
+          "level": "SECONDARY SCHOOL",
+          "schoolYearsLine": "Really Great High School, 2010 - 2014"
+        },
+        {
+          "id": "de-2",
+          "level": "BACHELOR OF TECHNOLOGY",
+          "schoolYearsLine": "Really Great University, 2014 - 2016"
+        }
+      ]
+    },
+    "profileSummary": "Motivated web developer focused on accessible interfaces, maintainable codebases, and close collaboration with design and product teams.",
+    "experience": [
+      {
+        "id": "dx-1",
+        "title": "APPLICATIONS DEVELOPER",
+        "company": "Really Great Company",
+        "dates": "2016 - Present",
+        "bullets": [
+          "Built responsive UI components and integrated REST APIs.",
+          "Improved performance and accessibility scores on key flows.",
+          "Participated in code reviews and sprint planning."
+        ]
+      },
+      {
+        "id": "dx-2",
+        "title": "FRONT END INTERN",
+        "company": "Studio North",
+        "dates": "2015 - 2016",
+        "bullets": ["Shipped marketing landing pages and email templates."]
+      }
+    ]
+  }
+}

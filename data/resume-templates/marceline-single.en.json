@@ -1,0 +1,109 @@
+{
+  "locale": "en",
+  "sections": {
+    "profileSummary": { "heading": "PROFILE SUMMARY" },
+    "experience": { "heading": "EXPERIENCE", "addEntry": "Add role", "removeEntry": "Remove", "bulletPlaceholder": "Achievement or responsibility" },
+    "education": { "heading": "EDUCATION", "addEntry": "Add education", "removeEntry": "Remove" },
+    "skills": { "heading": "SKILLS", "addGroup": "Add skill group", "removeGroup": "Remove group", "itemsHint": "Comma-separated skills" },
+    "achievements": { "heading": "ACHIEVEMENTS", "add": "Add achievement", "remove": "Remove" }
+  },
+  "editor": {
+    "titleCreate": "Create resume",
+    "titleEdit": "Edit resume",
+    "save": "Save",
+    "saved": "Saved!",
+    "saving": "Saving...",
+    "downloadPdf": "Download PDF",
+    "generatingPdf": "Generating...",
+    "addToProfile": "Save to profile",
+    "addToProfileSaving": "Syncing...",
+    "aiEnhance": "Enhance with AI",
+    "aiModalTitle": "Enhance section with AI",
+    "aiInstructionLabel": "What should the AI focus on?",
+    "aiInstructionPlaceholder": "e.g. Tighten wording, emphasize impact, keep facts accurate…",
+    "aiApply": "Apply enhancement",
+    "aiCancel": "Cancel",
+    "aiWorking": "Enhancing…",
+    "personalBlockTitle": "Header & contact",
+    "personalFieldLabels": {
+      "fullName": "Full name",
+      "jobTitle": "Professional title",
+      "addressLine": "Address",
+      "phone": "Phone",
+      "email": "Email"
+    },
+    "profileBody": "Profile summary",
+    "experienceRole": "Job title",
+    "experienceCompany": "Company",
+    "experienceDates": "Dates",
+    "educationDegree": "Degree or program",
+    "educationInstitutionYear": "School and year",
+    "skillGroupLabel": "Group label",
+    "achievementText": "Achievement"
+  },
+  "ai": {
+    "sectionContextHeader": "Full name and target role for tone:",
+    "defaultInstruction": "Polish for clarity and professional tone without adding new facts."
+  },
+  "defaults": {
+    "personalInfo": {
+      "fullName": "MARCELINE ANDERSON",
+      "jobTitle": "GRAPHIC DESIGNER",
+      "addressLine": "123 Anywhere St., Any City",
+      "phone": "+123-456-7890",
+      "email": "hello@reallygreatsite.com"
+    },
+    "profileSummary": "Creative and detail-oriented graphic designer with experience in brand systems, digital campaigns, and print layout. Focused on clear storytelling and collaborative delivery.",
+    "experience": [
+      {
+        "id": "mxp-1",
+        "role": "Senior Graphic Designer",
+        "company": "Studio Shodwe",
+        "dates": "2021 – Present",
+        "bullets": [
+          "Developed brand identity packages for retail and hospitality clients.",
+          "Partnered with marketing on campaign visuals and social assets.",
+          "Improved handoff workflows between design and development teams."
+        ]
+      },
+      {
+        "id": "mxp-2",
+        "role": "Junior Designer",
+        "company": "Freelance",
+        "dates": "2018 – 2021",
+        "bullets": [
+          "Supported illustration and layout for editorial and event collateral.",
+          "Maintained asset libraries and brand guideline documentation."
+        ]
+      }
+    ],
+    "education": [
+      {
+        "id": "med-1",
+        "degree": "Bachelor of Design in Visual Communication",
+        "institutionYear": "Rimberio University, 2018"
+      }
+    ],
+    "skillGroups": [
+      {
+        "id": "msg-1",
+        "label": "Design Tools",
+        "itemsLine": "Adobe Illustrator, Photoshop, Canva, Figma, Affinity Designer"
+      },
+      {
+        "id": "msg-2",
+        "label": "Specialties",
+        "itemsLine": "Branding, Illustration, Layout Design, Typography, Digital Ads"
+      },
+      {
+        "id": "msg-3",
+        "label": "Soft Skills",
+        "itemsLine": "Communication, Time Management, Creativity, Collaboration"
+      }
+    ],
+    "achievements": [
+      { "id": "mach-1", "text": "Winner – Young Designer Award 2022, Local Creative Festival" },
+      { "id": "mach-2", "text": "Featured on Behance Graphic Design Gallery, 2023" }
+    ]
+  }
+}

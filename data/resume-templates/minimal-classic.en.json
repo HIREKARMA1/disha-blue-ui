@@ -1,0 +1,118 @@
+{
+  "locale": "en",
+  "sections": {
+    "aboutMe": { "heading": "ABOUT ME" },
+    "education": { "heading": "EDUCATION", "addEntry": "Add education", "removeEntry": "Remove" },
+    "experience": { "heading": "EXPERIENCE", "addEntry": "Add role", "removeEntry": "Remove" },
+    "skills": { "heading": "SKILLS", "addSkill": "Add skill", "columnHint": "Skills fill left-to-right in four columns (two rows)." },
+    "references": { "heading": "REFERENCES", "addReference": "Add reference", "phoneLabel": "Phone", "socialLabel": "Social" }
+  },
+  "editor": {
+    "titleCreate": "Create resume",
+    "titleEdit": "Edit resume",
+    "save": "Save",
+    "saved": "Saved!",
+    "saving": "Saving...",
+    "downloadPdf": "Download PDF",
+    "generatingPdf": "Generating...",
+    "addToProfile": "Save to profile",
+    "addToProfileSaving": "Syncing...",
+    "aiEnhance": "Enhance with AI",
+    "aiModalTitle": "Enhance section with AI",
+    "aiInstructionLabel": "What should the AI focus on?",
+    "aiInstructionPlaceholder": "e.g. Make it more concise, emphasize leadership, tailor for product roles…",
+    "aiApply": "Apply enhancement",
+    "aiCancel": "Cancel",
+    "aiWorking": "Enhancing…",
+    "personalBlockTitle": "Header & contact",
+    "personalFieldLabels": {
+      "fullName": "Full name",
+      "jobTitle": "Professional headline",
+      "phone": "Phone",
+      "email": "Email",
+      "location": "Location"
+    },
+    "timelineDateRange": "Date range",
+    "timelineOrganization": "School or company",
+    "timelineTitle": "Degree or job title",
+    "timelineBody": "Description",
+    "referenceName": "Name",
+    "referenceSubtitle": "Title / company",
+    "referencePhone": "Phone line",
+    "referenceSocial": "Social line",
+    "aboutBody": "Summary paragraph",
+    "skillLabel": "Skill"
+  },
+  "ai": {
+    "sectionContextHeader": "Full name and target role for tone:",
+    "defaultInstruction": "Polish for clarity and professional tone without adding new facts."
+  },
+  "defaults": {
+    "personalInfo": {
+      "fullName": "ANAISHA PARVATI",
+      "jobTitle": "HEAD MANAGER",
+      "phone": "+123-456-7890",
+      "location": "123 Anywhere St., Any City",
+      "email": "hello@reallygreatsite.com"
+    },
+    "aboutMe": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
+    "education": [
+      {
+        "id": "edu-1",
+        "dateRange": "2020 - 2023",
+        "organization": "Wardiere University",
+        "title": "Master of Business Management",
+        "body": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+      },
+      {
+        "id": "edu-2",
+        "dateRange": "2016 - 2020",
+        "organization": "Wardiere University",
+        "title": "Bachelor of Business Management",
+        "body": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+      }
+    ],
+    "experience": [
+      {
+        "id": "exp-1",
+        "dateRange": "2023 - NOW",
+        "organization": "Borcelle Studio",
+        "title": "Head Manager",
+        "body": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris."
+      },
+      {
+        "id": "exp-2",
+        "dateRange": "2020 - 2023",
+        "organization": "Salford & Co",
+        "title": "Executive Assistant",
+        "body": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris."
+      }
+    ],
+    "skills": [
+      "Leadership",
+      "Digital Marketing",
+      "Communication",
+      "Innovation",
+      "Analytics",
+      "Teamwork",
+      "Problem Solving",
+      "Collaboration"
+    ],
+    "references": [
+      {
+        "id": "ref-1",
+        "name": "Aarya Agarwal",
+        "subtitle": "CEO of Borcelle Company",
+        "phone": "123-456-7890",
+        "social": "@reallygreatsite"
+      },
+      {
+        "id": "ref-2",
+        "name": "James Novak",
+        "subtitle": "Head of HR at Wardiere Inc.",
+        "phone": "123-456-7890",
+        "social": "@reallygreatsite"
+      }
+    ]
+  }
+}

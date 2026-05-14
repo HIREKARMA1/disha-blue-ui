@@ -2,11 +2,11 @@
 
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { FileText, Plus, Search, Filter } from 'lucide-react'
+import { FileText, Filter } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { ResumeBuilderDashboard } from './ResumeBuilderDashboard'
-import { TemplateSelection } from './TemplateSelection'
-import { ResumeBuilder } from './ResumeBuilder'
+import { TemplateSelection, type SelectedResumeTemplateMeta } from './TemplateSelection'
+import { ResumeBuilderRouter } from './ResumeBuilderRouter'
 import { useProfile } from '@/hooks/useProfile'
 
 type ResumeBuilderView = 'dashboard' | 'templates' | 'builder'
@@ -14,7 +14,7 @@ type ResumeBuilderView = 'dashboard' | 'templates' | 'builder'
 export function ResumeBuilderPage() {
   const { profile, loading, error } = useProfile()
   const [currentView, setCurrentView] = useState<ResumeBuilderView>('dashboard')
-  const [selectedTemplate, setSelectedTemplate] = useState<string | null>(null)
+  const [selectedTemplateMeta, setSelectedTemplateMeta] = useState<SelectedResumeTemplateMeta | null>(null)
   const [selectedResume, setSelectedResume] = useState<string | null>(null)
 
   // Debug logging
@@ -24,25 +24,27 @@ export function ResumeBuilderPage() {
   console.log('ResumeBuilderPage - Profile error:', error)
   }, [profile, loading, error])
 
-  const handleTemplateSelect = (templateId: string) => {
-  setSelectedTemplate(templateId)
+  const handleTemplateSelect = (template: SelectedResumeTemplateMeta) => {
+  setSelectedTemplateMeta(template)
+  setSelectedResume(null)
   setCurrentView('builder')
   }
 
   const handleResumeSelect = (resumeId: string) => {
   setSelectedResume(resumeId)
+  setSelectedTemplateMeta(null)
   setCurrentView('builder')
   }
 
   const handleBackToDashboard = () => {
   setCurrentView('dashboard')
-  setSelectedTemplate(null)
+  setSelectedTemplateMeta(null)
   setSelectedResume(null)
   }
 
   const handleBackToTemplates = () => {
   setCurrentView('templates')
-  setSelectedTemplate(null)
+  setSelectedTemplateMeta(null)
   }
 
   // Show loading state while profile is loading
@@ -155,9 +157,9 @@ export function ResumeBuilderPage() {
   )}
 
   {currentView === 'builder' && (
-  <ResumeBuilder
-  templateId={selectedTemplate}
+  <ResumeBuilderRouter
   resumeId={selectedResume}
+  templateMeta={selectedTemplateMeta}
   />
   )}
   </motion.div>

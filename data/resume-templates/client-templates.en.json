@@ -1,0 +1,53 @@
+{
+  "locale": "en",
+  "templates": [
+    {
+      "clientTemplateId": "client:minimal-classic-v1",
+      "layoutKey": "minimal-classic-v1",
+      "name": "Minimal Executive",
+      "description": "Single-page ruled layout with centered header, timeline education and experience, four-column skills, and references.",
+      "category": "minimalist",
+      "preview_image": "/assets/resume-template-minimal-classic.png",
+      "layout": "single-page-ruled",
+      "font_family": "Inter",
+      "font_size": "10pt",
+      "sections": 6
+    },
+    {
+      "clientTemplateId": "client:marceline-single-v1",
+      "layoutKey": "marceline-single-v1",
+      "name": "Marceline — Single column",
+      "description": "Navy single-column resume with profile summary, experience, education, grouped skills, and achievements.",
+      "category": "creative",
+      "preview_image": "/assets/resume-template-marceline.png",
+      "layout": "single-column-navy",
+      "font_family": "Inter",
+      "font_size": "10pt",
+      "sections": 6
+    },
+    {
+      "clientTemplateId": "client:morgan-blocks-v1",
+      "layoutKey": "morgan-blocks-v1",
+      "name": "Morgan — Block layout",
+      "description": "Bold block layout with photo header, contact and summary strip, education and experience panels, and references.",
+      "category": "executive",
+      "preview_image": "/assets/resume-template-morgan.png",
+      "layout": "multi-block",
+      "font_family": "Inter",
+      "font_size": "10pt",
+      "sections": 6
+    },
+    {
+      "clientTemplateId": "client:dani-sidebar-v1",
+      "layoutKey": "dani-sidebar-v1",
+      "name": "Dani — Sidebar",
+      "description": "Two-column resume with slate header, main profile and experience timeline, and a sidebar for photo, contact, skills, and education.",
+      "category": "creative",
+      "preview_image": "/assets/resume-template-dani.png",
+      "layout": "two-column-sidebar",
+      "font_family": "Inter",
+      "font_size": "10pt",
+      "sections": 5
+    }
+  ]
+}

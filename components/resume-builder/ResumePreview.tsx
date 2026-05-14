@@ -3,6 +3,21 @@
 import { useState, useEffect } from 'react'
 import { getTemplateComponent, getTemplateInfo, TemplateInfo } from './templates/TemplateRegistry'
 import type { FullResumeSchema } from '@/hooks/useResumeAI'
+import { isMinimalClassicResumeContent } from '@/lib/minimalClassicResume'
+import {
+  isAnyStructuredResumeContent,
+  isDaniResumeContent,
+  isMarcelineResumeContent,
+  isMorganResumeContent,
+} from '@/lib/designerVariantsResume'
+import { MinimalClassicTemplate } from './templates/minimal-classic/MinimalClassicTemplate'
+import minimalClassicEn from '@/data/resume-templates/minimal-classic.en.json'
+import { MarcelineTemplate } from './templates/marceline-single/MarcelineTemplate'
+import marcelineEn from '@/data/resume-templates/marceline-single.en.json'
+import { MorganTemplate } from './templates/morgan-blocks/MorganTemplate'
+import morganEn from '@/data/resume-templates/morgan-blocks.en.json'
+import { DaniTemplate } from './templates/dani-sidebar/DaniTemplate'
+import daniEn from '@/data/resume-templates/dani-sidebar.en.json'
 
 interface ResumePreviewProps {
   resumeData: any
@@ -15,6 +30,11 @@ export function ResumePreview({ resumeData, templateId, onReady }: ResumePreview
   const [TemplateComponent, setTemplateComponent] = useState<any>(null)
 
   useEffect(() => {
+  if (isAnyStructuredResumeContent(resumeData)) {
+  setCurrentTemplate(null)
+  setTemplateComponent(null)
+  return
+  }
   if (templateId) {
   const templateInfo = getTemplateInfo(templateId)
   const TemplateComponent = getTemplateComponent(templateId)
@@ -30,17 +50,30 @@ export function ResumePreview({ resumeData, templateId, onReady }: ResumePreview
   setCurrentTemplate(templateInfo)
   setTemplateComponent(() => TemplateComponent)
   }
-  }, [templateId])
+  }, [templateId, resumeData])
 
   // Notify parent when the template component is ready so that external
   // consumers (like the dashboard PDF download) can safely snapshot the DOM.
   useEffect(() => {
-  if (TemplateComponent && onReady) {
+  if ((TemplateComponent || isAnyStructuredResumeContent(resumeData)) && onReady) {
   onReady()
   }
-  }, [TemplateComponent, onReady])
+  }, [TemplateComponent, onReady, resumeData])
 
   const renderPreviewContent = () => {
+  if (isMinimalClassicResumeContent(resumeData)) {
+  return <MinimalClassicTemplate copy={minimalClassicEn} model={resumeData.minimalClassic} />
+  }
+  if (isMarcelineResumeContent(resumeData)) {
+  return <MarcelineTemplate copy={marcelineEn} model={resumeData.marcelineSingle} />
+  }
+  if (isMorganResumeContent(resumeData)) {
+  return <MorganTemplate copy={morganEn} model={resumeData.morganBlocks} />
+  }
+  if (isDaniResumeContent(resumeData)) {
+  return <DaniTemplate copy={daniEn} model={resumeData.daniSidebar} />
+  }
+
   if (!TemplateComponent) {
   return (
   <div className="dashboard-overview-card rounded-2xl p-4">
