@@ -16,7 +16,7 @@ import {
   ChevronLeft,
   ChevronRight,
 } from 'lucide-react'
-import { ApplicationData } from '@/app/dashboard/corporate/applications/page'
+import type { ApplicationData } from '@/components/corporate/applications/corporate-application-types'
 
 interface ApplicationTableProps {
   applications: ApplicationData[]

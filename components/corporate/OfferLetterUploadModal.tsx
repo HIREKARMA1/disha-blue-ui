@@ -3,7 +3,7 @@
 import { useState, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, Upload, FileText, CheckCircle, AlertCircle, Loader } from 'lucide-react'
-import { ApplicationData } from '@/app/dashboard/corporate/applications/page'
+import type { ApplicationData } from '@/components/corporate/applications/corporate-application-types'
 import { corporateModalBackdropClass, corporateModalShellClass, corporateModalHeaderClass } from '@/components/corporate/corporate-ui'
 import { cn } from '@/lib/utils'
 
