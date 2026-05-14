@@ -17,7 +17,8 @@ export type SectionAiEnhanceCopy = {
     aiWorking: string
   }
   ai: {
-    defaultInstruction: string
+    /** @deprecated Server builds prompts; kept for typing compatibility. */
+    defaultInstruction?: string
     sectionContextHeader: string
   }
 }
@@ -26,7 +27,6 @@ export function SectionAiEnhanceModal({
   copy,
   open,
   sectionLabel,
-  initialInstruction,
   onClose,
   onConfirm,
   loading,
@@ -34,16 +34,16 @@ export function SectionAiEnhanceModal({
   copy: SectionAiEnhanceCopy
   open: boolean
   sectionLabel: string
-  initialInstruction: string
   onClose: () => void
-  onConfirm: (instruction: string) => void
+  /** Optional short hint only (e.g. "emphasize leadership"). Full prompts live on the server. */
+  onConfirm: (optionalHint: string) => void
   loading: boolean
 }) {
-  const [instruction, setInstruction] = useState(initialInstruction)
+  const [hint, setHint] = useState("")
 
   useEffect(() => {
-    if (open) setInstruction(initialInstruction)
-  }, [open, initialInstruction])
+    if (open) setHint("")
+  }, [open])
 
   return (
     <Modal
@@ -57,8 +57,8 @@ export function SectionAiEnhanceModal({
           <Label>{copy.editor.aiInstructionLabel}</Label>
           <Textarea
             className="mt-2 min-h-[100px]"
-            value={instruction}
-            onChange={(e) => setInstruction(e.target.value)}
+            value={hint}
+            onChange={(e) => setHint(e.target.value)}
             placeholder={copy.editor.aiInstructionPlaceholder}
           />
         </div>
@@ -66,7 +66,7 @@ export function SectionAiEnhanceModal({
           <Button type="button" variant="outline" onClick={onClose} disabled={loading}>
             {copy.editor.aiCancel}
           </Button>
-          <Button type="button" onClick={() => onConfirm(instruction)} disabled={loading} className="gap-1.5">
+          <Button type="button" onClick={() => onConfirm(hint)} disabled={loading} className="gap-1.5">
             <Sparkles className="h-4 w-4 shrink-0" aria-hidden />
             {loading ? copy.editor.aiWorking : copy.editor.aiApply}
           </Button>

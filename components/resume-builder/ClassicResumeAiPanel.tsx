@@ -6,21 +6,24 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { SectionAiEnhanceModal } from "@/components/resume-builder/templates/minimal-classic/SectionAiEnhanceModal"
 import { AiEnhanceButton } from "@/components/resume-builder/templates/minimal-classic/AiEnhanceButton"
-import { resumeService } from "@/services/resumeService"
+import { useResumeAiEnhance } from "@/features/resume-builder/hooks/useResumeAiEnhance"
+import type { ResumeAiEnhanceSection } from "@/features/resume-builder/types/ai-enhance"
 import toast from "react-hot-toast"
+
+const LAKSHYA_CLASSIC_TEMPLATE_ID = "classic-ats"
 
 const AI_COPY = {
   editor: {
     aiModalTitle: "Enhance with AI",
-    aiInstructionLabel: "What should the AI focus on?",
-    aiInstructionPlaceholder: "e.g. Stronger verbs, tighter bullets, align with software roles…",
+    aiInstructionLabel: "Optional focus",
+    aiInstructionPlaceholder:
+      "E.g. emphasize leadership, metrics, or ATS keywords. Leave blank for a smart rewrite — instructions are applied on the server.",
     aiApply: "Apply enhancement",
     aiCancel: "Cancel",
     aiWorking: "Enhancing…",
   },
   ai: {
     sectionContextHeader: "Name and target role (for tone only):",
-    defaultInstruction: "Polish for clarity and professional tone without adding new facts.",
   },
 } as const
 
@@ -67,11 +70,11 @@ export function ClassicResumeAiPanel({
   resumeData: ResumeData
   onApply: (next: ResumeData) => void
 }) {
+  const { enhance: enhanceLakshya, loading: aiEnhanceLoading } = useResumeAiEnhance()
   const [target, setTarget] = useState<ClassicAiTarget>({ kind: "summary" })
+  const [lakshyaSection, setLakshyaSection] = useState<ResumeAiEnhanceSection>("summary")
   const [expIndex, setExpIndex] = useState(0)
   const [modalOpen, setModalOpen] = useState(false)
-  const [loading, setLoading] = useState(false)
-  const [currentText, setCurrentText] = useState("")
 
   useEffect(() => {
     const n = resumeData.experience?.length ?? 0
@@ -81,7 +84,7 @@ export function ClassicResumeAiPanel({
 
   const openModal = (t: ClassicAiTarget) => {
     setTarget(t)
-    setCurrentText(getCurrentText(resumeData, t))
+    setLakshyaSection(t.kind === "experience_description" ? "experience" : "summary")
     setModalOpen(true)
   }
 
@@ -94,34 +97,30 @@ export function ClassicResumeAiPanel({
     openModal({ kind: "experience_description", index: idx })
   }
 
-  const runAi = async (instruction: string) => {
+  const runAi = async (optionalHint: string) => {
     const locale = typeof window !== "undefined" ? localStorage.getItem("locale") || "en" : "en"
-    const ctx = `${AI_COPY.ai.sectionContextHeader}\n${resumeData.header?.fullName || ""}`
-    setLoading(true)
+    const draftText = getCurrentText(resumeData, target)
     try {
-      const res = await resumeService.enhanceResumeSection({
-        section_type: `classic:${JSON.stringify(target)}`,
-        section_context: ctx,
-        user_instruction: instruction || AI_COPY.ai.defaultInstruction,
-        current_text: currentText,
+      const res = await enhanceLakshya({
+        section: lakshyaSection,
+        text: draftText,
+        hint: optionalHint.trim() || undefined,
+        context: {
+          fullName: resumeData.header?.fullName || "",
+          templateId: LAKSHYA_CLASSIC_TEMPLATE_ID,
+        },
         language: locale,
       })
-      onApply(applyEnhanced(resumeData, target, res.enhanced_text))
+      if (!res.success) {
+        toast.error(res.message || "AI could not enhance this section.")
+        return
+      }
+      onApply(applyEnhanced(resumeData, target, res.enhancedText))
       setModalOpen(false)
       toast.success("Section updated")
     } catch (e: unknown) {
       console.error(e)
-      const err = e as { response?: { data?: { detail?: unknown } } }
-      const detail = err?.response?.data?.detail
-      const msg =
-        typeof detail === "string"
-          ? detail
-          : Array.isArray(detail) && detail[0] && typeof (detail[0] as { msg?: string }).msg === "string"
-            ? (detail[0] as { msg: string }).msg
-            : "AI enhancement failed. Check login and API configuration."
-      toast.error(msg)
-    } finally {
-      setLoading(false)
+      toast.error("AI enhancement failed. Check your connection and try again.")
     }
   }
 
@@ -184,9 +183,8 @@ export function ClassicResumeAiPanel({
         copy={AI_COPY}
         open={modalOpen}
         sectionLabel={targetLabel(target)}
-        initialInstruction={AI_COPY.ai.defaultInstruction}
-        loading={loading}
-        onClose={() => !loading && setModalOpen(false)}
+        loading={aiEnhanceLoading}
+        onClose={() => !aiEnhanceLoading && setModalOpen(false)}
         onConfirm={runAi}
       />
     </div>

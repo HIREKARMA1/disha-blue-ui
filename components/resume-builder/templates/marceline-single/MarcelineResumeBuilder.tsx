@@ -18,6 +18,8 @@ import { MarcelineTemplate } from "./MarcelineTemplate"
 import { MarcelineEditorPanel, type MarcelineAiTarget } from "./MarcelineEditorPanel"
 import { SectionAiEnhanceModal } from "../minimal-classic/SectionAiEnhanceModal"
 import { cloneMarcelineDefaults, mergeProfileIntoMarceline } from "./buildInitialModel"
+import { useResumeAiEnhance } from "@/features/resume-builder/hooks/useResumeAiEnhance"
+import type { ResumeAiEnhanceSection } from "@/features/resume-builder/types/ai-enhance"
 
 const SEEDED_CLASSIC_TEMPLATE_ID = "550e8400-e29b-41d4-a716-446655440001"
 
@@ -25,6 +27,13 @@ let html2pdf: any
 if (typeof window !== "undefined") {
   // eslint-disable-next-line @typescript-eslint/no-var-requires
   html2pdf = require("html2pdf.js")
+}
+
+function getDraftTextForMarcelineAi(model: MarcelineModel, target: MarcelineAiTarget | null): string {
+  if (!target) return ""
+  if (target.kind === "profile_summary") return model.profileSummary || ""
+  const row = model.experience[target.index]
+  return row?.bullets?.filter(Boolean).join("\n") ?? ""
 }
 
 function applyAiTextToMarcelineModel(
@@ -68,11 +77,12 @@ export function MarcelineResumeBuilder({
   const [showPreview, setShowPreview] = useState(true)
   const previewRef = useRef<HTMLDivElement>(null)
 
+  const { enhance: runLakshyaEnhance, loading: aiBusy } = useResumeAiEnhance()
+
   const [aiOpen, setAiOpen] = useState(false)
-  const [aiLoading, setAiLoading] = useState(false)
   const [aiTarget, setAiTarget] = useState<MarcelineAiTarget | null>(null)
+  const [aiLakshyaSection, setAiLakshyaSection] = useState<ResumeAiEnhanceSection>("summary")
   const [aiSectionLabel, setAiSectionLabel] = useState("")
-  const [aiCurrentText, setAiCurrentText] = useState("")
 
   useEffect(() => {
     if (resumeId) setLocalResumeId(resumeId)
@@ -212,42 +222,39 @@ export function MarcelineResumeBuilder({
     }
   }
 
-  const openAi = (target: MarcelineAiTarget, currentText: string, sectionLabel: string) => {
+  const openAi = (target: MarcelineAiTarget, _currentText: string, sectionLabel: string) => {
     setAiTarget(target)
-    setAiCurrentText(currentText)
+    setAiLakshyaSection(target.kind === "experience_item" ? "experience" : "summary")
     setAiSectionLabel(sectionLabel)
     setAiOpen(true)
   }
 
-  const runAi = async (instruction: string) => {
+  const runAi = async (optionalHint: string) => {
     if (!model || !aiTarget) return
     const locale = typeof window !== "undefined" ? localStorage.getItem("locale") || "en" : "en"
-    const sectionContext = `${copy.ai.sectionContextHeader}\n${model.personalInfo.fullName}\n${model.personalInfo.jobTitle}`
-    setAiLoading(true)
+    const draftText = getDraftTextForMarcelineAi(model, aiTarget)
     try {
-      const res = await resumeService.enhanceResumeSection({
-        section_type: `${aiSectionLabel}:${JSON.stringify(aiTarget)}`,
-        section_context: sectionContext,
-        user_instruction: instruction || copy.ai.defaultInstruction,
-        current_text: aiCurrentText,
+      const res = await runLakshyaEnhance({
+        section: aiLakshyaSection,
+        text: draftText,
+        hint: optionalHint.trim() || undefined,
+        context: {
+          fullName: model.personalInfo.fullName,
+          jobTitle: model.personalInfo.jobTitle,
+          templateId: MARCELINE_BUILDER_VARIANT,
+        },
         language: locale,
       })
-      setModel(applyAiTextToMarcelineModel(model, aiTarget, res.enhanced_text))
+      if (!res.success) {
+        toast.error(res.message || "AI could not enhance this section.")
+        return
+      }
+      setModel(applyAiTextToMarcelineModel(model, aiTarget, res.enhancedText))
       setAiOpen(false)
       toast.success("Section updated")
     } catch (e: unknown) {
       console.error(e)
-      const err = e as { response?: { data?: { detail?: unknown } } }
-      const detail = err?.response?.data?.detail
-      const msg =
-        typeof detail === "string"
-          ? detail
-          : Array.isArray(detail) && detail[0] && typeof (detail[0] as { msg?: string }).msg === "string"
-            ? (detail[0] as { msg: string }).msg
-            : "AI enhancement failed. Sign in as a student and ensure the API URL and AI keys are configured."
-      toast.error(msg)
-    } finally {
-      setAiLoading(false)
+      toast.error("AI enhancement failed. Check your connection and try again.")
     }
   }
 
@@ -357,9 +364,8 @@ export function MarcelineResumeBuilder({
         copy={copy}
         open={aiOpen}
         sectionLabel={aiSectionLabel}
-        initialInstruction={copy.ai.defaultInstruction}
-        loading={aiLoading}
-        onClose={() => !aiLoading && setAiOpen(false)}
+        loading={aiBusy}
+        onClose={() => !aiBusy && setAiOpen(false)}
         onConfirm={runAi}
       />
     </div>
