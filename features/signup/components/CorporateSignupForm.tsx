@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { Building2, Globe, Mail } from "lucide-react"
@@ -13,10 +13,12 @@ import { SignupOtpModal } from "./SignupOtpModal"
 import { SignupLabeledField } from "./fields/SignupLabeledField"
 import { DualPasswordFields } from "./fields/DualPasswordFields"
 import { signupCardClass, signupPrimaryButtonClass } from "./signupStyles"
-
-function isValidEmail(s: string) {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s.trim())
-}
+import {
+  sanitizeEmailInput,
+  sanitizeOrganizationName,
+  validateEmail,
+  validateOrganizationName,
+} from "../utils/validation"
 
 function normalizeWebsite(raw: string): string | undefined {
   const t = raw.trim()
@@ -55,21 +57,36 @@ export function CorporateSignupForm({ loginHref }: Props) {
   const [resending, setResending] = useState(false)
   const [otpError, setOtpError] = useState("")
 
+  useEffect(() => {
+    setCompanyName((n) => sanitizeOrganizationName(n))
+    setEmail((e) => sanitizeEmailInput(e))
+  }, [])
+
   const validate = () => {
     const e: Record<string, string> = {}
-    if (!companyName.trim()) e.company = "Company name is required"
+    const companyErr = validateOrganizationName(companyName)
+    if (companyErr) e.company = companyErr
     if (website.trim() && !isReasonableUrl(website)) e.website = "Enter a valid URL (e.g. https://company.com)"
-    if (!email.trim()) e.email = "Email is required"
-    else if (!isValidEmail(email)) e.email = "Enter a valid email"
+    const emailErr = validateEmail(email)
+    if (emailErr) e.email = emailErr
     if (password.length < 8) e.password = "Use at least 8 characters"
     if (password !== confirm) e.confirm = "Passwords do not match"
     setFieldErrors(e)
     return Object.keys(e).length === 0
   }
 
+  const clearError = (key: string) => {
+    setFieldErrors((prev) => {
+      if (!prev[key]) return prev
+      const next = { ...prev }
+      delete next[key]
+      return next
+    })
+  }
+
   const buildPayload = (): CorporateRegisterRequest => ({
-    company_name: companyName.trim(),
-    email: email.trim().toLowerCase(),
+    company_name: sanitizeOrganizationName(companyName).trim(),
+    email: sanitizeEmailInput(email),
     password,
     website_url: website.trim() ? normalizeWebsite(website) : undefined,
   })
@@ -136,8 +153,12 @@ export function CorporateSignupForm({ loginHref }: Props) {
           icon={Building2}
           autoComplete="organization"
           placeholder="Enter company name"
+          filter="organization"
           value={companyName}
-          onChange={setCompanyName}
+          onChange={(v) => {
+            setCompanyName(v)
+            clearError("company")
+          }}
           error={fieldErrors.company}
           disabled={sending || verifying}
         />
@@ -161,8 +182,12 @@ export function CorporateSignupForm({ loginHref }: Props) {
           type="email"
           autoComplete="email"
           placeholder="Enter your email address"
+          filter="email"
           value={email}
-          onChange={setEmail}
+          onChange={(v) => {
+            setEmail(v)
+            clearError("email")
+          }}
           error={fieldErrors.email}
           disabled={sending || verifying}
         />

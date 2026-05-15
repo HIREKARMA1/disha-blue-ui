@@ -1,6 +1,6 @@
 "use client"
 
-import { useMemo, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { Mail, Phone, UserRound } from "lucide-react"
@@ -15,10 +15,14 @@ import { SignupLabeledField } from "./fields/SignupLabeledField"
 import { DualPasswordFields } from "./fields/DualPasswordFields"
 import { InstitutionSearchField } from "./fields/InstitutionSearchField"
 import { signupCardClass, signupPrimaryButtonClass } from "./signupStyles"
-
-function isValidEmail(s: string) {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s.trim())
-}
+import {
+  sanitizeEmailInput,
+  sanitizePersonName,
+  sanitizePhoneInput,
+  validateEmail,
+  validatePersonName,
+  validatePhone,
+} from "../utils/validation"
 
 type Props = {
   loginHref: string
@@ -47,23 +51,40 @@ export function StudentSignupForm({ loginHref }: Props) {
   const [resending, setResending] = useState(false)
   const [otpError, setOtpError] = useState("")
 
+  useEffect(() => {
+    setName((n) => sanitizePersonName(n))
+    setPhone((p) => sanitizePhoneInput(p))
+    setEmail((e) => sanitizeEmailInput(e))
+  }, [])
+
   const validate = () => {
     const e: Record<string, string> = {}
-    if (!name.trim()) e.name = "Full name is required"
-    if (phone.trim() && !/^\d{10}$/.test(phone.trim())) e.phone = "Enter a valid 10-digit phone number"
-    if (!email.trim()) e.email = "Email is required"
-    else if (!isValidEmail(email)) e.email = "Enter a valid email"
+    const nameErr = validatePersonName(name)
+    if (nameErr) e.name = nameErr
+    const phoneErr = validatePhone(phone, true)
+    if (phoneErr) e.phone = phoneErr
+    const emailErr = validateEmail(email)
+    if (emailErr) e.email = emailErr
     if (password.length < 8) e.password = "Use at least 8 characters"
     if (password !== confirm) e.confirm = "Passwords do not match"
     setFieldErrors(e)
     return Object.keys(e).length === 0
   }
 
+  const clearError = (key: string) => {
+    setFieldErrors((prev) => {
+      if (!prev[key]) return prev
+      const next = { ...prev }
+      delete next[key]
+      return next
+    })
+  }
+
   const buildPayload = (): StudentRegisterRequest => ({
-    name: name.trim(),
-    email: email.trim().toLowerCase(),
+    name: sanitizePersonName(name).trim(),
+    email: sanitizeEmailInput(email),
     password,
-    phone: phone.trim() || undefined,
+    phone: sanitizePhoneInput(phone) || undefined,
     institution: institution.trim() || undefined,
   })
 
@@ -127,22 +148,30 @@ export function StudentSignupForm({ loginHref }: Props) {
           label="Full Name"
           required
           icon={UserRound}
+          filter="personName"
           autoComplete="name"
           placeholder="Enter your full name"
           value={name}
-          onChange={setName}
+          onChange={(v) => {
+            setName(v)
+            clearError("name")
+          }}
           error={fieldErrors.name}
           disabled={sending || verifying}
         />
         <SignupLabeledField
           id="su-phone"
           label="Phone Number"
+          required
           icon={Phone}
-          type="tel"
-          autoComplete="tel"
-          placeholder="Enter 10 digit phone number (e.g. 9876543210)"
+          filter="phone"
+          autoComplete="tel-national"
+          placeholder="10-digit mobile number (e.g. 9876543210)"
           value={phone}
-          onChange={setPhone}
+          onChange={(v) => {
+            setPhone(v)
+            clearError("phone")
+          }}
           error={fieldErrors.phone}
           disabled={sending || verifying}
         />
@@ -162,7 +191,11 @@ export function StudentSignupForm({ loginHref }: Props) {
           autoComplete="email"
           placeholder="Enter your email address"
           value={email}
-          onChange={setEmail}
+          filter="email"
+          onChange={(v) => {
+            setEmail(v)
+            clearError("email")
+          }}
           error={fieldErrors.email}
           disabled={sending || verifying}
         />
