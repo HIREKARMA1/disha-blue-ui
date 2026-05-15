@@ -8,6 +8,7 @@ import { toast } from "react-hot-toast"
 import { Button } from "@/components/ui/button"
 import { apiClient } from "@/lib/api"
 import { resetOnboarding } from "@/lib/onboarding"
+import { useAuth } from "@/hooks/useAuth"
 import type { CorporateRegisterRequest } from "@/types/auth"
 import { SignupOtpModal } from "./SignupOtpModal"
 import { SignupLabeledField } from "./fields/SignupLabeledField"
@@ -19,6 +20,7 @@ import {
   validateEmail,
   validateOrganizationName,
 } from "../utils/validation"
+import { loginAfterSignup, SIGNUP_DASHBOARD_PATH } from "../utils/postSignupAuth"
 
 function normalizeWebsite(raw: string): string | undefined {
   const t = raw.trim()
@@ -44,6 +46,7 @@ type Props = {
 
 export function CorporateSignupForm({ loginHref }: Props) {
   const router = useRouter()
+  const { login } = useAuth()
   const [companyName, setCompanyName] = useState("")
   const [website, setWebsite] = useState("")
   const [email, setEmail] = useState("")
@@ -126,11 +129,19 @@ export function CorporateSignupForm({ loginHref }: Props) {
     setOtpError("")
     try {
       const code = encodeURIComponent(otp)
-      await apiClient.verifyOtpAndRegisterCorporate(code, buildPayload())
+      const payload = buildPayload()
+      await apiClient.verifyOtpAndRegisterCorporate(code, payload)
+      const session = await loginAfterSignup({
+        email: payload.email,
+        password: payload.password,
+        userType: "corporate",
+        displayName: payload.contact_person ?? payload.company_name,
+      })
+      login(session.user, session.accessToken, session.refreshToken)
       resetOnboarding()
-      toast.success("Account created. Sign in to continue.")
+      toast.success("Welcome! Your account is ready.")
       setOtpOpen(false)
-      router.replace("/auth/login?type=corporate&registered=true")
+      router.replace(SIGNUP_DASHBOARD_PATH.corporate)
     } catch (err: unknown) {
       const detail = (err as { response?: { data?: { detail?: string } } })?.response?.data?.detail
       setOtpError(String(detail || "Verification failed"))

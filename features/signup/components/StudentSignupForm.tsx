@@ -8,6 +8,7 @@ import { toast } from "react-hot-toast"
 import { Button } from "@/components/ui/button"
 import { apiClient } from "@/lib/api"
 import { resetOnboarding } from "@/lib/onboarding"
+import { useAuth } from "@/hooks/useAuth"
 import { useColleges } from "@/hooks/useLookup"
 import type { StudentRegisterRequest } from "@/types/auth"
 import { SignupOtpModal } from "./SignupOtpModal"
@@ -23,6 +24,7 @@ import {
   validatePersonName,
   validatePhone,
 } from "../utils/validation"
+import { loginAfterSignup, SIGNUP_DASHBOARD_PATH } from "../utils/postSignupAuth"
 
 type Props = {
   loginHref: string
@@ -30,6 +32,7 @@ type Props = {
 
 export function StudentSignupForm({ loginHref }: Props) {
   const router = useRouter()
+  const { login } = useAuth()
   const { data: colleges, loading: collegesLoading } = useColleges({ limit: 500 })
 
   const suggestions = useMemo(
@@ -123,11 +126,19 @@ export function StudentSignupForm({ loginHref }: Props) {
     setOtpError("")
     try {
       const code = encodeURIComponent(otp)
-      await apiClient.verifyOtpAndRegisterStudent(code, buildPayload())
+      const payload = buildPayload()
+      await apiClient.verifyOtpAndRegisterStudent(code, payload)
+      const session = await loginAfterSignup({
+        email: payload.email,
+        password: payload.password,
+        userType: "student",
+        displayName: payload.name,
+      })
+      login(session.user, session.accessToken, session.refreshToken)
       resetOnboarding()
-      toast.success("Account created. Sign in to continue.")
+      toast.success("Welcome! Your account is ready.")
       setOtpOpen(false)
-      router.replace("/auth/login?type=student&registered=true")
+      router.replace(SIGNUP_DASHBOARD_PATH.student)
     } catch (err: unknown) {
       const detail = (err as { response?: { data?: { detail?: string } } })?.response?.data?.detail
       setOtpError(String(detail || "Verification failed"))
