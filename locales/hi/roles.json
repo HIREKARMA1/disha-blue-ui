@@ -1,0 +1,57 @@
+{
+  "student": {
+    "welcome": {
+      "greetingMorning": "सुप्रभात",
+      "greetingAfternoon": "नमस्कार",
+      "greetingEvening": "शुभ संध्या",
+      "messageMorning": "क्या आप आज अपने आसपास की नौकरियाँ और स्थानीय अवसर देखना चाहते हैं?",
+      "messageAfternoon": "जारी रखें - आपके आसपास नई स्थानीय नौकरियाँ पोस्ट हो रही हैं।",
+      "messageEvening": "आज अच्छा काम हुआ। आवेदन देखें और अगला कदम तय करें।",
+      "tagLocalOpportunities": "स्थानीय अवसर",
+      "tagNearbyHiring": "आसपास भर्ती"
+    },
+    "jobs": {
+      "title": "स्थानीय नौकरी खोज",
+      "searchPlaceholder": "भूमिका, कौशल, कंपनी या स्थान से खोजें...",
+      "activeFiltersSuffix": "सक्रिय खोज/फ़िल्टर मानदंड"
+    }
+  },
+  "corporate": {
+    "welcome": {
+      "greetingMorning": "सुप्रभात",
+      "greetingAfternoon": "नमस्कार",
+      "greetingEvening": "शुभ संध्या",
+      "messageMorning": "क्या आप बेहतर दृश्यता के साथ स्थानीय प्रतिभा को तेज़ी से नियुक्त करने के लिए तैयार हैं?",
+      "messageAfternoon": "गति बनाए रखें - आसपास से नए उम्मीदवार आवेदन कर रहे हैं।",
+      "messageEvening": "आज अच्छी प्रगति हुई। आवेदकों की समीक्षा करें और अगले भर्ती चरण तय करें।",
+      "tagWorkspace": "नियोक्ता कार्यक्षेत्र",
+      "tagVerified": "सत्यापित नियोक्ता",
+      "tagLocalHiring": "स्थानीय भर्ती",
+      "tagRegionalGrowth": "क्षेत्रीय विकास"
+    },
+    "jobs": {
+      "title": "स्थानीय भर्ती नौकरियाँ",
+      "searchPlaceholder": "शीर्षक, कौशल, या जिला/राज्य से खोजें...",
+      "activeFiltersSuffix": "सक्रिय खोज/फ़िल्टर मानदंड"
+    }
+  },
+  "admin": {
+    "welcome": {
+      "greetingMorning": "सुप्रभात",
+      "greetingAfternoon": "नमस्कार",
+      "greetingEvening": "शुभ संध्या",
+      "subtitle": "अपने हाइपर-लोकल अवसर इकोसिस्टम का प्रबंधन करें",
+      "today": "आज",
+      "systemStatus": "सिस्टम स्थिति",
+      "operational": "सक्रिय",
+      "snapshot": "स्नैपशॉट",
+      "totalUsers": "कुल उपयोगकर्ता",
+      "jobs": "नौकरियाँ"
+    },
+    "jobs": {
+      "title": "स्थानीय अवसर निगरानी",
+      "searchPlaceholder": "शीर्षक, कीवर्ड, स्थान या नियोक्ता से खोजें...",
+      "activeFiltersSuffix": "सक्रिय खोज/फ़िल्टर मानदंड"
+    }
+  }
+}

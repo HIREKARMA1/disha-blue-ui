@@ -1,0 +1,50 @@
+{
+  "jobs": {
+    "pageTitle": "Find Jobs",
+    "filters": "Filters",
+    "searchPlaceholder": "Role, skill, company…",
+    "clearSearch": "Clear search",
+    "loading": "Loading jobs…",
+    "resultsCount": "{{count}} jobs found",
+    "resultsCountOne": "1 job found",
+    "noResults": "No jobs match your search",
+    "noResultsHint": "Try adjusting filters or search terms.",
+    "loadError": "We couldn't load jobs right now. Please try again.",
+    "retry": "Try again",
+    "apply": "Apply",
+    "applied": "Applied",
+    "viewDetails": "View details",
+    "hero": {
+      "defaultTitle": "Jobs in India",
+      "defaultDescription": "Explore verified job openings across India with salary details. Apply free today.",
+      "keywordDescription": "Browse verified {{keyword}} vacancies with salary details. Apply free today.",
+      "location": "Location",
+      "role": "Role",
+      "response": "Response",
+      "responseValue": "Under 30 mins",
+      "allRoles": "All roles",
+      "salaryRange": "Salary range",
+      "topSkills": "Top skills",
+      "documents": "Documents",
+      "documentsDefault": "Aadhaar · Resume · Education certificates",
+      "defaultSkills": "Communication · Teamwork"
+    },
+    "filtersPanel": {
+      "title": "Filters",
+      "location": "Location",
+      "locationPlaceholder": "City or state",
+      "keyword": "Role / keyword",
+      "keywordPlaceholder": "e.g. Electrician",
+      "salary": "Salary (₹/month)",
+      "apply": "Apply filters",
+      "clear": "Clear all",
+      "close": "Close"
+    },
+    "toast": {
+      "profileIncomplete": "Profile must be at least 75% complete to apply.",
+      "applicationsClosed": "Applications are closed for this job.",
+      "applySuccess": "Application submitted!",
+      "applyFailed": "Failed to submit application"
+    }
+  }
+}

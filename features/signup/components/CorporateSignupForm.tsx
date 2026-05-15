@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button"
 import { apiClient } from "@/lib/api"
 import { resetOnboarding } from "@/lib/onboarding"
 import { useAuth } from "@/hooks/useAuth"
+import { useTranslation } from "@/hooks/useTranslation"
 import type { CorporateRegisterRequest } from "@/types/auth"
 import { SignupOtpModal } from "./SignupOtpModal"
 import { SignupLabeledField } from "./fields/SignupLabeledField"
@@ -47,6 +48,7 @@ type Props = {
 export function CorporateSignupForm({ loginHref }: Props) {
   const router = useRouter()
   const { login } = useAuth()
+  const { t } = useTranslation()
   const [companyName, setCompanyName] = useState("")
   const [website, setWebsite] = useState("")
   const [email, setEmail] = useState("")
@@ -153,17 +155,17 @@ export function CorporateSignupForm({ loginHref }: Props) {
 
   return (
     <div className={signupCardClass}>
-      <h1 className="text-xl font-semibold tracking-tight text-slate-900 dark:text-white sm:text-2xl">Corporate signup</h1>
-      <p className="mt-1 text-sm text-slate-600 dark:text-blue-200/85">Create your hiring account with email verification.</p>
+      <h1 className="text-xl font-semibold tracking-tight text-slate-900 dark:text-white sm:text-2xl">{t("signup.corporate.title")}</h1>
+      <p className="mt-1 text-sm text-slate-600 dark:text-blue-200/85">{t("signup.corporate.subtitle")}</p>
 
       <div className="mt-6 space-y-4 sm:space-y-5">
         <SignupLabeledField
           id="co-name"
-          label="Company Name"
+          label={t("signup.corporate.companyName")}
           required
           icon={Building2}
           autoComplete="organization"
-          placeholder="Enter company name"
+          placeholder={t("signup.corporate.companyPlaceholder")}
           filter="organization"
           value={companyName}
           onChange={(v) => {
@@ -175,7 +177,7 @@ export function CorporateSignupForm({ loginHref }: Props) {
         />
         <SignupLabeledField
           id="co-web"
-          label="Website URL"
+          label={t("signup.corporate.website")}
           icon={Globe}
           type="url"
           autoComplete="url"
@@ -187,12 +189,12 @@ export function CorporateSignupForm({ loginHref }: Props) {
         />
         <SignupLabeledField
           id="co-email"
-          label="Email Address"
+          label={t("signup.corporate.email")}
           required
           icon={Mail}
           type="email"
           autoComplete="email"
-          placeholder="Enter your email address"
+          placeholder={t("signup.corporate.emailPlaceholder")}
           filter="email"
           value={email}
           onChange={(v) => {
@@ -214,13 +216,13 @@ export function CorporateSignupForm({ loginHref }: Props) {
       </div>
 
       <Button type="button" className={signupPrimaryButtonClass + " mt-6"} loading={sending} disabled={verifying} onClick={() => void sendOtp()}>
-        Send OTP
+        {t("signup.corporate.sendOtp")}
       </Button>
 
       <p className="mt-5 text-center text-sm text-slate-600 dark:text-blue-200/85">
-        Already have an account?{" "}
+        {t("signup.corporate.alreadyHaveAccount")}{" "}
         <Link href={loginHref} className="font-semibold text-blue-700 hover:underline dark:text-blue-400">
-          Sign in
+          {t("common.signIn")}
         </Link>
       </p>
 

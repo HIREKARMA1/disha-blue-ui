@@ -1,12 +1,12 @@
 "use client"
 
-import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { useTheme } from 'next-themes'
 import { Mail, Phone, MapPin } from 'lucide-react'
 import { BRANDING } from '@/config/branding'
-import { SupportedLocale, getClientLocale, t } from '@/lib/i18n'
+import { t } from '@/lib/i18n'
+import { useLocale } from '@/contexts/LocaleContext'
 
 interface FooterProps {
   /** Text-only brand and contact—no logo image or icons (home marketing page). */
@@ -17,11 +17,7 @@ interface FooterProps {
 
 export function Footer({ plainText = false, hideIcons = false }: FooterProps) {
   const { theme, resolvedTheme } = useTheme()
-  const [locale, setLocale] = useState<SupportedLocale>('en')
-
-  useEffect(() => {
-  setLocale(getClientLocale())
-  }, [])
+  const { locale } = useLocale()
 
   const getLogoSrc = () => {
   const isDark = resolvedTheme === 'dark' || (resolvedTheme === 'system' && theme === 'dark')

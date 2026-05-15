@@ -4,6 +4,7 @@ import { useCallback, useState } from "react"
 import { useRouter } from "next/navigation"
 import { ArrowRight, MapPin } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { useTranslation } from "@/hooks/useTranslation"
 import { jobsUrlWithLocation } from "../constants"
 
 type ApplyForJobsBarProps = {
@@ -18,6 +19,7 @@ type ApplyForJobsBarProps = {
  */
 export function ApplyForJobsBar({ className, variant = "default" }: ApplyForJobsBarProps) {
   const router = useRouter()
+  const { t } = useTranslation()
   const [location, setLocation] = useState("")
   const isHero = variant === "hero"
 
@@ -32,7 +34,7 @@ export function ApplyForJobsBar({ className, variant = "default" }: ApplyForJobs
         isHero && "apply-jobs-section--hero",
         className,
       )}
-      aria-label="Search jobs by location"
+      aria-label={t("landing.applyBar.ariaLabel")}
     >
       <div className="apply-jobs-section__inner">
         <form
@@ -44,11 +46,11 @@ export function ApplyForJobsBar({ className, variant = "default" }: ApplyForJobs
         >
           {isHero ? (
             <label htmlFor="apply-jobs-location" className="apply-jobs-hero-label">
-              Where would you like to work?
+              {t("landing.applyBar.heroLabel")}
             </label>
           ) : (
             <label className="sr-only" htmlFor="apply-jobs-location">
-              Enter your location
+              {t("landing.applyBar.locationSrOnly")}
             </label>
           )}
 
@@ -62,7 +64,7 @@ export function ApplyForJobsBar({ className, variant = "default" }: ApplyForJobs
                 type="text"
                 name="location"
                 autoComplete="address-level2"
-                placeholder={isHero ? "e.g. Bangalore, Maharashtra" : "Enter your location"}
+                placeholder={isHero ? t("landing.applyBar.placeholderHero") : t("landing.applyBar.placeholderDefault")}
                 value={location}
                 onChange={(e) => setLocation(e.target.value)}
                 className="apply-jobs-bar__input"
@@ -70,7 +72,7 @@ export function ApplyForJobsBar({ className, variant = "default" }: ApplyForJobs
             </div>
             <button type="submit" className="apply-jobs-bar__cta">
               <span className="apply-jobs-bar__cta-text">
-                {isHero ? "Browse jobs" : "Apply for jobs now"}
+                {isHero ? t("landing.applyBar.browseJobs") : t("landing.applyBar.applyNow")}
               </span>
               <ArrowRight className="apply-jobs-bar__cta-icon" aria-hidden />
             </button>

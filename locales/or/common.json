@@ -1,0 +1,56 @@
+{
+  "common": {
+    "dashboard": "ଡ୍ୟାଶବୋର୍ଡ",
+    "logout": "ଲଗଆଉଟ",
+    "cancel": "ବାତିଲ୍",
+    "signIn": "ସାଇନ୍ ଇନ୍",
+    "signUp": "ସାଇନ୍ ଅପ୍",
+    "loading": "ଲୋଡ୍ ହେଉଛି...",
+    "noFiltersApplied": "କୌଣସି ଫିଲ୍ଟର ଲାଗୁ ହୋଇନାହିଁ"
+  },
+  "profile": {
+    "form": {
+      "enterYour": "ଆପଣଙ୍କର ଲେଖନ୍ତୁ",
+      "updateSectionInfoPrefix": "ଆପଣଙ୍କର",
+      "updateSectionInfoSuffix": "ସୂଚନା ଅପଡେଟ୍ କରନ୍ତୁ",
+      "saveChanges": "ପରିବର୍ତ୍ତନ ସେଭ୍ କରନ୍ତୁ",
+      "saving": "ସେଭ୍ ହେଉଛି..."
+    }
+  },
+  "nav": {
+    "home": "ହୋମ",
+    "jobs": "ଚାକିରି",
+    "forStudents": "ଛାତ୍ରଛାତ୍ରୀଙ୍କ ପାଇଁ",
+    "forEmployers": "ନିଯୁକ୍ତିଦାତାଙ୍କ ପାଇଁ",
+    "aiTools": "AI ଟୁଲ୍ସ",
+    "about": "ପରିଚୟ",
+    "contact": "ଯୋଗାଯୋଗ",
+    "language": "ଭାଷା",
+    "studentNavigation": "ଛାତ୍ର ନାଭିଗେସନ୍",
+    "recruiterNavigation": "ନିଯୁକ୍ତିକର୍ତ୍ତା ନାଭିଗେସନ୍",
+    "adminNavigation": "ଆଡମିନ ନାଭିଗେସନ୍"
+  },
+  "chat": {
+    "assistant": "ଏଆଇ ସହାୟକ",
+    "opportunityAssistant": "ସୁଯୋଗ ସହାୟକ",
+    "thinking": "ଭାବୁଛି...",
+    "askPlaceholder": "ଚାକିରି, ପ୍ରୋଫାଇଲ୍, ଆବେଦନ ବିଷୟରେ ପଚାରନ୍ତୁ...",
+    "scrollToBottom": "ତଳକୁ ଯାଆନ୍ତୁ"
+  },
+  "footer": {
+    "platformOverview": "ପ୍ଲାଟଫର୍ମ ପରିଚୟ",
+    "quickLinks": "ଦ୍ରୁତ ଲିଙ୍କ",
+    "roleLinks": "ଭୂମିକା ଲିଙ୍କ",
+    "contact": "ଯୋଗାଯୋଗ",
+    "forStudents": "ଛାତ୍ରଛାତ୍ରୀଙ୍କ ପାଇଁ",
+    "forEmployers": "ନିଯୁକ୍ତିଦାତାଙ୍କ ପାଇଁ"
+  },
+  "home": {
+    "heroTitle": "ନିଜ ଅଞ୍ଚଳରେ ଏବଂ ନିକଟସ୍ଥ ଚାକିରି ସୁଯୋଗ ଖୋଜନ୍ତୁ",
+    "heroSubtitle": "ଏକ ହାଇପର-ଲୋକାଲ୍ ସୁଯୋଗ ପ୍ଲାଟଫର୍ମ ଯାହା ଚାକିରି ପ୍ରାର୍ଥୀଙ୍କୁ ସହର, ଜିଲ୍ଲା ଓ ଗ୍ରାମୀଣ ଅଞ୍ଚଳର ନିଯୁକ୍ତିଦାତାଙ୍କ ସହିତ ଯୋଡେ।",
+    "ctaStudent": "ମୋ ନିକଟର ଚାକିରି ଦେଖନ୍ତୁ",
+    "ctaEmployer": "ସ୍ଥାନୀୟ ଚାକିରି ପୋଷ୍ଟ କରନ୍ତୁ",
+    "howItWorks": "ଏହା କିପରି କାମ କରେ",
+    "valueHeading": "ଚାକିରି ପ୍ରାର୍ଥୀ ଏବଂ ନିଯୁକ୍ତିଦାତାମାନେ ଆମକୁ କାହିଁକି ବାଛନ୍ତି"
+  }
+}

@@ -1,0 +1,61 @@
+{
+  "signup": {
+    "roleToggle": {
+      "ariaLabel": "Account type",
+      "student": "Student",
+      "corporate": "Corporate"
+    },
+    "student": {
+      "title": "Create student account",
+      "subtitle": "Join with email verification in one step.",
+      "fullName": "Full Name",
+      "phone": "Phone Number",
+      "email": "Email Address",
+      "namePlaceholder": "Enter your full name",
+      "phonePlaceholder": "10-digit mobile number (e.g. 9876543210)",
+      "emailPlaceholder": "Enter your email address",
+      "sendOtp": "Send OTP",
+      "alreadyHaveAccount": "Already have an account?",
+      "welcomeToast": "Welcome! Your account is ready.",
+      "verificationFailed": "Verification failed"
+    },
+    "corporate": {
+      "title": "Create corporate account",
+      "subtitle": "Register your company and start hiring local talent.",
+      "companyName": "Company Name",
+      "website": "Website",
+      "email": "Work Email",
+      "companyPlaceholder": "Enter company name",
+      "websitePlaceholder": "https://yourcompany.com",
+      "emailPlaceholder": "you@company.com",
+      "sendOtp": "Send OTP",
+      "alreadyHaveAccount": "Already have an account?",
+      "welcomeToast": "Welcome! Your account is ready.",
+      "verificationFailed": "Verification failed"
+    },
+    "otp": {
+      "title": "Enter verification code",
+      "sentTo": "We sent a 6-digit code to",
+      "placeholder": "Enter OTP",
+      "resend": "Resend code",
+      "verify": "Verify & create account",
+      "otpSent": "OTP sent to your email",
+      "otpResent": "OTP resent"
+    },
+    "validation": {
+      "nameRequired": "Full name is required",
+      "nameInvalid": "Name can only contain letters and spaces",
+      "phoneRequired": "Phone number is required",
+      "phoneInvalid": "Enter a valid 10-digit mobile number",
+      "emailRequired": "Email is required",
+      "emailInvalid": "Enter a valid email address",
+      "institutionRequired": "Institution is required",
+      "passwordRequired": "Password is required",
+      "passwordMin": "Password must be at least 8 characters",
+      "confirmRequired": "Please confirm your password",
+      "passwordMismatch": "Passwords do not match",
+      "companyRequired": "Company name is required",
+      "websiteInvalid": "Enter a valid website URL"
+    }
+  }
+}

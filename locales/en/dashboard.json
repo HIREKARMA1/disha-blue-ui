@@ -1,0 +1,26 @@
+{
+  "dashboard": {
+    "overview": "Overview",
+    "groups": {
+      "overview": "Overview",
+      "jobs": "Jobs",
+      "careerTools": "Career Tools",
+      "account": "Account",
+      "hiring": "Hiring",
+      "insights": "Insights",
+      "company": "Company",
+      "operations": "Operations",
+      "assessments": "Assessments",
+      "admin": "Admin"
+    },
+    "labels": {
+      "logout": "Logout",
+      "studentAccount": "Student account",
+      "recruiterAccount": "Recruiter account",
+      "adminAccount": "Admin account",
+      "studentWorkspace": "Student Workspace",
+      "recruiterWorkspace": "Recruiter Workspace",
+      "adminWorkspace": "Admin Workspace"
+    }
+  }
+}

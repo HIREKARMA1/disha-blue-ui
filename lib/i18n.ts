@@ -1,29 +1,13 @@
-import en from '@/locales/en.json'
-import hi from '@/locales/hi.json'
-import or from '@/locales/or.json'
+import { getMessage as lookupMessage } from '@/lib/i18n/loadDictionary'
+import type { SupportedLocale } from '@/lib/i18n/types'
 
-export type SupportedLocale = 'en' | 'hi' | 'or'
+export type { SupportedLocale } from '@/lib/i18n/types'
+export { SUPPORTED_LOCALES, LOCALE_LABELS } from '@/lib/i18n/types'
+
 const LOCALE_STORAGE_KEY = 'locale'
 
-const dictionaries = { en, hi, or } as const
-
 export function t(locale: SupportedLocale, key: string): string {
-  const parts = key.split('.')
-  let value: any = dictionaries[locale]
-
-  for (const part of parts) {
-  if (value && typeof value === 'object' && part in value) {
-  value = value[part]
-  } else {
-  value = undefined
-  break
-  }
-  }
-
-  if (typeof value === 'string') return value
-
-  // Fallback to English
-  value = parts.reduce((acc: any, part) => (acc && part in acc ? acc[part] : undefined), dictionaries.en as any)
+  const value = lookupMessage(locale, key)
   return typeof value === 'string' ? value : key
 }
 

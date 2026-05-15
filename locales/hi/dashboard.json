@@ -1,0 +1,26 @@
+{
+  "dashboard": {
+    "overview": "अवलोकन",
+    "groups": {
+      "overview": "अवलोकन",
+      "jobs": "जॉब्स",
+      "careerTools": "करियर टूल्स",
+      "account": "अकाउंट",
+      "hiring": "हायरिंग",
+      "insights": "इनसाइट्स",
+      "company": "कंपनी",
+      "operations": "ऑपरेशन्स",
+      "assessments": "असेसमेंट्स",
+      "admin": "एडमिन"
+    },
+    "labels": {
+      "logout": "लॉगआउट",
+      "studentAccount": "छात्र अकाउंट",
+      "recruiterAccount": "रिक्रूटर अकाउंट",
+      "adminAccount": "एडमिन अकाउंट",
+      "studentWorkspace": "छात्र कार्यक्षेत्र",
+      "recruiterWorkspace": "रिक्रूटर कार्यक्षेत्र",
+      "adminWorkspace": "एडमिन कार्यक्षेत्र"
+    }
+  }
+}

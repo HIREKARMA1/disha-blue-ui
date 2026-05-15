@@ -1,0 +1,57 @@
+{
+  "student": {
+    "welcome": {
+      "greetingMorning": "Good morning",
+      "greetingAfternoon": "Good afternoon",
+      "greetingEvening": "Good evening",
+      "messageMorning": "Ready to explore nearby jobs and local opportunities today?",
+      "messageAfternoon": "Keep going - fresh local jobs are being posted near you.",
+      "messageEvening": "Great effort today. Review applications and plan your next move.",
+      "tagLocalOpportunities": "Local Opportunities",
+      "tagNearbyHiring": "Nearby Hiring"
+    },
+    "jobs": {
+      "title": "Local Job Discovery",
+      "searchPlaceholder": "Search by role, skill, company, or location...",
+      "activeFiltersSuffix": "active search/filter criteria"
+    }
+  },
+  "corporate": {
+    "welcome": {
+      "greetingMorning": "Good morning",
+      "greetingAfternoon": "Good afternoon",
+      "greetingEvening": "Good evening",
+      "messageMorning": "Ready to hire local talent faster with better visibility?",
+      "messageAfternoon": "Keep momentum going - new nearby candidates are applying.",
+      "messageEvening": "Great progress today. Review applicants and plan next hiring steps.",
+      "tagWorkspace": "Employer Workspace",
+      "tagVerified": "Verified Employer",
+      "tagLocalHiring": "Local Hiring",
+      "tagRegionalGrowth": "Regional Growth"
+    },
+    "jobs": {
+      "title": "Local Hiring Jobs",
+      "searchPlaceholder": "Search by title, skill, or district/state...",
+      "activeFiltersSuffix": "active search/filter criteria"
+    }
+  },
+  "admin": {
+    "welcome": {
+      "greetingMorning": "Good Morning",
+      "greetingAfternoon": "Good Afternoon",
+      "greetingEvening": "Good Evening",
+      "subtitle": "Manage your hyper-local opportunity ecosystem",
+      "today": "Today",
+      "systemStatus": "System Status",
+      "operational": "Operational",
+      "snapshot": "Snapshot",
+      "totalUsers": "Total Users",
+      "jobs": "Jobs"
+    },
+    "jobs": {
+      "title": "Local Opportunity Oversight",
+      "searchPlaceholder": "Search by title, keyword, location, or employer...",
+      "activeFiltersSuffix": "active search/filter criteria"
+    }
+  }
+}

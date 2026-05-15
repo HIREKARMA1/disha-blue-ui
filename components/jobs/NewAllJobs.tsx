@@ -13,6 +13,7 @@ import {
 } from "lucide-react"
 import { toast } from "react-hot-toast"
 import { cn } from "@/lib/utils"
+import { useTranslation } from "@/hooks/useTranslation"
 import { apiClient } from "@/lib/api"
 import { profileService } from "@/services/profileService"
 import { ApplicationModal } from "@/components/dashboard/ApplicationModal"
@@ -79,6 +80,7 @@ function isRequestCancelled(error: unknown): boolean {
 }
 
 export function NewAllJobs() {
+  const { t, tParams } = useTranslation()
   const router = useRouter()
   const searchParams = useSearchParams()
   const locationParam = searchParams.get("location")?.trim() ?? ""
@@ -212,7 +214,7 @@ export function NewAllJobs() {
       } catch (err: unknown) {
         if (isRequestCancelled(err) || requestId !== fetchRequestId.current) return
         setJobs([])
-        setListError("We couldn't load jobs right now. Please try again.")
+        setListError(t("jobs.loadError"))
       } finally {
         if (requestId === fetchRequestId.current) {
           setLoading(false)
@@ -245,11 +247,11 @@ export function NewAllJobs() {
       return
     }
     if (profileCompletion < 75) {
-      toast.error("Profile must be at least 75% complete to apply.")
+      toast.error(t("jobs.toast.profileIncomplete"))
       return
     }
     if (!job.can_apply) {
-      toast.error("Applications are closed for this job.")
+      toast.error(t("jobs.toast.applicationsClosed"))
       return
     }
     setSelectedJob(job)
@@ -267,7 +269,7 @@ export function NewAllJobs() {
         expected_salary: data.expected_salary ? Number(data.expected_salary) : null,
         availability_date: data.availability_date,
       })
-      toast.success("Application submitted!")
+      toast.success(t("jobs.toast.applySuccess"))
       setShowApplyModal(false)
       setJobs((prev) =>
         prev.map((j) =>
@@ -276,7 +278,7 @@ export function NewAllJobs() {
       )
     } catch (err: unknown) {
       const detail = (err as { response?: { data?: { detail?: unknown } } })?.response?.data?.detail
-      toast.error(typeof detail === "string" ? detail : "Failed to submit application")
+      toast.error(typeof detail === "string" ? detail : t("jobs.toast.applyFailed"))
     } finally {
       setIsApplying(false)
       setApplyingJobId(null)
@@ -288,19 +290,19 @@ export function NewAllJobs() {
   const heroTitle = useMemo(() => {
     if (appliedFilters.keyword) return `${appliedFilters.keyword} Jobs in India`
     if (displayLocation) return `Jobs in ${displayLocation}`
-    return "Jobs in India"
-  }, [appliedFilters.keyword, displayLocation])
+    return t("jobs.hero.defaultTitle")
+  }, [appliedFilters.keyword, displayLocation, t])
 
   const heroDesc = useMemo(() => {
     if (appliedFilters.keyword)
-      return `Browse verified ${appliedFilters.keyword} vacancies with salary details. Apply free today.`
-    return "Explore verified job openings across India with salary details. Apply free today."
-  }, [appliedFilters.keyword])
+      return tParams("jobs.hero.keywordDescription", { keyword: appliedFilters.keyword })
+    return t("jobs.hero.defaultDescription")
+  }, [appliedFilters.keyword, t, tParams])
 
   const salaryLabel = useMemo(() => aggregateSalaryRange(jobs), [jobs])
   const skillsLabel = useMemo(
-    () => topSkillsFromJobs(jobs, 3).join(" · ") || "Communication · Teamwork",
-    [jobs]
+    () => topSkillsFromJobs(jobs, 3).join(" · ") || t("jobs.hero.defaultSkills"),
+    [jobs, t]
   )
   const locationLabel = useMemo(
     () =>
@@ -328,14 +330,14 @@ export function NewAllJobs() {
     <div className="mx-auto w-full max-w-[1400px] px-4 pb-16 pt-24 sm:px-6 lg:px-8">
       {/* Mobile filter toggle bar */}
       <div className="mb-4 flex items-center justify-between lg:hidden">
-        <h1 className="text-xl font-bold text-[#0a0e1a] dark:text-white">Find Jobs</h1>
+        <h1 className="text-xl font-bold text-[#0a0e1a] dark:text-white">{t("jobs.pageTitle")}</h1>
         <button
           type="button"
           onClick={() => setShowMobileFilters(true)}
           className="inline-flex items-center gap-2 rounded-xl border border-[#dde3f5] bg-white px-4 py-2.5 text-sm font-semibold text-[#0a0e1a] shadow-sm dark:border-blue-800 dark:bg-slate-900 dark:text-white"
         >
           <SlidersHorizontal className="h-4 w-4 text-[#0070f3]" />
-          Filters
+          {t("jobs.filters")}
         </button>
       </div>
 
@@ -359,7 +361,7 @@ export function NewAllJobs() {
             title={heroTitle}
             description={heroDesc}
             locationLabel={locationLabel}
-            roleLabel={appliedFilters.keyword || "All roles"}
+            roleLabel={appliedFilters.keyword || t("jobs.hero.allRoles")}
             salaryRangeLabel={salaryLabel}
             skillsLabel={skillsLabel}
           />
@@ -377,7 +379,7 @@ export function NewAllJobs() {
                   className="font-semibold underline underline-offset-2"
                   onClick={() => void fetchJobs(pagination.page, appliedFilters)}
                 >
-                  Retry
+                  {t("jobs.retry")}
                 </button>
               </div>
             ) : null}
@@ -392,7 +394,7 @@ export function NewAllJobs() {
               <Search className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-[#7a85a8]" aria-hidden />
               <input
                 type="search"
-                placeholder="Role, skill, company…"
+                placeholder={t("jobs.searchPlaceholder")}
                 value={filters.keyword}
                 onChange={(e) => handleFilterChange("keyword", e.target.value)}
                 className="h-11 w-full rounded-xl border border-[#dde3f5] bg-white py-2 pl-10 pr-4 text-sm text-[#0a0e1a] outline-none transition focus:border-[#0070f3] focus:ring-2 focus:ring-[#0070f3]/20 dark:border-blue-900 dark:bg-slate-900 dark:text-blue-50"
@@ -407,7 +409,7 @@ export function NewAllJobs() {
                     setAppliedFilters(next)
                     setPagination((p) => ({ ...p, page: 1 }))
                   }}
-                  aria-label="Clear search"
+                  aria-label={t("jobs.clearSearch")}
                 >
                   <X className="h-4 w-4" />
                 </button>

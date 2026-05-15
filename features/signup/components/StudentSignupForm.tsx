@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button"
 import { apiClient } from "@/lib/api"
 import { resetOnboarding } from "@/lib/onboarding"
 import { useAuth } from "@/hooks/useAuth"
+import { useTranslation } from "@/hooks/useTranslation"
 import { useColleges } from "@/hooks/useLookup"
 import type { StudentRegisterRequest } from "@/types/auth"
 import { SignupOtpModal } from "./SignupOtpModal"
@@ -33,6 +34,7 @@ type Props = {
 export function StudentSignupForm({ loginHref }: Props) {
   const router = useRouter()
   const { login } = useAuth()
+  const { t } = useTranslation()
   const { data: colleges, loading: collegesLoading } = useColleges({ limit: 500 })
 
   const suggestions = useMemo(
@@ -136,7 +138,7 @@ export function StudentSignupForm({ loginHref }: Props) {
       })
       login(session.user, session.accessToken, session.refreshToken)
       resetOnboarding()
-      toast.success("Welcome! Your account is ready.")
+      toast.success(t("signup.student.welcomeToast"))
       setOtpOpen(false)
       router.replace(SIGNUP_DASHBOARD_PATH.student)
     } catch (err: unknown) {
@@ -150,18 +152,18 @@ export function StudentSignupForm({ loginHref }: Props) {
 
   return (
     <div className={signupCardClass}>
-      <h1 className="text-xl font-semibold tracking-tight text-slate-900 dark:text-white sm:text-2xl">Create student account</h1>
-      <p className="mt-1 text-sm text-slate-600 dark:text-blue-200/85">Join with email verification in one step.</p>
+      <h1 className="text-xl font-semibold tracking-tight text-slate-900 dark:text-white sm:text-2xl">{t("signup.student.title")}</h1>
+      <p className="mt-1 text-sm text-slate-600 dark:text-blue-200/85">{t("signup.student.subtitle")}</p>
 
       <div className="mt-6 space-y-4 sm:space-y-5">
         <SignupLabeledField
           id="su-name"
-          label="Full Name"
+          label={t("signup.student.fullName")}
           required
           icon={UserRound}
           filter="personName"
           autoComplete="name"
-          placeholder="Enter your full name"
+          placeholder={t("signup.student.namePlaceholder")}
           value={name}
           onChange={(v) => {
             setName(v)
@@ -172,12 +174,12 @@ export function StudentSignupForm({ loginHref }: Props) {
         />
         <SignupLabeledField
           id="su-phone"
-          label="Phone Number"
+          label={t("signup.student.phone")}
           required
           icon={Phone}
           filter="phone"
           autoComplete="tel-national"
-          placeholder="10-digit mobile number (e.g. 9876543210)"
+          placeholder={t("signup.student.phonePlaceholder")}
           value={phone}
           onChange={(v) => {
             setPhone(v)
@@ -195,12 +197,12 @@ export function StudentSignupForm({ loginHref }: Props) {
         />
         <SignupLabeledField
           id="su-email"
-          label="Email Address"
+          label={t("signup.student.email")}
           required
           icon={Mail}
           type="email"
           autoComplete="email"
-          placeholder="Enter your email address"
+          placeholder={t("signup.student.emailPlaceholder")}
           value={email}
           filter="email"
           onChange={(v) => {
@@ -222,13 +224,13 @@ export function StudentSignupForm({ loginHref }: Props) {
       </div>
 
       <Button type="button" className={signupPrimaryButtonClass + " mt-6"} loading={sending} disabled={verifying} onClick={() => void sendOtp()}>
-        Send OTP
+        {t("signup.student.sendOtp")}
       </Button>
 
       <p className="mt-5 text-center text-sm text-slate-600 dark:text-blue-200/85">
-        Already have an account?{" "}
+        {t("signup.student.alreadyHaveAccount")}{" "}
         <Link href={loginHref} className="font-semibold text-blue-700 hover:underline dark:text-blue-400">
-          Sign in
+          {t("common.signIn")}
         </Link>
       </p>
 

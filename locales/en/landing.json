@@ -1,0 +1,270 @@
+{
+  "landing": {
+    "applyBar": {
+      "ariaLabel": "Search jobs by location",
+      "heroLabel": "Where would you like to work?",
+      "locationSrOnly": "Enter your location",
+      "placeholderHero": "e.g. Bangalore, Maharashtra",
+      "placeholderDefault": "Enter your location",
+      "browseJobs": "Browse jobs",
+      "applyNow": "Apply for jobs now"
+    },
+    "hero": {
+      "kicker": "AI-powered skill development",
+      "titleLine1": "Train youth.",
+      "titleEm": "Build careers.",
+      "titleLine2": "Create livelihoods.",
+      "description": "Lakshya is a full-stack career readiness platform that takes a learner from skill training to job placement — with AI-powered assessments, resume building, AI driven interviews, and real-time job matching, all in one place.",
+      "dashBrand": "Lakshya-The AI Partner",
+      "stat1Value": "50K+",
+      "stat1Label": "Learners trained|on the platform",
+      "stat2Value": "78%",
+      "stat2Label": "Placed within|60 days",
+      "stat3Value": "125+",
+      "stat3Label": "Hiring partners|on network"
+    },
+    "ticker": [
+      "Skill Development",
+      "Career Growth",
+      "Job Readiness",
+      "Livelihood Opportunities",
+      "Youth Empowerment",
+      "Digital Skills",
+      "Placement Opportunities",
+      "Workforce Development",
+      "Employability Enhancement",
+      "Income Generation",
+      "Capacity Building",
+      "Economic Empowerment",
+      "Self Reliance"
+    ],
+    "aiStrip": {
+      "resumeTitle": "AI Resume Builder",
+      "resumeDesc": "ATS-optimised resume generated in under 3 minutes from your profile",
+      "interviewTitle": "AI-Driven Interviews",
+      "interviewDesc": "Voice AI conducts practice rounds with real-time feedback and scoring",
+      "matchingTitle": "Job Matching",
+      "matchingDesc": "AI surfaces nearby openings ranked by skill compatibility score",
+      "coursesTitle": "AI-recommended courses",
+      "coursesDesc": "Discover courses that match your skills and interests"
+    },
+    "illus": {
+      "learnTitle": "AI-Guided Learning",
+      "learnDesc": "Personalized skill tracks powered by intelligent mentoring. Learn faster with smart AI guidance.",
+      "placeTitle": "Job Placement",
+      "placeDesc": "AI-matched to verified openings near you. Get shortlisted faster based on your profile.",
+      "interviewTitle": "AI Interviews",
+      "interviewDesc": "Practice real interview scenarios with AI-driven feedback. Improve confidence, answers, and communication skills instantly."
+    },
+    "audience": {
+      "heading": "Built for every person on the path.",
+      "learnersTag": "For Learners",
+      "learnersTitle": "Build your future.",
+      "learnersDesc": "The all-in-one platform to learn, track progress, and get hired.",
+      "learnersBullets": [
+        "Create a digital profile in minutes.",
+        "Access high-quality local skill tracks.",
+        "Get match-ranked for nearby jobs."
+      ],
+      "orgsTag": "For Organisations",
+      "orgsTitle": "Scale your impact.",
+      "orgsDesc": "Comprehensive tools to manage vocational programs and tracking.",
+      "orgsBullets": [
+        "Monitor learner progress in real-time.",
+        "Automate assessments and certification.",
+        "Access data-driven placement insights."
+      ],
+      "employersTag": "For Employers",
+      "employersTitle": "Hire with confidence.",
+      "employersDesc": "Find pre-vetted, work-ready talent matched to your specific needs.",
+      "employersBullets": [
+        "Direct access to skilled graduates.",
+        "Verify credentials instantly.",
+        "Streamline your entry-level hiring."
+      ],
+      "featuresTag": "Features & AI",
+      "featuresTitle": "Smart AI tools.",
+      "featuresDesc": "Intelligent career tools designed for the modern Indian workforce.",
+      "featuresBullets": [
+        "Voice-enabled AI Interviewer.",
+        "Intelligent Resume Builder.",
+        "Career roadmap generation."
+      ]
+    },
+    "howItWorks": {
+      "eyebrow": "How it works",
+      "heading": "The complete journey, end to end.",
+      "intro": "Lakshya covers the entire lifecycle — from the moment a learner walks in to the day they receive their first salary.",
+      "stepTitles": [
+        "Register & onboard",
+        "Choose a skill track",
+        "Train, assess, and grow",
+        "Get certified",
+        "Match to a job & get placed"
+      ],
+      "stepDescs": [
+        "Learners create a profile through voice or text in Hindi, English, or regional languages. AI captures background, goals, and preferences.",
+        "AI recommends the most relevant course based on the learner's profile and local job market demand.",
+        "Complete structured learning modules with AI-driven assessments. Weekly progress is tracked.",
+        "On completion, learners receive a verifiable digital credential. AI instantly generates an ATS-optimised resume.",
+        "The AI jobs engine surfaces nearby openings. Employers review profiles and schedule interviews."
+      ],
+      "phoneBrand": "Lakshya",
+      "phoneTag": "Student Home",
+      "profileLabel": "Profile completion",
+      "profileHint": "Add work experience to reach 90%",
+      "skillLabel": "Skill progress",
+      "skills": ["Digital literacy", "Communication", "Interview skills"],
+      "partners": ["Urban Company", "Zomato", "Tata Projects"],
+      "partnerRole": "Sector Partner"
+    },
+    "journey": {
+      "eyebrow": "THE LEARNING JOURNEY",
+      "stepTitles": [
+        "Register & Onboard",
+        "AI Skill Training",
+        "Mock Interviews",
+        "Get Certified",
+        "Get Placed"
+      ],
+      "stepDescs": [
+        "Voice or text, any language",
+        "Personalised learning tracks",
+        "AI voice feedback & scoring",
+        "Verifiable digital credential",
+        "Matched & hired locally"
+      ]
+    },
+    "platform": {
+      "eyebrow": "Platform features",
+      "heading": "Everything in one place.",
+      "headingAccent": "Nothing missing.",
+      "resumeEyebrow": "AI RESUME BUILDER",
+      "resumeTitle": "A professional, ATS-ready resume generated in under 3 minutes.",
+      "resumeDesc": "No writing experience needed. Lakshya reads the learner's profile and generates a keyword-optimised resume tailored to their target industry — across 20+ job categories from trades to technology.",
+      "resumeTags": ["Electrician", "Data Entry", "Customer Support", "Field Sales", "IT Support", "Logistics"],
+      "interviewEyebrow": "MOCK INTERVIEW AI",
+      "interviewTitle": "Practise until you are truly ready.",
+      "interviewDesc": "AI conducts full voice-based mock interviews with sector-specific question banks. Learners receive instant scoring on clarity, content, confidence, and communication — in Hindi or English.",
+      "tracksEyebrow": "SKILL TRACKS",
+      "tracksTitle": "20+ courses, built for real jobs.",
+      "tracksDesc": "Structured learning paths aligned with NSQF levels and industry requirements — from entry-level trades and IT support to customer success and field sales roles.",
+      "credentialsEyebrow": "DIGITAL CREDENTIALS",
+      "credentialsTitle": "Verifiable certificates employers trust.",
+      "credentialsDesc": "On course completion, learners receive tamper-proof digital credentials they can share with employers directly from their Lakshya profile — or download as PDF.",
+      "dashboardEyebrow": "FOUNDATION & CSR DASHBOARD",
+      "dashboardTitle": "Full visibility into your program.",
+      "dashboardTitleAccent": "Every cohort. Every learner. Every outcome.",
+      "dashboardDesc": "Program managers and CSR funders get a real-time dashboard showing enrollments, course completions, assessment scores, placements, and salary outcomes. Auto-generated impact reports make every investment accountable.",
+      "dashboardTags": ["Live analytics", "Cohort tracking", "Placement reports", "Income uplift data", "CSR compliance export"],
+      "commEyebrow": "COMMUNICATION AI",
+      "commTitle": "Sound as good as you are on paper.",
+      "commDesc": "Pronunciation, fluency, grammar, and confidence scoring. Especially valuable for first-generation English speakers entering formal employment.",
+      "jobsEyebrow": "LOCAL JOBS ENGINE",
+      "jobsTitle": "Jobs matched to where you are.",
+      "jobsDesc": "AI surfaces nearby openings ranked by skill compatibility, with salary data and one-click apply. Employers can browse verified profiles and shortlist directly.",
+      "roadmapEyebrow": "CAREER ROADMAP",
+      "roadmapTitle": "A week-by-week plan to the goal.",
+      "roadmapDesc": "Skill gap analysis and personalised weekly learning plans that take the learner from where they are to where they want to be — in a clear, achievable sequence."
+    },
+    "stats": {
+      "stat1Value": "50,000+",
+      "stat1Label": "Learners trained on the platform",
+      "stat2Value": "78%",
+      "stat2Label": "Placed within 60 days of certification",
+      "stat3Value": "₹6.2L",
+      "stat3Label": "Average annual income of placed learners",
+      "stat4Value": "125+",
+      "stat4Label": "Employer partners actively hiring"
+    },
+    "outcomes": {
+      "eyebrow": "Outcomes",
+      "heading": "What changes when skills meet opportunity.",
+      "cardTitles": [
+        "Employment generation at scale",
+        "First-generation earners",
+        "Income uplift of 3.2×",
+        "Measurable ROI for funders"
+      ],
+      "cardDescs": [
+        "Organisations using Disha report 78% of their graduates placed within 60 days — compared to 34% through traditional methods alone.",
+        "68% of learners placed through Disha are the first formally employed person in their family — creating lasting economic change at the household level.",
+        "Learners placed through the platform earn on average 3.2× more than their pre-training income — a direct measure of economic empowerment.",
+        "Every CSR rupee invested is tracked to a tangible outcome. Disha's impact dashboards give funders placement rates and income data automatically."
+      ],
+      "upliftLabel": "INCOME UPLIFT JOURNEY",
+      "before": "Before",
+      "after": "After Disha",
+      "growth": "Growth",
+      "perMonth": "per month",
+      "incomeUplift": "income uplift"
+    },
+    "testimonials": {
+      "tags": [
+        "Placed · Electrician · Bhubaneswar",
+        "Placed · Delivery Partner · Cuttack",
+        "Placed · Driver · Bhubaneswar",
+        "Placed · Construction Worker · Ranchi"
+      ],
+      "quotes": [
+        "I was doing small local work before. After training, I got a stable electrician job. Now I earn regularly and support my family.",
+        "The training helped me get selected quickly. Now I earn daily and manage my expenses independently.",
+        "Earlier I had no proper job. Now I have a stable driver job and my income is consistent every month.",
+        "I now work on bigger construction sites and earn better wages than before."
+      ],
+      "names": [
+        "Rakesh Kumar · Batch 2024",
+        "Amit Das · Batch 2023",
+        "Sanjay Nayak · Batch 2024",
+        "Rahul Singh · Batch 2023"
+      ]
+    },
+    "wordCloud": {
+      "heading": "Every word is a commitment to the learner.",
+      "sub": "Our core values drive every line of code we write.",
+      "words": [
+        "Dignity", "Opportunity", "Independence", "Growth", "Future", "Skills",
+        "Vocation", "Livelihood", "Aspiration", "Scale", "Impact", "Equality",
+        "Accessibility", "Youth", "Potential", "Success"
+      ]
+    },
+    "stories": {
+      "eyebrow": "The Human Story",
+      "heading": "Real people. Real change.",
+      "sub": "Every learner on Lakshya is someone's first hope for a better income — a first-generation earner, a family's turning point."
+    },
+    "cta": {
+      "eyebrow": "Start Today",
+      "heading": "Give every learner a direction forward.",
+      "desc": "Whether you are a learner looking for your first job, a foundation running a skill development program, or an employer looking for work-ready talent — Lakshya is built for you.",
+      "primary": "Get started free",
+      "secondary": "Request a demo →"
+    },
+    "footer": {
+      "tagline": "AI-powered skill development for learners, organisations, and employers.",
+      "tags": ["Skill Development", "Placement Ready", "Youth Empowerment"],
+      "platform": "Platform",
+      "platformLinks": [
+        "Resume builder",
+        "Interview prep",
+        "Skill tracks",
+        "Job matching",
+        "Digital credentials",
+        "Career roadmap"
+      ],
+      "organisations": "Organisations",
+      "orgLinks": ["For NGOs & foundations", "For recruiters", "Impact dashboard"],
+      "company": "Company",
+      "companyLinks": [
+        "About Lakshya",
+        "Our approach",
+        "Blog & resources",
+        "Contact us",
+        "Privacy policy",
+        "Terms of use"
+      ],
+      "copyright": "© 2025 Lakshya · AI-powered skill development and career readiness platform",
+      "social": ["LinkedIn", "Twitter", "YouTube", "Email"]
+    }
+  }
+}

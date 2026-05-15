@@ -37,7 +37,7 @@ export function validatePhone(value: string, required = false): string | undefin
 export function sanitizePersonName(value: string): string {
   return value
     .replace(/[0-9]/g, "")
-    .replace(/[^\p{L}\s.'-]/gu, "")
+    .replace(/[^a-zA-Z\s.'-]/g, "")
     .replace(/\s{2,}/g, " ")
 }
 
@@ -46,7 +46,7 @@ export function validatePersonName(value: string, fieldLabel = "Full name"): str
   if (!trimmed) return `${fieldLabel} is required`
   if (trimmed.length < 2) return `${fieldLabel} must be at least 2 characters`
   if (/\d/.test(trimmed)) return `${fieldLabel} cannot contain numbers`
-  if (!/^[\p{L}][\p{L}\s.'-]*$/u.test(trimmed)) {
+  if (!/^[a-zA-Z][a-zA-Z\s.'-]*$/.test(trimmed)) {
     return `${fieldLabel} can only contain letters, spaces, hyphens, and apostrophes`
   }
   return undefined
@@ -54,8 +54,8 @@ export function validatePersonName(value: string, fieldLabel = "Full name"): str
 
 export function sanitizeOrganizationName(value: string): string {
   return value
-    .replace(/[\u{1F300}-\u{1FAFF}]/gu, "")
-    .replace(/[^\p{L}\p{N}\s&.,'-]/gu, "")
+    .replace(/[^\x00-\x7F]/g, "")
+    .replace(/[^a-zA-Z0-9\s&.,'-]/g, "")
     .replace(/\s{2,}/g, " ")
 }
 
@@ -63,10 +63,10 @@ export function validateOrganizationName(value: string, fieldLabel = "Company na
   const trimmed = value.trim()
   if (!trimmed) return `${fieldLabel} is required`
   if (trimmed.length < 2) return `${fieldLabel} must be at least 2 characters`
-  if (/[\u{1F300}-\u{1FAFF}]/u.test(trimmed)) {
-    return `${fieldLabel} cannot contain emojis`
+  if (/[^\x00-\x7F]/.test(trimmed)) {
+    return `${fieldLabel} cannot contain emojis or non-ASCII characters`
   }
-  if (!/^[\p{L}\p{N}][\p{L}\p{N}\s&.,'-]*$/u.test(trimmed)) {
+  if (!/^[a-zA-Z0-9][a-zA-Z0-9\s&.,'-]*$/.test(trimmed)) {
     return `${fieldLabel} contains invalid characters`
   }
   return undefined
@@ -103,7 +103,7 @@ const NAV_KEYS = new Set([
 export function isAllowedPersonNameKey(e: KeyboardEvent<HTMLInputElement>): boolean {
   if (e.ctrlKey || e.metaKey || e.altKey) return true
   if (NAV_KEYS.has(e.key)) return true
-  if (e.key.length === 1 && /^[\p{L}\s.'-]$/u.test(e.key)) return true
+  if (e.key.length === 1 && /^[a-zA-Z\s.'-]$/.test(e.key)) return true
   return false
 }
 

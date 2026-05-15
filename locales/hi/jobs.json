@@ -1,0 +1,50 @@
+{
+  "jobs": {
+    "pageTitle": "नौकरियाँ खोजें",
+    "filters": "फ़िल्टर",
+    "searchPlaceholder": "भूमिका, कौशल, कंपनी…",
+    "clearSearch": "खोज साफ़ करें",
+    "loading": "नौकरियाँ लोड हो रही हैं…",
+    "resultsCount": "{{count}} नौकरियाँ मिलीं",
+    "resultsCountOne": "1 नौकरी मिली",
+    "noResults": "आपकी खोज से कोई नौकरी मेल नहीं खाती",
+    "noResultsHint": "फ़िल्टर या खोज शब्द बदलकर देखें।",
+    "loadError": "अभी नौकरियाँ लोड नहीं हो सकीं। कृपया पुनः प्रयास करें।",
+    "retry": "पुनः प्रयास करें",
+    "apply": "आवेदन करें",
+    "applied": "आवेदन किया",
+    "viewDetails": "विवरण देखें",
+    "hero": {
+      "defaultTitle": "भारत में नौकरियाँ",
+      "defaultDescription": "भारत भर में सत्यापित नौकरी अवसर देखें, वेतन विवरण के साथ। आज ही मुफ़्त आवेदन करें।",
+      "keywordDescription": "सत्यापित {{keyword}} रिक्तियाँ देखें, वेतन विवरण के साथ। आज ही मुफ़्त आवेदन करें।",
+      "location": "स्थान",
+      "role": "भूमिका",
+      "response": "प्रतिक्रिया",
+      "responseValue": "30 मिनट से कम",
+      "allRoles": "सभी भूमिकाएँ",
+      "salaryRange": "वेतन सीमा",
+      "topSkills": "शीर्ष कौशल",
+      "documents": "दस्तावेज़",
+      "documentsDefault": "आधार · रिज़्यूमे · शिक्षा प्रमाणपत्र",
+      "defaultSkills": "संचार · टीमवर्क"
+    },
+    "filtersPanel": {
+      "title": "फ़िल्टर",
+      "location": "स्थान",
+      "locationPlaceholder": "शहर या राज्य",
+      "keyword": "भूमिका / कीवर्ड",
+      "keywordPlaceholder": "जैसे इलेक्ट्रीशियन",
+      "salary": "वेतन (₹/माह)",
+      "apply": "फ़िल्टर लागू करें",
+      "clear": "सब साफ़ करें",
+      "close": "बंद करें"
+    },
+    "toast": {
+      "profileIncomplete": "आवेदन के लिए प्रोफ़ाइल कम से कम 75% पूर्ण होनी चाहिए।",
+      "applicationsClosed": "इस नौकरी के लिए आवेदन बंद हैं।",
+      "applySuccess": "आवेदन जमा हो गया!",
+      "applyFailed": "आवेदन जमा करने में विफल"
+    }
+  }
+}

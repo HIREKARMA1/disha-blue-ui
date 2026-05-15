@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { signupFieldClass } from "./signupStyles"
 import { cn } from "@/lib/utils"
+import { useTranslation } from "@/hooks/useTranslation"
 
 type Props = {
   open: boolean
@@ -21,7 +22,7 @@ type Props = {
 
 export function SignupOtpModal({
   open,
-  title = "Enter verification code",
+  title,
   email,
   onClose,
   onSubmit,
@@ -30,7 +31,9 @@ export function SignupOtpModal({
   resending,
   error,
 }: Props) {
+  const { t } = useTranslation()
   const [otp, setOtp] = useState("")
+  const modalTitle = title ?? t("signup.otp.title")
 
   const handleClose = () => {
     setOtp("")
@@ -38,9 +41,9 @@ export function SignupOtpModal({
   }
 
   return (
-    <Modal isOpen={open} onClose={handleClose} title={title} maxWidth="sm">
+    <Modal isOpen={open} onClose={handleClose} title={modalTitle} maxWidth="sm">
       <p className="mb-4 text-sm text-slate-600 dark:text-blue-200/90">
-        We sent a 6-digit code to <span className="font-medium text-slate-900 dark:text-white">{email}</span>
+        {t("signup.otp.sentTo")} <span className="font-medium text-slate-900 dark:text-white">{email}</span>
       </p>
       <label htmlFor="signup-otp" className="sr-only">
         One-time password
@@ -51,7 +54,7 @@ export function SignupOtpModal({
         pattern="[0-9]*"
         maxLength={6}
         autoComplete="one-time-code"
-        placeholder="Enter OTP"
+        placeholder={t("signup.otp.placeholder")}
         value={otp}
         onChange={(e) => setOtp(e.target.value.replace(/\D/g, ""))}
         className={cn(signupFieldClass, "text-center text-lg font-semibold tracking-widest")}
@@ -59,7 +62,7 @@ export function SignupOtpModal({
       {error ? <p className="mt-2 text-sm text-red-600 dark:text-red-400">{error}</p> : null}
       <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:justify-end">
         <Button type="button" variant="outline" className="w-full sm:w-auto" onClick={() => void onResend()} loading={resending} disabled={submitting}>
-          Resend code
+          {t("signup.otp.resend")}
         </Button>
         <Button
           type="button"
@@ -75,7 +78,7 @@ export function SignupOtpModal({
             }
           }}
         >
-          Verify & create account
+          {t("signup.otp.verify")}
         </Button>
       </div>
     </Modal>

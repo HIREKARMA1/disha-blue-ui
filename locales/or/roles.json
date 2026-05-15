@@ -1,0 +1,57 @@
+{
+  "student": {
+    "welcome": {
+      "greetingMorning": "ସୁପ୍ରଭାତ",
+      "greetingAfternoon": "ଶୁଭ ଅପରାହ୍ନ",
+      "greetingEvening": "ଶୁଭ ସନ୍ଧ୍ୟା",
+      "messageMorning": "ଆଜି ନିକଟସ୍ଥ ଚାକିରି ଏବଂ ସ୍ଥାନୀୟ ସୁଯୋଗ ଦେଖିବାକୁ ପ୍ରସ୍ତୁତ କି?",
+      "messageAfternoon": "ଜାରି ରଖନ୍ତୁ - ଆପଣଙ୍କ ନିକଟରେ ନୂତନ ସ୍ଥାନୀୟ ଚାକିରି ପୋଷ୍ଟ ହେଉଛି।",
+      "messageEvening": "ଆଜି ଭଲ କାମ। ଆବେଦନଗୁଡ଼ିକ ଦେଖନ୍ତୁ ଏବଂ ପରବର୍ତ୍ତୀ ପଦକ୍ଷେପ ପ୍ରସ୍ତୁତ କରନ୍ତୁ।",
+      "tagLocalOpportunities": "ସ୍ଥାନୀୟ ସୁଯୋଗ",
+      "tagNearbyHiring": "ନିକଟସ୍ଥ ନିଯୁକ୍ତି"
+    },
+    "jobs": {
+      "title": "ସ୍ଥାନୀୟ ଚାକିରି ଖୋଜ",
+      "searchPlaceholder": "ଭୂମିକା, କୌଶଳ, କମ୍ପାନୀ କିମ୍ବା ସ୍ଥାନ ଦ୍ୱାରା ଖୋଜନ୍ତୁ...",
+      "activeFiltersSuffix": "ସକ୍ରିୟ ସର୍ଚ୍ଚ/ଫିଲ୍ଟର ମାନଦଣ୍ଡ"
+    }
+  },
+  "corporate": {
+    "welcome": {
+      "greetingMorning": "ସୁପ୍ରଭାତ",
+      "greetingAfternoon": "ଶୁଭ ଅପରାହ୍ନ",
+      "greetingEvening": "ଶୁଭ ସନ୍ଧ୍ୟା",
+      "messageMorning": "ଅଧିକ ଦୃଶ୍ୟମାନତା ସହିତ ସ୍ଥାନୀୟ ପ୍ରତିଭାକୁ ଶୀଘ୍ର ନିଯୁକ୍ତ କରିବାକୁ ପ୍ରସ୍ତୁତ କି?",
+      "messageAfternoon": "ଗତି ରଖନ୍ତୁ - ନିକଟସ୍ଥ ପ୍ରାର୍ଥୀମାନେ ଆବେଦନ କରୁଛନ୍ତି।",
+      "messageEvening": "ଆଜି ଭଲ ପ୍ରଗତି। ଆବେଦକମାନଙ୍କୁ ରିଭ୍ୟୁ କରନ୍ତୁ ଏବଂ ପରବର୍ତ୍ତୀ ନିଯୁକ୍ତି ପଦକ୍ଷେପ ଯୋଜନା କରନ୍ତୁ।",
+      "tagWorkspace": "ନିଯୁକ୍ତିଦାତା ୱାର୍କସ୍ପେସ୍",
+      "tagVerified": "ସତ୍ୟାପିତ ନିଯୁକ୍ତିଦାତା",
+      "tagLocalHiring": "ସ୍ଥାନୀୟ ନିଯୁକ୍ତି",
+      "tagRegionalGrowth": "ଅଞ୍ଚଳୀୟ ବୃଦ୍ଧି"
+    },
+    "jobs": {
+      "title": "ସ୍ଥାନୀୟ ନିଯୁକ୍ତି ଚାକିରି",
+      "searchPlaceholder": "ଶୀର୍ଷକ, କୌଶଳ, କିମ୍ବା ଜିଲ୍ଲା/ରାଜ୍ୟ ଦ୍ୱାରା ଖୋଜନ୍ତୁ...",
+      "activeFiltersSuffix": "ସକ୍ରିୟ ସର୍ଚ୍ଚ/ଫିଲ୍ଟର ମାନଦଣ୍ଡ"
+    }
+  },
+  "admin": {
+    "welcome": {
+      "greetingMorning": "ସୁପ୍ରଭାତ",
+      "greetingAfternoon": "ଶୁଭ ଅପରାହ୍ନ",
+      "greetingEvening": "ଶୁଭ ସନ୍ଧ୍ୟା",
+      "subtitle": "ଆପଣଙ୍କର ହାଇପର-ଲୋକାଲ୍ ସୁଯୋଗ ଇକୋସିଷ୍ଟମ୍ ପରିଚାଳନା କରନ୍ତୁ",
+      "today": "ଆଜି",
+      "systemStatus": "ସିଷ୍ଟମ୍ ସ୍ଥିତି",
+      "operational": "ଚାଲୁ ଅଛି",
+      "snapshot": "ସ୍ନାପସଟ୍",
+      "totalUsers": "ମୋଟ ବ୍ୟବହାରକାରୀ",
+      "jobs": "ଚାକିରି"
+    },
+    "jobs": {
+      "title": "ସ୍ଥାନୀୟ ସୁଯୋଗ ନିରୀକ୍ଷଣ",
+      "searchPlaceholder": "ଶୀର୍ଷକ, କୀୱାର୍ଡ, ସ୍ଥାନ କିମ୍ବା ନିଯୁକ୍ତିଦାତା ଦ୍ୱାରା ଖୋଜନ୍ତୁ...",
+      "activeFiltersSuffix": "ସକ୍ରିୟ ସର୍ଚ୍ଚ/ଫିଲ୍ଟର ମାନଦଣ୍ଡ"
+    }
+  }
+}

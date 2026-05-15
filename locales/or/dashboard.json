@@ -1,0 +1,26 @@
+{
+  "dashboard": {
+    "overview": "ଅଭିଲୋକନ",
+    "groups": {
+      "overview": "ଅଭିଲୋକନ",
+      "jobs": "ଚାକିରି",
+      "careerTools": "କ୍ୟାରିୟର ଟୁଲ୍ସ",
+      "account": "ଖାତା",
+      "hiring": "ନିଯୁକ୍ତି",
+      "insights": "ଇନସାଇଟ୍ସ",
+      "company": "କମ୍ପାନୀ",
+      "operations": "ଅପରେସନ୍ସ",
+      "assessments": "ଅସେସମେଣ୍ଟସ୍",
+      "admin": "ଆଡମିନ"
+    },
+    "labels": {
+      "logout": "ଲଗଆଉଟ",
+      "studentAccount": "ଛାତ୍ର ଖାତା",
+      "recruiterAccount": "ନିଯୁକ୍ତିକର୍ତ୍ତା ଖାତା",
+      "adminAccount": "ଆଡମିନ ଖାତା",
+      "studentWorkspace": "ଛାତ୍ର କାର୍ଯ୍ୟକ୍ଷେତ୍ର",
+      "recruiterWorkspace": "ନିଯୁକ୍ତିକର୍ତ୍ତା କାର୍ଯ୍ୟକ୍ଷେତ୍ର",
+      "adminWorkspace": "ଆଡମିନ କାର୍ଯ୍ୟକ୍ଷେତ୍ର"
+    }
+  }
+}

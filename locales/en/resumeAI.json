@@ -1,0 +1,30 @@
+{
+  "resumeAI": {
+    "livePreview": "Live Preview",
+    "generatedResume": "Generated Resume Structure",
+    "focusChat": "Focus chat",
+    "showPreview": "Show preview",
+    "saveToProfile": "Save to Profile",
+    "downloadPdf": "Download PDF",
+    "previewEmpty": "Preview will appear here once AI returns structured resume output.",
+    "generatingStatus": "AI is architecting your resume...",
+    "syncingStatus": "Syncing...",
+    "printingStatus": "Preparing print preview...",
+    "syncConfirmTitle": "Confirm Sync",
+    "syncConfirmDescription": "This will update your platform profile with the AI-generated information. Existing data in matching fields will be overwritten.",
+    "confirmSync": "Continue Sync",
+    "noAudioDetected": "No audio detected. Please try again or type your skills.",
+    "mobileTabs": {
+      "chat": "Chat",
+      "preview": "Preview"
+    },
+    "sections": {
+      "summary": "Professional Summary",
+      "experience": "Work Experience",
+      "education": "Education",
+      "skills": "Skills",
+      "projects": "Projects",
+      "certifications": "Certifications"
+    }
+  }
+}

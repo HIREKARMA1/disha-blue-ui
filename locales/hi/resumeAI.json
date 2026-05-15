@@ -1,0 +1,30 @@
+{
+  "resumeAI": {
+    "livePreview": "लाइव प्रीव्यू",
+    "generatedResume": "जनरेटेड रिज्यूमे संरचना",
+    "focusChat": "चैट पर फोकस",
+    "showPreview": "प्रीव्यू दिखाएँ",
+    "saveToProfile": "प्रोफ़ाइल में सेव करें",
+    "downloadPdf": "PDF डाउनलोड करें",
+    "previewEmpty": "AI रिज्यूमे आउटपुट आने के बाद प्रीव्यू यहाँ दिखाई देगा।",
+    "generatingStatus": "AI आपका रिज्यूमे तैयार कर रहा है...",
+    "syncingStatus": "सिंक हो रहा है...",
+    "printingStatus": "प्रिंट प्रीव्यू तैयार हो रहा है...",
+    "syncConfirmTitle": "सिंक की पुष्टि करें",
+    "syncConfirmDescription": "यह आपके प्लेटफ़ॉर्म प्रोफ़ाइल को AI-जनरेटेड जानकारी से अपडेट करेगा। समान फ़ील्ड में मौजूद डेटा ओवरराइट हो जाएगा।",
+    "confirmSync": "सिंक जारी रखें",
+    "noAudioDetected": "कोई ऑडियो नहीं मिला। कृपया फिर से प्रयास करें या अपनी स्किल्स टाइप करें।",
+    "mobileTabs": {
+      "chat": "चैट",
+      "preview": "प्रीव्यू"
+    },
+    "sections": {
+      "summary": "प्रोफेशनल सारांश",
+      "experience": "कार्य अनुभव",
+      "education": "शिक्षा",
+      "skills": "कौशल",
+      "projects": "प्रोजेक्ट्स",
+      "certifications": "प्रमाणपत्र"
+    }
+  }
+}

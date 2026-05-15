@@ -1,0 +1,56 @@
+{
+  "common": {
+    "dashboard": "डैशबोर्ड",
+    "logout": "लॉगआउट",
+    "cancel": "रद्द करें",
+    "signIn": "साइन इन",
+    "signUp": "साइन अप",
+    "loading": "लोड हो रहा है...",
+    "noFiltersApplied": "कोई फ़िल्टर लागू नहीं है"
+  },
+  "profile": {
+    "form": {
+      "enterYour": "अपना दर्ज करें",
+      "updateSectionInfoPrefix": "अपनी",
+      "updateSectionInfoSuffix": "जानकारी अपडेट करें",
+      "saveChanges": "परिवर्तन सहेजें",
+      "saving": "सहेजा जा रहा है..."
+    }
+  },
+  "nav": {
+    "home": "होम",
+    "jobs": "जॉब्स",
+    "forStudents": "छात्रों के लिए",
+    "forEmployers": "नियोक्ताओं के लिए",
+    "aiTools": "AI टूल्स",
+    "about": "परिचय",
+    "contact": "संपर्क",
+    "language": "भाषा",
+    "studentNavigation": "छात्र नेविगेशन",
+    "recruiterNavigation": "रिक्रूटर नेविगेशन",
+    "adminNavigation": "एडमिन नेविगेशन"
+  },
+  "chat": {
+    "assistant": "एआई सहायक",
+    "opportunityAssistant": "अवसर सहायक",
+    "thinking": "सोच रहा है...",
+    "askPlaceholder": "नौकरी, प्रोफ़ाइल, आवेदन के बारे में पूछें...",
+    "scrollToBottom": "नीचे जाएँ"
+  },
+  "footer": {
+    "platformOverview": "प्लेटफॉर्म परिचय",
+    "quickLinks": "त्वरित लिंक",
+    "roleLinks": "भूमिका लिंक",
+    "contact": "संपर्क",
+    "forStudents": "छात्रों के लिए",
+    "forEmployers": "नियोक्ताओं के लिए"
+  },
+  "home": {
+    "heroTitle": "अपने आसपास और स्थानीय नौकरी अवसर खोजें",
+    "heroSubtitle": "एक हाइपर-लोकल अवसर प्लेटफॉर्म जो नौकरी खोजने वालों को शहर, जिला और ग्रामीण क्षेत्रों के नियोक्ताओं से जोड़ता है।",
+    "ctaStudent": "मेरे पास की जॉब्स देखें",
+    "ctaEmployer": "स्थानीय जॉब पोस्ट करें",
+    "howItWorks": "यह कैसे काम करता है",
+    "valueHeading": "जॉब सीकर्स और नियोक्ता हमें क्यों चुनते हैं"
+  }
+}

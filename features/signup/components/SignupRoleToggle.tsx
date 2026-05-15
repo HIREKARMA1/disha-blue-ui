@@ -1,6 +1,7 @@
 "use client"
 
 import { cn } from "@/lib/utils"
+import { useTranslation } from "@/hooks/useTranslation"
 
 export type SignupRole = "student" | "corporate"
 
@@ -11,6 +12,7 @@ type Props = {
 }
 
 export function SignupRoleToggle({ value, onChange, className }: Props) {
+  const { t } = useTranslation()
   return (
     <div
       className={cn(
@@ -18,12 +20,12 @@ export function SignupRoleToggle({ value, onChange, className }: Props) {
         className,
       )}
       role="tablist"
-      aria-label="Account type"
+      aria-label={t("signup.roleToggle.ariaLabel")}
     >
       {(
         [
-          { id: "student" as const, label: "Student" },
-          { id: "corporate" as const, label: "Corporate" },
+          { id: "student" as const, label: t("signup.roleToggle.student") },
+          { id: "corporate" as const, label: t("signup.roleToggle.corporate") },
         ] as const
       ).map((tab) => (
         <button

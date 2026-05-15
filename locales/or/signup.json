@@ -1,0 +1,61 @@
+{
+  "signup": {
+    "roleToggle": {
+      "ariaLabel": "ଖାତା ପ୍ରକାର",
+      "student": "ଛାତ୍ର",
+      "corporate": "କର୍ପୋରେଟ"
+    },
+    "student": {
+      "title": "ଛାତ୍ର ଖାତା ସୃଷ୍ଟି କରନ୍ତୁ",
+      "subtitle": "ଇମେଲ୍ ଯାଞ୍ଚ ସହିତ ଗୋଟିଏ ପଦକ୍ଷେପରେ ଯୋଗ ଦିଅନ୍ତୁ।",
+      "fullName": "ପୂର୍ଣ୍ଣ ନାମ",
+      "phone": "ଫୋନ୍ ନମ୍ବର",
+      "email": "ଇମେଲ୍ ଠିକଣା",
+      "namePlaceholder": "ଆପଣଙ୍କର ପୂର୍ଣ୍ଣ ନାମ ଲେଖନ୍ତୁ",
+      "phonePlaceholder": "10 ଅଙ୍କର ମୋବାଇଲ୍ ନମ୍ବର (ଯେପରିକି 9876543210)",
+      "emailPlaceholder": "ଆପଣଙ୍କର ଇମେଲ୍ ଲେଖନ୍ତୁ",
+      "sendOtp": "OTP ପଠାନ୍ତୁ",
+      "alreadyHaveAccount": "ପୂର୍ବରୁ ଖାତା ଅଛି?",
+      "welcomeToast": "ସ୍ୱାଗତ! ଆପଣଙ୍କର ଖାତା ପ୍ରସ୍ତୁତ।",
+      "verificationFailed": "ଯାଞ୍ଚ ବିଫଳ"
+    },
+    "corporate": {
+      "title": "କର୍ପୋରେଟ ଖାତା ସୃଷ୍ଟି କରନ୍ତୁ",
+      "subtitle": "ଆପଣଙ୍କ କମ୍ପାନୀ ପଞ୍ଜିକରଣ କରି ସ୍ଥାନୀୟ ପ୍ରତିଭାକୁ ନିଯୁକ୍ତି ଆରମ୍ଭ କରନ୍ତୁ।",
+      "companyName": "କମ୍ପାନୀର ନାମ",
+      "website": "ୱେବସାଇଟ୍",
+      "email": "କାର୍ଯ୍ୟ ଇମେଲ୍",
+      "companyPlaceholder": "କମ୍ପାନୀର ନାମ ଲେଖନ୍ତୁ",
+      "websitePlaceholder": "https://yourcompany.com",
+      "emailPlaceholder": "you@company.com",
+      "sendOtp": "OTP ପଠାନ୍ତୁ",
+      "alreadyHaveAccount": "ପୂର୍ବରୁ ଖାତା ଅଛି?",
+      "welcomeToast": "ସ୍ୱାଗତ! ଆପଣଙ୍କର ଖାତା ପ୍ରସ୍ତୁତ।",
+      "verificationFailed": "ଯାଞ୍ଚ ବିଫଳ"
+    },
+    "otp": {
+      "title": "ଯାଞ୍ଚ କୋଡ୍ ଲେଖନ୍ତୁ",
+      "sentTo": "ଆମେ 6 ଅଙ୍କର କୋଡ୍ ପଠାଇଛୁ",
+      "placeholder": "OTP ଲେଖନ୍ତୁ",
+      "resend": "କୋଡ୍ ପୁଣି ପଠାନ୍ତୁ",
+      "verify": "ଯାଞ୍ଚ କରି ଖାତା ସୃଷ୍ଟି କରନ୍ତୁ",
+      "otpSent": "ଆପଣଙ୍କ ଇମେଲ୍‌କୁ OTP ପଠାଗଲା",
+      "otpResent": "OTP ପୁଣି ପଠାଗଲା"
+    },
+    "validation": {
+      "nameRequired": "ପୂର୍ଣ୍ଣ ନାମ ଆବଶ୍ୟକ",
+      "nameInvalid": "ନାମରେ କେବଳ ଅକ୍ଷର ଏବଂ ସ୍ପେସ୍ ରହିପାରେ",
+      "phoneRequired": "ଫୋନ୍ ନମ୍ବର ଆବଶ୍ୟକ",
+      "phoneInvalid": "ବୈଧ 10 ଅଙ୍କର ମୋବାଇଲ୍ ନମ୍ବର ଲେଖନ୍ତୁ",
+      "emailRequired": "ଇମେଲ୍ ଆବଶ୍ୟକ",
+      "emailInvalid": "ବୈଧ ଇମେଲ୍ ଲେଖନ୍ତୁ",
+      "institutionRequired": "ଅନୁଷ୍ଠାନ ଆବଶ୍ୟକ",
+      "passwordRequired": "ପାସୱାର୍ଡ ଆବଶ୍ୟକ",
+      "passwordMin": "ପାସୱାର୍ଡ ଅତିକମରେ 8 ଅକ୍ଷରର ହେବ",
+      "confirmRequired": "ଦୟାକରି ପାସୱାର୍ଡ ନିଶ୍ଚିତ କରନ୍ତୁ",
+      "passwordMismatch": "ପାସୱାର୍ଡ ମେଳ ଖାଉନାହିଁ",
+      "companyRequired": "କମ୍ପାନୀର ନାମ ଆବଶ୍ୟକ",
+      "websiteInvalid": "ବୈଧ ୱେବସାଇଟ୍ URL ଲେଖନ୍ତୁ"
+    }
+  }
+}

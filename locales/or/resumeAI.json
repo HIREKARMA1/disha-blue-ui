@@ -1,0 +1,30 @@
+{
+  "resumeAI": {
+    "livePreview": "ଲାଇଭ୍ ପ୍ରିଭ୍ୟୁ",
+    "generatedResume": "ଜନେରେଟେଡ୍ ରେଜ୍ୟୁମେ ଗଠନ",
+    "focusChat": "ଚାଟ୍‌ରେ ଫୋକସ୍",
+    "showPreview": "ପ୍ରିଭ୍ୟୁ ଦେଖାନ୍ତୁ",
+    "saveToProfile": "ପ୍ରୋଫାଇଲ୍‌ରେ ସେଭ୍ କରନ୍ତୁ",
+    "downloadPdf": "PDF ଡାଉନଲୋଡ୍ କରନ୍ତୁ",
+    "previewEmpty": "AI ରେଜ୍ୟୁମେ ଆଉଟପୁଟ୍ ଆସିଲେ ପ୍ରିଭ୍ୟୁ ଏଠାରେ ଦେଖାଯିବ।",
+    "generatingStatus": "AI ଆପଣଙ୍କ ରେଜ୍ୟୁମେ ତିଆରି କରୁଛି...",
+    "syncingStatus": "ସିଙ୍କ ହେଉଛି...",
+    "printingStatus": "ପ୍ରିଣ୍ଟ ପ୍ରିଭ୍ୟୁ ପ୍ରସ୍ତୁତ ହେଉଛି...",
+    "syncConfirmTitle": "ସିଙ୍କ ନିଶ୍ଚିତ କରନ୍ତୁ",
+    "syncConfirmDescription": "ଏହା ଆପଣଙ୍କ ପ୍ଲାଟଫର୍ମ ପ୍ରୋଫାଇଲ୍‌କୁ AI ଦ୍ୱାରା ସୃଷ୍ଟ ସୂଚନା ସହିତ ଅପଡେଟ୍ କରିବ। ସମାନ ଫିଲ୍ଡର ଥିବା ତଥ୍ୟ ଓଭରରାଇଟ୍ ହେବ।",
+    "confirmSync": "ସିଙ୍କ ଜାରି ରଖନ୍ତୁ",
+    "noAudioDetected": "କୌଣସି ଅଡିଓ ମିଳିଲା ନାହିଁ। ଦୟାକରି ପୁଣି ଚେଷ୍ଟା କରନ୍ତୁ କିମ୍ବା ଆପଣଙ୍କ ଦକ୍ଷତା ଟାଇପ କରନ୍ତୁ।",
+    "mobileTabs": {
+      "chat": "ଚାଟ୍",
+      "preview": "ପ୍ରିଭ୍ୟୁ"
+    },
+    "sections": {
+      "summary": "ପ୍ରୋଫେସନାଲ୍ ସାରାଂଶ",
+      "experience": "କାର୍ଯ୍ୟ ଅନୁଭବ",
+      "education": "ଶିକ୍ଷା",
+      "skills": "ଦକ୍ଷତା",
+      "projects": "ପ୍ରକଳ୍ପ",
+      "certifications": "ସର୍ଟିଫିକେସନ୍"
+    }
+  }
+}

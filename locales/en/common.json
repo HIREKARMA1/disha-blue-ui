@@ -1,0 +1,56 @@
+{
+  "common": {
+    "dashboard": "Home",
+    "logout": "Logout",
+    "cancel": "Cancel",
+    "signIn": "Sign In",
+    "signUp": "Sign Up",
+    "loading": "Loading...",
+    "noFiltersApplied": "No filters applied"
+  },
+  "profile": {
+    "form": {
+      "enterYour": "Enter your",
+      "updateSectionInfoPrefix": "Update your",
+      "updateSectionInfoSuffix": "information",
+      "saveChanges": "Save Changes",
+      "saving": "Saving..."
+    }
+  },
+  "nav": {
+    "home": "Home",
+    "jobs": "Jobs",
+    "forStudents": "For Students",
+    "forEmployers": "For Employers",
+    "aiTools": "AI Tools",
+    "about": "About",
+    "contact": "Contact",
+    "language": "Language",
+    "studentNavigation": "Student navigation",
+    "recruiterNavigation": "Recruiter navigation",
+    "adminNavigation": "Admin navigation"
+  },
+  "chat": {
+    "assistant": "AI Assistant",
+    "opportunityAssistant": "Opportunity Assistant",
+    "thinking": "Thinking...",
+    "askPlaceholder": "Ask anything about jobs, profile, applications...",
+    "scrollToBottom": "Scroll to bottom"
+  },
+  "footer": {
+    "platformOverview": "Platform Overview",
+    "quickLinks": "Quick Links",
+    "roleLinks": "Role Links",
+    "contact": "Contact",
+    "forStudents": "For Students",
+    "forEmployers": "For Employers"
+  },
+  "home": {
+    "heroTitle": "Discover local and nearby job opportunities",
+    "heroSubtitle": "A hyper-local opportunity platform connecting job seekers with employers across cities, districts, and rural communities.",
+    "ctaStudent": "Find jobs near me",
+    "ctaEmployer": "Post a local job",
+    "howItWorks": "How it works",
+    "valueHeading": "Why job seekers and employers choose us"
+  }
+}

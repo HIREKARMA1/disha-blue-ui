@@ -2,14 +2,12 @@
 
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { useLocale } from '@/contexts/LocaleContext'
-import { SupportedLocale, t } from '@/lib/i18n'
+import { LOCALE_LABELS, SupportedLocale, t } from '@/lib/i18n'
 import { cn } from '@/lib/utils'
 
-const languages: Array<{ value: SupportedLocale; label: string }> = [
-  { value: 'en', label: 'English' },
-  { value: 'hi', label: 'हिन्दी' },
-  { value: 'or', label: 'ଓଡ଼ିଆ' },
-]
+const languages: Array<{ value: SupportedLocale; label: string }> = (
+  ['en', 'hi', 'or'] as SupportedLocale[]
+).map((value) => ({ value, label: LOCALE_LABELS[value] }))
 
 const triggerBar = cn(
   'border-2 border-white/90 bg-white font-medium text-slate-900 shadow-none',
