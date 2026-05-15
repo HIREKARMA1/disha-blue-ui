@@ -84,10 +84,6 @@ export default function LakshyaLandingPage() {
             <p className="hdesc">Lakshya is a <b>full-stack career readiness platform</b> that takes a learner from skill
               training to job placement — with AI-powered assessments, resume building, ai driven interviews, and real-time
               job matching, all in one place.</p>
-            <div className="hbtns">
-              <button className="btn-hero">Get started free</button>
-              <button className="btn-hero2">See how it works →</button>
-            </div>
             <div className="h-stats">
               <div className="hs">
                 <div className="hs-n">50K+</div>
