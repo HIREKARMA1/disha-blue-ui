@@ -3,6 +3,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import './dishaai.css';
 import { Navbar } from '@/components/ui/navbar';
+import { ApplyForJobsBar } from '@/features/landing';
 
 export default function LakshyaLandingPage() {
   const [mounted, setMounted] = useState(false);
@@ -119,6 +120,8 @@ export default function LakshyaLandingPage() {
         </div>
       </section>
 
+      <ApplyForJobsBar />
+
       {/* -- TICKER -- */}
       <div className="ticker">
         <div className="tick-track">
@@ -143,7 +146,7 @@ export default function LakshyaLandingPage() {
       </div>
 
       {/* -- AI STRIP -- */}
-      <div className="ai-strip">
+      <div id="features" className="ai-strip">
         <div className="ai-strip-inner">
           {[
             {
@@ -208,7 +211,7 @@ export default function LakshyaLandingPage() {
       </div>
 
       {/* -- WHO IS IT FOR -- */}
-      <section className="sec rv">
+      <section id="about" className="sec rv">
         <div className="wrap">
           <h2 className="sh" style={{ marginBottom: '2.5rem' }}>Built for every person <em>on the path.</em></h2>
           <div className="for-grid">

@@ -99,10 +99,10 @@ export function Footer({ plainText = false, hideIcons = false }: FooterProps) {
   <Link href="/signup?type=corporate" className="text-sm text-slate-600 transition-colors hover:text-blue-600 dark:text-blue-300 dark:hover:text-white">Post Jobs</Link>
   </li>
   <li>
-  <Link href="/#roles" className="text-sm text-slate-600 transition-colors hover:text-blue-600 dark:text-blue-300 dark:hover:text-white">For Students</Link>
+  <Link href="/signup" className="text-sm text-slate-600 transition-colors hover:text-blue-600 dark:text-blue-300 dark:hover:text-white">For Students</Link>
   </li>
   <li>
-  <Link href="/#roles" className="text-sm text-slate-600 transition-colors hover:text-blue-600 dark:text-blue-300 dark:hover:text-white">For Employers</Link>
+  <Link href="/signup?type=corporate" className="text-sm text-slate-600 transition-colors hover:text-blue-600 dark:text-blue-300 dark:hover:text-white">For Employers</Link>
   </li>
   </ul>
   </div>

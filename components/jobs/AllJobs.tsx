@@ -21,7 +21,7 @@ import { ApplicationModal } from '@/components/dashboard/ApplicationModal'
 import { JobDescriptionModal } from '@/components/dashboard/JobDescriptionModal'
 import { apiClient } from '@/lib/api'
 import { toast } from 'react-hot-toast'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { profileService, type ProfileCompletionResponse } from '@/services/profileService'
 
 // Types (reusing from student/jobs/page.tsx logic)
@@ -98,6 +98,8 @@ interface JobSearchResponse {
 
 export function AllJobs() {
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const locationQuery = searchParams.get('location') ?? ''
   const [jobs, setJobs] = useState<Job[]>([])
   const [loading, setLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState('')
@@ -175,6 +177,11 @@ export function AllJobs() {
   setSavedJobIds(loadSavedJobIds())
   }, [])
 
+  useEffect(() => {
+  const loc = locationQuery.trim()
+  setFilters((prev) => (prev.location === loc ? prev : { ...prev, location: loc }))
+  }, [locationQuery])
+
   const refreshSavedJobs = () => setSavedJobIds(loadSavedJobIds())
 
   const handleSaveToggleForJob = (jobId: string) => {
@@ -207,7 +214,7 @@ export function AllJobs() {
 
   useEffect(() => {
   fetchJobs(pagination.page)
-  }, [pagination.page]) // Refetch on page change
+  }, [pagination.page, locationQuery]) // Refetch on page change or URL `location` prefill
 
   useEffect(() => {
   // Refetch when job status filter changes
@@ -241,9 +248,17 @@ export function AllJobs() {
 
   if (searchTerm) params.set('keyword', searchTerm)
 
+  const locationFromUrl = searchParams.get('location')?.trim()
+  if (locationFromUrl) {
+    params.set('location', locationFromUrl)
+  }
+
   // Add other filters
   Object.entries(filters).forEach(([key, value]) => {
-  if (value) params.set(key, value)
+  if (value) {
+  if (key === 'location' && locationFromUrl) return
+  params.set(key, value)
+  }
   })
 
   // Note: jobStatusFilter 'open'/'closed' logic might need backend support or frontend filtering

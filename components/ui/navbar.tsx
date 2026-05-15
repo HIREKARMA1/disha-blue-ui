@@ -1,10 +1,10 @@
 "use client"
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { useTheme } from 'next-themes'
-import { usePathname, useRouter } from 'next/navigation'
+import { usePathname } from 'next/navigation'
 import { useAuth } from '@/hooks/useAuth'
 import { Button } from '@/components/ui/button'
 import { ThemeToggle } from '@/components/ui/theme-toggle'
@@ -21,7 +21,7 @@ import { t } from '@/lib/i18n'
 import { useLocale } from '@/contexts/LocaleContext'
 import { LanguageSwitcher } from '@/components/ui/language-switcher'
 import { cn } from '@/lib/utils'
-import { getOnboardingEntryRoute } from '@/lib/onboarding'
+import { STUDENT_SIGNUP_ROUTE } from '@/features/landing/constants'
 
 interface NavbarProps {
   variant?: 'default' | 'transparent' | 'solid'
@@ -36,7 +36,6 @@ export function Navbar({
   textOnly = false,
 }: NavbarProps) {
   const { user, isAuthenticated, isLoading, logout } = useAuth()
-  const router = useRouter()
   const { theme, resolvedTheme } = useTheme()
   const pathname = usePathname()
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
@@ -54,12 +53,6 @@ export function Navbar({
   const handleLogout = () => {
     logout()
     setIsMobileMenuOpen(false)
-  }
-
-  const handleFindJobsClick = () => {
-    const route = getOnboardingEntryRoute()
-    setIsMobileMenuOpen(false)
-    router.push(route)
   }
 
   const getDashboardPath = () => {
@@ -106,11 +99,17 @@ export function Navbar({
           ? 'Admin'
           : 'Workspace'
 
+  const [hash, setHash] = useState("")
+  useEffect(() => {
+    const sync = () => setHash(typeof window !== "undefined" ? window.location.hash : "")
+    sync()
+    window.addEventListener("hashchange", sync)
+    return () => window.removeEventListener("hashchange", sync)
+  }, [pathname])
+
+  /** Marketing routes: fewer items; role entry is via Find Jobs / Post Jobs CTAs. */
   const fullMarketingNavLinks = [
     { href: '/', label: t(locale, 'nav.home') },
-    { href: '/jobs', label: t(locale, 'nav.jobs') },
-    { href: '/signup', label: t(locale, 'nav.forStudents') },
-    { href: '/signup?type=corporate', label: t(locale, 'nav.forEmployers') },
     { href: '/#features', label: t(locale, 'nav.aiTools') },
     { href: '/#about', label: t(locale, 'nav.about') },
     { href: `mailto:${BRANDING.supportEmail}`, label: t(locale, 'nav.contact'), external: true },
@@ -132,28 +131,33 @@ export function Navbar({
   }
 
   const marketingNavInnerClass = isTransparentVariant
-    ? 'border border-slate-200/90 bg-white/88 shadow-[0_4px_24px_-6px_rgba(15,23,42,0.06)] ring-1 ring-black/[0.03] dark:border-blue-500/40 dark:bg-blue-900/55 dark:shadow-none dark:ring-1 dark:ring-inset dark:ring-blue-400/12'
-    : 'border border-blue-600/50 bg-white/40 shadow-sm dark:border-blue-800/60 dark:bg-blue-900/50'
+    ? 'rounded-full border border-slate-200/90 bg-slate-100/90 px-1.5 py-1 shadow-[0_4px_24px_-6px_rgba(15,23,42,0.06)] ring-1 ring-black/[0.03] dark:border-blue-800/55 dark:bg-blue-950/75 dark:shadow-none dark:ring-1 dark:ring-inset dark:ring-blue-500/15'
+    : 'rounded-full border border-blue-600/45 bg-white/50 px-1.5 py-1 shadow-sm dark:border-blue-800/60 dark:bg-blue-900/55'
 
   const marketingAuthClusterClass = isTransparentVariant
-    ? 'border border-slate-200/90 bg-white/90 shadow-[0_4px_24px_-6px_rgba(15,23,42,0.06)] ring-1 ring-black/[0.03] dark:border-blue-500/40 dark:bg-blue-900/55 dark:shadow-none dark:ring-1 dark:ring-inset dark:ring-blue-400/12'
-    : 'border border-blue-600/50 bg-white/45 shadow-sm dark:border-blue-800/60 dark:bg-blue-900/55'
+    ? 'rounded-full border border-slate-200/90 bg-slate-100/90 px-1.5 py-1 shadow-[0_4px_24px_-6px_rgba(15,23,42,0.06)] ring-1 ring-black/[0.03] dark:border-blue-800/55 dark:bg-blue-950/75 dark:shadow-none dark:ring-1 dark:ring-inset dark:ring-blue-500/15'
+    : 'rounded-full border border-blue-600/45 bg-white/50 px-1.5 py-1 shadow-sm dark:border-blue-800/60 dark:bg-blue-900/55'
 
   const marketingNavLinkClass = (href: string) => {
-    const active = pathname === href
+    const isHash = href.startsWith('/#')
+    const active = isHash
+      ? pathname === '/' && hash === href.slice(1)
+      : href === '/'
+        ? pathname === '/' && !hash
+        : pathname === href || (!!href && href[0] === '/' && pathname?.startsWith(href) && href.length > 1)
     if (isTransparentVariant) {
       return cn(
-        'rounded-lg px-3 py-1.5 text-sm font-medium transition-colors',
+        'rounded-full px-2.5 py-1.5 text-xs font-semibold transition-colors sm:px-3 sm:text-sm',
         active
-          ? 'bg-blue-50/25 text-slate-900 shadow-sm ring-1 ring-blue-600/15 dark:bg-blue-800/90 dark:text-white dark:ring-blue-400/25'
-          : 'text-slate-900 hover:bg-blue-50/15 hover:text-blue-600 dark:text-blue-50 dark:hover:bg-blue-800/55 dark:hover:text-white',
+          ? 'bg-white text-slate-900 shadow-sm ring-1 ring-blue-600/20 dark:bg-blue-600/90 dark:text-white dark:ring-blue-400/35'
+          : 'text-slate-800 hover:bg-white/70 hover:text-blue-700 dark:text-blue-100 dark:hover:bg-blue-900/65 dark:hover:text-white',
       )
     }
     return cn(
-      'rounded-lg px-3 py-1.5 text-sm font-medium transition-colors',
+      'rounded-full px-2.5 py-1.5 text-xs font-semibold transition-colors sm:px-3 sm:text-sm',
       active
-        ? 'bg-white/95 text-slate-900 shadow-sm ring-1 ring-blue-600/25 dark:bg-blue-800 dark:text-white dark:ring-blue-600/50'
-        : 'text-slate-900 hover:bg-white/60 hover:text-slate-950 dark:text-blue-50 dark:hover:bg-blue-800/70 dark:hover:text-white',
+        ? 'bg-white text-slate-900 shadow-sm ring-1 ring-blue-600/30 dark:bg-blue-700 dark:text-white dark:ring-blue-500/45'
+        : 'text-slate-900 hover:bg-white/80 hover:text-blue-700 dark:text-blue-50 dark:hover:bg-blue-800/70 dark:hover:text-white',
     )
   }
 
@@ -234,7 +238,12 @@ export function Navbar({
                 </div>
               </div>
             ) : (
-              <nav className={cn('flex flex-1 items-center justify-center gap-1 rounded-2xl px-2 py-1', marketingNavInnerClass)}>
+              <nav
+                className={cn(
+                  'flex min-w-0 flex-1 flex-wrap items-center justify-center gap-0.5 sm:gap-1',
+                  marketingNavInnerClass,
+                )}
+              >
                 {/* About Dropdown */}
                 {/* <div className="relative group">
   <Button
@@ -416,13 +425,25 @@ export function Navbar({
               ) : (
                 <>
                   {showMarketingAuthCluster ? (
-                    <div className={cn('flex items-center gap-2 rounded-2xl px-2 py-1', marketingAuthClusterClass)}>
-                      <Link href={getAuthLink('/auth/login')} className="text-sm font-semibold text-slate-900 transition-colors hover:text-blue-600 dark:text-blue-50 dark:hover:text-white">
+                    <div className={cn('flex flex-wrap items-center justify-end gap-1 sm:gap-1.5', marketingAuthClusterClass)}>
+                      <Link
+                        href={getAuthLink('/auth/login')}
+                        className="rounded-full px-2.5 py-1.5 text-xs font-semibold text-slate-900 transition-colors hover:bg-white/80 hover:text-blue-700 dark:text-blue-50 dark:hover:bg-blue-900/60 dark:hover:text-white sm:px-3 sm:text-sm"
+                      >
                         {t(locale, 'common.signIn')}
                       </Link>
-                      <Button onClick={handleFindJobsClick} variant="outline" className="h-9 rounded-lg border-2 border-blue-600/50 bg-white/80 px-4 font-semibold text-slate-900 hover:bg-blue-50/15 hover:text-slate-950 dark:border-blue-400/80 dark:bg-blue-950/40 dark:text-blue-50 dark:hover:bg-blue-800/70 dark:hover:text-white">Find Jobs</Button>
-                      <Link href="/signup?type=corporate">
-                        <Button className="h-9 rounded-lg bg-blue-600 px-4 font-semibold text-white shadow-sm hover:bg-blue-600/90 dark:bg-blue-600 dark:text-white dark:hover:bg-blue-500">Post Jobs</Button>
+                      <Link href={STUDENT_SIGNUP_ROUTE} className="inline-flex">
+                        <Button
+                          variant="outline"
+                          className="h-8 rounded-full border-2 border-blue-600/55 bg-white/90 px-3 text-xs font-semibold text-slate-900 hover:bg-blue-50 dark:border-blue-400/75 dark:bg-blue-950/50 dark:text-blue-50 dark:hover:bg-blue-800/70 sm:h-9 sm:px-4 sm:text-sm"
+                        >
+                          Find Jobs
+                        </Button>
+                      </Link>
+                      <Link href="/signup?type=corporate" className="inline-flex">
+                        <Button className="h-8 rounded-full bg-blue-600 px-3 text-xs font-semibold text-white shadow-sm hover:bg-blue-600/90 dark:bg-blue-600 dark:text-white dark:hover:bg-blue-500 sm:h-9 sm:px-4 sm:text-sm">
+                          Post Jobs
+                        </Button>
                       </Link>
                     </div>
                   ) : (
@@ -529,15 +550,24 @@ export function Navbar({
               ) : (
                 <div className="space-y-3 border-t border-blue-600/45 pt-2 dark:border-blue-800/65">
                   <Link href={getAuthLink('/auth/login')} onClick={() => setIsMobileMenuOpen(false)}>
-                    <Button variant="outline" className="w-full justify-center rounded-lg border-2 border-blue-600/50 bg-white/90 font-semibold text-slate-900 hover:bg-blue-50/12 dark:border-blue-400/80 dark:bg-blue-950/40 dark:text-blue-50 dark:hover:bg-blue-800/70 dark:hover:text-white">
+                    <Button variant="outline" className="w-full justify-center rounded-full border-2 border-blue-600/50 bg-white/90 font-semibold text-slate-900 hover:bg-blue-50/12 dark:border-blue-400/80 dark:bg-blue-950/40 dark:text-blue-50 dark:hover:bg-blue-800/70 dark:hover:text-white">
                       {t(locale, 'common.signIn')}
                     </Button>
                   </Link>
                   {showMarketingAuthCluster ? (
                     <>
-                      <Button onClick={handleFindJobsClick} variant="outline" className="w-full justify-center rounded-lg border-2 border-blue-600/50 bg-white/90 font-semibold text-slate-900 hover:bg-blue-50/15 dark:border-blue-400/80 dark:bg-blue-950/40 dark:text-blue-50 dark:hover:bg-blue-800/70 dark:hover:text-white">Find Jobs</Button>
+                      <Link href={STUDENT_SIGNUP_ROUTE} onClick={() => setIsMobileMenuOpen(false)}>
+                        <Button
+                          variant="outline"
+                          className="w-full justify-center rounded-full border-2 border-blue-600/50 bg-white/90 font-semibold text-slate-900 hover:bg-blue-50/15 dark:border-blue-400/80 dark:bg-blue-950/40 dark:text-blue-50 dark:hover:bg-blue-800/70 dark:hover:text-white"
+                        >
+                          Find Jobs
+                        </Button>
+                      </Link>
                       <Link href="/signup?type=corporate" onClick={() => setIsMobileMenuOpen(false)}>
-                        <Button className="w-full justify-center rounded-lg bg-blue-600 font-semibold text-white shadow-sm hover:bg-blue-600/90 dark:bg-blue-600 dark:text-white dark:hover:bg-blue-500">Post Jobs</Button>
+                        <Button className="w-full justify-center rounded-full bg-blue-600 font-semibold text-white shadow-sm hover:bg-blue-600/90 dark:bg-blue-600 dark:text-white dark:hover:bg-blue-500">
+                          Post Jobs
+                        </Button>
                       </Link>
                     </>
                   ) : (
