@@ -42,9 +42,21 @@ export function ThemeToggle({
   const [mounted, setMounted] = React.useState(false)
   React.useEffect(() => setMounted(true), [])
 
+  if (!mounted) {
+    return (
+      <div
+        className={cn(
+          labelsOnly ? "h-9 w-14 shrink-0 rounded-lg border border-transparent" : "h-9 w-9 shrink-0 rounded-lg border border-transparent",
+          styles,
+        )}
+        aria-hidden
+      />
+    )
+  }
+
   if (labelsOnly) {
     const next = resolvedTheme === "dark" ? "light" : "dark"
-    const label = mounted ? (resolvedTheme === "dark" ? "Light mode" : "Dark mode") : "Theme"
+    const label = resolvedTheme === "dark" ? "Light mode" : "Dark mode"
     return (
       <Button
         type="button"

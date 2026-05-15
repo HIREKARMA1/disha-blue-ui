@@ -1,6 +1,6 @@
 "use client"
 
-import { useMemo, useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { GraduationCap } from "lucide-react"
 import { StudentDashboardLayout } from "@/components/dashboard/StudentDashboardLayout"
 import { CourseList } from "@/components/courses/CourseList"
@@ -25,6 +25,17 @@ type SpeechRecognitionLike = {
 
 const LOCAL_STORAGE_KEY = "courses.previousSearches"
 
+function readPreviousSearches(): string[] {
+  if (typeof window === "undefined") return []
+  try {
+    const raw = window.localStorage.getItem(LOCAL_STORAGE_KEY)
+    const parsed = raw ? (JSON.parse(raw) as string[]) : []
+    return parsed.slice(0, 5)
+  } catch {
+    return []
+  }
+}
+
 export function CoursesPage() {
   const [userInput, setUserInput] = useState("")
   const [parsedData, setParsedData] = useState<ParsedUserProfile | null>(null)
@@ -33,17 +44,11 @@ export function CoursesPage() {
   const [error, setError] = useState<string | null>(null)
   const [isListening, setIsListening] = useState(false)
   const recognitionRef = useRef<SpeechRecognitionLike | null>(null)
+  const [previousSearches, setPreviousSearches] = useState<string[]>([])
 
-  const previousSearches = useMemo(() => {
-    if (typeof window === "undefined") return []
-    try {
-      const raw = window.localStorage.getItem(LOCAL_STORAGE_KEY)
-      const parsed = raw ? (JSON.parse(raw) as string[]) : []
-      return parsed.slice(0, 5)
-    } catch {
-      return []
-    }
-  }, [userInput])
+  useEffect(() => {
+    setPreviousSearches(readPreviousSearches())
+  }, [])
 
   const persistSearch = (text: string) => {
     if (typeof window === "undefined" || !text.trim()) return
@@ -52,6 +57,7 @@ export function CoursesPage() {
       const existing = existingRaw ? (JSON.parse(existingRaw) as string[]) : []
       const deduped = [text, ...existing.filter((item) => item !== text)].slice(0, 8)
       window.localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(deduped))
+      setPreviousSearches(deduped.slice(0, 5))
     } catch {
       // Ignore localStorage failures on low-storage devices.
     }

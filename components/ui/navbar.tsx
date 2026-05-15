@@ -39,7 +39,12 @@ export function Navbar({
   const { theme, resolvedTheme } = useTheme()
   const pathname = usePathname()
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const [hasMounted, setHasMounted] = useState(false)
   const { locale } = useLocale()
+
+  useEffect(() => {
+    setHasMounted(true)
+  }, [])
 
   // Helper function to get auth links with redirect
   const getAuthLink = (basePath: string) => {
@@ -166,11 +171,14 @@ export function Navbar({
     : 'text-slate-900 hover:bg-white/50 hover:text-slate-950 dark:text-blue-50 dark:hover:bg-blue-800/65 dark:hover:text-white'
 
   const getLogoSrc = () => {
+    if (!hasMounted) {
+      return BRANDING.logoLight
+    }
     const isDark = resolvedTheme === 'dark' || (resolvedTheme === 'system' && theme === 'dark')
     return isDark ? BRANDING.logoDark : BRANDING.logoLight
   }
 
-  if (isLoading) {
+  if (isLoading || !hasMounted) {
     return (
       <nav className={`main-navbar ${getNavbarClasses()} ${className}`}>
         <div className="container mx-auto px-4 py-4">

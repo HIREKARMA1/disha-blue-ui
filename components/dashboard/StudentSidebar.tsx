@@ -27,6 +27,7 @@ import { cn } from '@/lib/utils'
 import { useLocale } from '@/contexts/LocaleContext'
 import { t } from '@/lib/i18n'
 import { SidebarRailHoverCard } from '@/components/dashboard/SidebarRailHoverCard'
+import { MobileBottomNav } from '@/components/dashboard/MobileBottomNav'
 
 interface NavItem {
  label: string
@@ -47,6 +48,7 @@ interface StudentSidebarProps {
 
 export function StudentSidebar({ className =''}: StudentSidebarProps) {
  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+ const [clientMounted, setClientMounted] = useState(false)
  const [profileData, setProfileData] = useState<any>(null)
  const pathname = usePathname()
  const { user, logout } = useAuth()
@@ -76,6 +78,21 @@ description:'Local and personalized roles',
  },
  ]
  const allItems = navGroups.flatMap((group) => group.items)
+
+ const bottomTabHrefs = [
+   '/dashboard/student',
+   '/dashboard/discover-jobs',
+   '/dashboard/student/applications',
+   '/dashboard/student/profile',
+ ] as const
+
+ const bottomTabs = bottomTabHrefs
+   .map((href) => allItems.find((item) => item.href === href))
+   .filter((item): item is NavItem => Boolean(item))
+
+ useEffect(() => {
+   setClientMounted(true)
+ }, [])
 
  useEffect(() => {
  const fetchProfile = async () => {
@@ -173,34 +190,25 @@ const isActive = isItemActive(item)
  </nav>
  </aside>
 
- {/* Mobile bottom bar */}
- <div className="student-mobile-nav fixed bottom-0 left-0 right-0 z-50 border-t border-blue-600 bg-blue-50 pb-safe dark:border-blue-800 dark:bg-blue-950 lg:hidden">
- <div className="grid grid-cols-5 gap-1 px-2 py-2">
- {allItems.slice(0, 4).map((item) => {
-const isActive = isItemActive(item)
- return (
- <Link
- key={item.href}
- href={item.href}
- title={item.label}
- onClick={() => !isActive && startLoading()}
- className={railLinkClass(isActive)}
- >
- <item.icon className="h-5 w-5" strokeWidth={1.75} />
- </Link>
- )
- })}
- <button
- type="button"
- title={t(locale,'nav.studentNavigation')}
- onClick={() => setIsMobileMenuOpen(true)}
- className="flex h-11 w-full items-center justify-center text-slate-700 dark:text-blue-200"
- >
- <Menu className="h-5 w-5" strokeWidth={1.75} />
- </button>
- </div>
- </div>
+ <MobileBottomNav
+ tabs={bottomTabs.map((item) => ({
+ label: item.label,
+ shortLabel:
+ item.href === '/dashboard/discover-jobs'
+ ? 'Jobs'
+ : item.href === '/dashboard/student/applications'
+ ? 'Apps'
+ : undefined,
+ href: item.href,
+ icon: item.icon,
+ isActive: isItemActive(item),
+ onNavigate: () => !isItemActive(item) && startLoading(),
+ }))}
+ moreLabel="More"
+ onMoreClick={() => setIsMobileMenuOpen(true)}
+ />
 
+ {clientMounted && (
  <AnimatePresence>
  {isMobileMenuOpen && (
  <motion.div
@@ -250,6 +258,7 @@ const isActive = isItemActive(item)
  </motion.div>
  )}
  </AnimatePresence>
+ )}
  </>
  )
 }
