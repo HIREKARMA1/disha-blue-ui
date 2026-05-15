@@ -16,7 +16,7 @@ import {
   ChevronLeft,
   ChevronRight,
 } from 'lucide-react'
-import { ApplicationData } from '@/app/dashboard/corporate/applications/page'
+import type { ApplicationData } from '@/components/corporate/applications/corporate-application-types'
 
 interface ApplicationTableProps {
   applications: ApplicationData[]
@@ -185,7 +185,7 @@ export function ApplicationTable({
   <button
   type="button"
   onClick={onRetry}
-  className="rounded-xl bg-gradient-to-r from-primary to-secondary px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-md transition hover:opacity-95"
+  className="rounded-xl bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-md transition hover:bg-primary/90"
   >
   Try again
   </button>

@@ -3,7 +3,7 @@
 import { useState, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, Upload, FileText, CheckCircle, AlertCircle, Loader } from 'lucide-react'
-import { ApplicationData } from '@/app/dashboard/corporate/applications/page'
+import type { ApplicationData } from '@/components/corporate/applications/corporate-application-types'
 import { corporateModalBackdropClass, corporateModalShellClass, corporateModalHeaderClass } from '@/components/corporate/corporate-ui'
 import { cn } from '@/lib/utils'
 
@@ -241,7 +241,7 @@ export function OfferLetterUploadModal({
   <button
   type="submit"
   disabled={!selectedFile || isSubmitting}
-  className="inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-primary to-secondary px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-md transition hover:opacity-95 disabled:opacity-50"
+  className="inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-md transition hover:bg-primary/90 disabled:opacity-50"
   >
   {isSubmitting ? (
   <>

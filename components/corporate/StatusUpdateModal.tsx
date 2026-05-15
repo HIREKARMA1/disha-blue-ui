@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, Calendar, MapPin, FileText, Save, Loader, Upload } from 'lucide-react'
-import { ApplicationData } from '@/app/dashboard/corporate/applications/page'
+import type { ApplicationData, ApplicationStatusUpdatePayload } from '@/components/corporate/applications/corporate-application-types'
 import { apiClient } from '@/lib/api'
 import { toast } from 'react-hot-toast'
 import { corporateModalBackdropClass, corporateModalShellClass, corporateModalHeaderClass } from '@/components/corporate/corporate-ui'
@@ -13,7 +13,7 @@ interface StatusUpdateModalProps {
   isOpen: boolean
   onClose: () => void
   application: ApplicationData | null
-  onSubmit: (applicationId: string, statusData: any) => void
+  onSubmit: (applicationId: string, statusData: ApplicationStatusUpdatePayload) => Promise<void>
 }
 
 const statusOptions = [
@@ -122,9 +122,9 @@ export function StatusUpdateModal({
   // First update the status to 'selected'
   const statusData = {
   status,
-  corporate_notes: corporateNotes || null,
-  interview_date: interviewDate ? new Date(interviewDate).toISOString() : null,
-  interview_location: interviewLocation || null
+  corporate_notes: corporateNotes || undefined,
+  interview_date: interviewDate ? new Date(interviewDate).toISOString() : undefined,
+  interview_location: interviewLocation || undefined
   }
   await onSubmit(application.id, statusData)
   
@@ -144,9 +144,9 @@ export function StatusUpdateModal({
   // Normal status update without offer letter
   const statusData = {
   status,
-  corporate_notes: corporateNotes || null,
-  interview_date: interviewDate ? new Date(interviewDate).toISOString() : null,
-  interview_location: interviewLocation || null
+  corporate_notes: corporateNotes || undefined,
+  interview_date: interviewDate ? new Date(interviewDate).toISOString() : undefined,
+  interview_location: interviewLocation || undefined
   }
   await onSubmit(application.id, statusData)
   }
@@ -359,7 +359,7 @@ export function StatusUpdateModal({
   <button
   type="submit"
   disabled={isSubmitting}
-  className="inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-primary to-secondary px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-md transition hover:opacity-95 disabled:opacity-50"
+  className="inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-md transition hover:bg-primary/90 disabled:opacity-50"
   >
   {isSubmitting ? (
   <>

@@ -477,7 +477,7 @@ export function CorporateAppliedStudentsModal({ isOpen, onClose, job }: Corporat
   {students.length > 0 && (
   <Button
   onClick={handleExportExcel}
-  className="rounded-xl bg-gradient-to-r from-primary to-secondary text-primary-foreground shadow-md hover:opacity-95"
+  className="rounded-xl bg-primary text-primary-foreground shadow-md hover:bg-primary/90"
   >
   <Download className="w-4 h-4 mr-2" />
   Export
