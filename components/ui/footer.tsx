@@ -81,7 +81,7 @@ export function Footer({ plainText = false, hideIcons = false }: FooterProps) {
   </Link>
   </li>
   <li>
-  <Link href="/signup/step-1" className="text-sm text-slate-600 transition-colors hover:text-blue-600 dark:text-blue-300 dark:hover:text-white">
+  <Link href="/signup" className="text-sm text-slate-600 transition-colors hover:text-blue-600 dark:text-blue-300 dark:hover:text-white">
   {t(locale, 'common.signUp')}
   </Link>
   </li>
@@ -93,10 +93,10 @@ export function Footer({ plainText = false, hideIcons = false }: FooterProps) {
   <h3 className="mb-5 text-lg font-semibold text-slate-900 dark:text-blue-50">{t(locale, 'footer.roleLinks')}</h3>
   <ul className="flex flex-col items-center space-y-4 md:items-start">
   <li>
-  <Link href="/signup/step-1" className="text-sm text-slate-600 transition-colors hover:text-blue-600 dark:text-blue-300 dark:hover:text-white">Find Jobs</Link>
+  <Link href="/signup" className="text-sm text-slate-600 transition-colors hover:text-blue-600 dark:text-blue-300 dark:hover:text-white">Find Jobs</Link>
   </li>
   <li>
-  <Link href="/signup/step-1" className="text-sm text-slate-600 transition-colors hover:text-blue-600 dark:text-blue-300 dark:hover:text-white">Post Jobs</Link>
+  <Link href="/signup?type=corporate" className="text-sm text-slate-600 transition-colors hover:text-blue-600 dark:text-blue-300 dark:hover:text-white">Post Jobs</Link>
   </li>
   <li>
   <Link href="/#roles" className="text-sm text-slate-600 transition-colors hover:text-blue-600 dark:text-blue-300 dark:hover:text-white">For Students</Link>

@@ -60,7 +60,7 @@ export default function CTASection() {
               Find Jobs (Student)
             </Button>
           </div>
-          <Link href="/auth/register?type=corporate" className="w-full sm:w-auto">
+          <Link href="/signup?type=corporate" className="w-full sm:w-auto">
             <Button
               size="lg"
               variant="outline"

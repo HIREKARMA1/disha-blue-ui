@@ -117,7 +117,7 @@ export function useAuth() {
 
   const requireAuth = (redirectPath: string = '/auth/login') => {
   const pathname = typeof window !== "undefined" ? window.location.pathname : ""
-  const isOnboardingRoute = pathname.startsWith("/signup/")
+  const isOnboardingRoute = pathname === "/signup" || pathname.startsWith("/signup/")
   if (!isAuthenticated && !isOnboardingRoute) {
   router.push('/auth/login')
   return false

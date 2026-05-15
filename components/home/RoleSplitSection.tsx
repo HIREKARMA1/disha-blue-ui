@@ -80,7 +80,7 @@ export default function RoleSplitSection() {
               </li>
             </ul>
             <div className="mt-8">
-              <Link href="/auth/register?type=corporate" className="w-full sm:w-auto">
+              <Link href="/signup?type=corporate" className="w-full sm:w-auto">
                 <Button
                   size="lg"
                   variant="outline"

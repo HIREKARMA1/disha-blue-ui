@@ -57,7 +57,7 @@ export default function LoginPage() {
   const [selectedUserType, setSelectedUserType] = useState<UserType>('student')
   const [termsAndPrivacyAccepted, setTermsAndPrivacyAccepted] = useState(false)
   const [showTermsModal, setShowTermsModal] = useState(false)
-  const [registerLink, setRegisterLink] = useState(`/signup/step-1`)
+  const [registerLink, setRegisterLink] = useState(`/signup`)
   const [locale, setLocale] = useState<SupportedLocale>('en')
 
   useEffect(() => {
@@ -117,8 +117,8 @@ export default function LoginPage() {
   const redirectUrl = searchParams.get('redirect') || localStorage.getItem('redirect_after_login')
       const base =
   selectedUserType === "corporate"
-  ? "/auth/register?type=corporate"
-  : "/signup/step-1"
+  ? "/signup?type=corporate"
+  : "/signup"
       const link = redirectUrl
   ? `${base}${base.includes("?") ? "&" : "?"}redirect=${encodeURIComponent(redirectUrl)}`
   : base

@@ -109,8 +109,8 @@ export function Navbar({
   const fullMarketingNavLinks = [
     { href: '/', label: t(locale, 'nav.home') },
     { href: '/jobs', label: t(locale, 'nav.jobs') },
-    { href: '/signup/step-1', label: t(locale, 'nav.forStudents') },
-    { href: '/auth/register?type=corporate', label: t(locale, 'nav.forEmployers') },
+    { href: '/signup', label: t(locale, 'nav.forStudents') },
+    { href: '/signup?type=corporate', label: t(locale, 'nav.forEmployers') },
     { href: '/#features', label: t(locale, 'nav.aiTools') },
     { href: '/#about', label: t(locale, 'nav.about') },
     { href: `mailto:${BRANDING.supportEmail}`, label: t(locale, 'nav.contact'), external: true },
@@ -371,24 +371,13 @@ export function Navbar({
                       {item.label}
                     </a>
                   ) : (
-                    item.href === '/signup/step-1' ? (
-                      <button
-                        key={item.href}
-                        type="button"
-                        onClick={handleFindJobsClick}
-                        className={marketingNavLinkClass(item.href)}
-                      >
-                        {item.label}
-                      </button>
-                    ) : (
-                      <Link
-                        key={item.href}
-                        href={item.href}
-                        className={marketingNavLinkClass(item.href)}
-                      >
-                        {item.label}
-                      </Link>
-                    )
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      className={marketingNavLinkClass(item.href)}
+                    >
+                      {item.label}
+                    </Link>
                   )
                 )}
               </nav>
@@ -432,7 +421,7 @@ export function Navbar({
                         {t(locale, 'common.signIn')}
                       </Link>
                       <Button onClick={handleFindJobsClick} variant="outline" className="h-9 rounded-lg border-2 border-blue-600/50 bg-white/80 px-4 font-semibold text-slate-900 hover:bg-blue-50/15 hover:text-slate-950 dark:border-blue-400/80 dark:bg-blue-950/40 dark:text-blue-50 dark:hover:bg-blue-800/70 dark:hover:text-white">Find Jobs</Button>
-                      <Link href="/auth/register?type=corporate">
+                      <Link href="/signup?type=corporate">
                         <Button className="h-9 rounded-lg bg-blue-600 px-4 font-semibold text-white shadow-sm hover:bg-blue-600/90 dark:bg-blue-600 dark:text-white dark:hover:bg-blue-500">Post Jobs</Button>
                       </Link>
                     </div>
@@ -443,7 +432,7 @@ export function Navbar({
                           {t(locale, 'common.signIn')}
                         </Button>
                       </Link>
-                      <Link href="/signup/step-1">
+                      <Link href="/signup">
                         <Button className="bg-white px-5 font-semibold text-slate-900 shadow-sm hover:bg-white/90 dark:bg-blue-100 dark:text-blue-950 dark:hover:bg-white">{t(locale, 'common.signUp')}</Button>
                       </Link>
                     </div>
@@ -547,12 +536,12 @@ export function Navbar({
                   {showMarketingAuthCluster ? (
                     <>
                       <Button onClick={handleFindJobsClick} variant="outline" className="w-full justify-center rounded-lg border-2 border-blue-600/50 bg-white/90 font-semibold text-slate-900 hover:bg-blue-50/15 dark:border-blue-400/80 dark:bg-blue-950/40 dark:text-blue-50 dark:hover:bg-blue-800/70 dark:hover:text-white">Find Jobs</Button>
-                      <Link href="/auth/register?type=corporate" onClick={() => setIsMobileMenuOpen(false)}>
+                      <Link href="/signup?type=corporate" onClick={() => setIsMobileMenuOpen(false)}>
                         <Button className="w-full justify-center rounded-lg bg-blue-600 font-semibold text-white shadow-sm hover:bg-blue-600/90 dark:bg-blue-600 dark:text-white dark:hover:bg-blue-500">Post Jobs</Button>
                       </Link>
                     </>
                   ) : (
-                    <Link href="/signup/step-1" onClick={() => setIsMobileMenuOpen(false)}>
+                    <Link href="/signup" onClick={() => setIsMobileMenuOpen(false)}>
                       <Button className="w-full justify-center bg-white font-semibold text-slate-900 shadow-sm hover:bg-white/90 dark:bg-blue-100 dark:text-blue-950 dark:hover:bg-white">{t(locale, 'common.signUp')}</Button>
                     </Link>
                   )}

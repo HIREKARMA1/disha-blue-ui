@@ -134,7 +134,7 @@ export const resetOnboarding = () => {
 
 export function getOnboardingEntryRoute() {
   hydrateFromStorage()
-  return "/signup/step-1"
+  return "/signup"
 }
 
 export function getSignupData(): SignupData {
