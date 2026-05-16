@@ -8,7 +8,6 @@ import {
   ChevronRight,
   Loader2,
   Search,
-  SlidersHorizontal,
   X,
 } from "lucide-react"
 import { toast } from "react-hot-toast"
@@ -22,6 +21,7 @@ import {
   JobsCategoryHero,
   JobsFiltersSidebar,
   JobsMobileFilterDrawer,
+  JobsMobileQuickFilters,
   PublicJobListingCard,
   aggregateSalaryRange,
   formatJobLocation,
@@ -328,17 +328,8 @@ export function NewAllJobs() {
 
   return (
     <div className="mx-auto w-full max-w-[1400px] px-4 pb-16 pt-24 sm:px-6 lg:px-8">
-      {/* Mobile filter toggle bar */}
-      <div className="mb-4 flex items-center justify-between lg:hidden">
+      <div className="mb-4 lg:hidden">
         <h1 className="text-xl font-bold text-[#0a0e1a] dark:text-white">{t("jobs.pageTitle")}</h1>
-        <button
-          type="button"
-          onClick={() => setShowMobileFilters(true)}
-          className="inline-flex items-center gap-2 rounded-xl border border-[#dde3f5] bg-white px-4 py-2.5 text-sm font-semibold text-[#0a0e1a] shadow-sm dark:border-blue-800 dark:bg-slate-900 dark:text-white"
-        >
-          <SlidersHorizontal className="h-4 w-4 text-[#0070f3]" />
-          {t("jobs.filters")}
-        </button>
       </div>
 
       <div className="flex gap-6">
@@ -364,6 +355,11 @@ export function NewAllJobs() {
             roleLabel={appliedFilters.keyword || t("jobs.hero.allRoles")}
             salaryRangeLabel={salaryLabel}
             skillsLabel={skillsLabel}
+          />
+
+          <JobsMobileQuickFilters
+            filters={filters}
+            onOpenFilters={() => setShowMobileFilters(true)}
           />
 
           {/* Search + count bar */}

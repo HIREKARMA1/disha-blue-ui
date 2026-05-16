@@ -1,13 +1,9 @@
 "use client"
 
 import { cn } from "@/lib/utils"
-import {
-  jobsFieldInput,
-  jobsFieldLabel,
-  jobsFieldSelect,
-  jobsPrimaryBtn,
-  jobsSidebarClass,
-} from "../jobsDiscoveryTheme"
+import { jobsPrimaryBtn, jobsSidebarClass } from "../jobsDiscoveryTheme"
+import { JobsFilterInput, JobsFilterSelect } from "./JobsFilterField"
+import { JobsNeedHelpIllustration } from "./JobsHeroIllustration"
 
 export type JobsFilterValues = {
   keyword: string
@@ -15,6 +11,34 @@ export type JobsFilterValues = {
   job_type: string
   salary_range: string
 }
+
+const ROLE_OPTIONS = [
+  { value: "", label: "Any role" },
+  { value: "Software Engineer", label: "Software Engineer" },
+  { value: "In-store Promoter", label: "In-store Promoter" },
+  { value: "Sales Executive", label: "Sales Executive" },
+  { value: "Data Analyst", label: "Data Analyst" },
+  { value: "Customer Support", label: "Customer Support" },
+  { value: "Field Executive", label: "Field Executive" },
+  { value: "Delivery Partner", label: "Delivery Partner" },
+]
+
+const SALARY_OPTIONS = [
+  { value: "", label: "Any salary" },
+  { value: "0-300000", label: "Up to ₹3 LPA" },
+  { value: "300000-600000", label: "₹3 – 6 LPA" },
+  { value: "600000-1200000", label: "₹6 – 12 LPA" },
+  { value: "1200000-99999999", label: "₹12 LPA+" },
+]
+
+const TYPE_OPTIONS = [
+  { value: "", label: "Any type" },
+  { value: "full_time", label: "Full time" },
+  { value: "part_time", label: "Part time" },
+  { value: "contract", label: "Contract" },
+  { value: "internship", label: "Internship" },
+  { value: "freelance", label: "Freelance" },
+]
 
 type Props = {
   filters: JobsFilterValues
@@ -25,6 +49,10 @@ type Props = {
 }
 
 export function JobsFiltersSidebar({ filters, onChange, onApply, onClear, className }: Props) {
+  const roleSelectValue = ROLE_OPTIONS.some((o) => o.value === filters.keyword)
+    ? filters.keyword
+    : ""
+
   return (
     <aside className={cn(jobsSidebarClass, className)}>
       <div className="mb-5 flex items-center justify-between gap-2">
@@ -32,86 +60,58 @@ export function JobsFiltersSidebar({ filters, onChange, onApply, onClear, classN
         <button
           type="button"
           onClick={onClear}
-          className="text-sm font-semibold text-[#0070f3] hover:underline dark:text-blue-400"
+          className="text-sm font-semibold text-primary-600 hover:underline dark:text-primary-400"
         >
           Clear all
         </button>
       </div>
 
       <div className="space-y-4">
-        <div>
-          <label className={jobsFieldLabel} htmlFor="jd-role">
-            Job role
-          </label>
-          <input
-            id="jd-role"
-            className={jobsFieldInput()}
-            placeholder="e.g. Software Engineer"
-            value={filters.keyword}
-            onChange={(e) => onChange("keyword", e.target.value)}
-          />
-        </div>
+        <JobsFilterSelect
+          id="jd-role"
+          label="Job role"
+          value={roleSelectValue}
+          onChange={(v) => onChange("keyword", v)}
+          options={ROLE_OPTIONS}
+        />
 
-        <div>
-          <label className={jobsFieldLabel} htmlFor="jd-salary">
-            Salary range
-          </label>
-          <select
-            id="jd-salary"
-            className={jobsFieldSelect()}
-            value={filters.salary_range}
-            onChange={(e) => onChange("salary_range", e.target.value)}
-          >
-            <option value="">Any salary</option>
-            <option value="0-300000">Up to ₹3 LPA</option>
-            <option value="300000-600000">₹3 – 6 LPA</option>
-            <option value="600000-1200000">₹6 – 12 LPA</option>
-            <option value="1200000-99999999">₹12 LPA+</option>
-          </select>
-        </div>
+        <JobsFilterSelect
+          id="jd-salary"
+          label="Salary range"
+          value={filters.salary_range}
+          onChange={(v) => onChange("salary_range", v)}
+          options={SALARY_OPTIONS}
+        />
 
-        <div>
-          <label className={jobsFieldLabel} htmlFor="jd-type">
-            Job type
-          </label>
-          <select
-            id="jd-type"
-            className={jobsFieldSelect()}
-            value={filters.job_type}
-            onChange={(e) => onChange("job_type", e.target.value)}
-          >
-            <option value="">Any type</option>
-            <option value="full_time">Full time</option>
-            <option value="part_time">Part time</option>
-            <option value="contract">Contract</option>
-            <option value="internship">Internship</option>
-            <option value="freelance">Freelance</option>
-          </select>
-        </div>
+        <JobsFilterSelect
+          id="jd-type"
+          label="Job type"
+          value={filters.job_type}
+          onChange={(v) => onChange("job_type", v)}
+          options={TYPE_OPTIONS}
+        />
 
-        <div>
-          <label className={jobsFieldLabel} htmlFor="jd-location">
-            Location
-          </label>
-          <input
-            id="jd-location"
-            className={jobsFieldInput()}
-            placeholder="Enter location (e.g. Mumbai)"
-            value={filters.location}
-            onChange={(e) => onChange("location", e.target.value)}
-          />
-        </div>
+        <JobsFilterInput
+          id="jd-location"
+          label="Location"
+          placeholder="Enter location (e.g. Mumbai)"
+          value={filters.location}
+          onChange={(v) => onChange("location", v)}
+        />
 
         <button type="button" className={jobsPrimaryBtn} onClick={onApply}>
           Apply filters
         </button>
       </div>
 
-      <div className="mt-6 rounded-xl border border-[#dde3f5] bg-[#f8faff] p-4 dark:border-blue-900/60 dark:bg-blue-950/40">
-        <p className="text-sm font-bold text-[#0a0e1a] dark:text-white">Need help?</p>
-        <p className="mt-1 text-xs leading-relaxed text-[#3a4260] dark:text-blue-200/80">
-          Save roles you like and sign in to apply with one profile.
-        </p>
+      <div className="mt-6 flex items-center gap-3 rounded-xl border border-[#dde3f5] bg-[#f8faff] p-4 dark:border-blue-900/60 dark:bg-blue-950/40">
+        <JobsNeedHelpIllustration className="h-14 w-[4.5rem] shrink-0" />
+        <div className="min-w-0">
+          <p className="text-sm font-bold text-[#0a0e1a] dark:text-white">Need help?</p>
+          <p className="mt-1 text-xs leading-relaxed text-[#3a4260] dark:text-blue-200/80">
+            Save roles you like and sign in to apply with one profile.
+          </p>
+        </div>
       </div>
     </aside>
   )

@@ -2,6 +2,7 @@ export { JobsFiltersSidebar, type JobsFilterValues } from "./components/JobsFilt
 export { JobsCategoryHero } from "./components/JobsCategoryHero"
 export { PublicJobListingCard } from "./components/PublicJobListingCard"
 export { JobsMobileFilterDrawer } from "./components/JobsMobileFilterDrawer"
+export { JobsMobileQuickFilters } from "./components/JobsMobileQuickFilters"
 export { jobsPageBg } from "./jobsDiscoveryTheme"
 export {
   aggregateSalaryRange,

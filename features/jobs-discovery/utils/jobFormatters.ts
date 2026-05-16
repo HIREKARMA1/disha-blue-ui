@@ -20,10 +20,11 @@ export function formatJobType(job: Job): string {
 export function formatExperience(job: Job): string {
   const min = job.experience_min
   const max = job.experience_max
+  if ((min == null || min === 0) && (max == null || max === 0)) return "Fresher (0 years)"
   if (min != null && max != null) return `${min}–${max} years`
   if (min != null) return `${min}+ years`
   if (max != null) return `Up to ${max} years`
-  return "Fresher"
+  return "Fresher (0 years)"
 }
 
 function formatInrAmount(n: number): string {

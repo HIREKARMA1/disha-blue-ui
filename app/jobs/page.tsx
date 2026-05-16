@@ -15,7 +15,7 @@ function JobsContent() {
 
 export default function PublicJobsPage() {
   return (
-    <div className="flex min-h-screen flex-col bg-[#f4f7fc] dark:bg-slate-950">
+    <div className="flex min-h-screen flex-col bg-sage-canvas dark:bg-slate-950">
       <Navbar variant="transparent" />
       <Suspense
         fallback={
