@@ -801,10 +801,6 @@ export function LandingPage() {
           <p className="cta-p">
             Whether you are a learner looking for your first job, a foundation running a skill development program, or an employer looking for work-ready talent — Lakshya is built for you.
           </p>
-          <div className="cta-btns">
-            <button className="btn-cta">Get started free</button>
-            <button className="btn-cta2">Request a demo →</button>
-          </div>
         </div>
       </section>
 
