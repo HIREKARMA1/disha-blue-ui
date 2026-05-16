@@ -3,6 +3,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import '@/app/dishaai.css';
 import { Navbar } from '@/components/ui/navbar';
+import { Footer } from '@/components/ui/footer';
 import { ApplyForJobsBar } from '@/features/landing';
 import { useLandingCopy } from '@/features/landing/hooks/useLandingCopy';
 
@@ -807,61 +808,8 @@ export function LandingPage() {
         </div>
       </section>
 
-      {/* -- FOOTER -- */}
-      <footer className="sec" style={{ background: '#fff' }}>
-        <div className="wrap">
-          <div className="ft">
-            <div>
-              <div className="fl">Lakshya<b></b></div>
-              <p className="ft-tag">AI-powered skill development for learners, organisations, and employers.</p>
-              <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
-                <span className="ji-pct" style={{ background: '#eef2ff', color: '#4f46e5', fontWeight: '500' }}>Skill Development</span>
-                <span className="ji-pct" style={{ background: '#ecfdf5', color: '#10b981', fontWeight: '500' }}>Placement Ready</span>
-                <span className="ji-pct" style={{ background: '#eff6ff', color: '#3b82f6', fontWeight: '500' }}>Youth Empowerment</span>
-              </div>
-            </div>
-            <div>
-              <div className="fch">Platform</div>
-              <ul className="fcl">
-                <li><a href="#">Resume builder</a></li>
-                <li><a href="#">Interview prep</a></li>
-                <li><a href="#">Skill tracks</a></li>
-                <li><a href="#">Job matching</a></li>
-                <li><a href="#">Digital credentials</a></li>
-                <li><a href="#">Career roadmap</a></li>
-              </ul>
-            </div>
-            <div>
-              <div className="fch">Organisations</div>
-              <ul className="fcl">
-                <li><a href="#">For NGOs & foundations</a></li>
-                <li><a href="#">For recruiters</a></li>
-                <li><a href="#">Impact dashboard</a></li>
-              </ul>
-            </div>
-            <div>
-              <div className="fch">Company</div>
-              <ul className="fcl">
-                <li><a href="#">About Lakshya</a></li>
-                <li><a href="#">Our approach</a></li>
-                <li><a href="#">Blog & resources</a></li>
-                <li><a href="#">Contact us</a></li>
-                <li><a href="#">Privacy policy</a></li>
-                <li><a href="#">Terms of use</a></li>
-              </ul>
-            </div>
-          </div>
-          <div className="fb">
-            <div className="fb-c">© 2025 Lakshya · AI-powered skill development and career readiness platform</div>
-            <div className="fb-s">
-              <a href="#">LinkedIn</a>
-              <a href="#">Twitter</a>
-              <a href="#">YouTube</a>
-              <a href="#">Email</a>
-            </div>
-          </div>
-        </div>
-      </footer>
+      <Footer />
+
       </div>
     </div>
   );
