@@ -3,6 +3,11 @@ export { JobsCategoryHero } from "./components/JobsCategoryHero"
 export { PublicJobListingCard } from "./components/PublicJobListingCard"
 export { PublicJobDetailsView } from "./components/PublicJobDetailsView"
 export { LiveJobsView } from "./components/LiveJobsView"
+export { JobDetailsContent } from "./components/JobDetailsContent"
+export {
+  DASHBOARD_JOBS_ROUTE,
+  dashboardJobDetailsPath,
+} from "./constants"
 export { LoginRequiredModal } from "./components/LoginRequiredModal"
 export { JobsDiscoveryHeader } from "./components/JobsDiscoveryHeader"
 export { JobsMobileFilterDrawer } from "./components/JobsMobileFilterDrawer"

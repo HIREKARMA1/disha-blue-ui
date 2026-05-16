@@ -35,6 +35,13 @@ type Props = {
   isApplying?: boolean
   onApply: () => void
   applicationStatus?: string
+  /** Where "Back to jobs" navigates (default public listing). */
+  backHref?: string
+  backLabel?: string
+  /** Links that point at the jobs list (e.g. reviews placeholder). */
+  jobsListHref?: string
+  /** Render inside dashboard shell (no extra top padding). */
+  embedded?: boolean
 }
 
 function DetailCard({
@@ -139,7 +146,16 @@ function ActionsPanel({
   )
 }
 
-export function PublicJobDetailsView({ job, isApplying, onApply, applicationStatus }: Props) {
+export function PublicJobDetailsView({
+  job,
+  isApplying,
+  onApply,
+  applicationStatus,
+  backHref = "/jobs",
+  backLabel = "Back to jobs",
+  jobsListHref = "/jobs",
+  embedded = false,
+}: Props) {
   const router = useRouter()
   const [saved, setSaved] = useState(() => isJobSaved(job.id))
 
@@ -170,16 +186,21 @@ export function PublicJobDetailsView({ job, isApplying, onApply, applicationStat
   }
 
   return (
-    <div className="mx-auto w-full max-w-6xl px-4 pb-16 pt-4 sm:px-6 lg:px-8 lg:pt-6">
+    <div
+      className={cn(
+        "mx-auto w-full max-w-6xl px-4 pb-16 sm:px-6 lg:px-8",
+        embedded ? "pt-0" : "pt-4 lg:pt-6",
+      )}
+    >
       {/* Toolbar */}
       <div className="mb-5 flex items-center justify-between gap-3">
         <button
           type="button"
-          onClick={() => router.push("/jobs")}
+          onClick={() => router.push(backHref)}
           className="inline-flex items-center gap-2 text-sm font-semibold text-[#3a4260] transition hover:text-primary-600 dark:text-blue-200"
         >
           <ArrowLeft className="h-4 w-4" />
-          Back to jobs
+          {backLabel}
         </button>
         <div className="flex items-center gap-1">
           <button
@@ -341,7 +362,7 @@ export function PublicJobDetailsView({ job, isApplying, onApply, applicationStat
               </p>
               <p className="mt-1 text-xs text-[#7a85a8]">0 reviews</p>
               <Link
-                href="/jobs"
+                href={jobsListHref}
                 className="mt-3 inline-block text-sm font-semibold text-primary-600 hover:underline"
               >
                 View reviews →
@@ -352,7 +373,7 @@ export function PublicJobDetailsView({ job, isApplying, onApply, applicationStat
 
         {/* Sidebar — desktop */}
         <aside className="hidden space-y-5 lg:block">
-          <div className="sticky top-24 space-y-5">
+          <div className={cn("sticky space-y-5", embedded ? "top-4" : "top-24")}>
             <ActionsPanel
               job={job}
               isApplying={isApplying}
@@ -375,7 +396,7 @@ export function PublicJobDetailsView({ job, isApplying, onApply, applicationStat
                 </p>
                 <p className="mt-1 text-xs text-[#7a85a8]">0 reviews</p>
                 <Link
-                  href="/jobs"
+                  href={jobsListHref}
                   className="mt-3 inline-block text-sm font-semibold text-primary-600 hover:underline"
                 >
                   View reviews →

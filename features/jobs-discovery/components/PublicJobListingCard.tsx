@@ -31,7 +31,6 @@ type Props = {
   onViewDetails: () => void
   onApply: () => void
   onSaveToggle?: () => void
-  onViewCompany?: () => void
 }
 
 type DetailRowProps = {
@@ -80,7 +79,6 @@ export function PublicJobListingCard({
   onViewDetails,
   onApply,
   onSaveToggle,
-  onViewCompany,
 }: Props) {
   const company = job.company_name || job.corporate_name || "Hiring partner"
   const openings = job.number_of_openings ?? 1
@@ -105,15 +103,6 @@ export function PublicJobListingCard({
               </p>
             </div>
             <div className="flex shrink-0 items-start gap-1.5">
-              {onViewCompany ? (
-                <button
-                  type="button"
-                  onClick={onViewCompany}
-                  className="hidden rounded-lg border border-[#dde3f5] bg-white px-2.5 py-1.5 text-[11px] font-semibold text-[#0a0e1a] transition hover:border-primary-500/40 sm:inline-flex dark:border-blue-800 dark:bg-slate-900 dark:text-blue-50"
-                >
-                  View Company
-                </button>
-              ) : null}
               {onSaveToggle ? (
                 <button
                   type="button"

@@ -180,12 +180,12 @@ export function RecommendedJobsSection() {
  ))}
  </div>
  <div className="mt-3 flex gap-2">
- <Link href="/dashboard/student/jobs"className="inline-flex">
+ <Link href={`/dashboard/discover-jobs/${job.id}`}className="inline-flex">
  <Button variant="outline"size="sm"className="rounded-xl">
  View
  </Button>
  </Link>
- <Link href="/dashboard/student/jobs"className="inline-flex">
+ <Link href={`/dashboard/discover-jobs/${job.id}`}className="inline-flex">
  <Button variant="gradient"size="sm"className="rounded-xl">
  Apply
  </Button>

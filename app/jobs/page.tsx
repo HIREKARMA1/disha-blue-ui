@@ -4,8 +4,11 @@ import { Suspense } from "react"
 import { Navbar } from "@/components/ui/navbar"
 import { NewAllJobs } from "@/components/jobs/NewAllJobs"
 import { Footer } from "@/components/ui/footer"
+import { useRedirectAuthenticatedFromPublicJobs } from "@/features/jobs-discovery/hooks/useRedirectAuthenticatedFromPublicJobs"
 
 function JobsContent() {
+  useRedirectAuthenticatedFromPublicJobs()
+
   return (
     <div className="flex-grow">
       <NewAllJobs />

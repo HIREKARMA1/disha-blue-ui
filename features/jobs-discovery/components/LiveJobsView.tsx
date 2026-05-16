@@ -31,6 +31,10 @@ import {
   topSkillsFromJobs,
 } from "../utils/jobFormatters"
 import {
+  DASHBOARD_JOBS_ROUTE,
+  dashboardJobDetailsPath,
+} from "../constants"
+import {
   loadSavedJobIds,
   toggleSavedJobId,
 } from "@/components/jobs/jobs-ui"
@@ -338,7 +342,7 @@ export function LiveJobsView({ variant = "public" }: LiveJobsViewProps) {
     setAppliedFilters(cleared)
     setPagination((prev) => ({ ...prev, page: 1 }))
     if (locationParam) {
-      router.replace("/jobs")
+      router.replace(isDashboard ? DASHBOARD_JOBS_ROUTE : "/jobs")
     }
   }
 
@@ -351,7 +355,7 @@ export function LiveJobsView({ variant = "public" }: LiveJobsViewProps) {
   ].filter(Boolean).length
 
   const jobDetailsPath = (id: string) =>
-    isDashboard ? `/jobs/${id}` : `/jobs/${id}`
+    isDashboard ? dashboardJobDetailsPath(id) : `/jobs/${id}`
 
   const skeletonItems = Array.from({ length: 6 })
 
@@ -542,7 +546,6 @@ export function LiveJobsView({ variant = "public" }: LiveJobsViewProps) {
                   matchScore={getDisplayMatchScore(job)}
                   onViewDetails={() => router.push(jobDetailsPath(job.id))}
                   onApply={() => handleApplyClick(job)}
-                  onViewCompany={() => router.push(jobDetailsPath(job.id))}
                   onSaveToggle={() => {
                     toggleSavedJobId(job.id)
                     setSavedJobIds(loadSavedJobIds())

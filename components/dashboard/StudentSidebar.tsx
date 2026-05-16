@@ -122,6 +122,13 @@ description:'Local and personalized roles',
  const isItemActive = (item: NavItem) => {
  if (pathname === item.href) return true
  if (item.aliases?.includes(pathname || '')) return true
+ if (
+   item.href === '/dashboard/discover-jobs' &&
+   (pathname?.startsWith('/dashboard/discover-jobs') ||
+     pathname?.startsWith('/dashboard/student/jobs'))
+ ) {
+   return true
+ }
  return false
  }
 

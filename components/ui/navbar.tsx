@@ -108,27 +108,13 @@ export function Navbar({
 
   const isDashboardRoute = pathname?.startsWith('/dashboard')
   const showMobileMarketingMenu = !isDashboardRoute
-  const dashboardSegments = (pathname || '').split('/').filter(Boolean)
-  const rawDashboardSection =
-    dashboardSegments[2] ||
-    (dashboardSegments[1] && dashboardSegments[1] !== user?.user_type ? dashboardSegments[1] : undefined)
-  const dashboardSectionMap: Record<string, string> = {
-    'discover-jobs': 'Discover Job',
-  }
-  const dashboardSection = rawDashboardSection
-    ? (dashboardSectionMap[rawDashboardSection] ||
-      rawDashboardSection.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase()))
-    : 'Overview'
-  const dashboardRoleLabel =
-    user?.user_type === 'student'
-      ? 'Student'
-      : user?.user_type === 'corporate'
-        ? 'Recruiter'
-        : user?.user_type === 'admin'
-          ? 'Admin'
-          : 'Workspace'
 
   const isTransparentVariant = variant === 'transparent'
+  const languageSwitcherVariant = isDashboardRoute
+    ? isTransparentVariant
+      ? 'surface'
+      : 'bar'
+    : 'marketing'
 
   const getNavbarClasses = () => {
     if (isDashboardRoute) {
@@ -205,7 +191,10 @@ export function Navbar({
               <div className="h-9 w-32 animate-pulse rounded-full bg-slate-100" />
             )}
             {isDashboardRoute && !textOnly && (
-              <ThemeToggle variant={isTransparentVariant ? 'surface' : 'bar'} labelsOnly={textOnly} />
+              <div className="flex shrink-0 items-center gap-2">
+                <LanguageSwitcher variant={languageSwitcherVariant} />
+                <ThemeToggle variant={isTransparentVariant ? 'surface' : 'bar'} labelsOnly={textOnly} />
+              </div>
             )}
           </div>
         </div>
@@ -234,24 +223,20 @@ export function Navbar({
 
           {/* Desktop */}
           <div className="hidden min-w-0 flex-1 items-center justify-end gap-3 lg:flex">
-            {isDashboardRoute ? (
-              <div className="flex flex-1 items-center justify-center">
-                <div className="inline-flex items-center gap-2 rounded-2xl border border-blue-600/50 bg-white/40 px-3 py-1.5 text-xs font-medium text-slate-900 shadow-sm dark:border-blue-800/65 dark:bg-blue-900/60 dark:text-blue-50">
-                  <span className="rounded-none bg-blue-600 px-2 py-0.5 font-semibold text-white dark:bg-blue-700">{dashboardRoleLabel}</span>
-                  <span>{dashboardSection}</span>
-                </div>
-              </div>
-            ) : isAuthenticated && user ? (
-              <>
-                {!textOnly && <LanguageSwitcher variant="marketing" />}
-                {authenticatedMarketingActions}
-              </>
-            ) : (
-              !textOnly && <MarketingJobsUpiActions />
-            )}
-
+            {!isDashboardRoute &&
+              (isAuthenticated && user ? (
+                <>
+                  {!textOnly && <LanguageSwitcher variant="marketing" />}
+                  {authenticatedMarketingActions}
+                </>
+              ) : (
+                !textOnly && <MarketingJobsUpiActions />
+              ))}
             {isDashboardRoute && !textOnly && (
-              <ThemeToggle variant={isTransparentVariant ? 'surface' : 'bar'} labelsOnly={textOnly} />
+              <div className="flex shrink-0 items-center gap-2">
+                <LanguageSwitcher variant={languageSwitcherVariant} />
+                <ThemeToggle variant={isTransparentVariant ? 'surface' : 'bar'} labelsOnly={textOnly} />
+              </div>
             )}
           </div>
 
@@ -278,7 +263,10 @@ export function Navbar({
               </>
             )}
             {isDashboardRoute && !textOnly && (
-              <ThemeToggle variant={isTransparentVariant ? 'surface' : 'bar'} labelsOnly={textOnly} />
+              <div className="flex shrink-0 items-center gap-2">
+                <LanguageSwitcher variant={languageSwitcherVariant} />
+                <ThemeToggle variant={isTransparentVariant ? 'surface' : 'bar'} labelsOnly={textOnly} />
+              </div>
             )}
           </div>
         </div>
