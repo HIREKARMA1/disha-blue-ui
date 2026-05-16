@@ -23,11 +23,46 @@ import { LanguageSwitcher } from '@/components/ui/language-switcher'
 import { cn } from '@/lib/utils'
 import { STUDENT_SIGNUP_ROUTE } from '@/features/landing/constants'
 
+const HIRE_WORKERS_ROUTE = '/signup?type=corporate'
+
+const jobsUpiCtaClass =
+  'inline-flex h-9 shrink-0 items-center justify-center rounded-full px-4 text-[10px] font-bold uppercase tracking-wide text-white shadow-[0_2px_8px_rgba(0,0,0,0.12)] transition hover:brightness-105 sm:h-11 sm:px-5 sm:text-xs'
+
 interface NavbarProps {
   variant?: 'default' | 'transparent' | 'solid'
   className?: string
   /** Logo as text, no menu icons, text theme control—home marketing page only. */
   textOnly?: boolean
+}
+
+interface MarketingJobsUpiActionsProps {
+  stacked?: boolean
+  onNavigate?: () => void
+}
+
+function MarketingJobsUpiActions({ stacked, onNavigate }: MarketingJobsUpiActionsProps) {
+  const { locale } = useLocale()
+
+  return (
+    <div
+      className={cn(
+        'flex items-center gap-2 sm:gap-3',
+        stacked && 'w-full flex-col',
+      )}
+    >
+      <LanguageSwitcher variant="jobsupi" compact={stacked} />
+      <Link href={HIRE_WORKERS_ROUTE} onClick={onNavigate} className={stacked ? 'w-full' : undefined}>
+        <span className={cn(jobsUpiCtaClass, 'w-full bg-[#E86B3A]', stacked && 'w-full px-6')}>
+          {t(locale, 'nav.hireWorkers')}
+        </span>
+      </Link>
+      <Link href={STUDENT_SIGNUP_ROUTE} onClick={onNavigate} className={stacked ? 'w-full' : undefined}>
+        <span className={cn(jobsUpiCtaClass, 'w-full bg-[#2B50AA]', stacked && 'w-full px-6')}>
+          {t(locale, 'nav.findJobs')}
+        </span>
+      </Link>
+    </div>
+  )
 }
 
 export function Navbar({
@@ -45,15 +80,6 @@ export function Navbar({
   useEffect(() => {
     setHasMounted(true)
   }, [])
-
-  // Helper function to get auth links with redirect
-  const getAuthLink = (basePath: string) => {
-    // Don't add redirect for auth pages themselves
-    if (pathname?.startsWith('/auth/') || pathname === '/') {
-      return basePath
-    }
-    return `${basePath}?redirect=${encodeURIComponent(pathname || '')}`
-  }
 
   const handleLogout = () => {
     logout()
@@ -79,11 +105,7 @@ export function Navbar({
   }
 
   const isDashboardRoute = pathname?.startsWith('/dashboard')
-  const isStudentDashboardRoute = pathname?.startsWith('/dashboard/student')
-  const isStudentProfileRoute = pathname?.startsWith('/dashboard/student/profile')
   const showMobileMarketingMenu = !isDashboardRoute
-  /** Full marketing nav + Sign in / Find jobs / Post jobs on every non-dashboard route (home, jobs, auth, about, etc.). */
-  const showMarketingAuthCluster = !isDashboardRoute
   const dashboardSegments = (pathname || '').split('/').filter(Boolean)
   const rawDashboardSection =
     dashboardSegments[2] ||
@@ -104,71 +126,23 @@ export function Navbar({
           ? 'Admin'
           : 'Workspace'
 
-  const [hash, setHash] = useState("")
-  useEffect(() => {
-    const sync = () => setHash(typeof window !== "undefined" ? window.location.hash : "")
-    sync()
-    window.addEventListener("hashchange", sync)
-    return () => window.removeEventListener("hashchange", sync)
-  }, [pathname])
-
-  /** Marketing routes: fewer items; role entry is via Find Jobs / Post Jobs CTAs. */
-  const fullMarketingNavLinks = [
-    { href: '/', label: t(locale, 'nav.home') },
-    { href: '/#features', label: t(locale, 'nav.aiTools') },
-    { href: '/#about', label: t(locale, 'nav.about') },
-    { href: `mailto:${BRANDING.supportEmail}`, label: t(locale, 'nav.contact'), external: true },
-  ]
-
-  const navLinks = fullMarketingNavLinks
-
   const isTransparentVariant = variant === 'transparent'
 
   const getNavbarClasses = () => {
-    if (isTransparentVariant) {
+    if (isDashboardRoute) {
+      if (isTransparentVariant) {
+        return (
+          'w-full z-50 fixed top-0 left-0 right-0 border-b border-slate-200/90 border-t-[3px] border-t-blue-600 bg-white/92 shadow-[0_4px_24px_-6px_rgba(15,23,42,0.09)] backdrop-blur-md dark:border-blue-600/35 dark:border-t-blue-400/80 dark:bg-blue-950/95 dark:shadow-none'
+        )
+      }
       return (
-        'w-full z-50 fixed top-0 left-0 right-0 border-b border-slate-200/90 border-t-[3px] border-t-blue-600 bg-white/92 shadow-[0_4px_24px_-6px_rgba(15,23,42,0.09)] backdrop-blur-md dark:border-blue-600/35 dark:border-t-blue-400/80 dark:bg-blue-950/95 dark:shadow-none'
+        'w-full z-50 fixed top-0 left-0 right-0 border-t-[3px] border-t-blue-600 border-b border-b-blue-600/90 bg-blue-50 shadow-[0_4px_24px_-6px_rgba(15,23,42,0.06)] dark:border-t-blue-500/80 dark:border-b-blue-900/90 dark:bg-blue-950 dark:shadow-none'
       )
     }
     return (
-      'w-full z-50 fixed top-0 left-0 right-0 border-t-[3px] border-t-blue-600 border-b border-b-blue-600/90 bg-blue-50 shadow-[0_4px_24px_-6px_rgba(15,23,42,0.06)] dark:border-t-blue-500/80 dark:border-b-blue-900/90 dark:bg-blue-950 dark:shadow-none'
+      'w-full z-50 fixed top-0 left-0 right-0 border-b border-slate-200/90 bg-white/95 shadow-[0_2px_16px_-6px_rgba(15,23,42,0.08)] backdrop-blur-md'
     )
   }
-
-  const marketingNavInnerClass = isTransparentVariant
-    ? 'rounded-full border border-slate-200/90 bg-slate-100/90 px-1.5 py-1 shadow-[0_4px_24px_-6px_rgba(15,23,42,0.06)] ring-1 ring-black/[0.03] dark:border-blue-800/55 dark:bg-blue-950/75 dark:shadow-none dark:ring-1 dark:ring-inset dark:ring-blue-500/15'
-    : 'rounded-full border border-blue-600/45 bg-white/50 px-1.5 py-1 shadow-sm dark:border-blue-800/60 dark:bg-blue-900/55'
-
-  const marketingAuthClusterClass = isTransparentVariant
-    ? 'rounded-full border border-slate-200/90 bg-slate-100/90 px-1.5 py-1 shadow-[0_4px_24px_-6px_rgba(15,23,42,0.06)] ring-1 ring-black/[0.03] dark:border-blue-800/55 dark:bg-blue-950/75 dark:shadow-none dark:ring-1 dark:ring-inset dark:ring-blue-500/15'
-    : 'rounded-full border border-blue-600/45 bg-white/50 px-1.5 py-1 shadow-sm dark:border-blue-800/60 dark:bg-blue-900/55'
-
-  const marketingNavLinkClass = (href: string) => {
-    const isHash = href.startsWith('/#')
-    const active = isHash
-      ? pathname === '/' && hash === href.slice(1)
-      : href === '/'
-        ? pathname === '/' && !hash
-        : pathname === href || (!!href && href[0] === '/' && pathname?.startsWith(href) && href.length > 1)
-    if (isTransparentVariant) {
-      return cn(
-        'rounded-full px-2.5 py-1.5 text-xs font-semibold transition-colors sm:px-3 sm:text-sm',
-        active
-          ? 'bg-white text-slate-900 shadow-sm ring-1 ring-blue-600/20 dark:bg-blue-600/90 dark:text-white dark:ring-blue-400/35'
-          : 'text-slate-800 hover:bg-white/70 hover:text-blue-700 dark:text-blue-100 dark:hover:bg-blue-900/65 dark:hover:text-white',
-      )
-    }
-    return cn(
-      'rounded-full px-2.5 py-1.5 text-xs font-semibold transition-colors sm:px-3 sm:text-sm',
-      active
-        ? 'bg-white text-slate-900 shadow-sm ring-1 ring-blue-600/30 dark:bg-blue-700 dark:text-white dark:ring-blue-500/45'
-        : 'text-slate-900 hover:bg-white/80 hover:text-blue-700 dark:text-blue-50 dark:hover:bg-blue-800/70 dark:hover:text-white',
-    )
-  }
-
-  const mobileNavItemGhostClass = isTransparentVariant
-    ? 'text-slate-900 hover:bg-blue-50/15 hover:text-blue-600 dark:text-blue-50 dark:hover:bg-blue-800/60 dark:hover:text-white'
-    : 'text-slate-900 hover:bg-white/50 hover:text-slate-950 dark:text-blue-50 dark:hover:bg-blue-800/65 dark:hover:text-white'
 
   const getLogoSrc = () => {
     if (!hasMounted) {
@@ -178,36 +152,59 @@ export function Navbar({
     return isDark ? BRANDING.logoDark : BRANDING.logoLight
   }
 
+  const closeMobileMenu = () => setIsMobileMenuOpen(false)
+
+  const authenticatedMarketingActions = (
+    <div className="flex flex-wrap items-center justify-end gap-2">
+      <Link href={getDashboardPath()}>
+        <Button className="h-9 rounded-full bg-[#2B50AA] px-4 text-xs font-bold uppercase tracking-wide text-white shadow-[0_2px_8px_rgba(0,0,0,0.12)] hover:bg-[#2B50AA]/90 sm:h-11 sm:px-5">
+          {!textOnly &&
+            (() => {
+              const IconComponent = getUserTypeIcon()
+              return <IconComponent className="mr-1.5 h-4 w-4" />
+            })()}
+          {t(locale, 'common.dashboard')}
+        </Button>
+      </Link>
+      {user?.user_type !== 'corporate' && user?.user_type !== 'admin' && (
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={handleLogout}
+          className="h-9 rounded-full text-red-700 hover:bg-red-50 hover:text-red-800 sm:h-11"
+        >
+          {!textOnly && <LogOut className="mr-1.5 h-4 w-4" />}
+          {t(locale, 'common.logout')}
+        </Button>
+      )}
+    </div>
+  )
+
   if (isLoading || !hasMounted) {
     return (
       <nav className={`main-navbar ${getNavbarClasses()} ${className}`}>
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            {/* Logo */}
-            <div className="flex items-center">
-              <Link href="/auth/login" className="flex items-center">
-                {textOnly ? (
-                  <span className="font-display text-lg font-semibold text-slate-900 dark:text-blue-50">{BRANDING.appName}</span>
-                ) : (
-                  <Image
-                    src={getLogoSrc()}
-                    alt={`${BRANDING.appName} logo`}
-                    width={150}
-                    height={50}
-                    className="h-8 w-auto sm:h-10 md:h-12 lg:h-11 object-contain"
-                    priority
-                  />
-                )}
-              </Link>
-            </div>
-
-            {/* Loading state */}
-            <div className="flex items-center space-x-4">
-              {!textOnly && (
-                <div className="h-4 w-4 animate-spin rounded-none border-2 border-blue-600 border-t-white dark:border-blue-700 dark:border-t-blue-200"></div>
+        <div className="container mx-auto px-4 py-3 sm:px-6">
+          <div className="flex items-center justify-between gap-4">
+            <Link href="/" className="flex items-center">
+              {textOnly ? (
+                <span className="font-display text-lg font-semibold text-slate-900">{BRANDING.appName}</span>
+              ) : (
+                <Image
+                  src={getLogoSrc()}
+                  alt={`${BRANDING.appName} logo`}
+                  width={150}
+                  height={50}
+                  className="h-8 w-auto object-contain sm:h-10"
+                  priority
+                />
               )}
+            </Link>
+            {!isDashboardRoute && !textOnly && (
+              <div className="h-9 w-32 animate-pulse rounded-full bg-slate-100" />
+            )}
+            {isDashboardRoute && !textOnly && (
               <ThemeToggle variant={isTransparentVariant ? 'surface' : 'bar'} labelsOnly={textOnly} />
-            </div>
+            )}
           </div>
         </div>
       </nav>
@@ -217,378 +214,91 @@ export function Navbar({
   return (
     <nav className={`main-navbar ${getNavbarClasses()} ${className}`}>
       <div className="container mx-auto px-4 py-3 sm:px-6">
-        <div className="flex items-center gap-4 lg:gap-6">
-          {/* Logo */}
-          <div className="flex shrink-0 items-center gap-2 sm:gap-3 md:gap-4">
-            <Link href={isAuthenticated ? getDashboardPath() : "/"} className="flex items-center">
-              {textOnly ? (
-                <span className="font-display text-lg font-semibold text-slate-900 dark:text-blue-50">{BRANDING.appName}</span>
-              ) : (
-                <Image
-                  src={getLogoSrc()}
-                  alt={`${BRANDING.appName} logo`}
-                  width={150}
-                  height={50}
-                  className="h-8 w-auto sm:h-10 md:h-12 lg:h-11 object-contain"
-                  priority
-                />
-              )}
-            </Link>
-          </div>
+        <div className="flex items-center gap-3 sm:gap-4">
+          <Link href={isAuthenticated ? getDashboardPath() : '/'} className="flex shrink-0 items-center">
+            {textOnly ? (
+              <span className="font-display text-lg font-semibold text-slate-900">{BRANDING.appName}</span>
+            ) : (
+              <Image
+                src={getLogoSrc()}
+                alt={`${BRANDING.appName} logo`}
+                width={150}
+                height={50}
+                className="h-8 w-auto object-contain sm:h-10 md:h-11"
+                priority
+              />
+            )}
+          </Link>
 
-          {/* Desktop Navigation */}
-          <div className="hidden min-w-0 flex-1 items-center justify-end gap-4 lg:flex">
+          {/* Desktop */}
+          <div className="hidden min-w-0 flex-1 items-center justify-end gap-3 lg:flex">
             {isDashboardRoute ? (
               <div className="flex flex-1 items-center justify-center">
                 <div className="inline-flex items-center gap-2 rounded-2xl border border-blue-600/50 bg-white/40 px-3 py-1.5 text-xs font-medium text-slate-900 shadow-sm dark:border-blue-800/65 dark:bg-blue-900/60 dark:text-blue-50">
-                  <span className="rounded-none bg-blue-600 px-2 py-0.5 font-semibold text-white dark:bg-blue-700 dark:text-white">{dashboardRoleLabel}</span>
-                  <span className="text-slate-900 dark:text-blue-50">{dashboardSection}</span>
+                  <span className="rounded-none bg-blue-600 px-2 py-0.5 font-semibold text-white dark:bg-blue-700">{dashboardRoleLabel}</span>
+                  <span>{dashboardSection}</span>
                 </div>
               </div>
+            ) : isAuthenticated && user ? (
+              <>
+                {!textOnly && <LanguageSwitcher variant="jobsupi" />}
+                {authenticatedMarketingActions}
+              </>
             ) : (
-              <nav
-                className={cn(
-                  'flex min-w-0 flex-1 flex-wrap items-center justify-center gap-0.5 sm:gap-1',
-                  marketingNavInnerClass,
-                )}
-              >
-                {/* About Dropdown */}
-                {/* <div className="relative group">
-  <Button
-  variant="ghost"
-  className="flex items-center space-x-1 text-gray-700 dark:text-gray-300 hover:text-primary-500 dark:hover:text-primary-400"
-  onMouseEnter={() => handleDropdownEnter('about')}
-  onMouseLeave={() => handleDropdownLeave('about')}
-  >
-  <span>About</span>
-  <ChevronDown className="w-4 h-4" />
-  </Button>
-
-  {isAboutOpen && (
-  <div
-  className="absolute top-full left-0 mt-1 w-64 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 py-2 z-50"
-  onMouseEnter={() => handleDropdownEnter('about')}
-  onMouseLeave={() => handleDropdownLeave('about')}
-  >
-  <Link href="/about/why-hirekarma" className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-primary-500 dark:hover:text-primary-400">
-  <div className="flex items-center space-x-2">
-  <Target className="w-4 h-4" />
-  <span>Why HireKarma</span>
-  </div>
-  </Link>
-  <Link href="/about/mission-vision" className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-primary-500 dark:hover:text-primary-400">
-  <div className="flex items-center space-x-2">
-  <Eye className="w-4 h-4" />
-  <span>Mission & Vision</span>
-  </div>
-  </Link>
-  </div>
-  )}
-  </div> */}
-
-                {/* Solutions Dropdown */}
-                {/* <div className="relative group">
-  <Button
-  variant="ghost"
-  className="flex items-center space-x-1 text-gray-700 dark:text-gray-300 hover:text-primary-500 dark:hover:text-primary-400"
-  onMouseEnter={() => handleDropdownEnter('solutions')}
-  onMouseLeave={() => handleDropdownLeave('solutions')}
-  >
-  <span>Solutions</span>
-  <ChevronDown className="w-4 h-4" />
-  </Button>
-
-  {isSolutionsOpen && (
-  <div
-  className="absolute top-full left-0 mt-1 w-72 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 py-2 z-50"
-  onMouseEnter={() => handleDropdownEnter('solutions')}
-  onMouseLeave={() => handleDropdownLeave('solutions')}
-  >
-  <Link href="/solutions/campus-placement" className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-primary-500 dark:hover:text-primary-400">
-  <div className="flex items-center space-x-2">
-  <Cap className="w-4 h-4" />
-  <div>
-  <div className="font-medium">Campus Placement</div>
-  <div className="text-xs text-gray-500 dark:text-gray-400">Hire the best from top colleges</div>
-  </div>
-  </div>
-  </Link>
-  <Link href="/solutions/skill-development" className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-primary-500 dark:hover:text-primary-400">
-  <div className="flex items-center space-x-2">
-  <BookOpen className="w-4 h-4" />
-  <div>
-  <div className="font-medium">Skill Development</div>
-  <div className="text-xs text-gray-500 dark:text-gray-400">Upskilling talent with job-ready skills</div>
-  </div>
-  </div>
-  </Link>
-  <Link href="/solutions/lateral-hiring" className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-primary-500 dark:hover:text-primary-400">
-  <div className="flex items-center space-x-2">
-  <Users className="w-4 h-4" />
-  <div>
-  <div className="font-medium">Lateral Hiring</div>
-  <div className="text-xs text-gray-500 dark:text-gray-400">Hire experienced talent with ease</div>
-  </div>
-  </div>
-  </Link>
-  <Link href="/solutions/general-staffing" className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-primary-500 dark:hover:text-primary-400">
-  <div className="flex items-center space-x-2">
-  <Wrench className="w-4 h-4" />
-  <div>
-  <div className="font-medium">General Staffing</div>
-  <div className="text-xs text-gray-500 dark:text-gray-400">On-demand staffing for all business needs</div>
-  </div>
-  </div>
-  </Link>
-  </div>
-  )}
-  </div> */}
-
-                {/* Resources Dropdown */}
-                {/* <div className="relative group">
-  <Button
-  variant="ghost"
-  className="flex items-center space-x-1 text-gray-700 dark:text-gray-300 hover:text-primary-500 dark:hover:text-primary-400"
-  onMouseEnter={() => handleDropdownEnter('resources')}
-  onMouseLeave={() => handleDropdownLeave('resources')}
-  >
-  <span>Resources</span>
-  <ChevronDown className="w-4 h-4" />
-  </Button>
-
-  {isResourcesOpen && (
-  <div
-  className="absolute top-full left-0 mt-1 w-64 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 py-2 z-50"
-  onMouseEnter={() => handleDropdownEnter('resources')}
-  onMouseLeave={() => handleDropdownLeave('resources')}
-  >
-  <Link href="/resources/moments-corner" className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-primary-500 dark:hover:text-primary-400">
-  <div className="flex items-center space-x-2">
-  <Calendar className="w-4 h-4" />
-  <span>Moments Corner</span>
-  </div>
-  </Link>
-  <Link href="/resources/insights" className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-primary-500 dark:hover:text-primary-400">
-  <div className="flex items-center space-x-2">
-  <BarChart3 className="w-4 h-4" />
-  <span>Insights</span>
-  </div>
-  </Link>
-  </div>
-  )}
-  </div> */}
-
-                {navLinks.map((item) =>
-                  item.external ? (
-                    <a
-                      key={item.label}
-                      href={item.href}
-                      className={marketingNavLinkClass(item.href)}
-                    >
-                      {item.label}
-                    </a>
-                  ) : (
-                    <Link
-                      key={item.href}
-                      href={item.href}
-                      className={marketingNavLinkClass(item.href)}
-                    >
-                      {item.label}
-                    </Link>
-                  )
-                )}
-              </nav>
+              !textOnly && <MarketingJobsUpiActions />
             )}
 
-            <div className="flex shrink-0 items-center gap-2">
-              {/* Auth Buttons */}
-              {isAuthenticated && user ? (
-                <div className="flex items-center gap-2">
-                  {!isDashboardRoute && (
-                    <Link href={getDashboardPath()}>
-                      <Button className="flex items-center gap-2 bg-white text-slate-900 shadow-sm hover:bg-white/90 dark:bg-blue-100 dark:text-blue-950 dark:hover:bg-white">
-                        {!textOnly &&
-                          (() => {
-                            const IconComponent = getUserTypeIcon()
-                            return <IconComponent className="w-4 h-4" />
-                          })()}
-                        <span>{t(locale, 'common.dashboard')}</span>
-                      </Button>
-                    </Link>
-                  )}
-
-                  {!isDashboardRoute &&
-                    user?.user_type !== 'corporate' &&
-                    user?.user_type !== 'admin' && (
-                      <Button
-                        variant="ghost"
-                        onClick={handleLogout}
-                        className="flex items-center gap-2 text-red-800 hover:bg-white/45 hover:text-red-950 dark:text-red-300 dark:hover:bg-blue-900/80 dark:hover:text-red-200"
-                      >
-                        {!textOnly && <LogOut className="w-4 h-4" />}
-                        <span>{t(locale, 'common.logout')}</span>
-                      </Button>
-                    )}
-                </div>
-              ) : (
-                <>
-                  {showMarketingAuthCluster ? (
-                    <div className={cn('flex flex-wrap items-center justify-end gap-1 sm:gap-1.5', marketingAuthClusterClass)}>
-                      <Link
-                        href={getAuthLink('/auth/login')}
-                        className="rounded-full px-2.5 py-1.5 text-xs font-semibold text-slate-900 transition-colors hover:bg-white/80 hover:text-blue-700 dark:text-blue-50 dark:hover:bg-blue-900/60 dark:hover:text-white sm:px-3 sm:text-sm"
-                      >
-                        {t(locale, 'common.signIn')}
-                      </Link>
-                      <Link href={STUDENT_SIGNUP_ROUTE} className="inline-flex">
-                        <Button
-                          variant="outline"
-                          className="h-8 rounded-full border-2 border-blue-600/55 bg-white/90 px-3 text-xs font-semibold text-slate-900 hover:bg-blue-50 dark:border-blue-400/75 dark:bg-blue-950/50 dark:text-blue-50 dark:hover:bg-blue-800/70 sm:h-9 sm:px-4 sm:text-sm"
-                        >
-                          Find Jobs
-                        </Button>
-                      </Link>
-                      <Link href="/signup?type=corporate" className="inline-flex">
-                        <Button className="h-8 rounded-full bg-blue-600 px-3 text-xs font-semibold text-white shadow-sm hover:bg-blue-600/90 dark:bg-blue-600 dark:text-white dark:hover:bg-blue-500 sm:h-9 sm:px-4 sm:text-sm">
-                          Post Jobs
-                        </Button>
-                      </Link>
-                    </div>
-                  ) : (
-                    <div className="flex items-center gap-2">
-                      <Link href={getAuthLink('/auth/login')}>
-                        <Button variant="outline" className="border-2 border-slate-800/40 bg-white/90 px-5 font-semibold text-slate-900 hover:bg-white dark:border-blue-400 dark:bg-blue-950/30 dark:text-blue-50 dark:hover:bg-blue-800 dark:hover:text-white">
-                          {t(locale, 'common.signIn')}
-                        </Button>
-                      </Link>
-                      <Link href="/signup">
-                        <Button className="bg-white px-5 font-semibold text-slate-900 shadow-sm hover:bg-white/90 dark:bg-blue-100 dark:text-blue-950 dark:hover:bg-white">{t(locale, 'common.signUp')}</Button>
-                      </Link>
-                    </div>
-                  )}
-                </>
-              )}
-
-              {!textOnly && <LanguageSwitcher variant={isTransparentVariant ? 'surface' : 'bar'} />}
+            {isDashboardRoute && !textOnly && (
               <ThemeToggle variant={isTransparentVariant ? 'surface' : 'bar'} labelsOnly={textOnly} />
-            </div>
+            )}
           </div>
 
-          {/* Mobile Menu Button */}
+          {/* Mobile — hamburger opens JobsUPI actions */}
           <div className="ml-auto flex items-center gap-2 lg:hidden">
-            {!textOnly && (
-              <LanguageSwitcher compact variant={isTransparentVariant ? 'surface' : 'bar'} />
+            {!isDashboardRoute && !textOnly && (
+              <>
+                {isAuthenticated && user && (
+                  <Link href={getDashboardPath()}>
+                    <span className={cn(jobsUpiCtaClass, 'bg-[#2B50AA] px-3 text-[9px] sm:px-4 sm:text-[10px]')}>
+                      {t(locale, 'common.dashboard')}
+                    </span>
+                  </Link>
+                )}
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                  className="h-9 shrink-0 rounded-full border border-slate-200 bg-white px-2.5 shadow-sm hover:bg-slate-50 sm:h-10 sm:px-3"
+                  aria-label={isMobileMenuOpen ? 'Close menu' : 'Open menu'}
+                >
+                  {isMobileMenuOpen ? <X className="h-5 w-5 text-slate-700" /> : <Menu className="h-5 w-5 text-slate-700" />}
+                </Button>
+              </>
             )}
-            <ThemeToggle variant={isTransparentVariant ? 'surface' : 'bar'} labelsOnly={textOnly} />
-            {showMobileMarketingMenu && (
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                className={cn(
-                  'rounded-lg border px-3 py-2 text-sm font-semibold text-slate-900 hover:bg-white/85 dark:text-blue-50 dark:hover:bg-blue-800/80 dark:hover:text-white',
-                  isTransparentVariant
-                    ? 'border-slate-200/90 bg-white/75 hover:bg-white dark:border-blue-800/55 dark:bg-blue-900/50'
-                    : 'border-blue-600/50 bg-white/35 hover:bg-white/55 dark:border-blue-800/55 dark:bg-blue-900/55',
-                )}
-              >
-                {textOnly ? (
-                  isMobileMenuOpen ? 'Close' : 'Menu'
-                ) : isMobileMenuOpen ? (
-                  <X className="w-5 h-5" />
-                ) : (
-                  <Menu className="w-5 h-5" />
-                )}
-              </Button>
+            {isDashboardRoute && !textOnly && (
+              <ThemeToggle variant={isTransparentVariant ? 'surface' : 'bar'} labelsOnly={textOnly} />
             )}
           </div>
         </div>
 
-        {/* Mobile Menu */}
-        {showMobileMarketingMenu && isMobileMenuOpen && (
-          <div
-            className={cn(
-              'absolute left-0 right-0 top-full border-t lg:hidden',
-              isTransparentVariant
-                ? 'border-slate-200/90 bg-white/95 shadow-[0_4px_24px_-6px_rgba(15,23,42,0.09)] backdrop-blur-md dark:border-blue-800/65 dark:bg-blue-950/98 dark:shadow-none'
-                : 'border-blue-600/60 bg-blue-50 shadow-none dark:border-blue-900/80 dark:bg-blue-950',
-            )}
-          >
-            <div className="flex flex-col space-y-3 p-4">
-              <div className="space-y-2">
-                {navLinks.map((item) =>
-                  item.external ? (
-                    <a key={item.label} href={item.href} onClick={() => setIsMobileMenuOpen(false)}>
-                      <Button variant="ghost" className={cn('w-full justify-start', mobileNavItemGhostClass)}>{item.label}</Button>
-                    </a>
-                  ) : (
-                    <Link key={item.href} href={item.href} onClick={() => setIsMobileMenuOpen(false)}>
-                      <Button variant="ghost" className={cn('w-full justify-start', mobileNavItemGhostClass)}>{item.label}</Button>
-                    </Link>
-                  )
-                )}
-              </div>
-
-              {/* Auth Section */}
-              {isAuthenticated && user ? (
-                <>
-                  <div className="border-t border-blue-600/45 pt-2 dark:border-blue-800/65">
-                    <Link href={getDashboardPath()} onClick={() => setIsMobileMenuOpen(false)}>
-                      <Button className="w-full justify-start bg-white font-semibold text-slate-900 shadow-sm hover:bg-white/90 dark:bg-blue-800 dark:text-white dark:hover:bg-blue-700">
-                        {!textOnly &&
-                          (() => {
-                            const IconComponent = getUserTypeIcon()
-                            return <IconComponent className="w-4 h-4 mr-2" />
-                          })()}
-                        {t(locale, 'common.dashboard')}
-                      </Button>
-                    </Link>
-                  </div>
-                  {!isDashboardRoute && user?.user_type !== 'corporate' && user?.user_type !== 'admin' && (
+        {showMobileMarketingMenu && isMobileMenuOpen && !isDashboardRoute && (
+          <div className="absolute left-0 right-0 top-full border-t border-slate-200/90 bg-white shadow-lg lg:hidden">
+            <div className="flex flex-col gap-4 p-4">
+              {!textOnly && !isAuthenticated && (
+                <MarketingJobsUpiActions stacked onNavigate={closeMobileMenu} />
+              )}
+              {isAuthenticated && user && (
+                <div className="space-y-2">
+                  {user?.user_type !== 'corporate' && user?.user_type !== 'admin' && (
                     <Button
                       variant="ghost"
                       onClick={handleLogout}
-                      className="w-full justify-start font-medium text-red-800 hover:bg-white/45 hover:text-red-950 dark:text-red-300 dark:hover:bg-blue-900/80 dark:hover:text-red-200"
+                      className="w-full justify-center text-red-700 hover:bg-red-50 hover:text-red-800"
                     >
-                      {!textOnly && <LogOut className="w-4 h-4 mr-2" />}
+                      {!textOnly && <LogOut className="mr-2 h-4 w-4" />}
                       {t(locale, 'common.logout')}
                     </Button>
                   )}
-                </>
-              ) : (
-                <div className="space-y-3 border-t border-blue-600/45 pt-2 dark:border-blue-800/65">
-                  <Link href={getAuthLink('/auth/login')} onClick={() => setIsMobileMenuOpen(false)}>
-                    <Button variant="outline" className="w-full justify-center rounded-full border-2 border-blue-600/50 bg-white/90 font-semibold text-slate-900 hover:bg-blue-50/12 dark:border-blue-400/80 dark:bg-blue-950/40 dark:text-blue-50 dark:hover:bg-blue-800/70 dark:hover:text-white">
-                      {t(locale, 'common.signIn')}
-                    </Button>
-                  </Link>
-                  {showMarketingAuthCluster ? (
-                    <>
-                      <Link href={STUDENT_SIGNUP_ROUTE} onClick={() => setIsMobileMenuOpen(false)}>
-                        <Button
-                          variant="outline"
-                          className="w-full justify-center rounded-full border-2 border-blue-600/50 bg-white/90 font-semibold text-slate-900 hover:bg-blue-50/15 dark:border-blue-400/80 dark:bg-blue-950/40 dark:text-blue-50 dark:hover:bg-blue-800/70 dark:hover:text-white"
-                        >
-                          Find Jobs
-                        </Button>
-                      </Link>
-                      <Link href="/signup?type=corporate" onClick={() => setIsMobileMenuOpen(false)}>
-                        <Button className="w-full justify-center rounded-full bg-blue-600 font-semibold text-white shadow-sm hover:bg-blue-600/90 dark:bg-blue-600 dark:text-white dark:hover:bg-blue-500">
-                          Post Jobs
-                        </Button>
-                      </Link>
-                    </>
-                  ) : (
-                    <Link href="/signup" onClick={() => setIsMobileMenuOpen(false)}>
-                      <Button className="w-full justify-center bg-white font-semibold text-slate-900 shadow-sm hover:bg-white/90 dark:bg-blue-100 dark:text-blue-950 dark:hover:bg-white">{t(locale, 'common.signUp')}</Button>
-                    </Link>
-                  )}
-                </div>
-              )}
-              {!textOnly && (
-                <div className="border-t border-blue-600/45 pt-2 dark:border-blue-800/65">
-                  <label className="mb-2 block text-xs font-medium text-slate-800 dark:text-blue-100">{t(locale, 'nav.language')}</label>
-                  <LanguageSwitcher compact variant={isTransparentVariant ? 'surface' : 'bar'} />
                 </div>
               )}
             </div>
