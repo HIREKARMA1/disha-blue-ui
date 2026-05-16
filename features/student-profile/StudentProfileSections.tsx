@@ -168,16 +168,16 @@ export function ProfileJobPreferencesSection({
         />
       ) : (
         <>
-          <div className="border-b border-slate-100 pb-3 dark:border-slate-800">
-            <p className="text-xs font-medium text-slate-500">Preferred Roles</p>
-            <div className="mt-2 flex flex-wrap gap-2">
+          <div className="border-b border-slate-100 pb-5 dark:border-slate-800">
+            <p className="text-sm font-medium text-slate-500">Preferred Roles</p>
+            <div className="mt-3 flex flex-wrap gap-2.5">
               {roles === 'N/A' ? (
-                <span className="text-sm font-semibold text-slate-900 dark:text-slate-50">N/A</span>
+                <span className="text-base font-semibold text-slate-900 dark:text-slate-50">N/A</span>
               ) : (
                 roles.split(',').map((role) => (
                   <span
                     key={role}
-                    className="rounded-lg bg-slate-100 px-2.5 py-1 text-xs font-semibold text-slate-800 dark:bg-slate-800 dark:text-slate-200"
+                    className="rounded-xl bg-slate-100 px-3.5 py-2 text-sm font-semibold text-slate-800 dark:bg-slate-800 dark:text-slate-200"
                   >
                     {role.trim()}
                   </span>
@@ -282,40 +282,23 @@ export function ProfileWorkExperienceSection({
           ) : null}
         </>
       ) : (
-        <div className={cn(profileCardClass, 'border-0 bg-amber-50/40 p-0 shadow-none dark:bg-amber-950/10')}>
-          <div className="rounded-2xl border border-amber-100 bg-[#fff8f0] p-5 text-center dark:border-amber-900/30">
-            <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-xl bg-white shadow-sm">
-              <Briefcase className="h-6 w-6 text-amber-600" />
-            </div>
-            <p className="font-semibold text-slate-900 dark:text-slate-50">Work Experience</p>
-            <p className="mt-1 text-sm text-slate-500">Add your past jobs</p>
-            <Button
-              type="button"
-              className="mt-4 w-full rounded-xl bg-primary-600 hover:bg-primary-700 sm:w-auto"
-              onClick={() => setEditing('experience')}
-            >
-              <Plus className="mr-2 h-4 w-4" />
-              Add Experience
-            </Button>
+        <div className="flex flex-col items-center py-6 text-center sm:py-8">
+          <div className="flex h-20 w-20 items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800">
+            <Briefcase className="h-9 w-9 text-slate-300" />
           </div>
-          <div className="mt-6 flex flex-col items-center px-2 py-4 text-center">
-            <div className="flex h-16 w-16 items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800">
-              <Briefcase className="h-8 w-8 text-slate-300" />
-            </div>
-            <p className="mt-4 font-semibold text-slate-900 dark:text-slate-50">No Work Experience Added</p>
-            <p className="mt-1 max-w-sm text-sm text-slate-500">
-              Showcase your professional experience to increase your chances of getting hired.
-            </p>
-            <Button
-              type="button"
-              size="sm"
-              className="mt-4 rounded-xl bg-primary-600"
-              onClick={() => setEditing('experience')}
-            >
-              <Plus className="mr-1 h-4 w-4" />
-              Add Work Experience
-            </Button>
-          </div>
+          <p className="mt-5 text-lg font-semibold text-slate-900 dark:text-slate-50">No Work Experience Added</p>
+          <p className="mt-2 max-w-sm px-2 text-base leading-relaxed text-slate-500 sm:text-sm">
+            Showcase your professional experience to increase your chances of getting hired.
+          </p>
+          <Button
+            type="button"
+            size="lg"
+            className="mt-6 h-12 w-full max-w-xs rounded-xl bg-primary-600 text-base hover:bg-primary-700 sm:w-auto sm:min-w-[220px]"
+            onClick={() => setEditing('experience')}
+          >
+            <Plus className="mr-2 h-5 w-5" />
+            Add Work Experience
+          </Button>
         </div>
       )}
     </ProfileSectionCard>

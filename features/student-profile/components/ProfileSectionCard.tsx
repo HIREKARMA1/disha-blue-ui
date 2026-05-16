@@ -2,7 +2,16 @@
 
 import { Pencil } from 'lucide-react'
 import { cn } from '@/lib/utils'
-import { profileCardClass, profileCardBodyClass, profileCardHeaderClass, profileEditBtnClass } from '../profileTheme'
+import {
+  profileCardClass,
+  profileCardBodyClass,
+  profileCardHeaderClass,
+  profileEditBtnClass,
+  profileFieldWrapperClass,
+  profileLabelClass,
+  profileSectionTitleClass,
+  profileValueClass,
+} from '../profileTheme'
 
 type ProfileSectionCardProps = {
   id?: string
@@ -26,9 +35,11 @@ export function ProfileSectionCard({
   return (
     <section id={id} className={cn(profileCardClass, className)}>
       <div className={profileCardHeaderClass}>
-        <div className="min-w-0">
-          <h2 className="text-base font-bold text-slate-900 dark:text-slate-50">{title}</h2>
-          {subtitle ? <p className="mt-0.5 text-sm text-slate-500 dark:text-slate-400">{subtitle}</p> : null}
+        <div className="min-w-0 flex-1 pr-2">
+          <h2 className={profileSectionTitleClass}>{title}</h2>
+          {subtitle ? (
+            <p className="mt-1.5 text-sm leading-relaxed text-slate-500 dark:text-slate-400">{subtitle}</p>
+          ) : null}
         </div>
         {onEdit ? (
           <button type="button" onClick={onEdit} className={profileEditBtnClass} aria-label={editLabel}>
@@ -43,9 +54,9 @@ export function ProfileSectionCard({
 
 export function ProfileField({ label, value, className }: { label: string; value: React.ReactNode; className?: string }) {
   return (
-    <div className={cn('border-b border-slate-100 py-3 last:border-0 dark:border-slate-800', className)}>
-      <p className="text-xs font-medium text-slate-500 dark:text-slate-400">{label}</p>
-      <div className="mt-1 text-sm font-semibold text-slate-900 dark:text-slate-50">{value}</div>
+    <div className={cn(profileFieldWrapperClass, className)}>
+      <p className={profileLabelClass}>{label}</p>
+      <div className={profileValueClass}>{value}</div>
     </div>
   )
 }

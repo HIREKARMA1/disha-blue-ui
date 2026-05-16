@@ -44,28 +44,28 @@ const DOCS = [
 export function ProfileIdentityVerification({ profile, onEdit }: ProfileIdentityVerificationProps) {
   return (
     <ProfileSectionCard id="profile-section-documents" title="Identity Verification" onEdit={onEdit}>
-      <div className="space-y-3">
+      <div className="flex flex-col gap-4">
         {DOCS.map((doc) => {
           const url = doc.getUrl(profile)
           return (
             <div
               key={doc.key}
-              className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-slate-200 bg-slate-50/50 px-4 py-3 dark:border-slate-700 dark:bg-slate-800/40"
+              className="flex flex-col gap-4 rounded-xl border border-slate-200 bg-slate-50/60 p-5 sm:flex-row sm:items-center sm:justify-between dark:border-slate-700 dark:bg-slate-800/40"
             >
-              <div className="flex min-w-0 items-center gap-3">
-                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white text-primary-600 shadow-sm dark:bg-slate-900">
-                  {doc.primary ? <Shield className="h-5 w-5" /> : <Info className="h-5 w-5 text-slate-500" />}
+              <div className="flex min-w-0 items-start gap-4">
+                <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-white text-primary-600 shadow-sm dark:bg-slate-900">
+                  {doc.primary ? <Shield className="h-6 w-6" /> : <Info className="h-6 w-6 text-slate-500" />}
                 </span>
                 <div className="min-w-0">
-                  <p className="text-sm font-semibold text-slate-900 dark:text-slate-50">{doc.title}</p>
-                  <p className="text-xs text-slate-500">{doc.subtitle}</p>
+                  <p className="text-base font-semibold text-slate-900 dark:text-slate-50">{doc.title}</p>
+                  <p className="mt-1 text-sm leading-relaxed text-slate-500">{doc.subtitle}</p>
                 </div>
               </div>
               {url ? (
                 <Button
                   type="button"
-                  size="sm"
-                  className="rounded-lg bg-primary-600 hover:bg-primary-700"
+                  size="lg"
+                  className="h-12 w-full shrink-0 rounded-xl bg-primary-600 text-base hover:bg-primary-700 sm:h-10 sm:w-auto sm:min-w-[100px]"
                   onClick={() => window.open(url, '_blank')}
                 >
                   View
@@ -73,9 +73,9 @@ export function ProfileIdentityVerification({ profile, onEdit }: ProfileIdentity
               ) : (
                 <Button
                   type="button"
-                  size="sm"
+                  size="lg"
                   variant="secondary"
-                  className="rounded-lg"
+                  className="h-12 w-full rounded-xl text-base sm:h-10 sm:w-auto sm:min-w-[100px]"
                   onClick={onEdit}
                 >
                   Upload

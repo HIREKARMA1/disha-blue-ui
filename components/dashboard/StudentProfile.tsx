@@ -257,7 +257,7 @@ const showSuccessToast = options?.showSuccessToast ?? true
 
  return (
  <StudentDashboardLayout>
- <motion.div className="w-full">
+ <div className="w-full min-w-0">
  <StudentProfilePageLayout
  profile={profile}
  applicationsCount={applicationsCount}
@@ -282,7 +282,7 @@ const showSuccessToast = options?.showSuccessToast ?? true
  imageUrl={imageModal.imageUrl}
  altText={imageModal.altText}
  />
- </motion.div>
+ </div>
  </StudentDashboardLayout>
  )
 }
