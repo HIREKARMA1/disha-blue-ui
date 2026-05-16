@@ -1,5 +1,6 @@
 "use client"
 
+import dynamic from "next/dynamic"
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import axios from "axios"
@@ -40,6 +41,21 @@ import {
   toggleSavedJobId,
 } from "@/components/jobs/jobs-ui"
 import type { Job } from "@/components/jobs/AllJobs"
+import type { JobLocationCluster } from "../utils/indiaGeo"
+
+const JobsIndiaMapView = dynamic(
+  () => import("./JobsIndiaMapView").then((m) => m.JobsIndiaMapView),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="flex h-[min(72vh,640px)] min-h-[420px] items-center justify-center rounded-2xl border border-[#dde3f5] bg-[#e8eef5] dark:border-blue-900/60">
+        <Loader2 className="h-8 w-8 animate-spin text-primary-600" />
+      </div>
+    ),
+  },
+)
+
+const MAP_JOBS_LIMIT = 50
 
 interface JobSearchResponse {
   jobs: Job[]
@@ -121,6 +137,7 @@ export function LiveJobsView({ variant = "public" }: LiveJobsViewProps) {
   const [savedJobIds, setSavedJobIds] = useState<string[]>([])
   const [showMobileFilters, setShowMobileFilters] = useState(false)
   const [viewMode, setViewMode] = useState<JobsViewMode>("list")
+  const [selectedMapClusterId, setSelectedMapClusterId] = useState<string | null>(null)
 
   // Selected job for modals
   const [selectedJob, setSelectedJob] = useState<Job | null>(null)
@@ -170,7 +187,8 @@ export function LiveJobsView({ variant = "public" }: LiveJobsViewProps) {
   }, [locationParam])
 
   const fetchJobs = useCallback(
-    async (page: number, activeFilters: JobsFilterValues) => {
+    async (page: number, activeFilters: JobsFilterValues, options?: { limit?: number }) => {
+      const requestLimit = options?.limit ?? pagination.limit
       abortControllerRef.current?.abort()
       const controller = new AbortController()
       abortControllerRef.current = controller
@@ -182,7 +200,7 @@ export function LiveJobsView({ variant = "public" }: LiveJobsViewProps) {
       try {
         const params = new URLSearchParams()
         params.set("page", String(page))
-        params.set("limit", String(pagination.limit))
+        params.set("limit", String(requestLimit))
 
         if (activeFilters.keyword) params.set("keyword", activeFilters.keyword)
         // Prefer URL location when present (e.g. redirect from landing hero bar)
@@ -212,7 +230,15 @@ export function LiveJobsView({ variant = "public" }: LiveJobsViewProps) {
           description: String(j.description || ""),
           job_type: String(j.job_type || ""),
           status: String(j.status || ""),
-          location: String(j.location || ""),
+          location: Array.isArray(j.location)
+            ? j.location.filter(Boolean).map(String).join(", ")
+            : j.location != null
+              ? String(j.location)
+              : "",
+          state: j.state != null ? String(j.state) : undefined,
+          district: j.district != null ? String(j.district) : undefined,
+          city_or_town: j.city_or_town != null ? String(j.city_or_town) : undefined,
+          pincode: j.pincode != null ? String(j.pincode) : undefined,
           remote_work: Boolean(j.remote_work),
           travel_required: Boolean(j.travel_required),
           salary_currency: String(j.salary_currency || "INR"),
@@ -235,24 +261,37 @@ export function LiveJobsView({ variant = "public" }: LiveJobsViewProps) {
         }))
       } catch (err: unknown) {
         if (isRequestCancelled(err) || requestId !== fetchRequestId.current) return
-        setJobs([])
         setListError(t("jobs.loadError"))
+        setPagination((prev) => ({ ...prev, total: 0, total_pages: 0 }))
+        setJobs([])
       } finally {
         if (requestId === fetchRequestId.current) {
           setLoading(false)
         }
       }
     },
-    [pagination.limit, locationParam]
+    [pagination.limit, locationParam],
   )
+
+  const jobsFetchLimit =
+    viewMode === "map"
+      ? Math.min(MAP_JOBS_LIMIT, Math.max(pagination.limit, pagination.total || pagination.limit))
+      : pagination.limit
+  const jobsFetchPage = viewMode === "map" ? 1 : pagination.page
 
   // Single fetch path — avoids duplicate requests and stale filter toasts on redirect
   useEffect(() => {
-    void fetchJobs(pagination.page, appliedFilters)
+    void fetchJobs(jobsFetchPage, appliedFilters, { limit: jobsFetchLimit })
     return () => {
       abortControllerRef.current?.abort()
     }
-  }, [pagination.page, appliedFilters, fetchJobs])
+  }, [jobsFetchPage, appliedFilters, jobsFetchLimit, fetchJobs])
+
+  const displayJobCount = listError ? jobs.length : pagination.total || jobs.length
+
+  useEffect(() => {
+    setSelectedMapClusterId(null)
+  }, [appliedFilters, viewMode])
 
   const handleApplyFilters = (page = 1) => {
     setAppliedFilters(filters)
@@ -358,6 +397,17 @@ export function LiveJobsView({ variant = "public" }: LiveJobsViewProps) {
   const jobDetailsPath = (id: string) =>
     isDashboard ? dashboardJobDetailsPath(id) : `/jobs/${id}`
 
+  const handleViewModeChange = (mode: JobsViewMode) => {
+    setViewMode(mode)
+    if (mode === "map") {
+      setPagination((prev) => ({ ...prev, page: 1 }))
+    }
+  }
+
+  const handleMapClusterSelect = (cluster: JobLocationCluster | null) => {
+    setSelectedMapClusterId(cluster?.id ?? null)
+  }
+
   const skeletonItems = Array.from({ length: 6 })
   const pageStart = pagination.total > 0 ? (pagination.page - 1) * pagination.limit + 1 : 0
   const pageEnd = Math.min(pagination.page * pagination.limit, pagination.total || jobs.length)
@@ -370,16 +420,7 @@ export function LiveJobsView({ variant = "public" }: LiveJobsViewProps) {
       )}
     >
       {isDashboard ? (
-        <JobsDiscoveryHeader
-          viewMode={viewMode}
-          onViewModeChange={(mode) => {
-            if (mode === "map") {
-              toast("Map view is coming soon", { icon: "🗺️" })
-              return
-            }
-            setViewMode(mode)
-          }}
-        />
+        <JobsDiscoveryHeader viewMode={viewMode} onViewModeChange={handleViewModeChange} />
       ) : (
         <div className="mb-4 lg:hidden">
           <JobsBreadcrumb items={[{ label: "Job Search" }]} homeHref="/" />
@@ -422,20 +463,10 @@ export function LiveJobsView({ variant = "public" }: LiveJobsViewProps) {
               onOpenFilters={() => setShowMobileFilters(true)}
               className="min-w-0 flex-1"
             />
-            <JobsViewModeToggle
-              value={viewMode}
-              onChange={(mode) => {
-                if (mode === "map") {
-                  toast("Map view is coming soon", { icon: "🗺️" })
-                  return
-                }
-                setViewMode(mode)
-              }}
-              compact
-            />
+            <JobsViewModeToggle value={viewMode} onChange={handleViewModeChange} compact />
           </div>
 
-          {listError ? (
+          {listError && jobs.length === 0 ? (
             <div
               className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800 lg:hidden dark:border-red-900/50 dark:bg-red-950/40 dark:text-red-200"
               role="alert"
@@ -460,7 +491,7 @@ export function LiveJobsView({ variant = "public" }: LiveJobsViewProps) {
             ) : (
               <>
                 <strong className="font-bold text-[#0a0e1a] dark:text-white">
-                  {pagination.total || jobs.length}
+                  {displayJobCount}
                 </strong>{" "}
                 {isDashboard ? "jobs that match your search" : "roles found"}
               </>
@@ -469,7 +500,7 @@ export function LiveJobsView({ variant = "public" }: LiveJobsViewProps) {
 
           {/* Search + count bar — desktop */}
           <div className="hidden flex-col gap-3 lg:flex lg:flex-row lg:items-center lg:justify-between">
-            {listError ? (
+            {listError && jobs.length === 0 ? (
               <div
                 className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800 dark:border-red-900/50 dark:bg-red-950/40 dark:text-red-200"
                 role="alert"
@@ -524,14 +555,26 @@ export function LiveJobsView({ variant = "public" }: LiveJobsViewProps) {
                 </span>
               ) : (
                 <span>
-                  <strong className="font-semibold text-[#0a0e1a] dark:text-white">{pagination.total || jobs.length}</strong> {isDashboard ? "jobs that match your search" : "roles found"}
+                  <strong className="font-semibold text-[#0a0e1a] dark:text-white">{displayJobCount}</strong> {isDashboard ? "jobs that match your search" : "roles found"}
                 </span>
               )}
             </p>
           </div>
 
+          {viewMode === "map" ? (
+            <JobsIndiaMapView
+              jobs={jobs}
+              loading={loading}
+              selectedClusterId={selectedMapClusterId}
+              onSelectCluster={handleMapClusterSelect}
+              applyingJobId={applyingJobId}
+              onViewDetails={(job) => router.push(jobDetailsPath(job.id))}
+              onApply={handleApplyClick}
+            />
+          ) : null}
+
           {/* Job listing */}
-          {loading ? (
+          {viewMode === "list" && loading ? (
             <div className="space-y-4">
               {skeletonItems.map((_, i) => (
                 <div
@@ -554,7 +597,7 @@ export function LiveJobsView({ variant = "public" }: LiveJobsViewProps) {
                 </div>
               ))}
             </div>
-          ) : jobs.length === 0 ? (
+          ) : viewMode === "list" && jobs.length === 0 ? (
             <div className="flex flex-col items-center justify-center gap-4 rounded-2xl border border-[#dde3f5] bg-white px-6 py-16 text-center dark:border-blue-900/50 dark:bg-slate-900">
               <p className="text-xl font-bold text-[#0a0e1a] dark:text-white">No roles found</p>
               <p className="max-w-sm text-sm text-[#7a85a8] dark:text-blue-300/80">
@@ -568,7 +611,7 @@ export function LiveJobsView({ variant = "public" }: LiveJobsViewProps) {
                 Clear filters
               </button>
             </div>
-          ) : (
+          ) : viewMode === "list" ? (
             <div className="space-y-3 sm:space-y-4">
               {jobs.map((job) => (
                 <PublicJobListingCard
@@ -587,10 +630,10 @@ export function LiveJobsView({ variant = "public" }: LiveJobsViewProps) {
                 />
               ))}
             </div>
-          )}
+          ) : null}
 
           {/* Pagination */}
-          {pagination.total_pages > 1 && !loading && (
+          {viewMode === "list" && pagination.total_pages > 1 && !loading && (
             <div className="space-y-3 pt-2">
               <p className="text-center text-xs font-medium text-[#7a85a8] sm:text-sm dark:text-blue-300/80">
                 Showing {pageStart} to {pageEnd} of {pagination.total} results

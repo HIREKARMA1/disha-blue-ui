@@ -26,6 +26,78 @@ body.hide-sidebar .main-navbar {
   .dashboard-overview-card-interactive {
     @apply rounded-2xl border border-slate-200/90 bg-white shadow-[0_4px_24px_-6px_rgba(0,82,204,0.09)] transition-all duration-200 hover:border-blue-600/55 hover:bg-blue-50/45 hover:shadow-[0_8px_28px_-8px_rgba(0,82,204,0.11)] dark:border-blue-800/65 dark:bg-slate-800/35 dark:shadow-none dark:hover:border-blue-600/85 dark:hover:bg-blue-900/55;
   }
+
+  /* Jobs map markers (Leaflet divIcon) */
+  .jobs-map-marker {
+    background: transparent !important;
+    border: none !important;
+  }
+
+  .jobs-map-marker-pin {
+    position: relative;
+    width: 48px;
+    height: 48px;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+  }
+
+  .jobs-map-marker-pin:hover {
+    transform: scale(1.06);
+  }
+
+  .jobs-map-marker-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 46px;
+    height: 46px;
+    border-radius: 9999px;
+    background: linear-gradient(165deg, #0066ff 0%, #0047b3 100%);
+    border: 3.5px solid #ffffff;
+    box-shadow:
+      0 6px 16px rgba(0, 71, 179, 0.65),
+      0 0 0 1px rgba(0, 40, 120, 0.15);
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+    transition:
+      background 0.25s ease,
+      transform 0.25s ease,
+      box-shadow 0.25s ease;
+  }
+
+  .jobs-map-marker-icon svg {
+    filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.15));
+  }
+
+  .jobs-map-marker-pin--active .jobs-map-marker-icon {
+    background: linear-gradient(165deg, #fb923c 0%, #ea580c 100%);
+    transform: scale(1.1);
+    border-color: #fffbeb;
+    box-shadow:
+      0 8px 20px rgba(234, 88, 12, 0.6),
+      0 0 0 3px rgba(251, 146, 60, 0.35);
+  }
+
+  .jobs-map-marker-badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    min-width: 22px;
+    height: 22px;
+    padding: 0 6px;
+    border-radius: 9999px;
+    background: #dc2626;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 800;
+    line-height: 22px;
+    text-align: center;
+    border: 2.5px solid #ffffff;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
+  }
+
+  .leaflet-container {
+    font-family: inherit;
+  }
 }
 
 @layer base {
