@@ -33,21 +33,21 @@ interface StudentSidebarProps {
 
 const navItems: NavItem[] = [
   { label: 'Home', href: '/dashboard/student', icon: Home },
-  { label: 'Profile', href: '/dashboard/student/profile', icon: UserCircle2 },
-  { label: 'Applications', href: '/dashboard/student/applications', icon: ClipboardList },
   {
     label: 'Local Jobs',
     href: '/dashboard/discover-jobs',
     aliases: ['/dashboard/student/jobs'],
     icon: Compass,
   },
+  { label: 'Applications', href: '/dashboard/student/applications', icon: ClipboardList },
+  { label: 'Profile', href: '/dashboard/student/profile', icon: UserCircle2 },
 ]
 
 const bottomTabHrefs = [
   '/dashboard/student',
-  '/dashboard/student/profile',
-  '/dashboard/student/applications',
   '/dashboard/discover-jobs',
+  '/dashboard/student/applications',
+  '/dashboard/student/profile',
 ] as const
 
 export function StudentSidebar({ className = '' }: StudentSidebarProps) {

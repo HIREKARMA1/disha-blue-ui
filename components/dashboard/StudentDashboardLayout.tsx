@@ -35,10 +35,10 @@ function StudentDashboardContent({ children }: StudentDashboardLayoutProps) {
  const { user } = useAuth()
   const featureCards: FeatureCard[] = [
     {
-      label: 'Profile',
-      href: '/dashboard/student/profile',
-      description: 'Manage personal and academic details',
-      icon: UserCircle2,
+      label: 'Local Jobs',
+      href: '/dashboard/discover-jobs',
+      description: 'Discover nearby and personalized openings',
+      icon: Compass,
     },
     {
       label: 'Applications',
@@ -47,10 +47,10 @@ function StudentDashboardContent({ children }: StudentDashboardLayoutProps) {
       icon: ClipboardList,
     },
     {
-      label: 'Local Jobs',
-      href: '/dashboard/discover-jobs',
-      description: 'Discover nearby and personalized openings',
-      icon: Compass,
+      label: 'Profile',
+      href: '/dashboard/student/profile',
+      description: 'Manage personal and academic details',
+      icon: UserCircle2,
     },
   ]
 
