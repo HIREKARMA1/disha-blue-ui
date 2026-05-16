@@ -14,13 +14,8 @@ import { useSidebarPreviewMode } from '@/hooks/useSidebarPreviewMode'
 import {
   Compass,
   UserCircle2,
-  FileText,
-  MessagesSquare,
-  GraduationCap,
-  Mic,
   ClipboardList,
-  Bot,
-  Film,
+  Home,
   type LucideIcon,
 } from 'lucide-react'
 interface StudentDashboardLayoutProps {
@@ -41,34 +36,16 @@ function StudentDashboardContent({ children }: StudentDashboardLayoutProps) {
  const { user } = useAuth()
   const featureCards: FeatureCard[] = [
     {
-      label: 'AI Interview Session',
-      href: '/dashboard/student/career-align',
-      description: 'Mock interviews with live AI guidance',
-      icon: MessagesSquare,
+      label: 'Home',
+      href: '/dashboard/student',
+      description: 'Your career dashboard and quick overview',
+      icon: Home,
     },
     {
-      label: 'AI Communication Assessments',
-      href: '/ai-communication',
-      description: 'Practice speaking and communication skills',
-      icon: Mic,
-    },
-    {
-      label: 'Build with AI',
-      href: '/dashboard/student/resume/ai',
-      description: 'Generate and improve your resume with AI',
-      icon: Bot,
-    },
-    {
-      label: 'Resume Builder',
-      href: '/dashboard/student/resume-builder',
-      description: 'Create polished resumes quickly',
-      icon: FileText,
-    },
-    {
-      label: 'Courses',
-      href: '/dashboard/student/courses',
-      description: 'Learn with guided skill-based pathways',
-      icon: GraduationCap,
+      label: 'Profile',
+      href: '/dashboard/student/profile',
+      description: 'Manage personal and academic details',
+      icon: UserCircle2,
     },
     {
       label: 'Local Jobs',
@@ -82,18 +59,13 @@ function StudentDashboardContent({ children }: StudentDashboardLayoutProps) {
       description: 'Track all job applications in one place',
       icon: ClipboardList,
     },
-    {
-      label: 'Video Search',
-      href: '/dashboard/student/video-search',
-      description: 'Learn through short video explainers',
-      icon: Film,
-    },
-    {
-      label: 'Profile',
-      href: '/dashboard/student/profile',
-      description: 'Manage personal and academic details',
-      icon: UserCircle2,
-    },
+    // Hidden — re-enable when ready
+    // { label: 'AI Interview Session', href: '/dashboard/student/career-align', description: '...', icon: MessagesSquare },
+    // { label: 'AI Communication Assessments', href: '/ai-communication', description: '...', icon: Mic },
+    // { label: 'Build with AI', href: '/dashboard/student/resume/ai', description: '...', icon: Bot },
+    // { label: 'Resume Builder', href: '/dashboard/student/resume-builder', description: '...', icon: FileText },
+    // { label: 'Courses', href: '/dashboard/student/courses', description: '...', icon: GraduationCap },
+    // { label: 'Video Search', href: '/dashboard/student/video-search', description: '...', icon: Film },
   ]
 
  // Check student access and fetch profile
@@ -153,10 +125,10 @@ function StudentDashboardContent({ children }: StudentDashboardLayoutProps) {
  <div className="space-y-6">
  <WelcomeMessage studentName={studentName} />
                   <div className="dashboard-overview-card p-4 sm:p-5">
-                    <p className="text-xs font-semibold uppercase tracking-[0.14em] text-blue-700 dark:text-blue-300">All features</p>
-                    <h3 className="mt-2 font-display text-lg font-semibold text-slate-900 sm:text-xl dark:text-blue-50">Explore every tool</h3>
-                    <p className="mt-1 text-sm text-slate-700 dark:text-blue-200">Click any card to open that feature directly.</p>
-                    <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3">
+                    <p className="text-xs font-semibold uppercase tracking-[0.14em] text-blue-700 dark:text-blue-300">Quick access</p>
+                    <h3 className="mt-2 font-display text-lg font-semibold text-slate-900 sm:text-xl dark:text-blue-50">Your essentials</h3>
+                    <p className="mt-1 text-sm text-slate-700 dark:text-blue-200">Jump to profile, local jobs, or your applications.</p>
+                    <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
                       {featureCards.map((feature) => (
                         <Link
                           key={feature.href}
