@@ -147,7 +147,7 @@ const statusCounts = applications.reduce((acc, app) => {
 
  return (
  <StudentDashboardLayout>
- <div className="space-y-6">
+ <div className="space-y-4 pb-4 sm:space-y-6 sm:pb-6">
  {/* Application Management Header */}
  <StudentApplicationManagementHeader
  totalApplications={totalApplications}
@@ -163,10 +163,10 @@ const statusCounts = applications.reduce((acc, app) => {
  />
 
  {/* Applications Table */}
- {!loading && (
- <div className="dashboard-overview-card px-4 py-2.5 text-xs font-medium text-slate-600 dark:text-blue-200/85">
- Showing {applications.length} applications on this page
- </div>
+ {!loading && applications.length > 0 && (
+ <p className="text-sm font-medium text-slate-600 dark:text-slate-400">
+ Showing {applications.length} of {pagination.total} application{pagination.total === 1 ? '' : 's'}
+ </p>
  )}
  <StudentApplicationTable
  applications={applications}

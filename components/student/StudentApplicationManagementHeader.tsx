@@ -4,8 +4,6 @@ import { motion } from 'framer-motion'
 import { Search, Filter, FileText, Users, CheckCircle, XCircle, Clock, UserCheck, Download } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
-import { jobsHeroClass, jobsSurfaceClass } from '@/components/jobs/jobs-ui'
-
 interface StudentApplicationManagementHeaderProps {
   totalApplications: number
   appliedApplications: number
@@ -94,7 +92,7 @@ export function StudentApplicationManagementHeader({
   initial={{ opacity: 0, y: 16 }}
   animate={{ opacity: 1, y: 0 }}
   transition={{ duration: 0.45 }}
-  className={jobsHeroClass}
+  className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6 dark:border-slate-800 dark:bg-slate-900"
   >
   <p className="font-display text-xs font-semibold uppercase tracking-[0.2em] text-primary">Pipeline</p>
   <h1 className="font-display mt-3 text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
@@ -108,7 +106,7 @@ export function StudentApplicationManagementHeader({
   </div>
   </motion.div>
 
-  <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6 lg:gap-4">
+  <div className="-mx-1 flex gap-3 overflow-x-auto px-1 pb-1 snap-x snap-mandatory scrollbar-hide lg:mx-0 lg:grid lg:grid-cols-6 lg:gap-3 lg:overflow-visible lg:pb-0">
   {statusOptions.map((option, index) => {
   const style = getStatusCardStyle(option.value)
   return (
@@ -117,15 +115,14 @@ export function StudentApplicationManagementHeader({
   initial={{ opacity: 0, y: 12 }}
   animate={{ opacity: 1, y: 0 }}
   transition={{ duration: 0.4, delay: index * 0.05 }}
-  className="w-full"
+  className="w-[8.5rem] shrink-0 snap-start lg:w-full"
   >
   <button
   type="button"
   onClick={() => onFilterChange(option.value)}
   className={cn(
-  'group flex w-full flex-col rounded-2xl border border-border/80 bg-card p-4 text-left shadow-sm transition-all hover:border-primary/30 hover:shadow-md',
-  filterStatus === option.value && 'ring-2 ring-primary/25 border-primary/35',
-  style.bg,
+  'group flex h-full w-full flex-col rounded-xl border border-slate-200 bg-white p-3.5 text-left shadow-sm transition-all hover:border-primary-300 hover:shadow-md dark:border-slate-700 dark:bg-slate-900',
+  filterStatus === option.value && 'border-primary-500 ring-2 ring-primary-500/20',
   )}
   >
   <div className="flex items-start justify-between gap-2">
@@ -142,7 +139,7 @@ export function StudentApplicationManagementHeader({
   <span className={style.color}>{getStatusIcon(option.value)}</span>
   </span>
   </div>
-  <p className="font-display mt-2 text-2xl font-bold tabular-nums text-foreground">
+  <p className="mt-2 text-xl font-bold tabular-nums text-slate-900 dark:text-slate-50">
   {option.count}
   </p>
   </button>
@@ -151,7 +148,7 @@ export function StudentApplicationManagementHeader({
   })}
   </div>
 
-  <div className={cn(jobsSurfaceClass, 'p-4 sm:p-5')}>
+  <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5 dark:border-slate-800 dark:bg-slate-900">
   <div className="flex flex-col gap-3 lg:flex-row lg:items-center">
   <div className="relative min-w-0 flex-1">
   <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
@@ -160,7 +157,7 @@ export function StudentApplicationManagementHeader({
   placeholder="Job title, company, status…"
   value={searchTerm}
   onChange={(e) => onSearchChange(e.target.value)}
-  className="h-11 w-full rounded-xl border border-input bg-background pl-10 pr-4 text-sm font-medium text-foreground placeholder:text-muted-foreground shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+  className="h-11 w-full rounded-xl border border-slate-200 bg-slate-50 pl-10 pr-4 text-sm font-medium text-slate-900 placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500/30 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100"
   />
   </div>
 
@@ -169,7 +166,7 @@ export function StudentApplicationManagementHeader({
   <select
   value={filterStatus}
   onChange={(e) => onFilterChange(e.target.value)}
-  className="h-11 w-full appearance-none rounded-xl border border-input bg-background pl-10 pr-3 text-sm font-medium text-foreground shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+  className="h-11 w-full appearance-none rounded-xl border border-slate-200 bg-slate-50 pl-10 pr-3 text-sm font-medium text-slate-900 shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500/30 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100"
   >
   {statusOptions.map((option) => (
   <option key={option.value} value={option.value}>
