@@ -12,7 +12,7 @@ interface DashboardTopbarProps {
 const roleMeta = {
  student: {
  label:"Student Workspace",
- description:"Track opportunities, applications, and career growth in one place.",
+ description:"Manage your profile, applications, and local job opportunities.",
  },
  corporate: {
  label:"Recruiter Workspace",

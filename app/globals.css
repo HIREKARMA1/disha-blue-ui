@@ -380,10 +380,14 @@ html, body {
   height: 100%;
 }
 
-/* Ensure bottom navbar is always visible */
+/* Mobile dashboard bottom tab bar — only when StudentSidebar mounts MobileBottomNav */
 @media (max-width: 1023px) {
-  body {
-    padding-bottom: calc(4rem + env(safe-area-inset-bottom));
+  body.has-mobile-bottom-nav {
+    padding-bottom: calc(5.25rem + env(safe-area-inset-bottom));
+  }
+
+  .student-mobile-nav {
+    z-index: 200;
   }
 }
 

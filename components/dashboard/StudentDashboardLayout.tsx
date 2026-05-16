@@ -35,10 +35,10 @@ function StudentDashboardContent({ children }: StudentDashboardLayoutProps) {
  const { user } = useAuth()
   const featureCards: FeatureCard[] = [
     {
-      label: 'Local Jobs',
-      href: '/dashboard/discover-jobs',
-      description: 'Discover nearby and personalized openings',
-      icon: Compass,
+      label: 'Profile',
+      href: '/dashboard/student/profile',
+      description: 'Manage personal and academic details',
+      icon: UserCircle2,
     },
     {
       label: 'Applications',
@@ -47,10 +47,10 @@ function StudentDashboardContent({ children }: StudentDashboardLayoutProps) {
       icon: ClipboardList,
     },
     {
-      label: 'Profile',
-      href: '/dashboard/student/profile',
-      description: 'Manage personal and academic details',
-      icon: UserCircle2,
+      label: 'Local Jobs',
+      href: '/dashboard/discover-jobs',
+      description: 'Discover nearby and personalized openings',
+      icon: Compass,
     },
   ]
 
@@ -113,7 +113,9 @@ function StudentDashboardContent({ children }: StudentDashboardLayoutProps) {
                   <div className="dashboard-overview-card p-4 sm:p-5">
                     <p className="text-xs font-semibold uppercase tracking-[0.14em] text-blue-700 dark:text-blue-300">Quick access</p>
                     <h3 className="mt-2 font-display text-lg font-semibold text-slate-900 sm:text-xl dark:text-blue-50">Your essentials</h3>
-                    <p className="mt-1 text-sm text-slate-700 dark:text-blue-200">Jump to local jobs, applications, or your profile.</p>
+                    <p className="mt-1 text-sm text-slate-700 dark:text-blue-200">
+                      Profile, applications, and local jobs — everything you need in one place.
+                    </p>
                     <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
                       {featureCards.map((feature) => (
                         <Link

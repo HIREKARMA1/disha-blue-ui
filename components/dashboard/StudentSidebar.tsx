@@ -44,6 +44,8 @@ export function StudentSidebar({ className = '' }: StudentSidebarProps) {
       title: 'Overview',
       items: [
         { label: 'Home', href: '/dashboard/student', icon: Home, description: 'Your career control center' },
+        { label: 'Profile', href: '/dashboard/student/profile', icon: UserCircle2, description: 'Personal details and identity' },
+        { label: 'Applications', href: '/dashboard/student/applications', icon: ClipboardList, description: 'Track your pipeline status' },
         {
           label: 'Local Jobs',
           href: '/dashboard/discover-jobs',
@@ -51,30 +53,25 @@ export function StudentSidebar({ className = '' }: StudentSidebarProps) {
           icon: Compass,
           description: 'Local and personalized roles',
         },
-        {
-          label: 'Applications',
-          href: '/dashboard/student/applications',
-          icon: ClipboardList,
-          description: 'Track your pipeline status',
-        },
-        { label: 'Profile', href: '/dashboard/student/profile', icon: UserCircle2, description: 'Personal details and identity' },
-        // Hidden — re-enable when ready
-        // { label: 'AI Interview Session', href: '/dashboard/student/career-align', icon: MessagesSquare, description: 'Mock interview with live AI coach' },
-        // { label: 'AI Communication Assessments', href: '/ai-communication', icon: Mic, description: 'Voice-based communication coaching' },
-        // { label: 'Build with AI', href: '/dashboard/student/resume/ai', icon: Bot, description: 'Generate resume using AI' },
-        // { label: 'Resume Builder', href: '/dashboard/student/resume-builder', icon: FileText, description: 'Craft and iterate quickly' },
-        // { label: 'Courses', href: '/dashboard/student/courses', aliases: ['/courses', '/dashboard/student/library'], icon: GraduationCap, description: 'Voice-first skill learning paths' },
-        // { label: 'Video Search', href: '/dashboard/student/video-search', icon: Film, description: 'Learn from short explainers' },
       ],
     },
   ]
+
+  // Hidden nav items — restore when re-enabling features
+  // { label:'AI Interview Session', href:'/dashboard/student/career-align', icon: MessagesSquare, ... },
+  // { label:'AI Communication Assessments', href:'/ai-communication', icon: Mic, ... },
+  // { label:'Build with AI', href:'/dashboard/student/resume/ai', icon: Bot, ... },
+  // { label:'Resume Builder', href:'/dashboard/student/resume-builder', icon: FileText, ... },
+  // { label:'Courses', href:'/dashboard/student/courses', aliases: ['/courses', '/dashboard/student/library'], icon: GraduationCap, ... },
+  // { label:'Video Search', href:'/dashboard/student/video-search', icon: Film, ... },
+
   const allItems = navGroups.flatMap((group) => group.items)
 
   const bottomTabHrefs = [
     '/dashboard/student',
-    '/dashboard/discover-jobs',
-    '/dashboard/student/applications',
     '/dashboard/student/profile',
+    '/dashboard/student/applications',
+    '/dashboard/discover-jobs',
   ] as const
 
   const bottomTabs = bottomTabHrefs
@@ -94,7 +91,8 @@ export function StudentSidebar({ className = '' }: StudentSidebarProps) {
     if (item.aliases?.includes(pathname || '')) return true
     if (
       item.href === '/dashboard/discover-jobs' &&
-      (pathname?.startsWith('/dashboard/discover-jobs') || pathname?.startsWith('/dashboard/student/jobs'))
+      (pathname?.startsWith('/dashboard/discover-jobs') ||
+        pathname?.startsWith('/dashboard/student/jobs'))
     ) {
       return true
     }
@@ -107,6 +105,7 @@ export function StudentSidebar({ className = '' }: StudentSidebarProps) {
 
   return (
     <>
+      {/* Desktop: slim blue-50 icon rail */}
       <aside
         className={cn(
           'student-sidebar fixed inset-y-0 left-0 z-40 hidden w-16 flex-col bg-blue-50 pt-16 dark:bg-blue-950 lg:flex',
@@ -149,12 +148,17 @@ export function StudentSidebar({ className = '' }: StudentSidebarProps) {
               ? 'Jobs'
               : item.href === '/dashboard/student/applications'
                 ? 'Apps'
-                : undefined,
+                : item.href === '/dashboard/student/profile'
+                  ? 'Profile'
+                  : undefined,
           href: item.href,
           icon: item.icon,
           isActive: isItemActive(item),
           onNavigate: () => !isItemActive(item) && startLoading(),
         }))}
+        // Account tab + drawer (mobile) — disabled
+        // moreLabel="Account"
+        // onMoreClick={() => setIsMobileMenuOpen(true)}
       />
     </>
   )
