@@ -28,7 +28,7 @@ import {
 } from '@/components/ui/nav-marketing-styles'
 import { STUDENT_SIGNUP_ROUTE } from '@/features/landing/constants'
 
-const HIRE_WORKERS_ROUTE = '/signup?type=corporate'
+const HIRE_WORKERS_ROUTE = '/signup/corporate'
 
 interface NavbarProps {
   variant?: 'default' | 'transparent' | 'solid'

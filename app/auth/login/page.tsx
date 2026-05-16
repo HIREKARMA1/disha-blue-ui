@@ -117,8 +117,8 @@ export default function LoginPage() {
   const redirectUrl = searchParams.get('redirect') || localStorage.getItem('redirect_after_login')
       const base =
   selectedUserType === "corporate"
-  ? "/signup?type=corporate"
-  : "/signup"
+  ? "/signup/corporate"
+  : "/signup/student"
       const link = redirectUrl
   ? `${base}${base.includes("?") ? "&" : "?"}redirect=${encodeURIComponent(redirectUrl)}`
   : base

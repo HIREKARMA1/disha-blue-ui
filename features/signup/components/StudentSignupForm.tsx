@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { Mail, Phone, UserRound } from "lucide-react"
+import { ChevronLeft, Mail, Phone, UserRound } from "lucide-react"
 import { toast } from "react-hot-toast"
 import { Button } from "@/components/ui/button"
 import { apiClient } from "@/lib/api"
@@ -14,8 +14,11 @@ import { useColleges } from "@/hooks/useLookup"
 import type { StudentRegisterRequest } from "@/types/auth"
 import { SignupOtpModal } from "./SignupOtpModal"
 import { SignupLabeledField } from "./fields/SignupLabeledField"
+import { SignupPlainField } from "./fields/SignupPlainField"
 import { DualPasswordFields } from "./fields/DualPasswordFields"
 import { InstitutionSearchField } from "./fields/InstitutionSearchField"
+import { SignupContinueButton } from "./SignupContinueButton"
+import { cn } from "@/lib/utils"
 import { signupCardClass, signupPrimaryButtonClass } from "./signupStyles"
 import {
   sanitizeEmailInput,
@@ -29,9 +32,11 @@ import { loginAfterSignup, SIGNUP_DASHBOARD_PATH } from "../utils/postSignupAuth
 
 type Props = {
   loginHref: string
+  /** When true, form renders inside SignupMarketingLayout card (no outer card/title). */
+  embedded?: boolean
 }
 
-export function StudentSignupForm({ loginHref }: Props) {
+export function StudentSignupForm({ loginHref, embedded = false }: Props) {
   const router = useRouter()
   const { login } = useAuth()
   const { t } = useTranslation()
@@ -55,12 +60,21 @@ export function StudentSignupForm({ loginHref }: Props) {
   const [verifying, setVerifying] = useState(false)
   const [resending, setResending] = useState(false)
   const [otpError, setOtpError] = useState("")
+  const [step, setStep] = useState<1 | 2>(1)
 
   useEffect(() => {
     setName((n) => sanitizePersonName(n))
     setPhone((p) => sanitizePhoneInput(p))
     setEmail((e) => sanitizeEmailInput(e))
   }, [])
+
+  const validatePhoneStep = () => {
+    const e: Record<string, string> = {}
+    const phoneErr = validatePhone(phone, true)
+    if (phoneErr) e.phone = phoneErr
+    setFieldErrors(e)
+    return Object.keys(e).length === 0
+  }
 
   const validate = () => {
     const e: Record<string, string> = {}
@@ -75,6 +89,20 @@ export function StudentSignupForm({ loginHref }: Props) {
     setFieldErrors(e)
     return Object.keys(e).length === 0
   }
+
+  const handleContinueStep1 = () => {
+    if (!validatePhoneStep()) return
+    setStep(2)
+  }
+
+  const phoneDigits = sanitizePhoneInput(phone)
+  const isPhoneStepReady = phoneDigits.length === 10
+  const isDetailsStepReady =
+    name.trim().length > 0 &&
+    email.trim().length > 0 &&
+    password.length >= 8 &&
+    confirm.length >= 8 &&
+    password === confirm
 
   const clearError = (key: string) => {
     setFieldErrors((prev) => {
@@ -150,86 +178,211 @@ export function StudentSignupForm({ loginHref }: Props) {
     }
   }
 
-  return (
-    <div className={signupCardClass}>
-      <h1 className="text-xl font-semibold tracking-tight text-slate-900 dark:text-white sm:text-2xl">{t("signup.student.title")}</h1>
-      <p className="mt-1 text-sm text-slate-600 dark:text-blue-200/85">{t("signup.student.subtitle")}</p>
-
-      <div className="mt-6 space-y-4 sm:space-y-5">
-        <SignupLabeledField
-          id="su-name"
-          label={t("signup.student.fullName")}
-          required
-          icon={UserRound}
-          filter="personName"
-          autoComplete="name"
-          placeholder={t("signup.student.namePlaceholder")}
-          value={name}
-          onChange={(v) => {
-            setName(v)
-            clearError("name")
-          }}
-          error={fieldErrors.name}
-          disabled={sending || verifying}
-        />
-        <SignupLabeledField
-          id="su-phone"
-          label={t("signup.student.phone")}
-          required
-          icon={Phone}
-          filter="phone"
-          autoComplete="tel-national"
-          placeholder={t("signup.student.phonePlaceholder")}
-          value={phone}
-          onChange={(v) => {
-            setPhone(v)
-            clearError("phone")
-          }}
-          error={fieldErrors.phone}
-          disabled={sending || verifying}
-        />
-        <InstitutionSearchField
-          value={institution}
-          onChange={setInstitution}
-          suggestions={suggestions}
-          loading={collegesLoading}
-          disabled={sending || verifying}
-        />
-        <SignupLabeledField
-          id="su-email"
-          label={t("signup.student.email")}
-          required
-          icon={Mail}
-          type="email"
-          autoComplete="email"
-          placeholder={t("signup.student.emailPlaceholder")}
-          value={email}
-          filter="email"
-          onChange={(v) => {
-            setEmail(v)
-            clearError("email")
-          }}
-          error={fieldErrors.email}
-          disabled={sending || verifying}
-        />
-        <DualPasswordFields
-          password={password}
-          confirm={confirm}
-          onPasswordChange={setPassword}
-          onConfirmChange={setConfirm}
-          passwordError={fieldErrors.password}
-          confirmError={fieldErrors.confirm}
-          disabled={sending || verifying}
-        />
-      </div>
-
-      <Button type="button" className={signupPrimaryButtonClass + " mt-6"} loading={sending} disabled={verifying} onClick={() => void sendOtp()}>
-        {t("signup.student.sendOtp")}
-      </Button>
+  const inner = (
+    <>
+      {embedded && step === 1 ? (
+        <>
+          <SignupPlainField
+            id="su-phone"
+            label={t("signup.student.phone")}
+            required
+            filter="phone"
+            autoComplete="tel-national"
+            placeholder="Enter 10-digit phone number"
+            value={phone}
+            onChange={(v) => {
+              setPhone(v)
+              clearError("phone")
+            }}
+            error={fieldErrors.phone}
+            disabled={sending || verifying}
+          />
+          <SignupContinueButton
+            className="mt-6"
+            active={isPhoneStepReady}
+            disabled={verifying}
+            onClick={handleContinueStep1}
+          />
+        </>
+      ) : embedded && step === 2 ? (
+        <>
+          <button
+            type="button"
+            onClick={() => setStep(1)}
+            className="mb-3 inline-flex items-center gap-1 text-sm font-medium text-[#1A4480] hover:underline"
+          >
+            <ChevronLeft className="h-4 w-4" />
+            Back
+          </button>
+          <div className="space-y-4">
+            <SignupPlainField
+              id="su-name"
+              label={t("signup.student.fullName")}
+              required
+              filter="personName"
+              autoComplete="name"
+              placeholder={t("signup.student.namePlaceholder")}
+              value={name}
+              onChange={(v) => {
+                setName(v)
+                clearError("name")
+              }}
+              error={fieldErrors.name}
+              disabled={sending || verifying}
+            />
+            <SignupPlainField
+              id="su-institution"
+              label="College / Institution"
+              placeholder="Search for your college…"
+              value={institution}
+              onChange={setInstitution}
+              disabled={sending || verifying}
+            />
+            <SignupPlainField
+              id="su-email"
+              label={t("signup.student.email")}
+              required
+              type="email"
+              autoComplete="email"
+              placeholder={t("signup.student.emailPlaceholder")}
+              value={email}
+              filter="email"
+              onChange={(v) => {
+                setEmail(v)
+                clearError("email")
+              }}
+              error={fieldErrors.email}
+              disabled={sending || verifying}
+            />
+            <SignupPlainField
+              id="signup-password"
+              label="Password"
+              required
+              type="password"
+              autoComplete="new-password"
+              placeholder="Create a strong password"
+              value={password}
+              onChange={(v) => {
+                setPassword(v)
+                clearError("password")
+              }}
+              error={fieldErrors.password}
+              disabled={sending || verifying}
+            />
+            <SignupPlainField
+              id="signup-password-confirm"
+              label="Confirm Password"
+              required
+              type="password"
+              autoComplete="new-password"
+              placeholder="Confirm your password"
+              value={confirm}
+              onChange={(v) => {
+                setConfirm(v)
+                clearError("confirm")
+              }}
+              error={fieldErrors.confirm}
+              disabled={sending || verifying}
+            />
+          </div>
+          <SignupContinueButton
+            className="mt-6"
+            active={isDetailsStepReady}
+            loading={sending}
+            disabled={verifying}
+            onClick={() => void sendOtp()}
+          >
+            {t("signup.student.sendOtp")}
+          </SignupContinueButton>
+        </>
+      ) : (
+        <>
+          <h1 className="text-xl font-semibold tracking-tight text-slate-900 dark:text-white sm:text-2xl">
+            {t("signup.student.title")}
+          </h1>
+          <p className="mt-1 text-sm text-slate-600 dark:text-blue-200/85">{t("signup.student.subtitle")}</p>
+          <div className="mt-6 space-y-4 sm:space-y-5">
+            <SignupLabeledField
+              id="su-name"
+              label={t("signup.student.fullName")}
+              required
+              icon={UserRound}
+              filter="personName"
+              autoComplete="name"
+              placeholder={t("signup.student.namePlaceholder")}
+              value={name}
+              onChange={(v) => {
+                setName(v)
+                clearError("name")
+              }}
+              error={fieldErrors.name}
+              disabled={sending || verifying}
+            />
+            <SignupLabeledField
+              id="su-phone"
+              label={t("signup.student.phone")}
+              required
+              icon={Phone}
+              filter="phone"
+              autoComplete="tel-national"
+              placeholder={t("signup.student.phonePlaceholder")}
+              value={phone}
+              onChange={(v) => {
+                setPhone(v)
+                clearError("phone")
+              }}
+              error={fieldErrors.phone}
+              disabled={sending || verifying}
+            />
+            <InstitutionSearchField
+              value={institution}
+              onChange={setInstitution}
+              suggestions={suggestions}
+              loading={collegesLoading}
+              disabled={sending || verifying}
+            />
+            <SignupLabeledField
+              id="su-email"
+              label={t("signup.student.email")}
+              required
+              icon={Mail}
+              type="email"
+              autoComplete="email"
+              placeholder={t("signup.student.emailPlaceholder")}
+              value={email}
+              filter="email"
+              onChange={(v) => {
+                setEmail(v)
+                clearError("email")
+              }}
+              error={fieldErrors.email}
+              disabled={sending || verifying}
+            />
+            <DualPasswordFields
+              password={password}
+              confirm={confirm}
+              onPasswordChange={setPassword}
+              onConfirmChange={setConfirm}
+              passwordError={fieldErrors.password}
+              confirmError={fieldErrors.confirm}
+              disabled={sending || verifying}
+            />
+          </div>
+          <Button
+            type="button"
+            className={cn(signupPrimaryButtonClass, "mt-6")}
+            loading={sending}
+            disabled={verifying}
+            onClick={() => void sendOtp()}
+          >
+            {t("signup.student.sendOtp")}
+          </Button>
+        </>
+      )}
 
       <p className="mt-5 text-center text-sm text-slate-600 dark:text-blue-200/85">
         {t("signup.student.alreadyHaveAccount")}{" "}
-        <Link href={loginHref} className="font-semibold text-blue-700 hover:underline dark:text-blue-400">
+        <Link href={loginHref} className="font-semibold text-[#1A4480] hover:underline">
           {t("common.signIn")}
         </Link>
       </p>
@@ -244,6 +397,9 @@ export function StudentSignupForm({ loginHref }: Props) {
         resending={resending}
         error={otpError}
       />
-    </div>
+    </>
   )
+  if (embedded) return inner
+
+  return <div className={signupCardClass}>{inner}</div>
 }

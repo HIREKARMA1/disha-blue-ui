@@ -1,0 +1,12 @@
+{
+  "student": {
+    "headline": "Find Your Dream Job",
+    "subheadline": "Find jobs that match your skills, experience, and goals — all in one place",
+    "cardTagline": "Get Hired in Minutes."
+  },
+  "corporate": {
+    "headline": "Hire Skilled Talent",
+    "subheadline": "Post jobs, reach candidates nearby, and build your team — all in one place",
+    "cardTagline": "Start Hiring in Minutes."
+  }
+}
