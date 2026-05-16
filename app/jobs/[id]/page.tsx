@@ -7,7 +7,7 @@ import { toast } from "react-hot-toast"
 import { Navbar } from "@/components/ui/navbar"
 import { Footer } from "@/components/ui/footer"
 import { ApplicationModal } from "@/components/dashboard/ApplicationModal"
-import { PublicJobDetailsView } from "@/features/jobs-discovery/components/PublicJobDetailsView"
+import { LoginRequiredModal, PublicJobDetailsView } from "@/features/jobs-discovery"
 import { apiClient } from "@/lib/api"
 import { profileService } from "@/services/profileService"
 import type { Job } from "@/components/jobs/AllJobs"
@@ -21,6 +21,7 @@ function JobDetailsContent() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [showApplyModal, setShowApplyModal] = useState(false)
+  const [showLoginRequired, setShowLoginRequired] = useState(false)
   const [isApplying, setIsApplying] = useState(false)
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [profileCompletion, setProfileCompletion] = useState(0)
@@ -57,7 +58,7 @@ function JobDetailsContent() {
   const handleApplyClick = () => {
     if (!job) return
     if (!isLoggedIn) {
-      router.push(`/auth/login?redirect=${encodeURIComponent(`/jobs/${job.id}`)}&type=student`)
+      setShowLoginRequired(true)
       return
     }
     if (profileCompletion < 75) {
@@ -140,6 +141,11 @@ function JobDetailsContent() {
           onSubmit={handleApplySubmit}
         />
       ) : null}
+      <LoginRequiredModal
+        open={showLoginRequired}
+        onClose={() => setShowLoginRequired(false)}
+        redirectPath={`/jobs/${job.id}`}
+      />
     </>
   )
 }

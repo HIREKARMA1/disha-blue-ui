@@ -21,6 +21,7 @@ import {
   JobsFiltersSidebar,
   JobsMobileFilterDrawer,
   JobsMobileQuickFilters,
+  LoginRequiredModal,
   PublicJobListingCard,
   aggregateSalaryRange,
   formatJobLocation,
@@ -111,6 +112,8 @@ export function NewAllJobs() {
   // Selected job for modals
   const [selectedJob, setSelectedJob] = useState<Job | null>(null)
   const [showApplyModal, setShowApplyModal] = useState(false)
+  const [showLoginRequired, setShowLoginRequired] = useState(false)
+  const [loginRedirectPath, setLoginRedirectPath] = useState("/jobs")
   const [isApplying, setIsApplying] = useState(false)
   const [applyingJobId, setApplyingJobId] = useState<string | null>(null)
 
@@ -241,7 +244,8 @@ export function NewAllJobs() {
 
   const handleApplyClick = (job: Job) => {
     if (!isLoggedIn) {
-      router.push(`/auth/login?redirect=${encodeURIComponent("/jobs")}&type=student`)
+      setLoginRedirectPath(`/jobs/${job.id}`)
+      setShowLoginRequired(true)
       return
     }
     if (profileCompletion < 75) {
@@ -554,6 +558,12 @@ export function NewAllJobs() {
           onSubmit={handleApplySubmit}
         />
       )}
+
+      <LoginRequiredModal
+        open={showLoginRequired}
+        onClose={() => setShowLoginRequired(false)}
+        redirectPath={loginRedirectPath}
+      />
     </div>
   )
 }

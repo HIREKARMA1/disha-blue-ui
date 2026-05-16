@@ -40,6 +40,13 @@
       "clear": "Clear all",
       "close": "Close"
     },
+    "loginRequired": {
+      "title": "Login Required",
+      "description": "Please login to apply for this job.",
+      "cancel": "Cancel",
+      "loginNow": "Login Now",
+      "close": "Close"
+    },
     "toast": {
       "profileIncomplete": "Profile must be at least 75% complete to apply.",
       "applicationsClosed": "Applications are closed for this job.",
