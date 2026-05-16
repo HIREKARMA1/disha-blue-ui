@@ -16,6 +16,7 @@ import { useTranslation } from "@/hooks/useTranslation"
 import { apiClient } from "@/lib/api"
 import { profileService } from "@/services/profileService"
 import { ApplicationModal } from "@/components/dashboard/ApplicationModal"
+import { JobsBreadcrumb } from "./JobsBreadcrumb"
 import { JobsCategoryHero } from "./JobsCategoryHero"
 import { JobsDiscoveryHeader } from "./JobsDiscoveryHeader"
 import { JobsFiltersSidebar, type JobsFilterValues } from "./JobsFiltersSidebar"
@@ -358,12 +359,14 @@ export function LiveJobsView({ variant = "public" }: LiveJobsViewProps) {
     isDashboard ? dashboardJobDetailsPath(id) : `/jobs/${id}`
 
   const skeletonItems = Array.from({ length: 6 })
+  const pageStart = pagination.total > 0 ? (pagination.page - 1) * pagination.limit + 1 : 0
+  const pageEnd = Math.min(pagination.page * pagination.limit, pagination.total || jobs.length)
 
   return (
     <div
       className={cn(
         "mx-auto w-full max-w-[1400px]",
-        isDashboard ? "pb-10" : "px-4 pb-16 pt-24 sm:px-6 lg:px-8",
+        isDashboard ? "pb-4 lg:pb-10" : "px-4 pb-16 pt-24 sm:px-6 lg:px-8",
       )}
     >
       {isDashboard ? (
@@ -379,7 +382,7 @@ export function LiveJobsView({ variant = "public" }: LiveJobsViewProps) {
         />
       ) : (
         <div className="mb-4 lg:hidden">
-          <h1 className="text-xl font-bold text-[#0a0e1a] dark:text-white">{t("jobs.pageTitle")}</h1>
+          <JobsBreadcrumb items={[{ label: "Job Search" }]} homeHref="/" />
         </div>
       )}
 
@@ -407,6 +410,7 @@ export function LiveJobsView({ variant = "public" }: LiveJobsViewProps) {
               roleLabel={appliedFilters.keyword || t("jobs.hero.allRoles")}
               salaryRangeLabel={salaryLabel}
               skillsLabel={skillsLabel}
+              className="hidden lg:block"
             />
           ) : null}
 
@@ -414,27 +418,57 @@ export function LiveJobsView({ variant = "public" }: LiveJobsViewProps) {
             <JobsMobileQuickFilters
               filters={filters}
               activeFilterCount={activeFilterCount}
-              variant={isDashboard ? "bar" : "chips"}
+              variant="bar"
               onOpenFilters={() => setShowMobileFilters(true)}
               className="min-w-0 flex-1"
             />
-            {isDashboard ? (
-              <JobsViewModeToggle
-                value={viewMode}
-                onChange={(mode) => {
-                  if (mode === "map") {
-                    toast("Map view is coming soon", { icon: "🗺️" })
-                    return
-                  }
-                  setViewMode(mode)
-                }}
-                compact
-              />
-            ) : null}
+            <JobsViewModeToggle
+              value={viewMode}
+              onChange={(mode) => {
+                if (mode === "map") {
+                  toast("Map view is coming soon", { icon: "🗺️" })
+                  return
+                }
+                setViewMode(mode)
+              }}
+              compact
+            />
           </div>
 
-          {/* Search + count bar */}
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          {listError ? (
+            <div
+              className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800 lg:hidden dark:border-red-900/50 dark:bg-red-950/40 dark:text-red-200"
+              role="alert"
+            >
+              {listError}{" "}
+              <button
+                type="button"
+                className="font-semibold underline underline-offset-2"
+                onClick={() => void fetchJobs(pagination.page, appliedFilters)}
+              >
+                {t("jobs.retry")}
+              </button>
+            </div>
+          ) : null}
+
+          <p className="text-sm text-[#3a4260] lg:hidden dark:text-blue-200/90">
+            {loading ? (
+              <span className="inline-flex items-center gap-1.5 text-[#7a85a8]">
+                <Loader2 className="h-4 w-4 animate-spin" />
+                Loading…
+              </span>
+            ) : (
+              <>
+                <strong className="font-bold text-[#0a0e1a] dark:text-white">
+                  {pagination.total || jobs.length}
+                </strong>{" "}
+                {isDashboard ? "jobs that match your search" : "roles found"}
+              </>
+            )}
+          </p>
+
+          {/* Search + count bar — desktop */}
+          <div className="hidden flex-col gap-3 lg:flex lg:flex-row lg:items-center lg:justify-between">
             {listError ? (
               <div
                 className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800 dark:border-red-900/50 dark:bg-red-950/40 dark:text-red-200"
@@ -535,7 +569,7 @@ export function LiveJobsView({ variant = "public" }: LiveJobsViewProps) {
               </button>
             </div>
           ) : (
-            <div className="space-y-4">
+            <div className="space-y-3 sm:space-y-4">
               {jobs.map((job) => (
                 <PublicJobListingCard
                   key={job.id}
@@ -557,7 +591,11 @@ export function LiveJobsView({ variant = "public" }: LiveJobsViewProps) {
 
           {/* Pagination */}
           {pagination.total_pages > 1 && !loading && (
-            <div className="flex items-center justify-center gap-1 pt-4">
+            <div className="space-y-3 pt-2">
+              <p className="text-center text-xs font-medium text-[#7a85a8] sm:text-sm dark:text-blue-300/80">
+                Showing {pageStart} to {pageEnd} of {pagination.total} results
+              </p>
+              <div className="flex items-center justify-center gap-1">
               <button
                 type="button"
                 disabled={pagination.page === 1}
@@ -606,6 +644,7 @@ export function LiveJobsView({ variant = "public" }: LiveJobsViewProps) {
               >
                 <ChevronRight className="h-5 w-5" />
               </button>
+              </div>
             </div>
           )}
         </div>

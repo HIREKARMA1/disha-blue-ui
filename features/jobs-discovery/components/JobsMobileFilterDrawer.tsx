@@ -16,35 +16,44 @@ export function JobsMobileFilterDrawer({ open, onClose, filters, onChange, onApp
   if (!open) return null
 
   return (
-    <div className="fixed inset-0 z-50 lg:hidden">
+    <div className="fixed inset-0 z-[60] flex items-end justify-center p-0 sm:items-center sm:p-4 lg:hidden">
       <button
         type="button"
-        className="absolute inset-0 bg-[#0a0e1a]/40 backdrop-blur-sm"
+        className="absolute inset-0 bg-[#0a0e1a]/45 backdrop-blur-[2px]"
         onClick={onClose}
         aria-label="Close filters"
       />
-      <div className="absolute bottom-0 left-0 right-0 max-h-[88vh] overflow-y-auto rounded-t-2xl border-t border-[#dde3f5] bg-white p-4 shadow-2xl dark:border-blue-900 dark:bg-slate-950">
-        <div className="mb-3 flex items-center justify-between">
-          <p className="text-lg font-bold text-[#0a0e1a] dark:text-white">Filters</p>
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="jobs-filter-title"
+        className="relative flex max-h-[min(88vh,640px)] w-full flex-col overflow-hidden rounded-t-[1.25rem] border border-[#dde3f5] bg-white shadow-2xl sm:max-h-[85vh] sm:max-w-md sm:rounded-2xl dark:border-blue-900 dark:bg-slate-950"
+      >
+        <div className="flex shrink-0 items-center justify-between border-b border-[#e8edf5] px-4 py-3.5 dark:border-blue-900/60">
+          <p id="jobs-filter-title" className="text-lg font-bold text-[#0a0e1a] dark:text-white">
+            Filters
+          </p>
           <button
             type="button"
             onClick={onClose}
-            className="rounded-lg p-2 text-[#7a85a8] hover:bg-[#f0f4ff]"
+            className="rounded-lg p-2 text-[#7a85a8] transition hover:bg-[#f0f4ff] dark:hover:bg-blue-900/50"
             aria-label="Close"
           >
             <X className="h-5 w-5" />
           </button>
         </div>
-        <JobsFiltersSidebar
-          filters={filters}
-          onChange={onChange}
-          onApply={() => {
-            onApply()
-            onClose()
-          }}
-          onClear={onClear}
-          className="border-0 bg-transparent p-0 shadow-none"
-        />
+        <div className="min-h-0 flex-1 overflow-y-auto px-4 py-4">
+          <JobsFiltersSidebar
+            filters={filters}
+            onChange={onChange}
+            onApply={() => {
+              onApply()
+              onClose()
+            }}
+            onClear={onClear}
+            className="border-0 bg-transparent p-0 shadow-none"
+          />
+        </div>
       </div>
     </div>
   )

@@ -28,7 +28,8 @@ import {
   parseBenefitTags,
   parseDescriptionItems,
 } from "../utils/jobDetailsHelpers"
-import { formatJobLocation, formatJobType } from "../utils/jobFormatters"
+import { JobsBreadcrumb } from "./JobsBreadcrumb"
+import { formatJobLocation, formatJobType, getDisplayMatchScore } from "../utils/jobFormatters"
 
 type Props = {
   job: Job
@@ -42,6 +43,8 @@ type Props = {
   jobsListHref?: string
   /** Render inside dashboard shell (no extra top padding). */
   embedded?: boolean
+  homeHref?: string
+  showMatchScore?: boolean
 }
 
 function DetailCard({
@@ -155,6 +158,8 @@ export function PublicJobDetailsView({
   backLabel = "Back to jobs",
   jobsListHref = "/jobs",
   embedded = false,
+  homeHref = "/jobs",
+  showMatchScore = false,
 }: Props) {
   const router = useRouter()
   const [saved, setSaved] = useState(() => isJobSaved(job.id))
@@ -185,15 +190,27 @@ export function PublicJobDetailsView({
     setSaved(isJobSaved(job.id))
   }
 
+  const matchScore = getDisplayMatchScore(job)
+  const breadcrumbHome = embedded ? "/dashboard/student" : homeHref
+
   return (
     <div
       className={cn(
-        "mx-auto w-full max-w-6xl px-4 pb-16 sm:px-6 lg:px-8",
-        embedded ? "pt-0" : "pt-4 lg:pt-6",
+        "mx-auto w-full max-w-6xl pb-16",
+        embedded ? "px-0 pt-0" : "px-4 pt-4 sm:px-6 lg:px-8 lg:pt-6",
       )}
     >
+      <JobsBreadcrumb
+        homeHref={breadcrumbHome}
+        items={[
+          { label: "Job Search", href: jobsListHref },
+          { label: "Job Details" },
+        ]}
+        className="mb-4"
+      />
+
       {/* Toolbar */}
-      <div className="mb-5 flex items-center justify-between gap-3">
+      <div className="mb-4 flex items-center justify-between gap-3 rounded-2xl border border-[#e8edf5] bg-white px-4 py-3 shadow-sm dark:border-blue-900/50 dark:bg-slate-900 sm:mb-5">
         <button
           type="button"
           onClick={() => router.push(backHref)}
@@ -232,6 +249,12 @@ export function PublicJobDetailsView({
                 {initials}
               </span>
               <div className="min-w-0 flex-1">
+                {showMatchScore ? (
+                  <span className="mb-2 inline-flex items-center gap-1 rounded-md bg-emerald-50 px-2 py-0.5 text-[11px] font-bold text-emerald-700 ring-1 ring-emerald-100 dark:bg-emerald-950/50 dark:text-emerald-400">
+                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" aria-hidden />
+                    {matchScore}% Match
+                  </span>
+                ) : null}
                 <h1 className="text-xl font-bold leading-snug text-[#0a0e1a] sm:text-2xl dark:text-white">
                   {job.title}
                 </h1>

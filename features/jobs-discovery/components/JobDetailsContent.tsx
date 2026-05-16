@@ -162,6 +162,7 @@ export function JobDetailsContent({ variant = "public" }: Props) {
         backLabel="Back to jobs"
         jobsListHref={jobsListHref}
         embedded={isDashboard}
+        showMatchScore={isDashboard || isLoggedIn}
       />
       {showApplyModal ? (
         <ApplicationModal

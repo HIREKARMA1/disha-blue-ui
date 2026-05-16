@@ -31,9 +31,10 @@ type Props = {
   onViewDetails: () => void
   onApply: () => void
   onSaveToggle?: () => void
+  onViewCompany?: () => void
 }
 
-type DetailRowProps = {
+type DetailCellProps = {
   icon: typeof MapPin
   label: string
   value: string
@@ -41,22 +42,22 @@ type DetailRowProps = {
   iconWrapClass: string
 }
 
-function DetailRow({ icon: Icon, label, value, iconClass, iconWrapClass }: DetailRowProps) {
+function DetailCell({ icon: Icon, label, value, iconClass, iconWrapClass }: DetailCellProps) {
   return (
-    <div className="flex items-center gap-3 px-3.5 py-3 sm:px-4 sm:py-3.5">
+    <div className="flex min-h-[4.5rem] items-center gap-2.5 px-3 py-3 sm:gap-3 sm:px-3.5 sm:py-3.5">
       <span
         className={cn(
-          "flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-white shadow-sm ring-1 ring-black/[0.04]",
+          "flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-white shadow-sm ring-1 ring-black/[0.04] sm:h-9 sm:w-9",
           iconWrapClass,
         )}
       >
-        <Icon className={cn("h-4 w-4", iconClass)} aria-hidden />
+        <Icon className={cn("h-3.5 w-3.5 sm:h-4 sm:w-4", iconClass)} aria-hidden />
       </span>
       <div className="min-w-0 flex-1">
-        <p className="text-[10px] font-semibold uppercase tracking-[0.06em] text-[#7a85a8]">
+        <p className="text-[9px] font-semibold uppercase tracking-[0.06em] text-[#7a85a8] sm:text-[10px]">
           {label}
         </p>
-        <p className="mt-0.5 break-words text-[15px] font-bold leading-snug text-[#0a0e1a] sm:text-base dark:text-blue-50">
+        <p className="mt-0.5 line-clamp-2 text-[13px] font-bold leading-snug text-[#0a0e1a] sm:text-[15px] dark:text-blue-50">
           {value}
         </p>
       </div>
@@ -79,6 +80,7 @@ export function PublicJobListingCard({
   onViewDetails,
   onApply,
   onSaveToggle,
+  onViewCompany,
 }: Props) {
   const company = job.company_name || job.corporate_name || "Hiring partner"
   const openings = job.number_of_openings ?? 1
@@ -86,28 +88,48 @@ export function PublicJobListingCard({
   const showUrgent = isUrgentPosting(job.created_at) && job.can_apply
   const initials = getCompanyInitials(company)
 
+  const handleViewCompany = () => {
+    if (onViewCompany) {
+      onViewCompany()
+      return
+    }
+    if (job.company_website) {
+      const url = job.company_website.startsWith("http")
+        ? job.company_website
+        : `https://${job.company_website}`
+      window.open(url, "_blank", "noopener,noreferrer")
+    }
+  }
+
   return (
     <article className={cn(jobsCardClass, "overflow-hidden p-4 sm:p-5")}>
       <div className="flex items-start gap-3">
-        <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[#e8f0ff] text-sm font-bold text-primary-700 ring-1 ring-[#dde3f5] dark:bg-blue-900/60 dark:ring-blue-800">
+        <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#e8f0ff] text-sm font-bold text-primary-700 ring-1 ring-[#dde3f5] sm:h-12 sm:w-12 dark:bg-blue-900/60 dark:ring-blue-800">
           {initials}
         </span>
         <div className="min-w-0 flex-1">
           <div className="flex items-start justify-between gap-2">
-            <div className="min-w-0 flex-1">
-              <h3 className="text-base font-bold leading-snug text-primary-700 sm:text-lg dark:text-primary-400">
+            <div className="min-w-0 flex-1 pr-1">
+              <h3 className="text-[15px] font-bold leading-snug text-[#0a0e1a] sm:text-base dark:text-blue-50">
                 {job.title}
               </h3>
               <p className="mt-0.5 truncate text-xs font-semibold text-[#7a85a8] dark:text-blue-300/80">
                 {company}
               </p>
             </div>
-            <div className="flex shrink-0 items-start gap-1.5">
+            <div className="flex shrink-0 flex-col items-end gap-1.5">
+              <button
+                type="button"
+                onClick={handleViewCompany}
+                className="rounded-lg border border-[#dde3f5] bg-white px-2 py-1 text-[10px] font-semibold text-primary-700 transition hover:border-primary-400 hover:bg-[#f8faff] sm:px-2.5 sm:text-[11px] dark:border-blue-800 dark:bg-slate-900 dark:text-primary-300"
+              >
+                View Company
+              </button>
               {onSaveToggle ? (
                 <button
                   type="button"
                   onClick={onSaveToggle}
-                  className="rounded-lg p-1.5 text-[#9aa3bd] transition hover:bg-[#f0f4ff] hover:text-primary-600 dark:hover:bg-blue-900/50"
+                  className="rounded-lg p-1 text-[#9aa3bd] transition hover:bg-[#f0f4ff] hover:text-primary-600 dark:hover:bg-blue-900/50"
                   aria-label={isSaved ? "Remove bookmark" : "Save job"}
                 >
                   <Bookmark
@@ -120,7 +142,8 @@ export function PublicJobListingCard({
 
           <div className="mt-2 flex flex-wrap items-center gap-2">
             {showMatchScore && matchScore != null ? (
-              <span className="inline-flex rounded-md bg-emerald-50 px-2 py-0.5 text-[11px] font-bold text-emerald-700 ring-1 ring-emerald-100 dark:bg-emerald-950/50 dark:text-emerald-400">
+              <span className="inline-flex items-center gap-1 rounded-md bg-emerald-50 px-2 py-0.5 text-[11px] font-bold text-emerald-700 ring-1 ring-emerald-100 dark:bg-emerald-950/50 dark:text-emerald-400">
+                <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" aria-hidden />
                 {matchScore}% Match
               </span>
             ) : null}
@@ -133,30 +156,30 @@ export function PublicJobListingCard({
         </div>
       </div>
 
-      <div className="mt-4 overflow-hidden rounded-xl border border-[#e8edf5] bg-[#f4f6fa] dark:border-blue-900/50 dark:bg-slate-800/50">
-        <div className="divide-y divide-[#e8edf5] dark:divide-blue-900/60">
-          <DetailRow
+      <div className="mt-3.5 overflow-hidden rounded-xl border border-[#e8edf5] bg-[#f4f6fa] dark:border-blue-900/50 dark:bg-slate-800/50">
+        <div className="grid grid-cols-2 divide-x divide-y divide-[#e8edf5] dark:divide-blue-900/60">
+          <DetailCell
             icon={MapPin}
             label="Location"
             value={formatJobLocation(job)}
             iconClass="text-blue-600"
             iconWrapClass="bg-blue-50 dark:bg-blue-950/80"
           />
-          <DetailRow
+          <DetailCell
             icon={Wallet}
             label="Salary"
             value={formatSalary(job)}
             iconClass="text-emerald-600"
             iconWrapClass="bg-emerald-50 dark:bg-emerald-950/80"
           />
-          <DetailRow
+          <DetailCell
             icon={Briefcase}
             label="Type"
             value={formatJobType(job)}
             iconClass="text-violet-600"
             iconWrapClass="bg-violet-50 dark:bg-violet-950/80"
           />
-          <DetailRow
+          <DetailCell
             icon={Calendar}
             label="Experience"
             value={formatExperience(job)}
@@ -166,26 +189,26 @@ export function PublicJobListingCard({
         </div>
       </div>
 
-      <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs font-medium text-[#7a85a8] dark:text-blue-300/80">
-        <span className="inline-flex items-center gap-1.5">
+      <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] font-medium text-[#7a85a8] sm:gap-x-4 sm:text-xs dark:text-blue-300/80">
+        <span className="inline-flex items-center gap-1">
           <Clock className="h-3.5 w-3.5 shrink-0" aria-hidden />
           Posted {formatPostedAgo(job.created_at)}
         </span>
-        <span className="inline-flex items-center gap-1.5">
+        <span className="inline-flex items-center gap-1">
           <Briefcase className="h-3.5 w-3.5 shrink-0" aria-hidden />
           {applied} Applied
         </span>
-        <span className="inline-flex items-center gap-1.5">
+        <span className="inline-flex items-center gap-1">
           <Users className="h-3.5 w-3.5 shrink-0" aria-hidden />
           {openings} Opening{openings === 1 ? "" : "s"}
         </span>
       </div>
 
-      <div className="mt-4 grid grid-cols-2 gap-2.5">
+      <div className="mt-3.5 grid grid-cols-2 gap-2 sm:mt-4 sm:gap-2.5">
         <button
           type="button"
           onClick={onViewDetails}
-          className="h-11 rounded-xl border border-[#dde3f5] bg-white px-3 text-sm font-semibold text-[#0a0e1a] transition hover:border-primary-500/40 hover:bg-[#f8faff] dark:border-blue-800 dark:bg-slate-900 dark:text-blue-50"
+          className="h-11 rounded-xl border border-[#dde3f5] bg-white px-2 text-[13px] font-semibold text-[#0a0e1a] transition hover:border-primary-500/40 hover:bg-[#f8faff] sm:px-3 sm:text-sm dark:border-blue-800 dark:bg-slate-900 dark:text-blue-50"
         >
           View details
         </button>
@@ -193,7 +216,7 @@ export function PublicJobListingCard({
           type="button"
           onClick={onApply}
           disabled={isApplying || (!job.can_apply && !!job.application_status)}
-          className="inline-flex h-11 items-center justify-center gap-1.5 rounded-xl bg-gradient-to-r from-primary-700 to-primary-600 px-3 text-sm font-bold text-white shadow-md shadow-primary-600/20 transition hover:from-primary-800 disabled:opacity-60"
+          className="inline-flex h-11 items-center justify-center gap-1 rounded-xl bg-gradient-to-r from-primary-700 to-primary-600 px-2 text-[13px] font-bold text-white shadow-md shadow-primary-600/20 transition hover:from-primary-800 disabled:opacity-60 sm:gap-1.5 sm:px-3 sm:text-sm"
         >
           <span className="truncate">
             {isApplying ? "Applying…" : job.application_status === "applied" ? "Applied" : "Apply now"}

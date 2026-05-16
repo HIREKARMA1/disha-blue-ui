@@ -8,7 +8,7 @@ import { LiveJobsView } from "@/features/jobs-discovery/components/LiveJobsView"
 
 function DiscoverJobsContent() {
   return (
-    <div className="min-h-full bg-sage-canvas px-4 py-5 dark:bg-slate-950 sm:px-6 lg:px-8">
+    <div className="min-h-full bg-sage-canvas -mx-4 px-3 py-4 dark:bg-slate-950 sm:mx-0 sm:px-0 sm:py-5">
       <LiveJobsView variant="dashboard" />
     </div>
   )

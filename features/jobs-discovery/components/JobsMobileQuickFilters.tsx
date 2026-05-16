@@ -68,7 +68,7 @@ export function JobsMobileQuickFilters({
         <button
           type="button"
           onClick={onOpenFilters}
-          className="flex h-11 w-full items-center justify-center gap-2 rounded-xl border border-[#dde3f5] bg-white px-4 text-sm font-semibold text-[#0a0e1a] shadow-sm transition hover:border-primary-500/30 dark:border-blue-900 dark:bg-slate-900 dark:text-blue-50"
+          className="flex h-12 w-full items-center justify-center gap-2 rounded-2xl border border-[#dde3f5] bg-white px-4 text-sm font-semibold text-[#0a0e1a] shadow-sm transition hover:border-primary-500/30 dark:border-blue-900 dark:bg-slate-900 dark:text-blue-50"
         >
           <SlidersHorizontal className="h-4 w-4 text-primary-600" aria-hidden />
           Filters
