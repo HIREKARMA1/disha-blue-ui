@@ -1,11 +1,14 @@
 "use client"
 
+import Link from 'next/link'
 import {
   Compass,
   Home,
   UserCircle2,
   LogOut,
   ClipboardList,
+  PanelLeftClose,
+  PanelLeftOpen,
   type LucideIcon,
 } from 'lucide-react'
 import { usePathname } from 'next/navigation'
@@ -14,77 +17,45 @@ import { useLoading } from '@/contexts/LoadingContext'
 import { cn } from '@/lib/utils'
 import { useLocale } from '@/contexts/LocaleContext'
 import { t } from '@/lib/i18n'
-import { SidebarRailHoverCard } from '@/components/dashboard/SidebarRailHoverCard'
 import { MobileBottomNav } from '@/components/dashboard/MobileBottomNav'
+import { useStudentSidebarExpand } from '@/hooks/useStudentSidebarExpand'
 
 interface NavItem {
   label: string
   href: string
   icon: LucideIcon
-  description: string
   aliases?: string[]
-}
-
-interface NavGroup {
-  title: string
-  items: NavItem[]
 }
 
 interface StudentSidebarProps {
   className?: string
 }
 
+const navItems: NavItem[] = [
+  { label: 'Home', href: '/dashboard/student', icon: Home },
+  { label: 'Profile', href: '/dashboard/student/profile', icon: UserCircle2 },
+  { label: 'Applications', href: '/dashboard/student/applications', icon: ClipboardList },
+  {
+    label: 'Local Jobs',
+    href: '/dashboard/discover-jobs',
+    aliases: ['/dashboard/student/jobs'],
+    icon: Compass,
+  },
+]
+
+const bottomTabHrefs = [
+  '/dashboard/student',
+  '/dashboard/student/profile',
+  '/dashboard/student/applications',
+  '/dashboard/discover-jobs',
+] as const
+
 export function StudentSidebar({ className = '' }: StudentSidebarProps) {
   const pathname = usePathname()
   const { logout } = useAuth()
   const { startLoading } = useLoading()
   const { locale } = useLocale()
-  const navGroups: NavGroup[] = [
-    {
-      title: 'Overview',
-      items: [
-        { label: 'Home', href: '/dashboard/student', icon: Home, description: 'Your career control center' },
-        { label: 'Profile', href: '/dashboard/student/profile', icon: UserCircle2, description: 'Personal details and identity' },
-        { label: 'Applications', href: '/dashboard/student/applications', icon: ClipboardList, description: 'Track your pipeline status' },
-        {
-          label: 'Local Jobs',
-          href: '/dashboard/discover-jobs',
-          aliases: ['/dashboard/student/jobs'],
-          icon: Compass,
-          description: 'Local and personalized roles',
-        },
-      ],
-    },
-  ]
-
-  // Hidden nav items — restore when re-enabling features
-  // { label:'AI Interview Session', href:'/dashboard/student/career-align', icon: MessagesSquare, ... },
-  // { label:'AI Communication Assessments', href:'/ai-communication', icon: Mic, ... },
-  // { label:'Build with AI', href:'/dashboard/student/resume/ai', icon: Bot, ... },
-  // { label:'Resume Builder', href:'/dashboard/student/resume-builder', icon: FileText, ... },
-  // { label:'Courses', href:'/dashboard/student/courses', aliases: ['/courses', '/dashboard/student/library'], icon: GraduationCap, ... },
-  // { label:'Video Search', href:'/dashboard/student/video-search', icon: Film, ... },
-
-  const allItems = navGroups.flatMap((group) => group.items)
-
-  const bottomTabHrefs = [
-    '/dashboard/student',
-    '/dashboard/student/profile',
-    '/dashboard/student/applications',
-    '/dashboard/discover-jobs',
-  ] as const
-
-  const bottomTabs = bottomTabHrefs
-    .map((href) => allItems.find((item) => item.href === href))
-    .filter((item): item is NavItem => Boolean(item))
-
-  const railLinkClass = (isActive: boolean) =>
-    cn(
-      'flex h-11 w-11 shrink-0 items-center justify-center transition-all hover:-translate-y-0.5',
-      isActive
-        ? 'rounded-none bg-white text-slate-800 shadow-none dark:bg-white dark:text-slate-900'
-        : 'text-slate-700 hover:text-slate-900 dark:text-blue-200 dark:hover:text-white',
-    )
+  const { expanded, toggle, hydrated } = useStudentSidebarExpand()
 
   const isItemActive = (item: NavItem) => {
     if (pathname === item.href) return true
@@ -103,39 +74,102 @@ export function StudentSidebar({ className = '' }: StudentSidebarProps) {
     logout()
   }
 
+  const bottomTabs = bottomTabHrefs
+    .map((href) => navItems.find((item) => item.href === href))
+    .filter((item): item is NavItem => Boolean(item))
+
+  const sidebarExpanded = hydrated ? expanded : true
+
   return (
     <>
-      {/* Desktop: slim blue-50 icon rail */}
       <aside
         className={cn(
-          'student-sidebar fixed inset-y-0 left-0 z-40 hidden w-16 flex-col bg-blue-50 pt-16 dark:bg-blue-950 lg:flex',
-          'rounded-none',
+          'student-sidebar fixed inset-y-0 left-0 z-40 hidden flex-col overflow-visible border-r border-slate-200/90 bg-slate-50 pt-16 transition-[width] duration-300 ease-in-out dark:border-slate-800 dark:bg-slate-950 lg:flex',
+          sidebarExpanded ? 'w-60' : 'w-[4.25rem]',
           className,
         )}
       >
-        <nav className="flex min-h-0 flex-1 flex-col items-center px-0 py-4">
-          <div className="flex min-h-0 w-full flex-1 flex-col items-center gap-3 overflow-y-auto overflow-x-hidden px-2">
-            {allItems.map((item) => {
+        <nav className="relative flex min-h-0 flex-1 flex-col px-2 py-4">
+          <div className="flex min-h-0 flex-1 flex-col gap-1 overflow-y-auto overflow-x-hidden">
+            {navItems.map((item) => {
               const isActive = isItemActive(item)
+              const Icon = item.icon
               return (
-                <SidebarRailHoverCard
+                <Link
                   key={item.href}
-                  item={item}
-                  isActive={isActive}
-                  dataSidebarItem={isActive ? 'active' : 'inactive'}
-                  railLinkClassName={railLinkClass(isActive)}
-                  onNavigate={() => !isActive && startLoading()}
-                />
+                  href={item.href}
+                  title={!sidebarExpanded ? item.label : undefined}
+                  onClick={() => !isActive && startLoading()}
+                  className={cn(
+                    'group relative flex shrink-0 items-center transition-colors duration-200',
+                    sidebarExpanded
+                      ? cn(
+                          'h-11 w-full gap-3 rounded-lg px-3',
+                          isActive
+                            ? 'bg-primary-600 text-white shadow-sm'
+                            : 'text-slate-800 hover:bg-slate-200/70 dark:text-slate-200 dark:hover:bg-slate-800',
+                        )
+                      : cn(
+                          'mx-auto h-11 w-11 justify-center rounded-lg',
+                          isActive
+                            ? 'bg-primary-600 text-white shadow-sm'
+                            : 'text-slate-600 hover:bg-slate-200/80 dark:text-slate-400 dark:hover:bg-slate-800',
+                        ),
+                  )}
+                >
+                  <Icon className="h-5 w-5 shrink-0" strokeWidth={1.75} aria-hidden />
+                  <span
+                    className={cn(
+                      'truncate text-sm font-medium transition-all duration-200',
+                      sidebarExpanded ? 'opacity-100' : 'pointer-events-none w-0 overflow-hidden opacity-0',
+                    )}
+                  >
+                    {item.label}
+                  </span>
+                </Link>
               )
             })}
           </div>
+
+          <div className="mt-3 border-t border-slate-200/90 pt-3 dark:border-slate-800">
+            <button
+              type="button"
+              title={t(locale, 'dashboard.labels.logout')}
+              onClick={handleLogout}
+              className={cn(
+                'flex w-full items-center text-slate-700 transition-colors hover:text-slate-900 dark:text-slate-300 dark:hover:text-white',
+                sidebarExpanded
+                  ? 'h-11 gap-3 rounded-lg px-3 hover:bg-slate-200/70 dark:hover:bg-slate-800'
+                  : 'mx-auto h-11 w-11 justify-center rounded-lg hover:bg-slate-200/80 dark:hover:bg-slate-800',
+              )}
+            >
+              <LogOut className="h-5 w-5 shrink-0" strokeWidth={1.75} />
+              <span
+                className={cn(
+                  'truncate text-sm font-medium transition-all duration-200',
+                  sidebarExpanded ? 'opacity-100' : 'pointer-events-none w-0 overflow-hidden opacity-0',
+                )}
+              >
+                {t(locale, 'dashboard.labels.logout')}
+              </span>
+            </button>
+          </div>
+
           <button
             type="button"
-            title={t(locale, 'dashboard.labels.logout')}
-            onClick={handleLogout}
-            className="mt-3 flex h-11 w-11 shrink-0 items-center justify-center text-slate-700 transition-colors hover:text-slate-900 dark:text-blue-200 dark:hover:text-white"
+            onClick={toggle}
+            aria-expanded={sidebarExpanded}
+            aria-label={sidebarExpanded ? 'Collapse sidebar' : 'Expand sidebar'}
+            className={cn(
+              'absolute z-50 flex h-7 w-7 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-700 shadow-md transition-colors hover:bg-slate-50 hover:text-primary-600 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-200 dark:hover:bg-slate-800',
+              sidebarExpanded ? '-right-3.5 top-6' : '-right-3.5 top-6',
+            )}
           >
-            <LogOut className="h-5 w-5" strokeWidth={1.75} />
+            {sidebarExpanded ? (
+              <PanelLeftClose className="h-4 w-4" strokeWidth={2} aria-hidden />
+            ) : (
+              <PanelLeftOpen className="h-4 w-4" strokeWidth={2} aria-hidden />
+            )}
           </button>
         </nav>
       </aside>
@@ -156,9 +190,6 @@ export function StudentSidebar({ className = '' }: StudentSidebarProps) {
           isActive: isItemActive(item),
           onNavigate: () => !isItemActive(item) && startLoading(),
         }))}
-        // Account tab + drawer (mobile) — disabled
-        // moreLabel="Account"
-        // onMoreClick={() => setIsMobileMenuOpen(true)}
       />
     </>
   )

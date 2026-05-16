@@ -24,7 +24,7 @@ export default function LibraryLayout({
  <Navbar />
  <div className="flex">
  <StudentSidebar />
- <main className="flex-1 lg:pl-16">
+ <main className="flex-1 transition-[padding-left] duration-300 ease-in-out lg:pl-[var(--student-sidebar-width,15rem)]">
  {children}
  </main>
  </div>

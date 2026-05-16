@@ -155,7 +155,9 @@ function StudentDashboardContent({ children }: StudentDashboardLayoutProps) {
  <div className="dashboard-flat min-h-screen bg-white text-slate-900">
  <Navbar />
  <StudentSidebar />
- <div className="pt-16 lg:pl-16">{main}</div>
+ <div className="pt-16 transition-[padding-left] duration-300 ease-in-out lg:pl-[var(--student-sidebar-width,15rem)]">
+ {main}
+ </div>
  </div>
  )
 }

@@ -8,6 +8,10 @@ body.hide-sidebar .main-navbar {
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --student-sidebar-width: 15rem;
+}
+
 /* Medica-style dashboard overview: soft radius + float shadow; sage/slate palette unchanged */
 @layer components {
   .dashboard-overview-page {
