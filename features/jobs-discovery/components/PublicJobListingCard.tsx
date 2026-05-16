@@ -148,7 +148,7 @@ export function PublicJobListingCard({
               </span>
             ) : null}
             {showUrgent ? (
-              <span className="inline-flex rounded-full bg-[#f05a28] px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-white">
+              <span className="inline-flex rounded-full bg-primary-600 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-white">
                 Urgent hiring
               </span>
             ) : null}

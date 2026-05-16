@@ -62,15 +62,15 @@ export function MobileBottomNav({ tabs, moreLabel = 'More', onMoreClick }: Mobil
               className={cn(
                 'flex min-w-0 flex-col items-center justify-center gap-0.5 px-1 py-1.5 text-[10px] font-semibold leading-tight transition-colors',
                 tab.isActive
-                  ? 'text-blue-700 dark:text-blue-300'
-                  : 'text-slate-600 hover:text-blue-700 dark:text-slate-400 dark:hover:text-blue-300',
+                  ? 'text-primary-700 dark:text-primary-300'
+                  : 'text-slate-600 hover:text-primary-700 dark:text-slate-400 dark:hover:text-primary-300',
               )}
             >
               <span
                 className={cn(
                   'flex h-9 w-9 items-center justify-center rounded-2xl transition-colors',
                   tab.isActive
-                    ? 'bg-blue-100 text-blue-800 dark:bg-blue-900/70 dark:text-blue-100'
+                    ? 'bg-primary-100 text-primary-800 dark:bg-primary-900/70 dark:text-primary-100'
                     : 'text-slate-700 dark:text-slate-300',
                 )}
               >
@@ -84,7 +84,7 @@ export function MobileBottomNav({ tabs, moreLabel = 'More', onMoreClick }: Mobil
           <button
             type="button"
             onClick={onMoreClick}
-            className="flex min-w-0 flex-col items-center justify-center gap-0.5 px-1 py-1.5 text-[10px] font-semibold leading-tight text-slate-600 transition-colors hover:text-blue-700 dark:text-slate-400 dark:hover:text-blue-300"
+            className="flex min-w-0 flex-col items-center justify-center gap-0.5 px-1 py-1.5 text-[10px] font-semibold leading-tight text-slate-600 transition-colors hover:text-primary-700 dark:text-slate-400 dark:hover:text-primary-300"
           >
             <span className="flex h-9 w-9 items-center justify-center rounded-2xl text-slate-700 dark:text-slate-300">
               <Menu className="h-[1.35rem] w-[1.35rem]" strokeWidth={2.25} aria-hidden />

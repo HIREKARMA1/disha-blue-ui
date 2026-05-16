@@ -263,7 +263,7 @@ export function PublicJobDetailsView({
                   {company}
                 </p>
                 {showUrgent ? (
-                  <span className="mt-2 inline-flex rounded-full bg-[#fff0e8] px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-[#e85d04]">
+                  <span className="mt-2 inline-flex rounded-full bg-primary-50 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-primary-700">
                     Urgent hiring
                   </span>
                 ) : null}
@@ -375,7 +375,7 @@ export function PublicJobDetailsView({
           <DetailCard className="border-primary-200/80 lg:hidden dark:border-primary-800/60">
             <h2 className="text-lg font-bold text-[#0a0e1a] dark:text-white">Reviews & ratings</h2>
             <div className="mt-4 rounded-xl border border-primary-200/60 bg-[#f8faff] p-4 dark:border-primary-800/50 dark:bg-blue-950/30">
-              <p className="flex items-center gap-1.5 text-xs font-semibold text-[#e85d04]">
+              <p className="flex items-center gap-1.5 text-xs font-semibold text-primary-600">
                 <Flame className="h-3.5 w-3.5" />
                 Platform rating
               </p>
@@ -409,7 +409,7 @@ export function PublicJobDetailsView({
             <DetailCard className="border-primary-200/80 dark:border-primary-800/60">
               <h2 className="text-lg font-bold text-[#0a0e1a] dark:text-white">Reviews & ratings</h2>
               <div className="mt-4 rounded-xl border border-primary-200/60 bg-[#f8faff] p-4 dark:border-primary-800/50 dark:bg-blue-950/30">
-                <p className="flex items-center gap-1.5 text-xs font-semibold text-[#e85d04]">
+                <p className="flex items-center gap-1.5 text-xs font-semibold text-primary-600">
                   <Flame className="h-3.5 w-3.5" />
                   Platform rating
                 </p>

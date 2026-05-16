@@ -67,7 +67,7 @@ export function LoginRequiredModal({
 
             <div className="flex flex-col items-center text-center">
               <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-[#e8f0ff]">
-                <Users className="h-7 w-7 text-[#0052cc]" strokeWidth={1.75} aria-hidden />
+                <Users className="h-7 w-7 text-[#2563eb]" strokeWidth={1.75} aria-hidden />
               </div>
 
               <h2
@@ -91,7 +91,7 @@ export function LoginRequiredModal({
                 <button
                   type="button"
                   onClick={handleLogin}
-                  className="h-11 flex-1 rounded-lg bg-[#0052cc] text-sm font-semibold text-white shadow-[0_4px_14px_-4px_rgba(0,82,204,0.55)] transition hover:bg-[#0047b3]"
+                  className="h-11 flex-1 rounded-lg bg-[#2563eb] text-sm font-semibold text-white shadow-[0_4px_14px_-4px_rgba(37,99,235,0.55)] transition hover:bg-[#1d4ed8]"
                 >
                   {t("jobs.loginRequired.loginNow")}
                 </button>

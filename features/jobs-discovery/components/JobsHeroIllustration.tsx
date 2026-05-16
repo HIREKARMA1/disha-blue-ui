@@ -42,13 +42,13 @@ export function JobsNeedHelpIllustration({ className }: { className?: string }) 
       <circle cx="40" cy="28" r="14" fill="#e8f0ff" />
       <path
         d="M28 52c2-8 8-12 12-12s10 4 12 12"
-        stroke="#0070f3"
+        stroke="#3b82f6"
         strokeWidth="2"
         strokeLinecap="round"
       />
-      <circle cx="36" cy="26" r="1.5" fill="#0052cc" />
-      <circle cx="44" cy="26" r="1.5" fill="#0052cc" />
-      <path d="M37 31c1.5 1.5 4.5 1.5 6 0" stroke="#0052cc" strokeWidth="1.5" strokeLinecap="round" />
+      <circle cx="36" cy="26" r="1.5" fill="#2563eb" />
+      <circle cx="44" cy="26" r="1.5" fill="#2563eb" />
+      <path d="M37 31c1.5 1.5 4.5 1.5 6 0" stroke="#2563eb" strokeWidth="1.5" strokeLinecap="round" />
     </svg>
   )
 }

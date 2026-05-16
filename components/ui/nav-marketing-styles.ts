@@ -26,8 +26,8 @@ export const navMarketingCtaHire = cn(
 export const navMarketingCtaFind = cn(
   navMarketingPillBase,
   "bg-primary-600 px-5 text-white",
-  "shadow-[0_4px_14px_-6px_rgba(0,82,204,0.45)]",
-  "hover:bg-primary-700 hover:shadow-[0_6px_18px_-6px_rgba(0,82,204,0.4)]",
+  "shadow-[0_4px_14px_-6px_rgba(37,99,235,0.45)]",
+  "hover:bg-primary-700 hover:shadow-[0_6px_18px_-6px_rgba(37,99,235,0.4)]",
   "active:scale-[0.98]",
 )
 

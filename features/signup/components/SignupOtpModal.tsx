@@ -66,7 +66,7 @@ export function SignupOtpModal({
         </Button>
         <Button
           type="button"
-          className="w-full bg-blue-700 hover:bg-blue-800 sm:w-auto dark:bg-blue-600"
+          className="w-full bg-primary-600 hover:bg-primary-700 sm:w-auto dark:bg-primary-600"
           loading={submitting}
           disabled={resending || otp.length < 6}
           onClick={async () => {

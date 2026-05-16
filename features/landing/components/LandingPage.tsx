@@ -446,10 +446,10 @@ export function LandingPage() {
                   <svg viewBox="0 0 110 140" fill="none" style={{ width: '90px' }}>
                     <rect x="5" y="5" width="100" height="130" rx="6" fill="white" stroke="#c8d8ff" strokeWidth="1.2" />
                     <rect x="5" y="5" width="100" height="22" rx="6" fill="#c8d8ff" />
-                    <circle cx="25" cy="16" r="8" fill="#0070f3" opacity=".5" />
+                    <circle cx="25" cy="16" r="8" fill="#3b82f6" opacity=".5" />
                     <rect x="14" y="42" width="82" height="1.5" rx=".5" fill="#dde3f5" />
                     <rect x="14" y="46" width="70" height="1.5" rx=".5" fill="#dde3f5" />
-                    <text x="55" y="128" textAnchor="middle" fontFamily="Inter, sans-serif" fontSize="6.5" fontWeight="600" fill="#0070f3">Score: 86/100</text>
+                    <text x="55" y="128" textAnchor="middle" fontFamily="Inter, sans-serif" fontSize="6.5" fontWeight="600" fill="#3b82f6">Score: 86/100</text>
                   </svg>
                 </div>
               </div>
@@ -736,7 +736,7 @@ export function LandingPage() {
                 pay: "₹18K/mo",
                 bg: "#f0f4ff",
                 badge: "Offer Letter",
-                badgeCol: "#0052cc"
+                badgeCol: "#2563eb"
               },
               {
                 name: "Priya",
@@ -756,7 +756,7 @@ export function LandingPage() {
                 pay: "",
                 bg: "#f0f4ff",
                 badge: "Worker",
-                badgeCol: "#0052cc"
+                badgeCol: "#2563eb"
               },
               {
                 name: "Rupa",
@@ -766,7 +766,7 @@ export function LandingPage() {
                 pay: "",
                 bg: "#f0f4ff",
                 badge: "Hire Now",
-                badgeCol: "#0052cc"
+                badgeCol: "#2563eb"
               }
             ].map((p, i) => (
               <div key={i} style={{ textAlign: 'center' }}>

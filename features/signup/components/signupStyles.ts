@@ -11,4 +11,4 @@ export const signupFieldClass = cn(
 export const signupLabelClass = "mb-1.5 block text-sm font-medium text-slate-800 dark:text-blue-100"
 
 export const signupPrimaryButtonClass =
-  "h-12 w-full rounded-xl bg-blue-700 text-base font-semibold text-white shadow-sm hover:bg-blue-800 dark:bg-blue-600 dark:hover:bg-blue-500"
+  "h-12 w-full rounded-xl bg-primary-600 text-base font-semibold text-white shadow-sm hover:bg-primary-700 dark:bg-primary-600 dark:hover:bg-primary-500"

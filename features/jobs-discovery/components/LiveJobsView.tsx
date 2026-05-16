@@ -529,7 +529,7 @@ export function LiveJobsView({ variant = "public" }: LiveJobsViewProps) {
                 placeholder={t("jobs.searchPlaceholder")}
                 value={filters.keyword}
                 onChange={(e) => handleFilterChange("keyword", e.target.value)}
-                className="h-11 w-full rounded-xl border border-[#dde3f5] bg-white py-2 pl-10 pr-4 text-sm text-[#0a0e1a] outline-none transition focus:border-[#0070f3] focus:ring-2 focus:ring-[#0070f3]/20 dark:border-blue-900 dark:bg-slate-900 dark:text-blue-50"
+                className="h-11 w-full rounded-xl border border-[#dde3f5] bg-white py-2 pl-10 pr-4 text-sm text-[#0a0e1a] outline-none transition focus:border-[#3b82f6] focus:ring-2 focus:ring-[#3b82f6]/20 dark:border-blue-900 dark:bg-slate-900 dark:text-blue-50"
               />
               {filters.keyword ? (
                 <button
@@ -606,7 +606,7 @@ export function LiveJobsView({ variant = "public" }: LiveJobsViewProps) {
               <button
                 type="button"
                 onClick={handleFilterClear}
-                className="h-10 rounded-xl bg-gradient-to-r from-[#0052cc] to-[#0070f3] px-6 text-sm font-bold text-white shadow-md"
+                className="h-10 rounded-xl bg-gradient-to-r from-[#2563eb] to-[#3b82f6] px-6 text-sm font-bold text-white shadow-md"
               >
                 Clear filters
               </button>
@@ -643,7 +643,7 @@ export function LiveJobsView({ variant = "public" }: LiveJobsViewProps) {
                 type="button"
                 disabled={pagination.page === 1}
                 onClick={() => handlePageChange(pagination.page - 1)}
-                className="flex h-10 w-10 items-center justify-center rounded-xl border border-[#dde3f5] bg-white text-[#3a4260] transition hover:border-[#0070f3]/50 hover:text-[#0070f3] disabled:opacity-40 dark:border-blue-900 dark:bg-slate-900 dark:text-blue-200"
+                className="flex h-10 w-10 items-center justify-center rounded-xl border border-[#dde3f5] bg-white text-[#3a4260] transition hover:border-[#3b82f6]/50 hover:text-[#3b82f6] disabled:opacity-40 dark:border-blue-900 dark:bg-slate-900 dark:text-blue-200"
                 aria-label="Previous page"
               >
                 <ChevronLeft className="h-5 w-5" />
@@ -670,8 +670,8 @@ export function LiveJobsView({ variant = "public" }: LiveJobsViewProps) {
                       className={cn(
                         "h-10 min-w-[2.5rem] rounded-xl px-2 text-sm font-semibold transition",
                         pagination.page === p
-                          ? "bg-gradient-to-r from-[#0052cc] to-[#0070f3] text-white shadow-md"
-                          : "border border-[#dde3f5] bg-white text-[#3a4260] hover:border-[#0070f3]/50 hover:text-[#0070f3] dark:border-blue-900 dark:bg-slate-900 dark:text-blue-200",
+                          ? "bg-gradient-to-r from-[#2563eb] to-[#3b82f6] text-white shadow-md"
+                          : "border border-[#dde3f5] bg-white text-[#3a4260] hover:border-[#3b82f6]/50 hover:text-[#3b82f6] dark:border-blue-900 dark:bg-slate-900 dark:text-blue-200",
                       )}
                     >
                       {p}
@@ -682,7 +682,7 @@ export function LiveJobsView({ variant = "public" }: LiveJobsViewProps) {
                 type="button"
                 disabled={pagination.page === pagination.total_pages}
                 onClick={() => handlePageChange(pagination.page + 1)}
-                className="flex h-10 w-10 items-center justify-center rounded-xl border border-[#dde3f5] bg-white text-[#3a4260] transition hover:border-[#0070f3]/50 hover:text-[#0070f3] disabled:opacity-40 dark:border-blue-900 dark:bg-slate-900 dark:text-blue-200"
+                className="flex h-10 w-10 items-center justify-center rounded-xl border border-[#dde3f5] bg-white text-[#3a4260] transition hover:border-[#3b82f6]/50 hover:text-[#3b82f6] disabled:opacity-40 dark:border-blue-900 dark:bg-slate-900 dark:text-blue-200"
                 aria-label="Next page"
               >
                 <ChevronRight className="h-5 w-5" />

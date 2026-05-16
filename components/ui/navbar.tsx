@@ -120,11 +120,11 @@ export function Navbar({
     if (isDashboardRoute) {
       if (isTransparentVariant) {
         return (
-          'w-full z-50 fixed top-0 left-0 right-0 border-b border-slate-200/90 border-t-[3px] border-t-blue-600 bg-white/92 shadow-[0_4px_24px_-6px_rgba(15,23,42,0.09)] backdrop-blur-md dark:border-blue-600/35 dark:border-t-blue-400/80 dark:bg-blue-950/95 dark:shadow-none'
+          'w-full z-50 fixed top-0 left-0 right-0 border-b border-slate-200/90 border-t-[3px] border-t-primary-600 bg-white/92 shadow-[0_4px_24px_-6px_rgba(15,23,42,0.09)] backdrop-blur-md dark:border-primary-500/35 dark:border-t-primary-400/80 dark:bg-slate-950/95 dark:shadow-none'
         )
       }
       return (
-        'w-full z-50 fixed top-0 left-0 right-0 border-t-[3px] border-t-blue-600 border-b border-b-blue-600/90 bg-blue-50 shadow-[0_4px_24px_-6px_rgba(15,23,42,0.06)] dark:border-t-blue-500/80 dark:border-b-blue-900/90 dark:bg-blue-950 dark:shadow-none'
+        'w-full z-50 fixed top-0 left-0 right-0 border-t-[3px] border-t-primary-600 border-b border-b-primary-600/90 bg-primary-50 shadow-[0_4px_24px_-6px_rgba(37,99,235,0.08)] dark:border-t-primary-500/80 dark:border-b-primary-800/90 dark:bg-slate-950 dark:shadow-none'
       )
     }
     return (

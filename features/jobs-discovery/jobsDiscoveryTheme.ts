@@ -4,11 +4,11 @@ import { cn } from "@/lib/utils"
 export const jobsPageBg = "min-h-screen bg-sage-canvas dark:bg-slate-950"
 
 export const jobsSidebarClass = cn(
-  "rounded-2xl border border-[#dde3f5] bg-white p-5 shadow-[0_8px_30px_-18px_rgba(0,82,204,0.12)] dark:border-blue-900/60 dark:bg-slate-900/95",
+  "rounded-2xl border border-[#dde3f5] bg-white p-5 shadow-[0_8px_30px_-18px_rgba(37,99,235,0.12)] dark:border-blue-900/60 dark:bg-slate-900/95",
 )
 
 export const jobsCardClass = cn(
-  "rounded-2xl border border-[#dde3f5] bg-white shadow-[0_4px_24px_-8px_rgba(15,23,42,0.08)] transition-shadow hover:shadow-[0_12px_36px_-14px_rgba(0,82,204,0.16)] dark:border-blue-900/50 dark:bg-slate-900/90",
+  "rounded-2xl border border-[#dde3f5] bg-white shadow-[0_4px_24px_-8px_rgba(15,23,42,0.08)] transition-shadow hover:shadow-[0_12px_36px_-14px_rgba(37,99,235,0.16)] dark:border-blue-900/50 dark:bg-slate-900/90",
 )
 
 export const jobsFieldLabel = "mb-2 block text-sm font-semibold text-[#0a0e1a] dark:text-blue-50"
