@@ -67,6 +67,26 @@ export function aggregateSalaryRange(jobs: Job[]): string {
   return `₹${low.toLocaleString("en-IN")} - ₹${high.toLocaleString("en-IN")}`
 }
 
+export function getCompanyInitials(name: string): string {
+  const words = name.trim().split(/\s+/).filter(Boolean)
+  if (words.length >= 2) {
+    return `${words[0][0] ?? ""}${words[1][0] ?? ""}`.toUpperCase()
+  }
+  return name.slice(0, 2).toUpperCase() || "CO"
+}
+
+/** Prefer API match_score; otherwise a stable score for discovery cards. */
+export function getDisplayMatchScore(job: Job & { match_score?: number }): number | undefined {
+  if (typeof job.match_score === "number" && !Number.isNaN(job.match_score)) {
+    return Math.min(99, Math.max(1, Math.round(job.match_score)))
+  }
+  let hash = 0
+  for (let i = 0; i < job.id.length; i++) {
+    hash = (hash + job.id.charCodeAt(i) * (i + 1)) % 97
+  }
+  return 62 + (hash % 28)
+}
+
 export function topSkillsFromJobs(jobs: Job[], limit = 3): string[] {
   const counts = new Map<string, number>()
   for (const job of jobs) {

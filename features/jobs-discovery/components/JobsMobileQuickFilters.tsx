@@ -13,15 +13,26 @@ import type { JobsFilterValues } from "./JobsFiltersSidebar"
 
 type Props = {
   filters: JobsFilterValues
+  activeFilterCount?: number
   onOpenFilters: () => void
   onOpenSection?: (section: keyof JobsFilterValues) => void
+  className?: string
+  /** Reference-style primary filters button (dashboard mobile). */
+  variant?: "chips" | "bar"
 }
 
 function hasValue(v: string) {
   return Boolean(v.trim())
 }
 
-export function JobsMobileQuickFilters({ filters, onOpenFilters, onOpenSection }: Props) {
+export function JobsMobileQuickFilters({
+  filters,
+  activeFilterCount = 0,
+  onOpenFilters,
+  onOpenSection,
+  className,
+  variant = "chips",
+}: Props) {
   const chips = [
     {
       key: "keyword" as const,
@@ -51,16 +62,44 @@ export function JobsMobileQuickFilters({ filters, onOpenFilters, onOpenSection }
     },
   ]
 
+  if (variant === "bar") {
+    return (
+      <div className={cn("lg:hidden", className)}>
+        <button
+          type="button"
+          onClick={onOpenFilters}
+          className="flex h-11 w-full items-center justify-center gap-2 rounded-xl border border-[#dde3f5] bg-white px-4 text-sm font-semibold text-[#0a0e1a] shadow-sm transition hover:border-primary-500/30 dark:border-blue-900 dark:bg-slate-900 dark:text-blue-50"
+        >
+          <SlidersHorizontal className="h-4 w-4 text-primary-600" aria-hidden />
+          Filters
+          {activeFilterCount > 0 ? (
+            <span className="flex h-5 min-w-[1.25rem] items-center justify-center rounded-full bg-primary-600 px-1.5 text-[11px] font-bold text-white">
+              {activeFilterCount}
+            </span>
+          ) : null}
+        </button>
+      </div>
+    )
+  }
+
   return (
-    <div className="lg:hidden">
+    <div className={cn("lg:hidden", className)}>
       <div className="-mx-1 flex gap-2 overflow-x-auto px-1 pb-1 scrollbar-hide">
         <button
           type="button"
           onClick={onOpenFilters}
-          className={cn(jobsChipInactive, "border-primary-500/30 bg-primary-50 text-primary-700")}
+          className={cn(
+            jobsChipInactive,
+            "border-primary-500/30 bg-primary-50 text-primary-700 dark:bg-primary-950/40",
+          )}
         >
           <SlidersHorizontal className="h-3.5 w-3.5 text-primary-600" aria-hidden />
-          All filters
+          Filters
+          {activeFilterCount > 0 ? (
+            <span className="ml-0.5 flex h-4 min-w-[1rem] items-center justify-center rounded-full bg-primary-600 px-1 text-[10px] font-bold text-white">
+              {activeFilterCount}
+            </span>
+          ) : null}
         </button>
         {chips.map((chip) => (
           <button

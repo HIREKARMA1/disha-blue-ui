@@ -19,15 +19,19 @@ import {
   formatJobType,
   formatPostedAgo,
   formatSalary,
+  getCompanyInitials,
 } from "../utils/jobFormatters"
 
 type Props = {
   job: Job
   isSaved?: boolean
   isApplying?: boolean
+  matchScore?: number
+  showMatchScore?: boolean
   onViewDetails: () => void
   onApply: () => void
   onSaveToggle?: () => void
+  onViewCompany?: () => void
 }
 
 type DetailRowProps = {
@@ -71,50 +75,75 @@ export function PublicJobListingCard({
   job,
   isSaved,
   isApplying,
+  matchScore,
+  showMatchScore = false,
   onViewDetails,
   onApply,
   onSaveToggle,
+  onViewCompany,
 }: Props) {
   const company = job.company_name || job.corporate_name || "Hiring partner"
   const openings = job.number_of_openings ?? 1
   const applied = job.applications_count ?? job.current_applications ?? 0
   const showUrgent = isUrgentPosting(job.created_at) && job.can_apply
+  const initials = getCompanyInitials(company)
 
   return (
     <article className={cn(jobsCardClass, "overflow-hidden p-4 sm:p-5")}>
-      {/* Header */}
       <div className="flex items-start gap-3">
-        <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#e8f0ff] text-primary-600 ring-1 ring-[#dde3f5] dark:bg-blue-900/60 dark:ring-blue-800">
-          <Briefcase className="h-5 w-5" strokeWidth={2} aria-hidden />
+        <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[#e8f0ff] text-sm font-bold text-primary-700 ring-1 ring-[#dde3f5] dark:bg-blue-900/60 dark:ring-blue-800">
+          {initials}
         </span>
         <div className="min-w-0 flex-1">
-          <h3 className="text-base font-bold leading-snug text-[#0a0e1a] sm:text-lg dark:text-white">
-            {job.title}
-          </h3>
-          <p className="mt-0.5 truncate text-xs font-semibold uppercase tracking-wide text-[#7a85a8] dark:text-blue-300/80">
-            {company}
-          </p>
-          {showUrgent ? (
-            <span className="mt-2 inline-flex rounded-full bg-[#f05a28] px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-white">
-              Urgent hiring
-            </span>
-          ) : null}
+          <div className="flex items-start justify-between gap-2">
+            <div className="min-w-0 flex-1">
+              <h3 className="text-base font-bold leading-snug text-primary-700 sm:text-lg dark:text-primary-400">
+                {job.title}
+              </h3>
+              <p className="mt-0.5 truncate text-xs font-semibold text-[#7a85a8] dark:text-blue-300/80">
+                {company}
+              </p>
+            </div>
+            <div className="flex shrink-0 items-start gap-1.5">
+              {onViewCompany ? (
+                <button
+                  type="button"
+                  onClick={onViewCompany}
+                  className="hidden rounded-lg border border-[#dde3f5] bg-white px-2.5 py-1.5 text-[11px] font-semibold text-[#0a0e1a] transition hover:border-primary-500/40 sm:inline-flex dark:border-blue-800 dark:bg-slate-900 dark:text-blue-50"
+                >
+                  View Company
+                </button>
+              ) : null}
+              {onSaveToggle ? (
+                <button
+                  type="button"
+                  onClick={onSaveToggle}
+                  className="rounded-lg p-1.5 text-[#9aa3bd] transition hover:bg-[#f0f4ff] hover:text-primary-600 dark:hover:bg-blue-900/50"
+                  aria-label={isSaved ? "Remove bookmark" : "Save job"}
+                >
+                  <Bookmark
+                    className={cn("h-5 w-5", isSaved ? "fill-primary-600 text-primary-600" : "fill-none")}
+                  />
+                </button>
+              ) : null}
+            </div>
+          </div>
+
+          <div className="mt-2 flex flex-wrap items-center gap-2">
+            {showMatchScore && matchScore != null ? (
+              <span className="inline-flex rounded-md bg-emerald-50 px-2 py-0.5 text-[11px] font-bold text-emerald-700 ring-1 ring-emerald-100 dark:bg-emerald-950/50 dark:text-emerald-400">
+                {matchScore}% Match
+              </span>
+            ) : null}
+            {showUrgent ? (
+              <span className="inline-flex rounded-full bg-[#f05a28] px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-white">
+                Urgent hiring
+              </span>
+            ) : null}
+          </div>
         </div>
-        {onSaveToggle ? (
-          <button
-            type="button"
-            onClick={onSaveToggle}
-            className="shrink-0 rounded-lg p-1.5 text-[#9aa3bd] transition hover:bg-[#f0f4ff] hover:text-primary-600 dark:hover:bg-blue-900/50"
-            aria-label={isSaved ? "Remove bookmark" : "Save job"}
-          >
-            <Bookmark
-              className={cn("h-5 w-5", isSaved ? "fill-primary-600 text-primary-600" : "fill-none")}
-            />
-          </button>
-        ) : null}
       </div>
 
-      {/* Unified details panel — reference-style stacked rows */}
       <div className="mt-4 overflow-hidden rounded-xl border border-[#e8edf5] bg-[#f4f6fa] dark:border-blue-900/50 dark:bg-slate-800/50">
         <div className="divide-y divide-[#e8edf5] dark:divide-blue-900/60">
           <DetailRow
@@ -126,14 +155,14 @@ export function PublicJobListingCard({
           />
           <DetailRow
             icon={Wallet}
-            label="Salary range"
+            label="Salary"
             value={formatSalary(job)}
             iconClass="text-emerald-600"
             iconWrapClass="bg-emerald-50 dark:bg-emerald-950/80"
           />
           <DetailRow
             icon={Briefcase}
-            label="Job type"
+            label="Type"
             value={formatJobType(job)}
             iconClass="text-violet-600"
             iconWrapClass="bg-violet-50 dark:bg-violet-950/80"
@@ -148,7 +177,6 @@ export function PublicJobListingCard({
         </div>
       </div>
 
-      {/* Metadata */}
       <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs font-medium text-[#7a85a8] dark:text-blue-300/80">
         <span className="inline-flex items-center gap-1.5">
           <Clock className="h-3.5 w-3.5 shrink-0" aria-hidden />
@@ -156,15 +184,14 @@ export function PublicJobListingCard({
         </span>
         <span className="inline-flex items-center gap-1.5">
           <Briefcase className="h-3.5 w-3.5 shrink-0" aria-hidden />
-          {applied} applied
+          {applied} Applied
         </span>
         <span className="inline-flex items-center gap-1.5">
           <Users className="h-3.5 w-3.5 shrink-0" aria-hidden />
-          {openings} opening{openings === 1 ? "" : "s"}
+          {openings} Opening{openings === 1 ? "" : "s"}
         </span>
       </div>
 
-      {/* Actions — side by side on mobile (reference) */}
       <div className="mt-4 grid grid-cols-2 gap-2.5">
         <button
           type="button"
