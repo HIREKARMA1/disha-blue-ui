@@ -350,6 +350,12 @@ body.hide-sidebar .main-navbar {
   .dashboard-flat .border-gray-700,
   .dashboard-flat .border-gray-600 { border-color: #e5e7eb !important; }
   .dashboard-flat .text-white { color: #111827 !important; }
+  /* Active student sidebar: keep white icon + label on primary background */
+  .dashboard-flat .student-sidebar a.bg-primary-600,
+  .dashboard-flat .student-sidebar a.bg-primary-600 span,
+  .dashboard-flat .student-sidebar a.bg-primary-600 svg {
+    color: #ffffff !important;
+  }
   .dashboard-flat .text-gray-400 { color: #6b7280 !important; }
   .dashboard-flat .hover\:bg-gray-700:hover,
   .dashboard-flat .hover\:bg-gray-800:hover { background-color: #f3f4f6 !important; }

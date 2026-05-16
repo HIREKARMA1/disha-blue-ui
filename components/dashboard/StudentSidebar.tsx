@@ -106,21 +106,26 @@ export function StudentSidebar({ className = '' }: StudentSidebarProps) {
                       ? cn(
                           'h-11 w-full gap-3 rounded-lg px-3',
                           isActive
-                            ? 'bg-primary-600 text-white shadow-sm'
+                            ? 'bg-primary-600 text-white shadow-sm [&_svg]:text-white'
                             : 'text-slate-800 hover:bg-slate-200/70 dark:text-slate-200 dark:hover:bg-slate-800',
                         )
                       : cn(
                           'mx-auto h-11 w-11 justify-center rounded-lg',
                           isActive
-                            ? 'bg-primary-600 text-white shadow-sm'
+                            ? 'bg-primary-600 text-white shadow-sm [&_svg]:text-white'
                             : 'text-slate-600 hover:bg-slate-200/80 dark:text-slate-400 dark:hover:bg-slate-800',
                         ),
                   )}
                 >
-                  <Icon className="h-5 w-5 shrink-0" strokeWidth={1.75} aria-hidden />
+                  <Icon
+                    className={cn('h-5 w-5 shrink-0', isActive && 'text-white')}
+                    strokeWidth={1.75}
+                    aria-hidden
+                  />
                   <span
                     className={cn(
                       'truncate text-sm font-medium transition-all duration-200',
+                      isActive && 'text-white',
                       sidebarExpanded ? 'opacity-100' : 'pointer-events-none w-0 overflow-hidden opacity-0',
                     )}
                   >
