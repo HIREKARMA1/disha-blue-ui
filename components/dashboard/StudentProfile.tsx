@@ -31,13 +31,18 @@ import { LookupSelect } from '@/components/ui/lookup-select'
 import { CollegeInfoDisplay } from './CollegeInfoDisplay'
 import { useRef } from 'react'
 import { getRecommendationReadiness } from '@/lib/recommendationReadiness'
-interface ProfileSection {
- id: string
- title: string
- icon: any
- fields: string[]
- completed: boolean
-}
+import { StudentProfilePageLayout } from '@/features/student-profile/StudentProfilePageLayout'
+import {
+ ProfilePersonalInfoSection,
+ ProfileQualificationSection,
+ ProfileJobPreferencesSection,
+ ProfileSkillsLanguagesSection,
+ ProfileWorkExperienceSection,
+ ProfileDocumentsSection,
+ ProfileSocialSection,
+} from '@/features/student-profile/StudentProfileSections'
+import type { ProfileSection } from '@/features/student-profile/types'
+import { apiClient } from '@/lib/api'
 
 export function StudentProfile() {
  const [profile, setProfile] = useState<StudentProfile | null>(null)
@@ -46,12 +51,11 @@ export function StudentProfile() {
  const [editing, setEditing] = useState<string | null>(null)
  const [error, setError] = useState<string | null>(null)
  const [saving, setSaving] = useState(false)
- const [activeTab, setActiveTab] = useState('basic')
+ const [applicationsCount, setApplicationsCount] = useState(0)
  const [imageModal, setImageModal] = useState<{ isOpen: boolean; imageUrl: string; altText: string }>({
  isOpen: false,
  imageUrl:'',
  altText:''})
- const basicFormRef = useRef<HTMLDivElement>(null);
  const recommendationReadiness = getRecommendationReadiness(profile)
 
  const profileSections: ProfileSection[] = [
@@ -99,14 +103,14 @@ export function StudentProfile() {
  }
  ]
 
- const tabs = [
- { id:'basic', label:'Basic Info', icon: User },
- { id:'academic', label:'Academic', icon: GraduationCap },
- { id:'skills', label:'Skills', icon: Zap },
- { id:'experience', label:'Experience', icon: Trophy },
- { id:'documents', label:'Documents', icon: Shield },
- { id:'social', label:'Social', icon: Globe }
- ]
+ const sectionDefs = Object.fromEntries(profileSections.map((s) => [s.id, s])) as Record<string, ProfileSection>
+
+ const scrollToSection = (sectionId: string) => {
+ setEditing(sectionId)
+ setTimeout(() => {
+ document.getElementById(`profile-section-${sectionId}`)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+ }, 120)
+ }
 
  useEffect(() => {
  loadProfile()
@@ -125,6 +129,13 @@ const [profileData, completionData] = await Promise.all([
 
  setProfile(profileData)
  setProfileCompletion(completionData)
+
+ try {
+ const apps = await apiClient.getStudentApplications({ page: 1, limit: 1 })
+ setApplicationsCount(apps.total_count ?? 0)
+ } catch {
+ setApplicationsCount(0)
+ }
  } catch (error: any) {
  setError(error.message)
  } finally {
@@ -181,31 +192,30 @@ const showSuccessToast = options?.showSuccessToast ?? true
  }
  }
 
+ const sectionProps = {
+ profile: profile!,
+ editing,
+ setEditing,
+ saving,
+ onSave: handleSave,
+ ProfileSectionForm,
+ sectionDefs,
+ }
+
  if (loading) {
  return (
  <StudentDashboardLayout>
- <div className="w-full">
- <div className="dashboard-overview-shell">
- <div className="animate-pulse space-y-4 lg:space-y-6">
- <div className="h-6 w-1/3 rounded-xl bg-slate-200/80 dark:bg-blue-800/60"></div>
- <div className="grid grid-cols-1 gap-4 lg:grid-cols-12 lg:gap-6">
- <div className="lg:col-span-3">
- <div className="h-80 rounded-2xl bg-slate-200/80 dark:bg-blue-800/50"></div>
- </div>
- <div className="space-y-4 lg:col-span-6">
- {[...Array(3)].map((_, i) => (
- <div key={i} className="h-32 rounded-2xl bg-slate-200/80 dark:bg-blue-800/50"></div>
- ))}
- </div>
- <div className="space-y-4 lg:col-span-3">
- {[...Array(3)].map((_, i) => (
- <div key={i} className="h-24 rounded-2xl bg-slate-200/80 dark:bg-blue-800/50"></div>
- ))}
- </div>
- </div>
- </div>
- </div>
- </div>
+ <motion.div className="w-full">
+ <motion.div className="mx-auto max-w-6xl animate-pulse space-y-4 px-4 py-6">
+ <motion.div className="h-4 w-40 rounded bg-slate-200 dark:bg-slate-800" />
+ <motion.div className="h-48 rounded-2xl bg-slate-200 dark:bg-slate-800" />
+ <motion.div className="h-40 rounded-2xl bg-slate-200 dark:bg-slate-800" />
+ <motion.div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
+ <motion.div className="h-64 rounded-2xl bg-slate-200 lg:col-span-2 dark:bg-slate-800" />
+ <motion.div className="h-64 rounded-2xl bg-slate-200 dark:bg-slate-800" />
+ </motion.div>
+ </motion.div>
+ </motion.div>
  </StudentDashboardLayout>
  )
  }
@@ -213,16 +223,18 @@ const showSuccessToast = options?.showSuccessToast ?? true
  if (error && !profile) {
  return (
  <StudentDashboardLayout>
- <div className="w-full">
- <div className="dashboard-overview-shell flex justify-center py-8">
- <div className="mx-auto max-w-md rounded-2xl border border-slate-200/90 bg-white p-6 shadow-[0_4px_24px_-6px_rgba(15,23,42,0.09)] dark:border-blue-800/70 dark:bg-blue-900/40 dark:shadow-none lg:p-8">
- <AlertCircle className="mx-auto mb-4 h-12 w-12 text-destructive lg:h-16 lg:w-16"/>
+ <motion.div className="w-full">
+ <motion.div className="flex justify-center px-4 py-8">
+ <motion.div className="mx-auto max-w-md rounded-2xl border border-slate-200/90 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900 lg:p-8">
+ <AlertCircle className="mx-auto mb-4 h-12 w-12 text-destructive lg:h-16 lg:w-16" />
  <h2 className="mb-2 text-xl font-bold text-foreground lg:text-2xl">Unable to Load Profile</h2>
  <p className="mb-6 text-muted-foreground">{error}</p>
- <Button onClick={loadProfile} variant="default">Try Again</Button>
- </div>
- </div>
- </div>
+ <Button onClick={loadProfile} variant="default">
+ Try Again
+ </Button>
+ </motion.div>
+ </motion.div>
+ </motion.div>
  </StudentDashboardLayout>
  )
  }
@@ -230,847 +242,47 @@ const showSuccessToast = options?.showSuccessToast ?? true
  if (!profile) {
  return (
  <StudentDashboardLayout>
- <div className="w-full">
- <div className="dashboard-overview-shell flex justify-center py-8">
- <div className="mx-auto max-w-md rounded-2xl border border-slate-200/90 bg-white p-6 shadow-[0_4px_24px_-6px_rgba(15,23,42,0.09)] dark:border-blue-800/70 dark:bg-blue-900/40 dark:shadow-none lg:p-8">
- <AlertCircle className="mx-auto mb-4 h-12 w-12 text-warning lg:h-16 lg:w-16"/>
+ <motion.div className="w-full">
+ <motion.div className="flex justify-center px-4 py-8">
+ <motion.div className="mx-auto max-w-md rounded-2xl border border-slate-200/90 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900 lg:p-8">
+ <AlertCircle className="mx-auto mb-4 h-12 w-12 text-warning lg:h-16 lg:w-16" />
  <h2 className="mb-2 text-xl font-bold text-foreground lg:text-2xl">Profile Not Found</h2>
  <p className="text-muted-foreground">Unable to load your profile. Please try again later.</p>
- </div>
- </div>
- </div>
+ </motion.div>
+ </motion.div>
+ </motion.div>
  </StudentDashboardLayout>
  )
  }
 
  return (
  <StudentDashboardLayout>
- <div className="w-full">
- <div className="dashboard-overview-shell space-y-6">
- {/* Header - Consistent with other sections */}
- <div className="rounded-2xl border border-slate-200/90 bg-blue-50/10 p-6 shadow-[0_4px_24px_-6px_rgba(15,23,42,0.08)] dark:border-blue-800/60 dark:bg-blue-900/25 dark:shadow-none">
- <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 lg:gap-6">
- <div className="flex-1 min-w-0">
- <h1 className="font-display text-2xl md:text-3xl font-semibold tracking-tight text-foreground mb-2">
- Career Profile Workspace
- </h1>
- <p className="text-muted-foreground text-base md:text-lg mb-3">
- Keep your identity, skills, and achievements recruiter-ready in one structured profile.
- </p>
- <div className="flex flex-wrap items-center gap-2">
- <span className="inline-flex items-center border px-3 py-1 text-xs font-medium text-primary">
- {new Date().toLocaleDateString('en-US', { weekday:'long', month:'long', day:'numeric'})}
- </span>
- <span className="inline-flex items-center border px-3 py-1 text-xs font-medium text-secondary-700">
- Profile workspace
- </span>
- <span className="inline-flex items-center border px-3 py-1 text-xs font-medium text-primary">
- AI Match Readiness: {recommendationReadiness.score}%
- </span>
- {profile.resume && (
- <Link
- href={profile.resume}
- target="_blank"rel="noopener noreferrer"className="inline-flex items-center border border-slate-200/90 bg-white px-3 py-1 text-xs font-medium text-slate-800 dark:border-blue-800/70 dark:bg-blue-900/40 dark:text-blue-50">
- Preview Resume
- </Link>
- )}
- </div>
- </div>
- </div>
- </div>
-
- {/* Profile Content */}
- <div className="space-y-6">
- <div className="grid grid-cols-1 gap-4 lg:grid-cols-12 lg:gap-6">
- {/* Top Horizontal Section - Profile Overview */}
- <div className="lg:col-span-3">
- <div className="rounded-2xl border border-slate-200/90 bg-white p-4 shadow-[0_4px_24px_-6px_rgba(15,23,42,0.09)] dark:border-blue-800/70 dark:bg-blue-900/25 dark:shadow-none">
- <div className="flex flex-col lg:flex-row items-center lg:items-start gap-6">
- {/* Profile Avatar & Info */}
- <div className="text-center lg:text-left">
- <div className="w-20 h-20 lg:w-24 lg:h-24 mx-auto lg:mx-0 mb-4 relative">
- <div className="flex h-20 w-20 items-center justify-center overflow-hidden bg-blue-600 shadow-lg dark:bg-blue-700 lg:h-24 lg:w-24">
- {profile.profile_picture ? (
- <img
- src={profile.profile_picture}
- alt={profile.name}
- className="w-20 h-20 lg:w-24 lg:h-24 object-cover"/>
- ) : (
- <span className="text-xl lg:text-2xl font-bold text-white">
- {getInitials(profile.name)}
- </span>
- )}
- </div>
- <button
- className="absolute -bottom-1 -right-1 flex h-5 w-5 items-center justify-center border border-slate-200 bg-white text-blue-600 shadow-md transition-all duration-200 hover:scale-110 hover:bg-blue-50/30 dark:border-blue-700 dark:bg-blue-950 dark:text-blue-300 dark:hover:bg-blue-900/60 lg:h-6 lg:w-6"
- onClick={() => {
- setEditing('basic');
- setTimeout(() => {
- basicFormRef.current?.scrollIntoView({
- behavior:"smooth",
- block:"start"});
- }, 100);
- }}
- title="Change profile picture">
- <Camera className="w-2.5 h-2.5 lg:w-3 lg:h-3"/>
- </button>
-
- </div>
- <h3 className="text-lg lg:text-xl font-semibold text-slate-900 dark:text-blue-50 mb-1">
- {profile.name}
- </h3>
- <p className="text-slate-600 dark:text-blue-200/85 text-sm">
- {profile.institution ||'University Student'}
- </p>
- <p className="text-xs text-slate-500 dark:text-blue-400">
- {profile.degree} • {profile.branch}
- </p>
- </div>
-
- </div>
- <div className="mt-4 rounded-2xl border border-slate-200/90 bg-blue-50/5 p-3 dark:border-blue-800/60 dark:bg-blue-900/20">
- <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">Quick profile stats</p>
- <div className="mt-2 space-y-1.5 text-sm text-foreground">
- <p>Degree: {profile.degree ||'Not set'}</p>
- <p>Branch: {profile.branch ||'Not set'}</p>
- <p>City: {profile.city ||'Not set'}</p>
- </div>
- </div>
- </div>
- </div>
-
- {/* Tab-based Profile Sections */}
- <div className="lg:col-span-6">
- {/* Tab Navigation */}
- <div className="mb-6">
- <div className="border-b border-slate-200 dark:border-blue-800">
- <nav className="-mb-px flex space-x-8 overflow-x-auto">
- {tabs.map((tab) => (
- <button
- key={tab.id}
- onClick={() => setActiveTab(tab.id)}
- className={cn(
- "flex items-center space-x-2 border-b-2 px-1 py-3 text-base font-bold transition-colors duration-200",
- activeTab === tab.id
- ? "border-blue-600 text-blue-600 dark:border-blue-400 dark:text-blue-300"
- : "border-transparent text-slate-500 hover:border-slate-300 hover:text-slate-800 dark:text-blue-400 dark:hover:border-blue-600 dark:hover:text-blue-200",
- )}
- >
- <tab.icon className="w-4 h-4"/>
- <span>{tab.label}</span>
- </button>
- ))}
- </nav>
- </div>
- </div>
-
- {/* Tab Content */}
- <div className="min-h-[600px]">
- {activeTab ==='basic'&& (
- <div ref={basicFormRef} className="rounded-2xl border border-slate-200/90 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md dark:border-blue-800/70 dark:bg-blue-900/25">
- <div className="flex items-center justify-between mb-6">
- <div className="flex items-center space-x-3">
- <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-600 shadow-sm dark:bg-blue-600">
- <User className="h-6 w-6 text-white"/>
- </div>
- <div>
- <h3 className="text-xl font-semibold text-slate-900 dark:text-blue-50">Basic Information</h3>
- <p className="text-sm text-slate-600 dark:text-blue-200/85">Personal details and contact information</p>
- </div>
- </div>
- <Button
- variant="ghost"size="sm"onClick={() => setEditing('basic')}
- className="text-blue-600 dark:text-blue-300 hover:text-slate-700 dark:text-blue-300 text-xs transition-all duration-200">
- <ChevronRight className="w-3 h-3 mr-1"/>
- Edit
- </Button>
- </div>
-
- {editing ==='basic'? (
- <ProfileSectionForm
- section={{ id:'basic', title:'Basic Information', icon: User, fields: ['name','email','phone','dob','gender','country','state','city','bio','profile_picture'], completed: false }}
+ <motion.div className="w-full">
+ <StudentProfilePageLayout
  profile={profile}
- onSave={(formData, options) => handleSave('basic', formData, options)}
- saving={saving}
- onCancel={() => setEditing(null)}
+ applicationsCount={applicationsCount}
+ completionPercent={
+ profileCompletion?.completion_percentage || profile.profile_completion_percentage || 0
+ }
+ profileCompletion={profileCompletion}
+ onScrollToSection={scrollToSection}
+ onEditPhoto={() => scrollToSection('basic')}
+ onEditName={() => scrollToSection('basic')}
+ workExperience={<ProfileWorkExperienceSection {...sectionProps} />}
+ personalInfo={<ProfilePersonalInfoSection {...sectionProps} />}
+ qualification={<ProfileQualificationSection {...sectionProps} />}
+ jobPreferences={<ProfileJobPreferencesSection {...sectionProps} />}
+ skillsLanguages={<ProfileSkillsLanguagesSection {...sectionProps} />}
+ documents={<ProfileDocumentsSection {...sectionProps} />}
+ social={<ProfileSocialSection {...sectionProps} />}
  />
- ) : (
- <div className="space-y-4">
- <div className="rounded-2xl border border-slate-200/90 bg-white/90 p-4 dark:border-blue-800/70 dark:bg-blue-900/20">
- <div className="font-medium text-slate-900 dark:text-blue-50 mb-2">
- Personal Details
- </div>
- <div className="text-sm text-slate-600 dark:text-blue-200/85">
- {profile.name ||'Name not provided'}
- </div>
- {profile.dob && (
- <div className="text-sm text-slate-600 dark:text-blue-200/85 mt-1">
- Date of Birth: {new Date(profile.dob).toLocaleDateString()}
- </div>
- )}
- {profile.gender && (
- <div className="text-sm text-slate-600 dark:text-blue-200/85 mt-1">
- Gender: {profile.gender.charAt(0).toUpperCase() + profile.gender.slice(1)}
- </div>
- )}
- </div>
-
- <div className="rounded-2xl border border-slate-200/90 bg-white/90 p-4 dark:border-blue-800/70 dark:bg-blue-900/20">
- <div className="font-medium text-slate-900 dark:text-blue-50 mb-2">
- Contact Information
- </div>
- <div className="text-sm text-slate-600 dark:text-blue-200/85">
- {profile.email ||'Email not provided'}
- </div>
- <div className="text-sm text-slate-600 dark:text-blue-200/85 mt-1">
- Phone: {profile.phone ||'Not provided'}
- </div>
- </div>
-
- {(profile.country || profile.state || profile.city) && (
- <div className="rounded-2xl border border-slate-200/90 bg-white/90 p-4 dark:border-blue-800/70 dark:bg-blue-900/20">
- <div className="font-medium text-slate-900 dark:text-blue-50 mb-2">
- Location
- </div>
- <div className="text-sm text-slate-600 dark:text-blue-200/85">
- {[profile.city, profile.state, profile.country].filter(Boolean).join(',') ||'Location not provided'}
- </div>
- </div>
- )}
-
- {profile.bio && (
- <div className="rounded-2xl border border-slate-200/90 bg-white/90 p-4 dark:border-blue-800/70 dark:bg-blue-900/20">
- <div className="font-medium text-slate-900 dark:text-blue-50 mb-2">
- Bio
- </div>
- <div className="text-sm text-slate-600 dark:text-blue-200/85">
- {profile.bio}
- </div>
- </div>
- )}
-
- <div className="rounded-2xl border border-slate-200/90 bg-white/90 p-4 dark:border-blue-800/70 dark:bg-blue-900/20">
- <div className="font-medium text-slate-900 dark:text-blue-50 mb-2">
- Profile Picture
- </div>
- <div className="flex items-center justify-between">
- <div className="flex items-center space-x-3">
- {profile.profile_picture ? (
- <>
- <img
- src={profile.profile_picture}
- alt="Profile"className="w-12 h-12 object-cover border-2 border-slate-200 dark:border-blue-800"/>
- <span className="text-sm text-blue-800 dark:text-blue-300"> Uploaded</span>
- </>
- ) : (
- <span className="text-sm text-slate-500 dark:text-blue-400"> Not uploaded</span>
- )}
- </div>
- {profile.profile_picture && (
- <Button
- variant="outline"size="sm"onClick={() => profile.profile_picture && setImageModal({
- isOpen: true,
- imageUrl: profile.profile_picture,
- altText:'Profile Picture'})}
- className="text-blue-600 dark:text-blue-300 hover:text-slate-700 dark:text-blue-300 hover:bg-blue-50/30 dark:hover:bg-blue-900/50">
- <Camera className="w-4 h-4 mr-2"/>
- View Image
- </Button>
- )}
- </div>
- </div>
- </div>
- )}
- </div>
- )}
-
- {activeTab ==='academic'&& (
- <div className="rounded-2xl border border-slate-200/90 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md dark:border-blue-800/70 dark:bg-blue-900/25">
- <div className="flex items-center justify-between mb-6">
- <div className="flex items-center space-x-3">
- <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-600 shadow-sm dark:bg-blue-600">
- <GraduationCap className="w-6 h-6 text-white"/>
- </div>
- <div>
- <h3 className="text-xl font-semibold text-slate-900 dark:text-blue-50">Academic Information</h3>
- <p className="text-sm text-slate-600 dark:text-blue-200/85">Educational background and achievements</p>
- </div>
- </div>
- <Button
- variant="ghost"size="sm"onClick={() => setEditing('academic')}
- className="text-blue-600 hover:text-blue-700 text-xs transition-all duration-200">
- <ChevronRight className="w-3 h-3 mr-1"/>
- Edit
- </Button>
- </div>
-
- {editing ==='academic'? (
- <ProfileSectionForm
- section={{ id:'academic', title:'Academic Information', icon: GraduationCap, fields: ['institution','degree','branch','graduation_year','btech_cgpa','twelfth_institution','twelfth_stream','twelfth_year','twelfth_grade_percentage','tenth_institution','tenth_stream','tenth_year','tenth_grade_percentage'], completed: false }}
- profile={profile}
- onSave={(formData, options) => handleSave('academic', formData, options)}
- saving={saving}
- onCancel={() => setEditing(null)}
- />
- ) : (
- <div className="space-y-6">
- {/* College Section */}
- <div className="rounded-2xl border border-slate-200/90 bg-white p-6 dark:border-blue-800/70 dark:bg-blue-900/25">
- <div className="flex items-center space-x-3 mb-4">
- <div className="w-8 h-8 rounded-2xl flex items-center justify-center">
- <GraduationCap className="w-4 h-4 text-white"/>
- </div>
- <h3 className="text-lg font-semibold text-blue-900">College</h3>
- </div>
-
- {/* We need to fetch universities here to display the name if only ID is present */}
- <CollegeInfoDisplay profile={profile} />
-
- </div>
-
- {/* 12th Section */}
- <div className="rounded-2xl border border-slate-200/90 bg-white p-6 dark:border-blue-800/70 dark:bg-blue-900/25">
- <div className="flex items-center space-x-3 mb-4">
- <div className="w-8 h-8 rounded-2xl flex items-center justify-center">
- <svg className="w-4 h-4 text-white"fill="none"stroke="currentColor"viewBox="0 0 24 24">
- <path strokeLinecap="round"strokeLinejoin="round"strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
- </svg>
- </div>
- <h3 className="text-lg font-semibold text-slate-900 dark:text-blue-50">Class XII</h3>
- </div>
-
- {profile.twelfth_grade_percentage ? (
- <div className="rounded-2xl border border-slate-200/90 bg-white/90 p-4 dark:border-blue-800/70 dark:bg-blue-900/20">
- <div className="font-medium text-slate-900 dark:text-blue-50 mb-2">
- Percentage
- </div>
- <div className="text-sm text-slate-700 dark:text-blue-300">
- {profile.twelfth_grade_percentage}%
- </div>
- </div>
- ) : (
- <div className="rounded-2xl border border-slate-200/90 bg-white/90 p-4 dark:border-blue-800/70 dark:bg-blue-900/20">
- <div className="text-sm text-slate-700 dark:text-blue-300">
- No Class XII details provided yet
- </div>
- </div>
- )}
- </div>
-
- {/* 10th Section */}
- <div className="rounded-2xl border border-slate-200/90 bg-white p-6 dark:border-blue-800/70 dark:bg-blue-900/25">
- <div className="flex items-center space-x-3 mb-4">
- <div className="w-8 h-8 rounded-2xl flex items-center justify-center">
- <svg className="w-4 h-4 text-white"fill="none"stroke="currentColor"viewBox="0 0 24 24">
- <path strokeLinecap="round"strokeLinejoin="round"strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
- </svg>
- </div>
- <h3 className="text-lg font-semibold text-purple-900">Class X</h3>
- </div>
-
- {profile.tenth_grade_percentage ? (
- <div className="rounded-2xl border border-slate-200/90 bg-white/90 p-4 dark:border-blue-800/70 dark:bg-blue-900/20">
- <div className="font-medium text-purple-900 mb-2">
- Percentage
- </div>
- <div className="text-sm text-purple-700">
- {profile.tenth_grade_percentage}%
- </div>
- </div>
- ) : (
- <div className="rounded-2xl border border-slate-200/90 bg-white/90 p-4 dark:border-blue-800/70 dark:bg-blue-900/20">
- <div className="text-sm text-purple-700">
- No Class X details provided yet
- </div>
- </div>
- )}
- </div>
- </div>
- )}
- </div>
- )}
-
- {activeTab ==='skills'&& (
- <div className="rounded-2xl border border-slate-200/90 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md dark:border-blue-800/70 dark:bg-blue-900/25">
- <div className="flex items-center justify-between mb-6">
- <div className="flex items-center space-x-3">
- <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-600 shadow-sm dark:bg-blue-600">
- <Zap className="w-6 h-6 text-white"/>
- </div>
- <div>
- <h3 className="text-xl font-semibold text-slate-900 dark:text-blue-50">Skills & Interests</h3>
- <p className="text-sm text-slate-600 dark:text-blue-200/85">Technical skills, soft skills, and career preferences</p>
- </div>
- </div>
- <Button
- variant="ghost"size="sm"onClick={() => setEditing('skills')}
- className="text-amber-600 hover:text-amber-700 text-xs transition-all duration-200">
- <ChevronRight className="w-3 h-3 mr-1"/>
- Edit
- </Button>
- </div>
-
- {editing ==='skills'? (
- <ProfileSectionForm
- section={{ id:'skills', title:'Skills & Interests', icon: Zap, fields: ['technical_skills','soft_skills','certifications','preferred_industry','job_roles_of_interest','location_preferences','preferred_job_city','preferred_job_district','preferred_job_state','preferred_job_remote','open_to_relocation'], completed: false }}
- profile={profile}
- onSave={(formData, options) => handleSave('skills', formData, options)}
- saving={saving}
- onCancel={() => setEditing(null)}
- />
- ) : (
- <div className="space-y-4">
- {profile.technical_skills && (
- <div className="rounded-2xl border border-slate-200/90 bg-white/90 p-4 dark:border-blue-800/70 dark:bg-blue-900/20">
- <div className="font-medium text-slate-900 dark:text-blue-50 mb-2">
- Technical Skills
- </div>
- <div className="text-sm text-slate-600 dark:text-blue-200/85">
- {profile.technical_skills}
- </div>
- </div>
- )}
-
- {profile.soft_skills && (
- <div className="rounded-2xl border border-slate-200/90 bg-white/90 p-4 dark:border-blue-800/70 dark:bg-blue-900/20">
- <div className="font-medium text-slate-900 dark:text-blue-50 mb-2">
- Soft Skills
- </div>
- <div className="text-sm text-slate-600 dark:text-blue-200/85">
- {profile.soft_skills}
- </div>
- </div>
- )}
-
- {profile.certifications && (
- <div className="rounded-2xl border border-slate-200/90 bg-white/90 p-4 dark:border-blue-800/70 dark:bg-blue-900/20">
- <div className="font-medium text-slate-900 dark:text-blue-50 mb-2">
- Certifications
- </div>
- <div className="text-sm text-slate-600 dark:text-blue-200/85">
- {profile.certifications}
- </div>
- </div>
- )}
-
- {profile.preferred_industry && (
- <div className="rounded-2xl border border-slate-200/90 bg-white/90 p-4 dark:border-blue-800/70 dark:bg-blue-900/20">
- <div className="font-medium text-slate-900 dark:text-blue-50 mb-2">
- Preferred Industry
- </div>
- <div className="text-sm text-slate-600 dark:text-blue-200/85">
- {profile.preferred_industry}
- </div>
- </div>
- )}
-
- {profile.job_roles_of_interest && (
- <div className="rounded-2xl border border-slate-200/90 bg-white/90 p-4 dark:border-blue-800/70 dark:bg-blue-900/20">
- <div className="font-medium text-slate-900 dark:text-blue-50 mb-2">
- Job Roles Of Interest
- </div>
- <div className="text-sm text-slate-600 dark:text-blue-200/85">
- {profile.job_roles_of_interest}
- </div>
- </div>
- )}
-
- {profile.location_preferences && (
- <div className="rounded-2xl border border-slate-200/90 bg-white/90 p-4 dark:border-blue-800/70 dark:bg-blue-900/20">
- <div className="font-medium text-slate-900 dark:text-blue-50 mb-2">
- Location Preferences
- </div>
- <div className="text-sm text-slate-600 dark:text-blue-200/85">
- {profile.location_preferences}
- </div>
- </div>
- )}
-
- {!profile.technical_skills && !profile.soft_skills && !profile.certifications && !profile.preferred_industry && !profile.job_roles_of_interest && !profile.location_preferences && (
- <div className="rounded-2xl border border-slate-200/90 bg-white/90 p-4 dark:border-blue-800/70 dark:bg-blue-900/20">
- <div className="font-medium text-slate-900 dark:text-blue-50 mb-2">
- Skills & Interests
- </div>
- <div className="text-sm text-slate-600 dark:text-blue-200/85">
- No skills or interests provided yet
- </div>
- </div>
- )}
- </div>
- )}
- </div>
- )}
-
- {activeTab ==='experience'&& (
- <div className="rounded-2xl border border-slate-200/90 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md dark:border-blue-800/70 dark:bg-blue-900/25">
- <div className="flex items-center justify-between mb-6">
- <div className="flex items-center space-x-3">
- <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-600 shadow-sm dark:bg-blue-600">
- <Trophy className="w-6 h-6 text-white"/>
- </div>
- <div>
- <h3 className="text-xl font-semibold text-slate-900 dark:text-blue-50">Experience & Projects</h3>
- <p className="text-sm text-slate-600 dark:text-blue-200/85">Internships, projects, and extracurricular activities</p>
- </div>
- </div>
- <Button
- variant="ghost"size="sm"onClick={() => setEditing('experience')}
- className="text-blue-600 dark:text-blue-300 hover:text-purple-700 text-xs transition-all duration-200">
- <ChevronRight className="w-3 h-3 mr-1"/>
- Edit
- </Button>
- </div>
-
- {editing ==='experience'? (
- <ProfileSectionForm
- section={{ id:'experience', title:'Experience & Projects', icon: Trophy, fields: ['internship_experience','project_details','extracurricular_activities'], completed: false }}
- profile={profile}
- onSave={(formData, options) => handleSave('experience', formData, options)}
- saving={saving}
- onCancel={() => setEditing(null)}
- />
- ) : (
- <div className="space-y-4">
- {profile.internship_experience && (
- <div className="rounded-2xl border border-slate-200/90 bg-white/90 p-4 dark:border-blue-800/70 dark:bg-blue-900/20">
- <div className="flex items-start space-x-3">
- <div className="w-10 h-10 bg-blue-50/35 dark:bg-blue-900/45 rounded-2xl flex items-center justify-center flex-shrink-0">
- <svg className="w-5 h-5 text-blue-600 dark:text-blue-300"fill="none"stroke="currentColor"viewBox="0 0 24 24">
- <path strokeLinecap="round"strokeLinejoin="round"strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
- </svg>
- </div>
- <div className="flex-1 min-w-0">
- <div className="font-medium text-slate-900 dark:text-blue-50 mb-1">
- Internship Experience
- </div>
- <div className="text-sm text-slate-600 dark:text-blue-200/85">
- {profile.internship_experience}
- </div>
- </div>
- </div>
- </div>
- )}
-
- {profile.project_details && (
- <div className="rounded-2xl border border-slate-200/90 bg-white/90 p-4 dark:border-blue-800/70 dark:bg-blue-900/20">
- <div className="flex items-start space-x-3">
- <div className="w-10 h-10 bg-blue-100/90 dark:bg-blue-900/40 rounded-2xl flex items-center justify-center flex-shrink-0">
- <svg className="w-5 h-5 text-blue-800 dark:text-blue-300"fill="none"stroke="currentColor"viewBox="0 0 24 24">
- <path strokeLinecap="round"strokeLinejoin="round"strokeWidth={2} d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
- </svg>
- </div>
- <div className="flex-1 min-w-0">
- <div className="font-medium text-slate-900 dark:text-blue-50 mb-1">
- Project Details
- </div>
- <div className="text-sm text-slate-600 dark:text-blue-200/85">
- {profile.project_details}
- </div>
- </div>
- </div>
- </div>
- )}
-
- {profile.extracurricular_activities && (
- <div className="rounded-2xl border border-slate-200/90 bg-white/90 p-4 dark:border-blue-800/70 dark:bg-blue-900/20">
- <div className="flex items-start space-x-3">
- <div className="w-10 h-10 bg-blue-50/30 dark:bg-blue-900/40 rounded-2xl flex items-center justify-center flex-shrink-0">
- <svg className="w-5 h-5 text-blue-600 dark:text-blue-300"fill="none"stroke="currentColor"viewBox="0 0 24 24">
- <path strokeLinecap="round"strokeLinejoin="round"strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
- </svg>
- </div>
- <div className="flex-1 min-w-0">
- <div className="font-medium text-slate-900 dark:text-blue-50 mb-1">
- Extracurricular Activities
- </div>
- <div className="text-sm text-slate-600 dark:text-blue-200/85">
- {profile.extracurricular_activities}
- </div>
- </div>
- </div>
- </div>
- )}
-
- {!profile.internship_experience && !profile.project_details && !profile.extracurricular_activities && (
- <div className="rounded-2xl border border-slate-200/90 bg-white/90 p-4 dark:border-blue-800/70 dark:bg-blue-900/20">
- <div className="flex items-start space-x-3">
- <div className="w-10 h-10 bg-slate-100 dark:bg-blue-900/35 rounded-2xl flex items-center justify-center flex-shrink-0">
- <svg className="w-5 h-5 text-slate-600 dark:text-blue-200/85"fill="none"stroke="currentColor"viewBox="0 0 24 24">
- <path strokeLinecap="round"strokeLinejoin="round"strokeWidth={2} d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
- </svg>
- </div>
- <div className="flex-1 min-w-0">
- <div className="font-medium text-slate-900 dark:text-blue-50 mb-1">
- Experience & Projects
- </div>
- <div className="text-sm text-slate-600 dark:text-blue-200/85">
- No experience or projects provided yet
- </div>
- </div>
- </div>
- </div>
- )}
- </div>
- )}
- </div>
- )}
-
- {activeTab ==='documents'&& (
- <div className="rounded-2xl border border-slate-200/90 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md dark:border-blue-800/70 dark:bg-blue-900/25">
- <div className="flex items-center justify-between mb-6">
- <div className="flex items-center space-x-3">
- <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-600 shadow-sm dark:bg-blue-600">
- <Shield className="w-6 h-6 text-white"/>
- </div>
- <div>
- <h3 className="text-xl font-semibold text-slate-900 dark:text-blue-50">Documents & Certificates</h3>
- <p className="text-sm text-slate-600 dark:text-blue-200/85">Resume, certificates, and important documents</p>
- </div>
- </div>
- <Button
- variant="ghost"size="sm"onClick={() => setEditing('documents')}
- className="text-slate-600 hover:text-slate-700 text-xs transition-all duration-200">
- <ChevronRight className="w-3 h-3 mr-1"/>
- Edit
- </Button>
- </div>
-
- {editing ==='documents'? (
- <ProfileSectionForm
- section={{ id:'documents', title:'Documents & Certificates', icon: Shield, fields: ['resume','10th_certificate','12th_certificate','internship_certificates'], completed: false }}
- profile={profile}
- onSave={(formData, options) => handleSave('documents', formData, options)}
- saving={saving}
- onCancel={() => setEditing(null)}
- />
- ) : (
- <div className="space-y-4">
- <div className="rounded-2xl border border-slate-200/90 bg-white/90 p-4 dark:border-blue-800/70 dark:bg-blue-900/20">
- <div className="font-medium text-slate-900 dark:text-blue-50 mb-2">
- Resume
- </div>
- <div className="flex items-center justify-between">
- <div className="flex items-center space-x-3">
- {profile.resume ? (
- <>
- <div className="w-10 h-10 bg-blue-100/90 dark:bg-blue-900/40 rounded-2xl flex items-center justify-center">
- <FileText className="w-5 h-5 text-blue-800 dark:text-blue-300"/>
- </div>
- <span className="text-sm text-blue-800 dark:text-blue-300"> Uploaded</span>
- </>
- ) : (
- <span className="text-sm text-slate-500 dark:text-blue-400"> Not uploaded</span>
- )}
- </div>
- {profile.resume && (
- <Button
- variant="outline"size="sm"onClick={() => window.open(profile.resume,'_blank')}
- className="text-blue-600 dark:text-blue-300 hover:text-slate-700 dark:text-blue-300 hover:bg-blue-50/30 dark:hover:bg-blue-900/50">
- <FileText className="w-4 h-4 mr-2"/>
- View File
- </Button>
- )}
- </div>
- </div>
-
- <div className="rounded-2xl border border-slate-200/90 bg-white/90 p-4 dark:border-blue-800/70 dark:bg-blue-900/20">
- <div className="font-medium text-slate-900 dark:text-blue-50 mb-2">
- Academic Certificates
- </div>
- <div className="space-y-3">
- <div className="flex items-center justify-between">
- <div className="flex items-center space-x-3">
- <span className="text-sm text-slate-600 dark:text-blue-200/85">10th Certificate:</span>
- {profile.tenth_certificate ? (
- <span className="text-sm text-blue-800 dark:text-blue-300"> Uploaded</span>
- ) : (
- <span className="text-sm text-slate-500 dark:text-blue-400"> Not uploaded</span>
- )}
- </div>
- {profile.tenth_certificate && (
- <Button
- variant="outline"size="sm"onClick={() => window.open(profile.tenth_certificate,'_blank')}
- className="text-blue-600 dark:text-blue-300 hover:text-slate-700 dark:text-blue-300 hover:bg-blue-50/30 dark:hover:bg-blue-900/50">
- <FileText className="w-4 h-4 mr-2"/>
- View File
- </Button>
- )}
- </div>
- <div className="flex items-center justify-between">
- <div className="flex items-center space-x-3">
- <span className="text-sm text-slate-600 dark:text-blue-200/85">12th Certificate:</span>
- {profile.twelfth_certificate ? (
- <span className="text-sm text-blue-800 dark:text-blue-300"> Uploaded</span>
- ) : (
- <span className="text-sm text-slate-500 dark:text-blue-400"> Not uploaded</span>
- )}
- </div>
- {profile.twelfth_certificate && (
- <Button
- variant="outline"size="sm"onClick={() => window.open(profile.twelfth_certificate,'_blank')}
- className="text-blue-600 dark:text-blue-300 hover:text-slate-700 dark:text-blue-300 hover:bg-blue-50/30 dark:hover:bg-blue-900/50">
- <FileText className="w-4 h-4 mr-2"/>
- View File
- </Button>
- )}
- </div>
- </div>
- </div>
-
- <div className="rounded-2xl border border-slate-200/90 bg-white/90 p-4 dark:border-blue-800/70 dark:bg-blue-900/20">
- <div className="font-medium text-slate-900 dark:text-blue-50 mb-2">
- Internship Certificates
- </div>
- <div className="flex items-center justify-between">
- <div className="flex items-center space-x-3">
- {profile.internship_certificates ? (
- <>
- <div className="w-10 h-10 bg-blue-100/90 dark:bg-blue-900/40 rounded-2xl flex items-center justify-center">
- <FileText className="w-5 h-5 text-blue-800 dark:text-blue-300"/>
- </div>
- <span className="text-sm text-blue-800 dark:text-blue-300"> Uploaded</span>
- </>
- ) : (
- <span className="text-sm text-slate-500 dark:text-blue-400"> Not uploaded</span>
- )}
- </div>
- {profile.internship_certificates && (
- <Button
- variant="outline"size="sm"onClick={() => window.open(profile.internship_certificates,'_blank')}
- className="text-blue-600 dark:text-blue-300 hover:text-slate-700 dark:text-blue-300 hover:bg-blue-50/30 dark:hover:bg-blue-900/50">
- <FileText className="w-4 h-4 mr-2"/>
- View File
- </Button>
- )}
- </div>
- </div>
- </div>
- )}
- </div>
- )}
-
- {activeTab ==='social'&& (
- <div className="rounded-2xl border border-slate-200/90 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md dark:border-blue-800/70 dark:bg-blue-900/25">
- <div className="flex items-center justify-between mb-6">
- <div className="flex items-center space-x-3">
- <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-600 shadow-sm dark:bg-blue-600">
- <Globe className="w-6 h-6 text-white"/>
- </div>
- <div>
- <h3 className="text-xl font-semibold text-slate-900 dark:text-blue-50">Social Profiles</h3>
- <p className="text-sm text-slate-600 dark:text-blue-200/85">LinkedIn, GitHub, and personal websites</p>
- </div>
- </div>
- <Button
- variant="ghost"size="sm"onClick={() => setEditing('social')}
- className="text-cyan-600 hover:text-cyan-700 text-xs transition-all duration-200">
- <ChevronRight className="w-3 h-3 mr-1"/>
- Edit
- </Button>
- </div>
-
- {editing ==='social'? (
- <ProfileSectionForm
- section={{ id:'social', title:'Social Profiles', icon: Globe, fields: ['linkedin_profile','github_profile','personal_website'], completed: false }}
- profile={profile}
- onSave={(formData, options) => handleSave('social', formData, options)}
- saving={saving}
- onCancel={() => setEditing(null)}
- />
- ) : (
- <div className="space-y-4">
- {profile.linkedin_profile && (
- <div className="rounded-2xl border border-slate-200/90 bg-white/90 p-4 dark:border-blue-800/70 dark:bg-blue-900/20">
- <div className="font-medium text-slate-900 dark:text-blue-50 mb-2">
- LinkedIn Profile
- </div>
- <div className="text-sm text-slate-600 dark:text-blue-200/85">
- <a
- href={profile.linkedin_profile}
- target="_blank"rel="noopener noreferrer"className="text-blue-600 dark:text-blue-300 hover:text-blue-600 dark:text-blue-200 underline hover:no-underline transition-all duration-200">
- {profile.linkedin_profile}
- </a>
- </div>
- </div>
- )}
-
- {profile.github_profile && (
- <div className="rounded-2xl border border-slate-200/90 bg-white/90 p-4 dark:border-blue-800/70 dark:bg-blue-900/20">
- <div className="font-medium text-slate-900 dark:text-blue-50 mb-2">
- GitHub Profile
- </div>
- <div className="text-sm text-slate-600 dark:text-blue-200/85">
- <a
- href={profile.github_profile}
- target="_blank"rel="noopener noreferrer"className="text-blue-600 dark:text-blue-300 hover:text-blue-600 dark:text-blue-200 underline hover:no-underline transition-all duration-200">
- {profile.github_profile}
- </a>
- </div>
- </div>
- )}
-
- {profile.personal_website && (
- <div className="rounded-2xl border border-slate-200/90 bg-white/90 p-4 dark:border-blue-800/70 dark:bg-blue-900/20">
- <div className="font-medium text-slate-900 dark:text-blue-50 mb-2">
- Personal Website
- </div>
- <div className="text-sm text-slate-600 dark:text-blue-200/85">
- <a
- href={profile.personal_website}
- target="_blank"rel="noopener noreferrer"className="text-blue-600 dark:text-blue-300 hover:text-blue-600 dark:text-blue-200 underline hover:no-underline transition-all duration-200">
- {profile.personal_website}
- </a>
- </div>
- </div>
- )}
-
- {!profile.linkedin_profile && !profile.github_profile && !profile.personal_website && (
- <div className="rounded-2xl border border-slate-200/90 bg-white/90 p-4 dark:border-blue-800/70 dark:bg-blue-900/20">
- <div className="font-medium text-slate-900 dark:text-blue-50 mb-2">
- Social Profiles
- </div>
- <div className="text-sm text-slate-600 dark:text-blue-200/85">
- No social profiles provided yet
- </div>
- </div>
- )}
- </div>
- )}
- </div>
- )}
- </div>
- </div>
- <aside className="space-y-4 lg:col-span-3">
- <ProfileCompletion
- completion={profileCompletion?.completion_percentage || profile?.profile_completion_percentage || 0}
- completionData={profileCompletion || undefined}
- />
- <div className="rounded-2xl border border-slate-200/90 bg-white p-4 shadow-[0_4px_24px_-6px_rgba(15,23,42,0.09)] dark:border-blue-800/70 dark:bg-blue-900/25 dark:shadow-none">
- <p className="text-xs font-semibold uppercase tracking-[0.14em] text-blue-600 dark:text-blue-300">AI suggestions</p>
- <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
- <li>Add measurable project outcomes</li>
- <li>Upload latest one-page resume</li>
- <li>Update preferred job locations</li>
- <li>Showcase certifications clearly</li>
- </ul>
- </div>
- <div className="rounded-2xl border border-slate-200/90 bg-white p-4 shadow-[0_4px_24px_-6px_rgba(15,23,42,0.09)] dark:border-blue-800/70 dark:bg-blue-900/25 dark:shadow-none">
- <p className="text-xs font-semibold uppercase tracking-[0.14em] text-blue-600 dark:text-blue-300">Next steps</p>
- <p className="mt-2 text-sm text-muted-foreground">Complete remaining sections to improve recruiter visibility.</p>
- </div>
- </aside>
- </div>
- </div>
- </div>
- </div>
-
- {/* Image Modal for Profile Picture */}
  <ImageModal
  isOpen={imageModal.isOpen}
- onClose={() => setImageModal({ isOpen: false, imageUrl:'', altText:''})}
+ onClose={() => setImageModal({ isOpen: false, imageUrl: '', altText: '' })}
  imageUrl={imageModal.imageUrl}
  altText={imageModal.altText}
  />
+ </motion.div>
  </StudentDashboardLayout>
  )
 }
@@ -1090,7 +302,7 @@ interface ProfileSectionFormProps {
  onCancel: () => void
 }
 
-function ProfileSectionForm({ section, profile, onSave, saving, onCancel }: ProfileSectionFormProps) {
+export function ProfileSectionForm({ section, profile, onSave, saving, onCancel }: ProfileSectionFormProps) {
  const { getToken } = useAuth()
  const [formData, setFormData] = useState<any>({})
  const [uploading, setUploading] = useState<string | null>(null)
