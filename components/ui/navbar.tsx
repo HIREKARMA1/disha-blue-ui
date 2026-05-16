@@ -21,12 +21,14 @@ import { t } from '@/lib/i18n'
 import { useLocale } from '@/contexts/LocaleContext'
 import { LanguageSwitcher } from '@/components/ui/language-switcher'
 import { cn } from '@/lib/utils'
+import {
+  navMarketingActionsRow,
+  navMarketingCtaFind,
+  navMarketingCtaHire,
+} from '@/components/ui/nav-marketing-styles'
 import { STUDENT_SIGNUP_ROUTE } from '@/features/landing/constants'
 
 const HIRE_WORKERS_ROUTE = '/signup?type=corporate'
-
-const jobsUpiCtaClass =
-  'inline-flex h-9 shrink-0 items-center justify-center rounded-full px-4 text-[10px] font-bold uppercase tracking-wide text-white shadow-[0_2px_8px_rgba(0,0,0,0.12)] transition hover:brightness-105 sm:h-11 sm:px-5 sm:text-xs'
 
 interface NavbarProps {
   variant?: 'default' | 'transparent' | 'solid'
@@ -46,18 +48,18 @@ function MarketingJobsUpiActions({ stacked, onNavigate }: MarketingJobsUpiAction
   return (
     <div
       className={cn(
-        'flex items-center gap-2 sm:gap-3',
-        stacked && 'w-full flex-col',
+        navMarketingActionsRow,
+        stacked && 'w-full flex-col gap-3',
       )}
     >
-      <LanguageSwitcher variant="jobsupi" compact={stacked} />
+      <LanguageSwitcher variant="marketing" compact={stacked} />
       <Link href={HIRE_WORKERS_ROUTE} onClick={onNavigate} className={stacked ? 'w-full' : undefined}>
-        <span className={cn(jobsUpiCtaClass, 'w-full bg-[#E86B3A]', stacked && 'w-full px-6')}>
+        <span className={cn(navMarketingCtaHire, stacked && 'w-full px-6')}>
           {t(locale, 'nav.hireWorkers')}
         </span>
       </Link>
       <Link href={STUDENT_SIGNUP_ROUTE} onClick={onNavigate} className={stacked ? 'w-full' : undefined}>
-        <span className={cn(jobsUpiCtaClass, 'w-full bg-[#2B50AA]', stacked && 'w-full px-6')}>
+        <span className={cn(navMarketingCtaFind, stacked && 'w-full px-6')}>
           {t(locale, 'nav.findJobs')}
         </span>
       </Link>
@@ -157,14 +159,14 @@ export function Navbar({
   const authenticatedMarketingActions = (
     <div className="flex flex-wrap items-center justify-end gap-2">
       <Link href={getDashboardPath()}>
-        <Button className="h-9 rounded-full bg-[#2B50AA] px-4 text-xs font-bold uppercase tracking-wide text-white shadow-[0_2px_8px_rgba(0,0,0,0.12)] hover:bg-[#2B50AA]/90 sm:h-11 sm:px-5">
+        <span className={cn(navMarketingCtaFind, 'gap-1.5 normal-case tracking-normal')}>
           {!textOnly &&
             (() => {
               const IconComponent = getUserTypeIcon()
-              return <IconComponent className="mr-1.5 h-4 w-4" />
+              return <IconComponent className="h-4 w-4" />
             })()}
           {t(locale, 'common.dashboard')}
-        </Button>
+        </span>
       </Link>
       {user?.user_type !== 'corporate' && user?.user_type !== 'admin' && (
         <Button
@@ -241,7 +243,7 @@ export function Navbar({
               </div>
             ) : isAuthenticated && user ? (
               <>
-                {!textOnly && <LanguageSwitcher variant="jobsupi" />}
+                {!textOnly && <LanguageSwitcher variant="marketing" />}
                 {authenticatedMarketingActions}
               </>
             ) : (
@@ -259,7 +261,7 @@ export function Navbar({
               <>
                 {isAuthenticated && user && (
                   <Link href={getDashboardPath()}>
-                    <span className={cn(jobsUpiCtaClass, 'bg-[#2B50AA] px-3 text-[9px] sm:px-4 sm:text-[10px]')}>
+                    <span className={cn(navMarketingCtaFind, 'px-4 text-[10px] sm:text-xs')}>
                       {t(locale, 'common.dashboard')}
                     </span>
                   </Link>
