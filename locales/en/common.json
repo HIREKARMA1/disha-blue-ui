@@ -43,7 +43,10 @@
     "roleLinks": "Role Links",
     "contact": "Contact",
     "forStudents": "For Students",
-    "forEmployers": "For Employers"
+    "forEmployers": "For Employers",
+    "popularSearches": "Popular Searches",
+    "browseByCity": "Browse by City",
+    "followUs": "Follow Us"
   },
   "home": {
     "heroTitle": "Discover local and nearby job opportunities",
