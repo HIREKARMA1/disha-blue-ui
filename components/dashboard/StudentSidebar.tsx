@@ -1,27 +1,15 @@
 "use client"
 
-import { useState, useEffect } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
 import {
- Compass,
- Home,
- UserCircle2,
- FileText,
-MessagesSquare,
- GraduationCap,
- X,
- Menu,
- LogOut,
- Mic,
- ClipboardList,
-Bot,
- Film,
- type LucideIcon,
+  Compass,
+  Home,
+  UserCircle2,
+  LogOut,
+  ClipboardList,
+  type LucideIcon,
 } from 'lucide-react'
-import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useAuth } from '@/hooks/useAuth'
-import { apiClient } from '@/lib/api'
 import { useLoading } from '@/contexts/LoadingContext'
 import { cn } from '@/lib/utils'
 import { useLocale } from '@/contexts/LocaleContext'
@@ -30,242 +18,144 @@ import { SidebarRailHoverCard } from '@/components/dashboard/SidebarRailHoverCar
 import { MobileBottomNav } from '@/components/dashboard/MobileBottomNav'
 
 interface NavItem {
- label: string
- href: string
- icon: LucideIcon
- description: string
-aliases?: string[]
+  label: string
+  href: string
+  icon: LucideIcon
+  description: string
+  aliases?: string[]
 }
 
 interface NavGroup {
- title: string
- items: NavItem[]
+  title: string
+  items: NavItem[]
 }
 
 interface StudentSidebarProps {
- className?: string
+  className?: string
 }
 
-export function StudentSidebar({ className =''}: StudentSidebarProps) {
- const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
- const [clientMounted, setClientMounted] = useState(false)
- const [profileData, setProfileData] = useState<any>(null)
- const pathname = usePathname()
- const { user, logout } = useAuth()
- const { startLoading } = useLoading()
- const { locale } = useLocale()
- const navGroups: NavGroup[] = [
- {
-title: 'Overview',
-items: [
-{ label: 'Home', href:'/dashboard/student', icon: Home, description:'Your career control center'},
-{ label:'AI Interview Session', href:'/dashboard/student/career-align', icon: MessagesSquare, description:'Mock interview with live AI coach'},
-{ label:'AI Communication Assessments', href:'/ai-communication', icon: Mic, description:'Voice-based communication coaching'},
-{ label:'Build with AI', href:'/dashboard/student/resume/ai', icon: Bot, description:'Generate resume using AI'},
-{ label:'Resume Builder', href:'/dashboard/student/resume-builder', icon: FileText, description:'Craft and iterate quickly'},
-{ label:'Courses', href:'/dashboard/student/courses', aliases: ['/courses', '/dashboard/student/library'], icon: GraduationCap, description:'Voice-first skill learning paths'},
-{
-label:'Local Jobs',
-href:'/dashboard/discover-jobs',
-aliases: ['/dashboard/student/jobs'],
-icon: Compass,
-description:'Local and personalized roles',
-},
-{ label:'Applications', href:'/dashboard/student/applications', icon: ClipboardList, description:'Track your pipeline status'},
-{ label:'Video Search', href:'/dashboard/student/video-search', icon: Film, description:'Learn from short explainers'},
-{ label:'Profile', href:'/dashboard/student/profile', icon: UserCircle2, description:'Personal details and identity'},
-],
- },
- ]
- const allItems = navGroups.flatMap((group) => group.items)
+export function StudentSidebar({ className = '' }: StudentSidebarProps) {
+  const pathname = usePathname()
+  const { logout } = useAuth()
+  const { startLoading } = useLoading()
+  const { locale } = useLocale()
+  const navGroups: NavGroup[] = [
+    {
+      title: 'Overview',
+      items: [
+        { label: 'Home', href: '/dashboard/student', icon: Home, description: 'Your career control center' },
+        {
+          label: 'Local Jobs',
+          href: '/dashboard/discover-jobs',
+          aliases: ['/dashboard/student/jobs'],
+          icon: Compass,
+          description: 'Local and personalized roles',
+        },
+        {
+          label: 'Applications',
+          href: '/dashboard/student/applications',
+          icon: ClipboardList,
+          description: 'Track your pipeline status',
+        },
+        { label: 'Profile', href: '/dashboard/student/profile', icon: UserCircle2, description: 'Personal details and identity' },
+        // Hidden — re-enable when ready
+        // { label: 'AI Interview Session', href: '/dashboard/student/career-align', icon: MessagesSquare, description: 'Mock interview with live AI coach' },
+        // { label: 'AI Communication Assessments', href: '/ai-communication', icon: Mic, description: 'Voice-based communication coaching' },
+        // { label: 'Build with AI', href: '/dashboard/student/resume/ai', icon: Bot, description: 'Generate resume using AI' },
+        // { label: 'Resume Builder', href: '/dashboard/student/resume-builder', icon: FileText, description: 'Craft and iterate quickly' },
+        // { label: 'Courses', href: '/dashboard/student/courses', aliases: ['/courses', '/dashboard/student/library'], icon: GraduationCap, description: 'Voice-first skill learning paths' },
+        // { label: 'Video Search', href: '/dashboard/student/video-search', icon: Film, description: 'Learn from short explainers' },
+      ],
+    },
+  ]
+  const allItems = navGroups.flatMap((group) => group.items)
 
- const bottomTabHrefs = [
-   '/dashboard/student',
-   '/dashboard/discover-jobs',
-   '/dashboard/student/applications',
-   '/dashboard/student/profile',
- ] as const
+  const bottomTabHrefs = [
+    '/dashboard/student',
+    '/dashboard/discover-jobs',
+    '/dashboard/student/applications',
+    '/dashboard/student/profile',
+  ] as const
 
- const bottomTabs = bottomTabHrefs
-   .map((href) => allItems.find((item) => item.href === href))
-   .filter((item): item is NavItem => Boolean(item))
+  const bottomTabs = bottomTabHrefs
+    .map((href) => allItems.find((item) => item.href === href))
+    .filter((item): item is NavItem => Boolean(item))
 
- useEffect(() => {
-   setClientMounted(true)
- }, [])
+  const railLinkClass = (isActive: boolean) =>
+    cn(
+      'flex h-11 w-11 shrink-0 items-center justify-center transition-all hover:-translate-y-0.5',
+      isActive
+        ? 'rounded-none bg-white text-slate-800 shadow-none dark:bg-white dark:text-slate-900'
+        : 'text-slate-700 hover:text-slate-900 dark:text-blue-200 dark:hover:text-white',
+    )
 
- useEffect(() => {
- const fetchProfile = async () => {
- if (user?.user_type ==='student') {
- try {
- const data = await apiClient.getStudentProfile()
- setProfileData(data)
- } catch (error) {
- console.error('Failed to fetch profile:', error)
- }
- }
- }
- fetchProfile()
- }, [user])
+  const isItemActive = (item: NavItem) => {
+    if (pathname === item.href) return true
+    if (item.aliases?.includes(pathname || '')) return true
+    if (
+      item.href === '/dashboard/discover-jobs' &&
+      (pathname?.startsWith('/dashboard/discover-jobs') || pathname?.startsWith('/dashboard/student/jobs'))
+    ) {
+      return true
+    }
+    return false
+  }
 
- const getDisplayName = () => profileData?.name?.trim() || user?.name ||'Student'
- const getDisplayEmail = () => profileData?.email || user?.email ||'student@university.edu'
+  const handleLogout = () => {
+    logout()
+  }
 
- const railLinkClass = (isActive: boolean) =>
- cn(
- 'flex h-11 w-11 shrink-0 items-center justify-center transition-all hover:-translate-y-0.5',
- isActive
- ?'rounded-none bg-white text-slate-800 shadow-none dark:bg-white dark:text-slate-900'
- :'text-slate-700 hover:text-slate-900 dark:text-blue-200 dark:hover:text-white',
- )
+  return (
+    <>
+      <aside
+        className={cn(
+          'student-sidebar fixed inset-y-0 left-0 z-40 hidden w-16 flex-col bg-blue-50 pt-16 dark:bg-blue-950 lg:flex',
+          'rounded-none',
+          className,
+        )}
+      >
+        <nav className="flex min-h-0 flex-1 flex-col items-center px-0 py-4">
+          <div className="flex min-h-0 w-full flex-1 flex-col items-center gap-3 overflow-y-auto overflow-x-hidden px-2">
+            {allItems.map((item) => {
+              const isActive = isItemActive(item)
+              return (
+                <SidebarRailHoverCard
+                  key={item.href}
+                  item={item}
+                  isActive={isActive}
+                  dataSidebarItem={isActive ? 'active' : 'inactive'}
+                  railLinkClassName={railLinkClass(isActive)}
+                  onNavigate={() => !isActive && startLoading()}
+                />
+              )
+            })}
+          </div>
+          <button
+            type="button"
+            title={t(locale, 'dashboard.labels.logout')}
+            onClick={handleLogout}
+            className="mt-3 flex h-11 w-11 shrink-0 items-center justify-center text-slate-700 transition-colors hover:text-slate-900 dark:text-blue-200 dark:hover:text-white"
+          >
+            <LogOut className="h-5 w-5" strokeWidth={1.75} />
+          </button>
+        </nav>
+      </aside>
 
- const isItemActive = (item: NavItem) => {
- if (pathname === item.href) return true
- if (item.aliases?.includes(pathname || '')) return true
- if (
-   item.href === '/dashboard/discover-jobs' &&
-   (pathname?.startsWith('/dashboard/discover-jobs') ||
-     pathname?.startsWith('/dashboard/student/jobs'))
- ) {
-   return true
- }
- return false
- }
-
- const renderMobileRow = (item: NavItem) => {
-const isActive = isItemActive(item)
- return (
- <Link
- key={item.href}
- href={item.href}
- onClick={() => {
- if (!isActive) startLoading()
- setIsMobileMenuOpen(false)
- }}
- className={cn(
- 'flex items-center gap-3 rounded-none px-3 py-3 text-sm font-medium transition-colors',
- isActive
- ?'bg-white text-slate-900 shadow-none dark:bg-blue-900 dark:text-blue-50'
- :'text-slate-700 hover:bg-slate-100 dark:text-blue-200 dark:hover:bg-blue-900',
- )}
- >
- <item.icon className="h-5 w-5 shrink-0" strokeWidth={1.75} />
- <span>{item.label}</span>
- </Link>
- )
- }
-
- const handleLogout = () => {
- logout()
- setIsMobileMenuOpen(false)
- }
-
- return (
- <>
- {/* Desktop: slim blue-50 icon rail (reference UI) */}
- <aside
- className={cn(
-'student-sidebar fixed inset-y-0 left-0 z-40 hidden w-16 flex-col bg-blue-50 pt-16 dark:bg-blue-950 lg:flex',
- 'rounded-none',
- className,
- )}
- >
- <nav className="flex min-h-0 flex-1 flex-col items-center px-0 py-4">
- <div className="flex min-h-0 w-full flex-1 flex-col items-center gap-3 overflow-y-auto overflow-x-hidden px-2">
- {allItems.map((item) => {
-const isActive = isItemActive(item)
- return (
- <SidebarRailHoverCard
- key={item.href}
- item={item}
- isActive={isActive}
- dataSidebarItem={isActive ?'active':'inactive'}
- railLinkClassName={railLinkClass(isActive)}
- onNavigate={() => !isActive && startLoading()}
- />
- )
- })}
- </div>
- <button
- type="button"
- title={t(locale,'dashboard.labels.logout')}
- onClick={handleLogout}
- className="mt-3 flex h-11 w-11 shrink-0 items-center justify-center text-slate-700 transition-colors hover:text-slate-900 dark:text-blue-200 dark:hover:text-white"
- >
- <LogOut className="h-5 w-5" strokeWidth={1.75} />
- </button>
- </nav>
- </aside>
-
- <MobileBottomNav
- tabs={bottomTabs.map((item) => ({
- label: item.label,
- shortLabel:
- item.href === '/dashboard/discover-jobs'
- ? 'Jobs'
- : item.href === '/dashboard/student/applications'
- ? 'Apps'
- : undefined,
- href: item.href,
- icon: item.icon,
- isActive: isItemActive(item),
- onNavigate: () => !isItemActive(item) && startLoading(),
- }))}
- moreLabel="More"
- onMoreClick={() => setIsMobileMenuOpen(true)}
- />
-
- {clientMounted && (
- <AnimatePresence>
- {isMobileMenuOpen && (
- <motion.div
- initial={{ opacity: 0 }}
- animate={{ opacity: 1 }}
- exit={{ opacity: 0 }}
- className="fixed inset-0 z-50 bg-slate-900 lg:hidden"
- onClick={() => setIsMobileMenuOpen(false)}
- >
- <motion.div
- initial={{ x:'100%'}}
- animate={{ x: 0 }}
- exit={{ x:'100%'}}
- transition={{ type:'spring', damping: 28, stiffness: 280 }}
- className="absolute right-0 top-0 flex h-full w-[min(100%,20rem)] flex-col bg-blue-50 dark:bg-blue-950"
- onClick={(e) => e.stopPropagation()}
- >
- <div className="flex items-center justify-between border-b border-slate-200 bg-blue-50 px-4 py-4 dark:border-blue-800 dark:bg-blue-950">
- <h2 className="text-base font-semibold text-slate-800 dark:text-blue-50">{t(locale,'nav.studentNavigation')}</h2>
- <button
- type="button"
- onClick={() => setIsMobileMenuOpen(false)}
- className="flex h-9 w-9 items-center justify-center rounded-none bg-white text-slate-800 shadow-none dark:bg-blue-900 dark:text-blue-100"
- >
- <X className="h-5 w-5" strokeWidth={1.75} />
- </button>
- </div>
-
- <div className="border-b border-slate-200 px-4 py-3 dark:border-blue-800">
- <p className="truncate text-sm font-semibold text-slate-900 dark:text-blue-50">{getDisplayName()}</p>
- <p className="truncate text-xs text-slate-600 dark:text-blue-300">{getDisplayEmail()}</p>
- </div>
-
- <nav className="min-h-0 flex-1 space-y-2 overflow-y-auto p-4">{allItems.map((item) => renderMobileRow(item))}</nav>
-
- <div className="border-t border-slate-200 p-4 dark:border-blue-800">
- <button
- type="button"
- onClick={handleLogout}
- className="flex w-full items-center justify-center gap-2 rounded-none bg-white py-3 text-sm font-medium text-slate-800 shadow-none dark:bg-blue-900 dark:text-blue-50"
- >
- <LogOut className="h-5 w-5" strokeWidth={1.75} />
- {t(locale,'dashboard.labels.logout')}
- </button>
- </div>
- </motion.div>
- </motion.div>
- )}
- </AnimatePresence>
- )}
- </>
- )
+      <MobileBottomNav
+        tabs={bottomTabs.map((item) => ({
+          label: item.label,
+          shortLabel:
+            item.href === '/dashboard/discover-jobs'
+              ? 'Jobs'
+              : item.href === '/dashboard/student/applications'
+                ? 'Apps'
+                : undefined,
+          href: item.href,
+          icon: item.icon,
+          isActive: isItemActive(item),
+          onNavigate: () => !isItemActive(item) && startLoading(),
+        }))}
+      />
+    </>
+  )
 }
