@@ -35,8 +35,8 @@ body.hide-sidebar .main-navbar {
 
   .jobs-map-marker-pin {
     position: relative;
-    width: 48px;
-    height: 48px;
+    width: 52px;
+    height: 52px;
     cursor: pointer;
     transition: transform 0.2s ease;
   }
@@ -49,15 +49,14 @@ body.hide-sidebar .main-navbar {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 46px;
-    height: 46px;
+    width: 48px;
+    height: 48px;
     border-radius: 9999px;
-    background: linear-gradient(165deg, #0066ff 0%, #0047b3 100%);
-    border: 3.5px solid #ffffff;
+    background: #1d4ed8;
+    border: 4px solid #ffffff;
     box-shadow:
-      0 6px 16px rgba(0, 71, 179, 0.65),
-      0 0 0 1px rgba(0, 40, 120, 0.15);
-    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+      0 0 0 2px #0f172a,
+      0 8px 18px rgba(15, 23, 42, 0.45);
     transition:
       background 0.25s ease,
       transform 0.25s ease,
@@ -65,16 +64,18 @@ body.hide-sidebar .main-navbar {
   }
 
   .jobs-map-marker-icon svg {
-    filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.15));
+    display: block;
+    color: #ffffff;
   }
 
   .jobs-map-marker-pin--active .jobs-map-marker-icon {
-    background: linear-gradient(165deg, #fb923c 0%, #ea580c 100%);
+    background: #c2410c;
     transform: scale(1.1);
-    border-color: #fffbeb;
+    border-color: #ffffff;
     box-shadow:
-      0 8px 20px rgba(234, 88, 12, 0.6),
-      0 0 0 3px rgba(251, 146, 60, 0.35);
+      0 0 0 2px #0f172a,
+      0 0 0 5px rgba(249, 115, 22, 0.45),
+      0 8px 20px rgba(194, 65, 12, 0.55);
   }
 
   .jobs-map-marker-badge {

@@ -22,14 +22,14 @@ function createJobMarkerIcon(count: number, selected: boolean) {
     className: "jobs-map-marker",
     html: `
       <div class="jobs-map-marker-pin ${selected ? "jobs-map-marker-pin--active" : ""}">
-        <span class="jobs-map-marker-icon">
-          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="7" rx="2" ry="2" fill="rgba(255,255,255,0.35)"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+        <span class="jobs-map-marker-icon" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"><path fill="#ffffff" stroke="none" d="M4 9h16v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V9z"/><path fill="none" d="M8 9V7a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path fill="none" d="M9 9h6"/></svg>
         </span>
         <span class="jobs-map-marker-badge">${count}</span>
       </div>
     `,
-    iconSize: [48, 48],
-    iconAnchor: [24, 48],
+    iconSize: [52, 52],
+    iconAnchor: [26, 52],
   })
 }
 
