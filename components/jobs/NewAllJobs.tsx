@@ -16,7 +16,6 @@ import { useTranslation } from "@/hooks/useTranslation"
 import { apiClient } from "@/lib/api"
 import { profileService } from "@/services/profileService"
 import { ApplicationModal } from "@/components/dashboard/ApplicationModal"
-import { JobDescriptionModal } from "@/components/dashboard/JobDescriptionModal"
 import {
   JobsCategoryHero,
   JobsFiltersSidebar,
@@ -110,7 +109,6 @@ export function NewAllJobs() {
   const [showMobileFilters, setShowMobileFilters] = useState(false)
 
   // Selected job for modals
-  const [viewJob, setViewJob] = useState<Job | null>(null)
   const [selectedJob, setSelectedJob] = useState<Job | null>(null)
   const [showApplyModal, setShowApplyModal] = useState(false)
   const [isApplying, setIsApplying] = useState(false)
@@ -471,7 +469,7 @@ export function NewAllJobs() {
                   job={job}
                   isSaved={savedJobIds.includes(job.id)}
                   isApplying={applyingJobId === job.id}
-                  onViewDetails={() => setViewJob(job)}
+                  onViewDetails={() => router.push(`/jobs/${job.id}`)}
                   onApply={() => handleApplyClick(job)}
                   onSaveToggle={() => {
                     toggleSavedJobId(job.id)
@@ -548,18 +546,6 @@ export function NewAllJobs() {
         onClear={handleFilterClear}
       />
 
-      {/* Modals */}
-      {viewJob && (
-        <JobDescriptionModal
-          job={viewJob}
-          onClose={() => setViewJob(null)}
-          onApply={() => {
-            setViewJob(null)
-            handleApplyClick(viewJob)
-          }}
-          applicationStatus={viewJob.application_status}
-        />
-      )}
       {showApplyModal && selectedJob && (
         <ApplicationModal
           job={selectedJob}

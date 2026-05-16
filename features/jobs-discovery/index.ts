@@ -1,6 +1,7 @@
 export { JobsFiltersSidebar, type JobsFilterValues } from "./components/JobsFiltersSidebar"
 export { JobsCategoryHero } from "./components/JobsCategoryHero"
 export { PublicJobListingCard } from "./components/PublicJobListingCard"
+export { PublicJobDetailsView } from "./components/PublicJobDetailsView"
 export { JobsMobileFilterDrawer } from "./components/JobsMobileFilterDrawer"
 export { JobsMobileQuickFilters } from "./components/JobsMobileQuickFilters"
 export { jobsPageBg } from "./jobsDiscoveryTheme"
